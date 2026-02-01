@@ -80,8 +80,8 @@ ares/
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd ares-phase-zero
+git clone https://github.com/b33fydan/ARES.git
+cd ARES
 
 # Create virtual environment
 python -m venv venv
@@ -281,7 +281,7 @@ This project is in active development. The architecture is stabilizing but not y
 
 ## License
 
-[TBD]
+[MIT](LICENSE)
 
 ---
 
