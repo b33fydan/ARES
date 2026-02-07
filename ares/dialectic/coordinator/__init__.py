@@ -27,6 +27,12 @@ from .orchestrator import (
     CycleResult,
     CycleError,
 )
+from .multi_turn import (
+    DebateRound,
+    MultiTurnConfig,
+    MultiTurnCycleResult,
+    run_multi_turn_cycle,
+)
 
 __all__ = [
     # Validator
@@ -51,4 +57,9 @@ __all__ = [
     "DialecticalOrchestrator",
     "CycleResult",
     "CycleError",
+    # Multi-Turn
+    "DebateRound",
+    "MultiTurnConfig",
+    "MultiTurnCycleResult",
+    "run_multi_turn_cycle",
 ]
