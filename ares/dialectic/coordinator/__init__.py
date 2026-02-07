@@ -22,6 +22,11 @@ from .coordinator import (
     CycleNotFoundError,
     MessageRejectedError,
 )
+from .orchestrator import (
+    DialecticalOrchestrator,
+    CycleResult,
+    CycleError,
+)
 
 __all__ = [
     # Validator
@@ -42,4 +47,8 @@ __all__ = [
     "DuplicateCycleError",
     "CycleNotFoundError",
     "MessageRejectedError",
+    # Orchestrator
+    "DialecticalOrchestrator",
+    "CycleResult",
+    "CycleError",
 ]
