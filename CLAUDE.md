@@ -7,10 +7,10 @@ for cybersecurity defense using graph neural networks and multi-agent reasoning.
 ## Current Status
 - Phase 0: Architecture Crystallization ✅ COMPLETE
 - Phase 1: Minimal Viable Dialectic 🔄 IN PROGRESS
-- Session 005: Evidence Extractors ✅ COMPLETE
-- **Active: Session 006 - Coordinator Orchestration**
+- Session 006: Coordinator Orchestration ✅ COMPLETE
+- **Active: Session 007 - Memory Stream**
 
-## Test Count: 700 passing
+## Test Count: 758 passing
 
 ## Tech Stack
 - Python 3.11, PyTorch, PyTorch Geometric
@@ -30,10 +30,10 @@ C:\ares-phase-zero
 
 ## Key Components
 
-### Completed (Sessions 001-005)
+### Completed (Sessions 001-006)
 ```
 ares/
-├── graph/schema.py                    # Graph structure (Session 001)
+├── graph/schema.py                    # Graph structure (Session 001, 110 tests)
 └── dialectic/
     ├── evidence/
     │   ├── provenance.py              # Source tracking (Session 002)
@@ -48,7 +48,8 @@ ares/
     ├── coordinator/
     │   ├── validator.py               # MessageValidator, ValidationError (Session 002, 26 tests)
     │   ├── cycle.py                   # CycleState, TerminationReason, DialecticalCycle (Session 002, 50 tests)
-    │   └── coordinator.py             # Coordinator (the Bouncer), SubmissionResult (Session 002, 33 tests)
+    │   ├── coordinator.py             # Coordinator (the Bouncer), SubmissionResult (Session 002, 33 tests)
+    │   └── orchestrator.py            # DialecticalOrchestrator, CycleResult, CycleError (Session 006, 58 tests)
     └── agents/
         ├── context.py                 # TurnContext, DataRequest (Session 003)
         ├── base.py                    # AgentBase with invariants (Session 003)
@@ -66,57 +67,59 @@ ares/
 | 003 | Agent Foundation (TurnContext, AgentBase) | 144 | 546 |
 | 004 | Concrete Agents (Architect, Skeptic, Oracle) + Integration | 134 | 570 |
 | 005 | Evidence Extractors (Windows Event Log) | 130 | 700 |
+| 006 | Coordinator Orchestration (DialecticalOrchestrator) | 58 | 758 |
 
-## Session 006: Coordinator Orchestration
+## Current Entry Point
+
+```python
+from ares.dialectic.coordinator.orchestrator import DialecticalOrchestrator
+
+orchestrator = DialecticalOrchestrator()
+result = orchestrator.run_cycle(packet)  # packet must be frozen
+
+result.verdict.outcome     # THREAT_CONFIRMED / THREAT_DISMISSED / INCONCLUSIVE
+result.verdict.confidence  # 0.0 - 1.0
+result.cycle_id            # UUID for audit trail
+result.duration_ms         # Performance timing
+```
+
+## Session 007: Memory Stream
 
 ### Goal
-Build `DialecticalOrchestrator` - a single entry point that manages the entire 
-THESIS → ANTITHESIS → SYNTHESIS cycle automatically.
+Build tamper-evident persistence layer that stores CycleResults with hash chain 
+integrity, enabling audit trails and cross-cycle correlation.
 
 ### Key Architectural Decision
-The Orchestrator is a **FACADE** that composes existing components. It does NOT 
-replace the existing Coordinator (the Bouncer). The existing `coordinator.py` has 
-33 tests for message validation and routing. The new `orchestrator.py` sits above 
-it, automating the agent wiring and cycle management.
+The Memory Stream is a **PEER module** to the coordinator — not injected into the 
+Orchestrator. The caller composes them. The Orchestrator (58 tests) remains 
+untouched.
 
 ### Files to Create
 ```
-ares/dialectic/coordinator/
-    orchestrator.py            # NEW - DialecticalOrchestrator, CycleResult, CycleError
+ares/dialectic/memory/
+├── __init__.py                # Public exports
+├── errors.py                  # ALL memory exceptions (single source of truth)
+├── protocol.py                # MemoryBackend protocol (abstract interface)
+├── entry.py                   # MemoryEntry (frozen record with hash chain linkage)
+├── chain.py                   # HashChain (tamper-evident audit log)
+├── stream.py                  # MemoryStream (main API — composes backend + chain)
+└── backends/
+    ├── __init__.py
+    └── in_memory.py           # InMemoryBackend (dict-based, for testing)
 
-ares/dialectic/tests/coordinator/
-    test_orchestrator.py       # NEW - ~50 orchestrator tests
+ares/dialectic/tests/memory/
+├── __init__.py
+├── test_entry.py              # MemoryEntry tests
+├── test_chain.py              # HashChain tests
+├── test_backend.py            # InMemoryBackend tests
+├── test_stream.py             # MemoryStream integration tests
+└── conftest.py                # Shared fixtures
 ```
 
-### Existing Coordinator Files (DO NOT recreate)
-- `coordinator/validator.py` - MessageValidator (26 tests)
-- `coordinator/cycle.py` - DialecticalCycle state machine (50 tests)
-- `coordinator/coordinator.py` - Coordinator bouncer (33 tests)
-
-### Agent Wiring Sequence (what the Orchestrator automates)
-```python
-# This is the manual sequence the Orchestrator must automate:
-architect = ArchitectAgent(agent_id="arch-001")
-skeptic = SkepticAgent(agent_id="skep-001")
-
-# THESIS
-architect.observe(packet)
-arch_context = TurnContext(phase=Phase.THESIS, turn_number=1, cycle_id=..., packet_id=..., snapshot_id=...)
-arch_result = architect.act(arch_context)
-
-# ANTITHESIS
-skeptic.observe(packet)
-skeptic.receive(arch_result.message)
-skep_context = TurnContext(phase=Phase.ANTITHESIS, turn_number=2, cycle_id=..., packet_id=..., snapshot_id=...)
-skep_result = skeptic.act(skep_context)
-
-# SYNTHESIS
-verdict = OracleJudge.compute_verdict(arch_result.message, skep_result.message, packet)
-narrator = OracleNarrator(agent_id="oracle-001", verdict=verdict)
-narrator.observe(packet)
-narr_context = TurnContext(phase=Phase.SYNTHESIS, turn_number=3, cycle_id=..., packet_id=..., snapshot_id=...)
-narr_result = narrator.act(narr_context)
-```
+### Existing Files (DO NOT MODIFY)
+- All files under `ares/graph/`, `ares/dialectic/evidence/`, `ares/dialectic/messages/`, 
+  `ares/dialectic/coordinator/`, `ares/dialectic/agents/`
+- 758 tests must continue passing
 
 ## Development Commands
 ```powershell
@@ -126,26 +129,56 @@ narr_result = narrator.act(narr_context)
 # Run all tests
 pytest ares/ -v
 
-# Run just orchestrator tests
-pytest ares/dialectic/tests/coordinator/test_orchestrator.py -v
+# Run just memory tests
+pytest ares/dialectic/tests/memory/ -v
 
 # Run with coverage
 pytest ares/ --cov=ares --cov-report=term-missing
 ```
 
+## Git Workflow
+- **NEVER commit directly to main**
+- Main branch = stable, all tests passing, production-ready
+- Create a session branch before each session: `session/{number}-{short-description}`
+- Commit frequently to the session branch during work
+- All 758+ tests must pass before merging to main
+- Squash merge preferred for clean history (one commit per session)
+
+```powershell
+# Before session: create branch from main
+git checkout main
+git pull origin main
+git checkout -b session/007-memory-stream
+
+# During session: Claude Code commits to session branch
+# (multiple commits fine — it's a working branch)
+
+# After session: all tests green → merge to main
+git checkout main
+git merge --squash session/007-memory-stream
+git commit -m "Session 007: Memory Stream - XX new tests (XXX total)"
+git push origin main
+
+# Clean up
+git branch -d session/007-memory-stream
+```
+
 ## Session Workflow
 1. Start new chat in Claude.ai ARES project
-2. Reference previous session number
-3. State today's goal
-4. Ask clarifying questions before coding
-5. Document decisions in session logs
+2. Create session branch (see Git Workflow above)
+3. Reference previous session number
+4. State today's goal
+5. Ask clarifying questions before coding
+6. All commits go to session branch, NOT main
+7. Merge to main only after all tests pass
+8. Document decisions in session logs
 
 ## Phase 1 Roadmap
 ```
 Phase One: Minimal Viable Dialectic
 ├── [✓] Real data integration (Session 005)
-├── [ ] Coordinator orchestration (Session 006) ← ACTIVE
-├── [ ] Memory Stream (Redis-backed persistence)
+├── [✓] Coordinator orchestration (Session 006)
+├── [ ] Memory Stream (Session 007) ← ACTIVE
 └── [ ] LLM integration (deterministic Judge preserved)
 ```
 
