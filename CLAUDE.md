@@ -7,15 +7,15 @@ for cybersecurity defense using graph neural networks and multi-agent reasoning.
 ## Current Status
 - Phase 0: Architecture Crystallization ✅ COMPLETE
 - Phase 1: Minimal Viable Dialectic 🔄 IN PROGRESS
-- Session 006: Coordinator Orchestration ✅ COMPLETE
-- **Active: Session 007 - Memory Stream**
+- Session 007: Memory Stream ✅ COMPLETE
+- **Next: Session 008 — Multi-Turn Dialectical Cycles**
 
-## Test Count: 758 passing
+## Test Count: 861 passing
 
 ## Tech Stack
 - Python 3.11, PyTorch, PyTorch Geometric
 - NetworkX (Phase 0/1), Neo4j (Phase 2+)
-- Redis for Memory Stream (planned)
+- Redis for Memory Stream (future — currently InMemoryBackend)
 - Windows + PowerShell + venv
 
 ## Code Location
@@ -30,10 +30,10 @@ C:\ares-phase-zero
 
 ## Key Components
 
-### Completed (Sessions 001-006)
+### Completed (Sessions 001-007)
 ```
 ares/
-├── graph/schema.py                    # Graph structure (Session 001, 110 tests)
+├── graph/schema.py                    # Graph structure (Session 001)
 └── dialectic/
     ├── evidence/
     │   ├── provenance.py              # Source tracking (Session 002)
@@ -50,13 +50,21 @@ ares/
     │   ├── cycle.py                   # CycleState, TerminationReason, DialecticalCycle (Session 002, 50 tests)
     │   ├── coordinator.py             # Coordinator (the Bouncer), SubmissionResult (Session 002, 33 tests)
     │   └── orchestrator.py            # DialecticalOrchestrator, CycleResult, CycleError (Session 006, 58 tests)
-    └── agents/
-        ├── context.py                 # TurnContext, DataRequest (Session 003)
-        ├── base.py                    # AgentBase with invariants (Session 003)
-        ├── patterns.py                # AnomalyPattern, BenignExplanation, Verdict, VerdictOutcome (Session 004)
-        ├── architect.py               # ArchitectAgent - THESIS phase (Session 004)
-        ├── skeptic.py                 # SkepticAgent - ANTITHESIS phase (Session 004)
-        └── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (constrained) (Session 004)
+    ├── agents/
+    │   ├── context.py                 # TurnContext, DataRequest (Session 003)
+    │   ├── base.py                    # AgentBase with invariants (Session 003)
+    │   ├── patterns.py                # AnomalyPattern, BenignExplanation, Verdict, VerdictOutcome (Session 004)
+    │   ├── architect.py               # ArchitectAgent - THESIS phase (Session 004)
+    │   ├── skeptic.py                 # SkepticAgent - ANTITHESIS phase (Session 004)
+    │   └── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (constrained) (Session 004)
+    └── memory/
+        ├── errors.py                  # MemoryStreamError, ChainIntegrityError, DuplicateEntryError
+        ├── entry.py                   # MemoryEntry (frozen, hash-chained)
+        ├── protocol.py                # MemoryBackend protocol
+        ├── chain.py                   # HashChain, ChainLink, GENESIS_HASH
+        ├── stream.py                  # MemoryStream (main API)
+        └── backends/
+            └── in_memory.py           # InMemoryBackend (Session 007, 103 tests)
 ```
 
 ### Session Progress
@@ -68,58 +76,23 @@ ares/
 | 004 | Concrete Agents (Architect, Skeptic, Oracle) + Integration | 134 | 570 |
 | 005 | Evidence Extractors (Windows Event Log) | 130 | 700 |
 | 006 | Coordinator Orchestration (DialecticalOrchestrator) | 58 | 758 |
+| 007 | Memory Stream (tamper-evident persistence) | 103 | 861 |
 
-## Current Entry Point
+## Current Entry Points
 
 ```python
+# Single-turn (Session 006)
 from ares.dialectic.coordinator.orchestrator import DialecticalOrchestrator
-
 orchestrator = DialecticalOrchestrator()
 result = orchestrator.run_cycle(packet)  # packet must be frozen
 
-result.verdict.outcome     # THREAT_CONFIRMED / THREAT_DISMISSED / INCONCLUSIVE
-result.verdict.confidence  # 0.0 - 1.0
-result.cycle_id            # UUID for audit trail
-result.duration_ms         # Performance timing
+# Memory Stream (Session 007)
+from ares.dialectic.memory.stream import MemoryStream
+from ares.dialectic.memory.backends.in_memory import InMemoryBackend
+stream = MemoryStream(backend=InMemoryBackend())
+entry = stream.store(result)
+assert stream.verify_chain_integrity()
 ```
-
-## Session 007: Memory Stream
-
-### Goal
-Build tamper-evident persistence layer that stores CycleResults with hash chain 
-integrity, enabling audit trails and cross-cycle correlation.
-
-### Key Architectural Decision
-The Memory Stream is a **PEER module** to the coordinator — not injected into the 
-Orchestrator. The caller composes them. The Orchestrator (58 tests) remains 
-untouched.
-
-### Files to Create
-```
-ares/dialectic/memory/
-├── __init__.py                # Public exports
-├── errors.py                  # ALL memory exceptions (single source of truth)
-├── protocol.py                # MemoryBackend protocol (abstract interface)
-├── entry.py                   # MemoryEntry (frozen record with hash chain linkage)
-├── chain.py                   # HashChain (tamper-evident audit log)
-├── stream.py                  # MemoryStream (main API — composes backend + chain)
-└── backends/
-    ├── __init__.py
-    └── in_memory.py           # InMemoryBackend (dict-based, for testing)
-
-ares/dialectic/tests/memory/
-├── __init__.py
-├── test_entry.py              # MemoryEntry tests
-├── test_chain.py              # HashChain tests
-├── test_backend.py            # InMemoryBackend tests
-├── test_stream.py             # MemoryStream integration tests
-└── conftest.py                # Shared fixtures
-```
-
-### Existing Files (DO NOT MODIFY)
-- All files under `ares/graph/`, `ares/dialectic/evidence/`, `ares/dialectic/messages/`, 
-  `ares/dialectic/coordinator/`, `ares/dialectic/agents/`
-- 758 tests must continue passing
 
 ## Development Commands
 ```powershell
@@ -128,9 +101,6 @@ ares/dialectic/tests/memory/
 
 # Run all tests
 pytest ares/ -v
-
-# Run just memory tests
-pytest ares/dialectic/tests/memory/ -v
 
 # Run with coverage
 pytest ares/ --cov=ares --cov-report=term-missing
@@ -141,26 +111,26 @@ pytest ares/ --cov=ares --cov-report=term-missing
 - Main branch = stable, all tests passing, production-ready
 - Create a session branch before each session: `session/{number}-{short-description}`
 - Commit frequently to the session branch during work
-- All 758+ tests must pass before merging to main
+- All 861+ tests must pass before merging to main
 - Squash merge preferred for clean history (one commit per session)
 
 ```powershell
 # Before session: create branch from main
 git checkout main
 git pull origin main
-git checkout -b session/007-memory-stream
+git checkout -b session/008-multi-turn
 
 # During session: Claude Code commits to session branch
 # (multiple commits fine — it's a working branch)
 
 # After session: all tests green → merge to main
 git checkout main
-git merge --squash session/007-memory-stream
-git commit -m "Session 007: Memory Stream - XX new tests (XXX total)"
+git merge --squash session/008-multi-turn
+git commit -m "Session 008: Multi-Turn Dialectical Cycles - XX new tests (XXX total)"
 git push origin main
 
 # Clean up
-git branch -d session/007-memory-stream
+git branch -d session/008-multi-turn
 ```
 
 ## Session Workflow
@@ -178,7 +148,8 @@ git branch -d session/007-memory-stream
 Phase One: Minimal Viable Dialectic
 ├── [✓] Real data integration (Session 005)
 ├── [✓] Coordinator orchestration (Session 006)
-├── [ ] Memory Stream (Session 007) ← ACTIVE
+├── [✓] Memory Stream (Session 007)
+├── [ ] Multi-Turn Dialectical Cycles (Session 008) ← NEXT
 └── [ ] LLM integration (deterministic Judge preserved)
 ```
 
