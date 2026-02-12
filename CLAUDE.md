@@ -8,7 +8,7 @@ for cybersecurity defense using graph neural networks and multi-agent reasoning.
 - Phase 0: Architecture Crystallization ✅ COMPLETE
 - Phase 1: Minimal Viable Dialectic 🔄 IN PROGRESS
 - Session 009: LLM Infrastructure Layer ✅ COMPLETE
-- **Next: Session 010 — Live LLM Integration + Tuning**
+- **Next: Session 010 — Live LLM Integration Harness + Observability**
 
 ## Test Count: 1040 passing
 
@@ -57,9 +57,9 @@ ares/
     │   ├── context.py                 # TurnContext, DataRequest (Session 003)
     │   ├── base.py                    # AgentBase with invariants (Session 003)
     │   ├── patterns.py                # AnomalyPattern, BenignExplanation, Verdict, VerdictOutcome (Session 004)
-    │   ├── architect.py               # ArchitectAgent - THESIS phase (Session 004, modified Session 009)
-    │   ├── skeptic.py                 # SkepticAgent - ANTITHESIS phase (Session 004, modified Session 009)
-    │   ├── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (Session 004, modified Session 009)
+    │   ├── architect.py               # ArchitectAgent - THESIS phase (Session 004, strategy-enabled Session 009)
+    │   ├── skeptic.py                 # SkepticAgent - ANTITHESIS phase (Session 004, strategy-enabled Session 009)
+    │   ├── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (Session 004, strategy-enabled Session 009)
     │   └── strategies/                # Pluggable reasoning backends (Session 009)
     │       ├── protocol.py            # ThreatAnalyzer, ExplanationFinder, NarrativeGenerator
     │       ├── rule_based.py          # RuleBasedThreatAnalyzer, RuleBasedExplanationFinder, RuleBasedNarrativeGenerator
@@ -126,11 +126,17 @@ skeptic = SkepticAgent(agent_id="skep-001", explanation_finder=LLMExplanationFin
 # Activate venv
 .\venv\Scripts\Activate.ps1
 
-# Run all tests
+# Run all tests (excludes live LLM tests)
 pytest ares/ -v
 
 # Run with coverage
 pytest ares/ --cov=ares --cov-report=term-missing
+
+# Run live LLM tests (requires ANTHROPIC_API_KEY)
+pytest ares/ -m live_llm --run-live-llm -v
+
+# Run everything including live LLM
+pytest ares/ --run-live-llm -v
 ```
 
 ## Git Workflow
@@ -154,7 +160,7 @@ git checkout -b session/010-live-llm-integration
 # After session: all tests green → merge to main
 git checkout main
 git merge --squash session/010-live-llm-integration
-git commit -m "Session 010: Live LLM Integration + Tuning - XX new tests (XXX total)"
+git commit -m "Session 010: Live LLM Integration Harness - XX new tests (XXX total)"
 git push origin main
 
 # Clean up (capital -D required after squash merge)
@@ -179,7 +185,7 @@ Phase One: Minimal Viable Dialectic
 ├── [✓] Memory Stream (Session 007)
 ├── [✓] Multi-Turn Dialectical Cycles (Session 008)
 ├── [✓] LLM Infrastructure Layer (Session 009)
-└── [ ] Live LLM Integration + Tuning (Session 010) ← NEXT
+└── [ ] Live LLM Integration Harness + Observability (Session 010) ← NEXT
 ```
 
 ## LLM Integration Architecture (Session 009)
