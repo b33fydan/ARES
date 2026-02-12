@@ -184,7 +184,7 @@ def main():
     # Build evidence
     print("Building sample evidence packet...")
     packet = build_sample_packet()
-    print(f"Packet: {packet.packet_id} ({len(packet.facts)} facts)")
+    print(f"Packet: {packet.packet_id} ({packet.fact_count} facts)")
 
     # Create call logger
     call_logger = None
