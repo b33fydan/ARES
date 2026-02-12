@@ -1,8 +1,8 @@
 """ArchitectAgent: The THESIS phase threat hypothesis generator.
 
 The Architect observes an EvidencePacket and proposes threat hypotheses
-based on rule-based pattern detection. This is a deterministic agent
-with no LLM involvement - all reasoning is encoded in detection rules.
+based on pluggable pattern detection (Strategy Pattern). The default
+strategy is rule-based with no LLM involvement.
 
 The Architect's job is to find evidence of malicious activity and
 construct a well-supported hypothesis that something suspicious occurred.
@@ -33,6 +33,7 @@ from ares.dialectic.messages.protocol import (
 )
 
 if TYPE_CHECKING:
+    from ares.dialectic.agents.strategies.protocol import ThreatAnalyzer
     from ares.dialectic.evidence.packet import EvidencePacket
     from ares.dialectic.evidence.fact import Fact
 
@@ -40,15 +41,37 @@ if TYPE_CHECKING:
 class ArchitectAgent(AgentBase):
     """THESIS phase agent that proposes threat hypotheses.
 
-    Rule-based logic (no LLM):
-    - Scan facts for anomaly indicators
-    - Look for: elevated_privileges, unusual_process_spawn, lateral_movement,
-      service_modification, credential_access patterns
+    Accepts an optional ThreatAnalyzer strategy at construction.
+    Default: RuleBasedThreatAnalyzer (deterministic, zero behavior change).
+
+    - Scan facts for anomaly indicators via strategy
     - Build HYPOTHESIS message with ASSERT and LINK assertions
     - Confidence = evidence_density (more corroborating facts = higher confidence)
-
-    LLM seam: ReasoningStrategy protocol for future swap
     """
+
+    def __init__(
+        self,
+        agent_id: Optional[str] = None,
+        max_memory_size: int = 100,
+        *,
+        threat_analyzer: Optional["ThreatAnalyzer"] = None,
+    ) -> None:
+        """Initialize the ArchitectAgent.
+
+        Args:
+            agent_id: Unique identifier for this agent instance.
+            max_memory_size: Maximum entries in working memory.
+            threat_analyzer: Strategy for anomaly detection.
+                Defaults to RuleBasedThreatAnalyzer.
+        """
+        super().__init__(agent_id=agent_id, max_memory_size=max_memory_size)
+        if threat_analyzer is None:
+            from ares.dialectic.agents.strategies.rule_based import (
+                RuleBasedThreatAnalyzer,
+            )
+
+            threat_analyzer = RuleBasedThreatAnalyzer()
+        self._threat_analyzer = threat_analyzer
 
     # Patterns that indicate privilege escalation
     PRIVILEGE_INDICATORS = frozenset({
@@ -123,9 +146,8 @@ class ArchitectAgent(AgentBase):
     def _detect_anomalies(self, packet: "EvidencePacket") -> List[AnomalyPattern]:
         """Detect anomaly patterns in the evidence.
 
-        Scans all facts for indicators of suspicious activity.
-        Each detection rule checks for specific patterns and produces
-        an AnomalyPattern if matched.
+        Delegates to the pluggable ThreatAnalyzer strategy.
+        Default: RuleBasedThreatAnalyzer (identical to original inline logic).
 
         Args:
             packet: The EvidencePacket to analyze
@@ -133,259 +155,7 @@ class ArchitectAgent(AgentBase):
         Returns:
             List of detected AnomalyPattern instances
         """
-        anomalies: List[AnomalyPattern] = []
-
-        # Collect facts by field for efficient analysis
-        facts_by_field: dict[str, list["Fact"]] = {}
-        for fact in packet.get_all_facts():
-            field_lower = fact.field.lower()
-            if field_lower not in facts_by_field:
-                facts_by_field[field_lower] = []
-            facts_by_field[field_lower].append(fact)
-
-        # Check for privilege escalation
-        priv_anomaly = self._check_privilege_escalation(packet, facts_by_field)
-        if priv_anomaly:
-            anomalies.append(priv_anomaly)
-
-        # Check for suspicious processes
-        proc_anomalies = self._check_suspicious_processes(packet, facts_by_field)
-        anomalies.extend(proc_anomalies)
-
-        # Check for credential access
-        cred_anomaly = self._check_credential_access(packet, facts_by_field)
-        if cred_anomaly:
-            anomalies.append(cred_anomaly)
-
-        # Check for lateral movement
-        lateral_anomaly = self._check_lateral_movement(packet, facts_by_field)
-        if lateral_anomaly:
-            anomalies.append(lateral_anomaly)
-
-        # Check for service abuse
-        service_anomaly = self._check_service_abuse(packet, facts_by_field)
-        if service_anomaly:
-            anomalies.append(service_anomaly)
-
-        return anomalies
-
-    def _check_privilege_escalation(
-        self,
-        packet: "EvidencePacket",
-        facts_by_field: dict[str, list["Fact"]],
-    ) -> Optional[AnomalyPattern]:
-        """Check for privilege escalation indicators.
-
-        Looks for:
-        - User gaining admin/system privileges
-        - Process running with elevated integrity
-        - Privilege field changes
-        """
-        supporting_facts: set[str] = set()
-        evidence_strength = 0.0
-
-        # Check privilege-related fields
-        for field, facts in facts_by_field.items():
-            for indicator in self.PRIVILEGE_INDICATORS:
-                if indicator in field:
-                    for fact in facts:
-                        supporting_facts.add(fact.fact_id)
-                        evidence_strength += 0.15
-
-        # Check values for privilege indicators
-        for fact in packet.get_all_facts():
-            value_str = str(fact.value).lower()
-            for indicator in self.PRIVILEGE_INDICATORS:
-                if indicator in value_str:
-                    supporting_facts.add(fact.fact_id)
-                    evidence_strength += 0.1
-
-        if supporting_facts and evidence_strength >= 0.2:
-            confidence = min(1.0, evidence_strength)
-            return AnomalyPattern(
-                pattern_type=PatternType.PRIVILEGE_ESCALATION,
-                fact_ids=frozenset(supporting_facts),
-                confidence=confidence,
-                description=f"Privilege escalation indicators detected in {len(supporting_facts)} facts",
-            )
-
-        return None
-
-    def _check_suspicious_processes(
-        self,
-        packet: "EvidencePacket",
-        facts_by_field: dict[str, list["Fact"]],
-    ) -> List[AnomalyPattern]:
-        """Check for suspicious process execution.
-
-        Looks for:
-        - Known attack tools
-        - LOLBins (living off the land binaries)
-        - Unusual parent-child relationships
-        """
-        anomalies: List[AnomalyPattern] = []
-        process_facts: dict[str, set[str]] = {}  # process_name -> fact_ids
-
-        # Find process-related facts
-        for field, facts in facts_by_field.items():
-            if "process" in field or "command" in field or "executable" in field:
-                for fact in facts:
-                    value_str = str(fact.value).lower()
-                    for proc in self.SUSPICIOUS_PROCESSES:
-                        if proc.lower() in value_str:
-                            if proc not in process_facts:
-                                process_facts[proc] = set()
-                            process_facts[proc].add(fact.fact_id)
-
-        # Check values directly for process names
-        for fact in packet.get_all_facts():
-            value_str = str(fact.value).lower()
-            for proc in self.SUSPICIOUS_PROCESSES:
-                if proc.lower() in value_str:
-                    if proc not in process_facts:
-                        process_facts[proc] = set()
-                    process_facts[proc].add(fact.fact_id)
-
-        # Create anomaly for each suspicious process found
-        for proc_name, fact_ids in process_facts.items():
-            if fact_ids:
-                confidence = min(1.0, 0.3 + (len(fact_ids) * 0.1))
-                anomalies.append(
-                    AnomalyPattern(
-                        pattern_type=PatternType.SUSPICIOUS_PROCESS,
-                        fact_ids=frozenset(fact_ids),
-                        confidence=confidence,
-                        description=f"Suspicious process execution: {proc_name}",
-                    )
-                )
-
-        return anomalies
-
-    def _check_credential_access(
-        self,
-        packet: "EvidencePacket",
-        facts_by_field: dict[str, list["Fact"]],
-    ) -> Optional[AnomalyPattern]:
-        """Check for credential access indicators.
-
-        Looks for:
-        - LSASS access
-        - SAM/SECURITY hive access
-        - Credential dumping tools
-        """
-        supporting_facts: set[str] = set()
-        evidence_strength = 0.0
-
-        # Check field names for credential indicators
-        for field, facts in facts_by_field.items():
-            for indicator in self.CREDENTIAL_FIELDS:
-                if indicator in field:
-                    for fact in facts:
-                        supporting_facts.add(fact.fact_id)
-                        evidence_strength += 0.2
-
-        # Check values for credential indicators
-        for fact in packet.get_all_facts():
-            value_str = str(fact.value).lower()
-            for indicator in self.CREDENTIAL_FIELDS:
-                if indicator in value_str:
-                    supporting_facts.add(fact.fact_id)
-                    evidence_strength += 0.15
-
-        if supporting_facts and evidence_strength >= 0.3:
-            confidence = min(1.0, evidence_strength)
-            return AnomalyPattern(
-                pattern_type=PatternType.CREDENTIAL_ACCESS,
-                fact_ids=frozenset(supporting_facts),
-                confidence=confidence,
-                description=f"Credential access indicators detected in {len(supporting_facts)} facts",
-            )
-
-        return None
-
-    def _check_lateral_movement(
-        self,
-        packet: "EvidencePacket",
-        facts_by_field: dict[str, list["Fact"]],
-    ) -> Optional[AnomalyPattern]:
-        """Check for lateral movement indicators.
-
-        Looks for:
-        - Remote authentication
-        - Network connections to internal hosts
-        - Protocol abuse (SMB, WMI, RDP, etc.)
-        """
-        supporting_facts: set[str] = set()
-        evidence_strength = 0.0
-
-        # Check field names for lateral movement indicators
-        for field, facts in facts_by_field.items():
-            for indicator in self.LATERAL_INDICATORS:
-                if indicator in field:
-                    for fact in facts:
-                        supporting_facts.add(fact.fact_id)
-                        evidence_strength += 0.15
-
-        # Check values for lateral movement indicators
-        for fact in packet.get_all_facts():
-            value_str = str(fact.value).lower()
-            for indicator in self.LATERAL_INDICATORS:
-                if indicator in value_str:
-                    supporting_facts.add(fact.fact_id)
-                    evidence_strength += 0.1
-
-        if supporting_facts and evidence_strength >= 0.25:
-            confidence = min(1.0, evidence_strength)
-            return AnomalyPattern(
-                pattern_type=PatternType.LATERAL_MOVEMENT,
-                fact_ids=frozenset(supporting_facts),
-                confidence=confidence,
-                description=f"Lateral movement indicators detected in {len(supporting_facts)} facts",
-            )
-
-        return None
-
-    def _check_service_abuse(
-        self,
-        packet: "EvidencePacket",
-        facts_by_field: dict[str, list["Fact"]],
-    ) -> Optional[AnomalyPattern]:
-        """Check for service abuse indicators.
-
-        Looks for:
-        - Service creation/modification
-        - Unusual service commands
-        - Persistence mechanisms
-        """
-        supporting_facts: set[str] = set()
-        evidence_strength = 0.0
-
-        # Check field names for service indicators
-        for field, facts in facts_by_field.items():
-            for indicator in self.SERVICE_INDICATORS:
-                if indicator in field:
-                    for fact in facts:
-                        supporting_facts.add(fact.fact_id)
-                        evidence_strength += 0.15
-
-        # Check values for service indicators
-        for fact in packet.get_all_facts():
-            value_str = str(fact.value).lower()
-            for indicator in self.SERVICE_INDICATORS:
-                if indicator in value_str:
-                    supporting_facts.add(fact.fact_id)
-                    evidence_strength += 0.1
-
-        if supporting_facts and evidence_strength >= 0.25:
-            confidence = min(1.0, evidence_strength)
-            return AnomalyPattern(
-                pattern_type=PatternType.SERVICE_ABUSE,
-                fact_ids=frozenset(supporting_facts),
-                confidence=confidence,
-                description=f"Service abuse indicators detected in {len(supporting_facts)} facts",
-            )
-
-        return None
+        return self._threat_analyzer.analyze_threats(packet)
 
     def _build_hypothesis_message(
         self,

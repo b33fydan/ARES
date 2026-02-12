@@ -1,8 +1,8 @@
 """SkepticAgent: The ANTITHESIS phase counter-argument generator.
 
 The Skeptic challenges the Architect's threat claims by finding benign
-explanations for the observed activity. This is a deterministic agent
-with no LLM involvement - all reasoning is encoded in detection rules.
+explanations for the observed activity using a pluggable strategy
+(Strategy Pattern). The default strategy is rule-based with no LLM.
 
 The Skeptic's job is to play devil's advocate - finding legitimate
 reasons why the activity might not be malicious, even if it looks
@@ -34,6 +34,7 @@ from ares.dialectic.messages.protocol import (
 )
 
 if TYPE_CHECKING:
+    from ares.dialectic.agents.strategies.protocol import ExplanationFinder
     from ares.dialectic.evidence.packet import EvidencePacket
     from ares.dialectic.evidence.fact import Fact
 
@@ -41,14 +42,38 @@ if TYPE_CHECKING:
 class SkepticAgent(AgentBase):
     """ANTITHESIS phase agent that challenges threat claims.
 
-    Rule-based logic (no LLM):
+    Accepts an optional ExplanationFinder strategy at construction.
+    Default: RuleBasedExplanationFinder (deterministic, zero behavior change).
+
     - Receive Architect's message via receive()
-    - For each assertion, check for benign explanations
-    - Look for: maintenance_window, known_admin_activity, scheduled_task,
-      software_update, legitimate_remote_access
+    - Find benign explanations via strategy
     - Build REBUTTAL message with counter-assertions and ALT alternatives
     - Confidence inversely weighted to Architect's evidence gaps
     """
+
+    def __init__(
+        self,
+        agent_id: Optional[str] = None,
+        max_memory_size: int = 100,
+        *,
+        explanation_finder: Optional["ExplanationFinder"] = None,
+    ) -> None:
+        """Initialize the SkepticAgent.
+
+        Args:
+            agent_id: Unique identifier for this agent instance.
+            max_memory_size: Maximum entries in working memory.
+            explanation_finder: Strategy for finding benign explanations.
+                Defaults to RuleBasedExplanationFinder.
+        """
+        super().__init__(agent_id=agent_id, max_memory_size=max_memory_size)
+        if explanation_finder is None:
+            from ares.dialectic.agents.strategies.rule_based import (
+                RuleBasedExplanationFinder,
+            )
+
+            explanation_finder = RuleBasedExplanationFinder()
+        self._explanation_finder = explanation_finder
 
     # Maintenance-related indicators
     MAINTENANCE_INDICATORS = frozenset({
@@ -177,8 +202,8 @@ class SkepticAgent(AgentBase):
     ) -> List[BenignExplanation]:
         """Find benign explanations for the Architect's claims.
 
-        For each assertion in the Architect's message, check if there's
-        evidence that could explain the activity as benign.
+        Delegates to the pluggable ExplanationFinder strategy.
+        Default: RuleBasedExplanationFinder (identical to original inline logic).
 
         Args:
             architect_msg: The Architect's hypothesis message
@@ -187,57 +212,7 @@ class SkepticAgent(AgentBase):
         Returns:
             List of BenignExplanation instances
         """
-        explanations: List[BenignExplanation] = []
-
-        # Collect all evidence characteristics
-        facts_by_field: dict[str, list["Fact"]] = {}
-        for fact in packet.get_all_facts():
-            field_lower = fact.field.lower()
-            if field_lower not in facts_by_field:
-                facts_by_field[field_lower] = []
-            facts_by_field[field_lower].append(fact)
-
-        # Check for maintenance window
-        maint_exp = self._check_maintenance_window(packet, facts_by_field)
-        if maint_exp:
-            explanations.append(maint_exp)
-
-        # Check for known admin activity
-        admin_exp = self._check_known_admin(packet, facts_by_field)
-        if admin_exp:
-            explanations.append(admin_exp)
-
-        # Check for scheduled tasks
-        sched_exp = self._check_scheduled_task(packet, facts_by_field)
-        if sched_exp:
-            explanations.append(sched_exp)
-
-        # Check for software updates
-        update_exp = self._check_software_update(packet, facts_by_field)
-        if update_exp:
-            explanations.append(update_exp)
-
-        # Check for legitimate remote access
-        remote_exp = self._check_legitimate_remote(packet, facts_by_field)
-        if remote_exp:
-            explanations.append(remote_exp)
-
-        # Check for security tools
-        security_exp = self._check_security_tool(packet, facts_by_field)
-        if security_exp:
-            explanations.append(security_exp)
-
-        # Check for development activity
-        dev_exp = self._check_development_activity(packet, facts_by_field)
-        if dev_exp:
-            explanations.append(dev_exp)
-
-        # Check for backup activity
-        backup_exp = self._check_backup_activity(packet, facts_by_field)
-        if backup_exp:
-            explanations.append(backup_exp)
-
-        return explanations
+        return self._explanation_finder.find_explanations(architect_msg, packet)
 
     def _check_maintenance_window(
         self,

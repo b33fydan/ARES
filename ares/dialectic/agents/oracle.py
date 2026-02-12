@@ -6,6 +6,9 @@ The Oracle consists of two components:
 
 The critical invariant: The OracleNarrator CANNOT modify the verdict.
 It can only explain what the OracleJudge has already decided.
+
+OracleJudge is UNTOUCHED by the Strategy Pattern — verdicts stay deterministic.
+Only OracleNarrator accepts a NarrativeGenerator strategy for explanation text.
 """
 
 from __future__ import annotations
@@ -33,6 +36,7 @@ from ares.dialectic.messages.protocol import (
 )
 
 if TYPE_CHECKING:
+    from ares.dialectic.agents.strategies.protocol import NarrativeGenerator
     from ares.dialectic.evidence.packet import EvidencePacket
 
 
@@ -200,6 +204,8 @@ class OracleNarrator(AgentBase):
         agent_id: Optional[str] = None,
         verdict: Optional[Verdict] = None,
         max_memory_size: int = 100,
+        *,
+        narrative_generator: Optional["NarrativeGenerator"] = None,
     ) -> None:
         """Initialize the OracleNarrator.
 
@@ -207,9 +213,18 @@ class OracleNarrator(AgentBase):
             agent_id: Optional custom agent ID
             verdict: The locked verdict to explain (required for acting)
             max_memory_size: Maximum working memory entries
+            narrative_generator: Strategy for narrative generation.
+                Defaults to RuleBasedNarrativeGenerator.
         """
         super().__init__(agent_id=agent_id, max_memory_size=max_memory_size)
         self._locked_verdict: Optional[Verdict] = verdict
+        if narrative_generator is None:
+            from ares.dialectic.agents.strategies.rule_based import (
+                RuleBasedNarrativeGenerator,
+            )
+
+            narrative_generator = RuleBasedNarrativeGenerator()
+        self._narrative_generator = narrative_generator
 
     @property
     def role(self) -> AgentRole:
@@ -381,45 +396,18 @@ class OracleNarrator(AgentBase):
     def _generate_narrative(self, verdict: Verdict) -> str:
         """Generate the full narrative explanation.
 
+        Delegates to the pluggable NarrativeGenerator strategy.
+        Default: RuleBasedNarrativeGenerator (identical to original template).
+
         Args:
             verdict: The verdict to explain
 
         Returns:
             Complete narrative explanation
         """
-        parts = []
-
-        # Opening statement
-        if verdict.outcome == VerdictOutcome.THREAT_CONFIRMED:
-            parts.append(
-                "VERDICT: THREAT CONFIRMED. "
-                "Analysis indicates the observed activity is likely malicious."
-            )
-        elif verdict.outcome == VerdictOutcome.THREAT_DISMISSED:
-            parts.append(
-                "VERDICT: THREAT DISMISSED. "
-                "Analysis indicates the observed activity is likely benign."
-            )
-        else:
-            parts.append(
-                "VERDICT: INCONCLUSIVE. "
-                "Analysis could not determine whether activity is malicious or benign."
-            )
-
-        # Reasoning from the verdict
-        parts.append(f"Basis: {verdict.reasoning}")
-
-        # Evidence summary
-        fact_count = len(verdict.supporting_fact_ids)
-        parts.append(f"Supporting evidence: {fact_count} fact(s) analyzed.")
-
-        # Confidence breakdown
-        parts.append(
-            f"Confidence analysis: Architect proposed at {verdict.architect_confidence:.0%}, "
-            f"Skeptic challenged at {verdict.skeptic_confidence:.0%}."
+        return self._narrative_generator.generate_narrative(
+            verdict, self._evidence_packet,
         )
-
-        return " ".join(parts)
 
 
 def create_oracle_verdict(

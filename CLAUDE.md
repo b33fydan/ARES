@@ -7,10 +7,10 @@ for cybersecurity defense using graph neural networks and multi-agent reasoning.
 ## Current Status
 - Phase 0: Architecture Crystallization ✅ COMPLETE
 - Phase 1: Minimal Viable Dialectic 🔄 IN PROGRESS
-- Session 008: Multi-Turn Dialectical Cycles ✅ COMPLETE
-- **Next: Session 009 — LLM Infrastructure Layer (Strategy Pattern + Anthropic API)**
+- Session 009: LLM Infrastructure Layer ✅ COMPLETE
+- **Next: Session 010 — Live LLM Integration + Tuning**
 
-## Test Count: 926 passing
+## Test Count: 1040 passing
 
 ## Tech Stack
 - Python 3.11, PyTorch, PyTorch Geometric
@@ -32,7 +32,7 @@ C:\ares-phase-zero
 
 ## Key Components
 
-### Completed (Sessions 001-008)
+### Completed (Sessions 001-009)
 ```
 ares/
 ├── graph/schema.py                    # Graph structure (Session 001)
@@ -57,9 +57,15 @@ ares/
     │   ├── context.py                 # TurnContext, DataRequest (Session 003)
     │   ├── base.py                    # AgentBase with invariants (Session 003)
     │   ├── patterns.py                # AnomalyPattern, BenignExplanation, Verdict, VerdictOutcome (Session 004)
-    │   ├── architect.py               # ArchitectAgent - THESIS phase (Session 004)
-    │   ├── skeptic.py                 # SkepticAgent - ANTITHESIS phase (Session 004)
-    │   └── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (constrained) (Session 004)
+    │   ├── architect.py               # ArchitectAgent - THESIS phase (Session 004, modified Session 009)
+    │   ├── skeptic.py                 # SkepticAgent - ANTITHESIS phase (Session 004, modified Session 009)
+    │   ├── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (constrained) (Session 004, modified Session 009)
+    │   └── strategies/                # Pluggable reasoning backends (Session 009, 114 tests)
+    │       ├── protocol.py            # ThreatAnalyzer, ExplanationFinder, NarrativeGenerator protocols
+    │       ├── rule_based.py          # RuleBasedThreatAnalyzer, RuleBasedExplanationFinder, RuleBasedNarrativeGenerator
+    │       ├── client.py              # AnthropicClient, LLMResponse (thin Anthropic API wrapper)
+    │       ├── llm_strategy.py        # LLMThreatAnalyzer, LLMExplanationFinder, LLMNarrativeGenerator
+    │       └── prompts.py             # System prompts for LLM strategies
     └── memory/
         ├── errors.py                  # MemoryStreamError, ChainIntegrityError, DuplicateEntryError
         ├── entry.py                   # MemoryEntry (frozen, hash-chained)
@@ -81,6 +87,7 @@ ares/
 | 006 | Coordinator Orchestration (DialecticalOrchestrator) | 58 | 758 |
 | 007 | Memory Stream (tamper-evident persistence) | 103 | 861 |
 | 008 | Multi-Turn Dialectical Cycles | 65 | 926 |
+| 009 | LLM Infrastructure Layer (Strategy Pattern + Anthropic API) | 114 | 1040 |
 
 ## Current Entry Points
 
@@ -101,6 +108,17 @@ from ares.dialectic.memory.backends.in_memory import InMemoryBackend
 stream = MemoryStream(backend=InMemoryBackend())
 entry = stream.store(cr)
 assert stream.verify_chain_integrity()
+
+# Agents with pluggable strategies (Session 009)
+from ares.dialectic.agents.architect import ArchitectAgent
+from ares.dialectic.agents.strategies import LLMThreatAnalyzer, AnthropicClient
+
+# Default: rule-based (no API key needed)
+agent = ArchitectAgent(agent_id="arch-1")
+
+# LLM-powered: requires ANTHROPIC_API_KEY
+client = AnthropicClient(api_key="sk-...")
+agent = ArchitectAgent(agent_id="arch-1", threat_analyzer=LLMThreatAnalyzer(client))
 ```
 
 ## Development Commands
@@ -120,26 +138,26 @@ pytest ares/ --cov=ares --cov-report=term-missing
 - Main branch = stable, all tests passing, production-ready
 - Create a session branch before each session: `session/{number}-{short-description}`
 - Commit frequently to the session branch during work
-- All 926+ tests must pass before merging to main
+- All 1040+ tests must pass before merging to main
 - Squash merge preferred for clean history (one commit per session)
 
 ```powershell
 # Before session: create branch from main
 git checkout main
 git pull origin main
-git checkout -b session/009-llm-infrastructure
+git checkout -b session/010-live-llm-integration
 
 # During session: Claude Code commits to session branch
 # (multiple commits fine — it's a working branch)
 
 # After session: all tests green → merge to main
 git checkout main
-git merge --squash session/009-llm-infrastructure
-git commit -m "Session 009: LLM Infrastructure Layer - XX new tests (XXX total)"
+git merge --squash session/010-live-llm-integration
+git commit -m "Session 010: Live LLM Integration + Tuning - XX new tests (XXX total)"
 git push origin main
 
 # Clean up
-git branch -d session/009-llm-infrastructure
+git branch -d session/010-live-llm-integration
 ```
 
 ## Session Workflow
@@ -159,16 +177,18 @@ Phase One: Minimal Viable Dialectic
 ├── [✓] Coordinator orchestration (Session 006)
 ├── [✓] Memory Stream (Session 007)
 ├── [✓] Multi-Turn Dialectical Cycles (Session 008)
-├── [ ] LLM Infrastructure Layer (Session 009) ← NEXT
-└── [ ] Live LLM Integration + Tuning (Session 010)
+├── [✓] LLM Infrastructure Layer (Session 009)
+└── [ ] Live LLM Integration + Tuning (Session 010) ← NEXT
 ```
 
-## LLM Integration Architecture (Session 009+)
-- **Strategy Pattern**: ThreatAnalyzer, ExplanationFinder, NarrativeGenerator protocols
+## LLM Integration Architecture (Session 009) ✅
+- **Strategy Pattern**: ThreatAnalyzer, ExplanationFinder, NarrativeGenerator protocols (typing.Protocol)
 - **RuleBasedStrategy**: Extracted current logic, zero behavior change, default for all agents
-- **LLMStrategy**: Anthropic API (Claude), validates output against EvidencePacket
-- **Fallback**: LLM failure → automatic rule-based fallback
+- **LLMStrategy**: Anthropic API (Claude), validates output against EvidencePacket (closed-world constraint)
+- **Fallback**: LLM failure → automatic rule-based fallback (never stops working)
 - **OracleJudge stays deterministic** — no LLM touches verdict computation
+- **AnthropicClient**: Thin wrapper, lazy SDK import, key via param or ANTHROPIC_API_KEY env var
+- **Validation**: fact_id hallucination rejection, confidence clamping, PatternType/ExplanationType enum enforcement
 
 ## Dan's Preferences
 - Direct, technical communication
