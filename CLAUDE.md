@@ -16,7 +16,7 @@ for cybersecurity defense using graph neural networks and multi-agent reasoning.
 - Python 3.11, PyTorch, PyTorch Geometric
 - NetworkX (Phase 0/1), Neo4j (Phase 2+)
 - Redis for Memory Stream (future — currently InMemoryBackend)
-- Anthropic API (Claude) for LLM integration (Session 009+)
+- Anthropic API (Claude) for LLM integration — `anthropic` SDK installed
 - Windows + PowerShell + venv
 
 ## Code Location
@@ -59,13 +59,13 @@ ares/
     │   ├── patterns.py                # AnomalyPattern, BenignExplanation, Verdict, VerdictOutcome (Session 004)
     │   ├── architect.py               # ArchitectAgent - THESIS phase (Session 004, modified Session 009)
     │   ├── skeptic.py                 # SkepticAgent - ANTITHESIS phase (Session 004, modified Session 009)
-    │   ├── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (constrained) (Session 004, modified Session 009)
-    │   └── strategies/                # Pluggable reasoning backends (Session 009, 114 tests)
-    │       ├── protocol.py            # ThreatAnalyzer, ExplanationFinder, NarrativeGenerator protocols
+    │   ├── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (Session 004, modified Session 009)
+    │   └── strategies/                # Pluggable reasoning backends (Session 009)
+    │       ├── protocol.py            # ThreatAnalyzer, ExplanationFinder, NarrativeGenerator
     │       ├── rule_based.py          # RuleBasedThreatAnalyzer, RuleBasedExplanationFinder, RuleBasedNarrativeGenerator
-    │       ├── client.py              # AnthropicClient, LLMResponse (thin Anthropic API wrapper)
     │       ├── llm_strategy.py        # LLMThreatAnalyzer, LLMExplanationFinder, LLMNarrativeGenerator
-    │       └── prompts.py             # System prompts for LLM strategies
+    │       ├── client.py              # AnthropicClient, LLMResponse
+    │       └── prompts.py             # System prompt templates (closed-world enforced)
     └── memory/
         ├── errors.py                  # MemoryStreamError, ChainIntegrityError, DuplicateEntryError
         ├── entry.py                   # MemoryEntry (frozen, hash-chained)
@@ -109,16 +109,16 @@ stream = MemoryStream(backend=InMemoryBackend())
 entry = stream.store(cr)
 assert stream.verify_chain_integrity()
 
-# Agents with pluggable strategies (Session 009)
+# LLM-powered agents (Session 009)
+from ares.dialectic.agents.strategies.client import AnthropicClient
+from ares.dialectic.agents.strategies.llm_strategy import LLMThreatAnalyzer, LLMExplanationFinder
 from ares.dialectic.agents.architect import ArchitectAgent
-from ares.dialectic.agents.strategies import LLMThreatAnalyzer, AnthropicClient
+from ares.dialectic.agents.skeptic import SkepticAgent
 
-# Default: rule-based (no API key needed)
-agent = ArchitectAgent(agent_id="arch-1")
-
-# LLM-powered: requires ANTHROPIC_API_KEY
-client = AnthropicClient(api_key="sk-...")
-agent = ArchitectAgent(agent_id="arch-1", threat_analyzer=LLMThreatAnalyzer(client))
+client = AnthropicClient(api_key="sk-...")  # or set ANTHROPIC_API_KEY env var
+architect = ArchitectAgent(agent_id="arch-001", threat_analyzer=LLMThreatAnalyzer(client))
+skeptic = SkepticAgent(agent_id="skep-001", explanation_finder=LLMExplanationFinder(client))
+# Agents now use LLM reasoning with automatic rule-based fallback
 ```
 
 ## Development Commands
@@ -140,6 +140,7 @@ pytest ares/ --cov=ares --cov-report=term-missing
 - Commit frequently to the session branch during work
 - All 1040+ tests must pass before merging to main
 - Squash merge preferred for clean history (one commit per session)
+- Use `git branch -D` (capital D) after squash merge to delete branch
 
 ```powershell
 # Before session: create branch from main
@@ -156,8 +157,8 @@ git merge --squash session/010-live-llm-integration
 git commit -m "Session 010: Live LLM Integration + Tuning - XX new tests (XXX total)"
 git push origin main
 
-# Clean up
-git branch -d session/010-live-llm-integration
+# Clean up (capital -D required after squash merge)
+git branch -D session/010-live-llm-integration
 ```
 
 ## Session Workflow
@@ -181,14 +182,13 @@ Phase One: Minimal Viable Dialectic
 └── [ ] Live LLM Integration + Tuning (Session 010) ← NEXT
 ```
 
-## LLM Integration Architecture (Session 009) ✅
-- **Strategy Pattern**: ThreatAnalyzer, ExplanationFinder, NarrativeGenerator protocols (typing.Protocol)
+## LLM Integration Architecture (Session 009)
+- **Strategy Pattern**: ThreatAnalyzer, ExplanationFinder, NarrativeGenerator protocols
 - **RuleBasedStrategy**: Extracted current logic, zero behavior change, default for all agents
-- **LLMStrategy**: Anthropic API (Claude), validates output against EvidencePacket (closed-world constraint)
-- **Fallback**: LLM failure → automatic rule-based fallback (never stops working)
+- **LLMStrategy**: Anthropic API (Claude), validates output against EvidencePacket, closed-world fact_id enforcement
+- **Fallback**: LLM failure → automatic rule-based fallback (graceful degradation)
 - **OracleJudge stays deterministic** — no LLM touches verdict computation
-- **AnthropicClient**: Thin wrapper, lazy SDK import, key via param or ANTHROPIC_API_KEY env var
-- **Validation**: fact_id hallucination rejection, confidence clamping, PatternType/ExplanationType enum enforcement
+- **AnthropicClient**: Thin wrapper, model default claude-sonnet-4-20250514
 
 ## Dan's Preferences
 - Direct, technical communication
