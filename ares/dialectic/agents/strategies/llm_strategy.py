@@ -16,7 +16,9 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Dict, List, Optional, Set, TYPE_CHECKING
+import time
+from datetime import datetime, timezone
+from typing import Dict, List, Optional, Set, Tuple, TYPE_CHECKING
 
 from ares.dialectic.agents.patterns import (
     AnomalyPattern,
@@ -39,6 +41,10 @@ from ares.dialectic.agents.strategies.rule_based import (
 )
 
 if TYPE_CHECKING:
+    from ares.dialectic.agents.strategies.observability import (
+        LLMCallLogger,
+        LLMCallRecord,
+    )
     from ares.dialectic.evidence.packet import EvidencePacket
     from ares.dialectic.messages.protocol import DialecticalMessage
 
@@ -128,9 +134,11 @@ class LLMThreatAnalyzer:
         client: AnthropicClient,
         *,
         fallback: Optional[RuleBasedThreatAnalyzer] = None,
+        call_logger: Optional["LLMCallLogger"] = None,
     ) -> None:
         self._client = client
         self._fallback = fallback or RuleBasedThreatAnalyzer()
+        self._call_logger = call_logger
 
     def analyze_threats(self, packet: "EvidencePacket") -> List[AnomalyPattern]:
         """Detect anomaly patterns using LLM reasoning.
@@ -141,19 +149,74 @@ class LLMThreatAnalyzer:
         Returns:
             List of validated AnomalyPattern instances.
         """
+        start = time.monotonic()
+        system_prompt = ARCHITECT_SYSTEM_PROMPT
+        user_prompt = self._build_user_prompt(packet)
+
+        raw_response = ""
+        parsed = None
+        validated = None
+        validation_errors: List[str] = []
+        fallback_used = False
+        fallback_reason = None
+        error_msg = None
+        input_tokens = 0
+        output_tokens = 0
+        model = ""
+
         try:
             response = self._client.complete(
-                system=ARCHITECT_SYSTEM_PROMPT,
-                user=self._build_user_prompt(packet),
+                system=system_prompt,
+                user=user_prompt,
             )
-            raw_patterns = _parse_json_array(response.content)
-            validated = self._validate_patterns(raw_patterns, packet)
+            raw_response = response.content
+            input_tokens = response.usage_input_tokens
+            output_tokens = response.usage_output_tokens
+            model = response.model
+
+            parsed = _parse_json_array(raw_response)
+            validated, validation_errors = self._validate_patterns_with_errors(
+                parsed, packet
+            )
+
             if validated:
-                return validated
-            # LLM returned nothing usable -> fallback
-            return self._fallback.analyze_threats(packet)
-        except Exception:
-            return self._fallback.analyze_threats(packet)
+                result = validated
+            else:
+                fallback_used = True
+                fallback_reason = "No valid patterns after validation"
+                result = self._fallback.analyze_threats(packet)
+
+        except Exception as e:
+            error_msg = f"{type(e).__name__}: {e}"
+            fallback_used = True
+            fallback_reason = f"Exception: {error_msg}"
+            result = self._fallback.analyze_threats(packet)
+
+        elapsed_ms = (time.monotonic() - start) * 1000
+
+        if self._call_logger is not None:
+            from ares.dialectic.agents.strategies.observability import LLMCallRecord
+
+            record = LLMCallRecord(
+                timestamp=datetime.now(timezone.utc).isoformat(),
+                strategy_type="ThreatAnalyzer",
+                model=model,
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                raw_response=raw_response,
+                parsed_result=parsed,
+                validated_result=validated,
+                validation_errors=tuple(validation_errors),
+                fallback_used=fallback_used,
+                fallback_reason=fallback_reason,
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                latency_ms=elapsed_ms,
+                error=error_msg,
+            )
+            self._call_logger.record(record)
+
+        return result
 
     def _build_user_prompt(self, packet: "EvidencePacket") -> str:
         """Build user prompt from packet facts."""
@@ -165,24 +228,53 @@ class LLMThreatAnalyzer:
     def _validate_patterns(
         self, raw: List[Dict], packet: "EvidencePacket"
     ) -> List[AnomalyPattern]:
-        """Validate LLM output against packet. Reject hallucinated fact_ids."""
+        """Validate LLM output against packet. Reject hallucinated fact_ids.
+
+        Preserved for backward compatibility with Session 009 tests.
+        """
+        validated, _ = self._validate_patterns_with_errors(raw, packet)
+        return validated
+
+    def _validate_patterns_with_errors(
+        self, raw: List[Dict], packet: "EvidencePacket"
+    ) -> Tuple[List[AnomalyPattern], List[str]]:
+        """Validate LLM output against packet. Returns validated items and errors.
+
+        Args:
+            raw: Parsed JSON array from LLM response.
+            packet: The EvidencePacket for closed-world validation.
+
+        Returns:
+            Tuple of (validated patterns, list of error descriptions).
+        """
         valid_fact_ids = packet.fact_ids
         validated: List[AnomalyPattern] = []
+        errors: List[str] = []
 
-        for item in raw:
+        for i, item in enumerate(raw):
             if not isinstance(item, dict):
+                errors.append(f"Item {i}: not a dict")
                 continue
 
             # Validate fact_ids
             raw_fact_ids = item.get("fact_ids", [])
             if not isinstance(raw_fact_ids, list):
+                errors.append(f"Item {i}: fact_ids is not a list")
                 continue
             if not all(isinstance(fid, str) for fid in raw_fact_ids):
+                errors.append(f"Item {i}: fact_ids contains non-string values")
                 continue
 
             cited = frozenset(raw_fact_ids)
-            if not cited or (cited - valid_fact_ids):
-                continue  # Reject — references facts not in packet
+            if not cited:
+                errors.append(f"Item {i}: empty fact_ids")
+                continue
+            hallucinated = cited - valid_fact_ids
+            if hallucinated:
+                errors.append(
+                    f"Item {i}: hallucinated fact_ids {hallucinated}"
+                )
+                continue
 
             # Clamp confidence
             try:
@@ -195,7 +287,8 @@ class LLMThreatAnalyzer:
             try:
                 pattern_type = PatternType(raw_type.lower())
             except ValueError:
-                continue  # Unknown pattern type — skip
+                errors.append(f"Item {i}: unknown pattern_type '{raw_type}'")
+                continue
 
             description = str(item.get("description", "")) or "LLM-detected pattern"
 
@@ -208,10 +301,11 @@ class LLMThreatAnalyzer:
                         description=description,
                     )
                 )
-            except (ValueError, TypeError):
-                continue  # AnomalyPattern validation failed
+            except (ValueError, TypeError) as e:
+                errors.append(f"Item {i}: AnomalyPattern creation failed: {e}")
+                continue
 
-        return validated
+        return validated, errors
 
 
 class LLMExplanationFinder:
@@ -225,9 +319,11 @@ class LLMExplanationFinder:
         client: AnthropicClient,
         *,
         fallback: Optional[RuleBasedExplanationFinder] = None,
+        call_logger: Optional["LLMCallLogger"] = None,
     ) -> None:
         self._client = client
         self._fallback = fallback or RuleBasedExplanationFinder()
+        self._call_logger = call_logger
 
     def find_explanations(
         self,
@@ -243,18 +339,74 @@ class LLMExplanationFinder:
         Returns:
             List of validated BenignExplanation instances.
         """
+        start = time.monotonic()
+        system_prompt = SKEPTIC_SYSTEM_PROMPT
+        user_prompt = self._build_user_prompt(architect_msg, packet)
+
+        raw_response = ""
+        parsed = None
+        validated = None
+        validation_errors: List[str] = []
+        fallback_used = False
+        fallback_reason = None
+        error_msg = None
+        input_tokens = 0
+        output_tokens = 0
+        model = ""
+
         try:
             response = self._client.complete(
-                system=SKEPTIC_SYSTEM_PROMPT,
-                user=self._build_user_prompt(architect_msg, packet),
+                system=system_prompt,
+                user=user_prompt,
             )
-            raw_explanations = _parse_json_array(response.content)
-            validated = self._validate_explanations(raw_explanations, packet)
+            raw_response = response.content
+            input_tokens = response.usage_input_tokens
+            output_tokens = response.usage_output_tokens
+            model = response.model
+
+            parsed = _parse_json_array(raw_response)
+            validated, validation_errors = self._validate_explanations_with_errors(
+                parsed, packet
+            )
+
             if validated:
-                return validated
-            return self._fallback.find_explanations(architect_msg, packet)
-        except Exception:
-            return self._fallback.find_explanations(architect_msg, packet)
+                result = validated
+            else:
+                fallback_used = True
+                fallback_reason = "No valid explanations after validation"
+                result = self._fallback.find_explanations(architect_msg, packet)
+
+        except Exception as e:
+            error_msg = f"{type(e).__name__}: {e}"
+            fallback_used = True
+            fallback_reason = f"Exception: {error_msg}"
+            result = self._fallback.find_explanations(architect_msg, packet)
+
+        elapsed_ms = (time.monotonic() - start) * 1000
+
+        if self._call_logger is not None:
+            from ares.dialectic.agents.strategies.observability import LLMCallRecord
+
+            record = LLMCallRecord(
+                timestamp=datetime.now(timezone.utc).isoformat(),
+                strategy_type="ExplanationFinder",
+                model=model,
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                raw_response=raw_response,
+                parsed_result=parsed,
+                validated_result=validated,
+                validation_errors=tuple(validation_errors),
+                fallback_used=fallback_used,
+                fallback_reason=fallback_reason,
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                latency_ms=elapsed_ms,
+                error=error_msg,
+            )
+            self._call_logger.record(record)
+
+        return result
 
     def _build_user_prompt(
         self, architect_msg: "DialecticalMessage", packet: "EvidencePacket"
@@ -279,22 +431,51 @@ class LLMExplanationFinder:
     def _validate_explanations(
         self, raw: List[Dict], packet: "EvidencePacket"
     ) -> List[BenignExplanation]:
-        """Validate LLM output against packet. Reject hallucinated fact_ids."""
+        """Validate LLM output against packet. Reject hallucinated fact_ids.
+
+        Preserved for backward compatibility with Session 009 tests.
+        """
+        validated, _ = self._validate_explanations_with_errors(raw, packet)
+        return validated
+
+    def _validate_explanations_with_errors(
+        self, raw: List[Dict], packet: "EvidencePacket"
+    ) -> Tuple[List[BenignExplanation], List[str]]:
+        """Validate LLM output against packet. Returns validated items and errors.
+
+        Args:
+            raw: Parsed JSON array from LLM response.
+            packet: The EvidencePacket for closed-world validation.
+
+        Returns:
+            Tuple of (validated explanations, list of error descriptions).
+        """
         valid_fact_ids = packet.fact_ids
         validated: List[BenignExplanation] = []
+        errors: List[str] = []
 
-        for item in raw:
+        for i, item in enumerate(raw):
             if not isinstance(item, dict):
+                errors.append(f"Item {i}: not a dict")
                 continue
 
             raw_fact_ids = item.get("fact_ids", [])
             if not isinstance(raw_fact_ids, list):
+                errors.append(f"Item {i}: fact_ids is not a list")
                 continue
             if not all(isinstance(fid, str) for fid in raw_fact_ids):
+                errors.append(f"Item {i}: fact_ids contains non-string values")
                 continue
 
             cited = frozenset(raw_fact_ids)
-            if not cited or (cited - valid_fact_ids):
+            if not cited:
+                errors.append(f"Item {i}: empty fact_ids")
+                continue
+            hallucinated = cited - valid_fact_ids
+            if hallucinated:
+                errors.append(
+                    f"Item {i}: hallucinated fact_ids {hallucinated}"
+                )
                 continue
 
             try:
@@ -306,7 +487,8 @@ class LLMExplanationFinder:
             try:
                 explanation_type = ExplanationType(raw_type)
             except ValueError:
-                continue  # Unknown explanation type
+                errors.append(f"Item {i}: unknown explanation_type '{raw_type}'")
+                continue
 
             description = str(item.get("description", "")) or "LLM-proposed explanation"
 
@@ -319,10 +501,11 @@ class LLMExplanationFinder:
                         description=description,
                     )
                 )
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e:
+                errors.append(f"Item {i}: BenignExplanation creation failed: {e}")
                 continue
 
-        return validated
+        return validated, errors
 
 
 class LLMNarrativeGenerator:
@@ -336,9 +519,11 @@ class LLMNarrativeGenerator:
         client: AnthropicClient,
         *,
         fallback: Optional[RuleBasedNarrativeGenerator] = None,
+        call_logger: Optional["LLMCallLogger"] = None,
     ) -> None:
         self._client = client
         self._fallback = fallback or RuleBasedNarrativeGenerator()
+        self._call_logger = call_logger
 
     def generate_narrative(
         self,
@@ -358,23 +543,73 @@ class LLMNarrativeGenerator:
         Returns:
             Narrative explanation string.
         """
+        start = time.monotonic()
+        system_prompt = NARRATOR_SYSTEM_PROMPT
+        user_prompt = self._build_user_prompt(
+            verdict, packet, architect_msg, skeptic_msg
+        )
+
+        raw_response = ""
+        fallback_used = False
+        fallback_reason = None
+        error_msg = None
+        input_tokens = 0
+        output_tokens = 0
+        model = ""
+
         try:
             response = self._client.complete(
-                system=NARRATOR_SYSTEM_PROMPT,
-                user=self._build_user_prompt(
-                    verdict, packet, architect_msg, skeptic_msg
-                ),
+                system=system_prompt,
+                user=user_prompt,
             )
+            raw_response = response.content
+            input_tokens = response.usage_input_tokens
+            output_tokens = response.usage_output_tokens
+            model = response.model
+
             narrative = response.content.strip()
             if not narrative:
-                return self._fallback.generate_narrative(
+                fallback_used = True
+                fallback_reason = "Empty response from LLM"
+                result = self._fallback.generate_narrative(
                     verdict, packet, architect_msg, skeptic_msg
                 )
-            return narrative
-        except Exception:
-            return self._fallback.generate_narrative(
+            else:
+                result = narrative
+
+        except Exception as e:
+            error_msg = f"{type(e).__name__}: {e}"
+            fallback_used = True
+            fallback_reason = f"Exception: {error_msg}"
+            result = self._fallback.generate_narrative(
                 verdict, packet, architect_msg, skeptic_msg
             )
+
+        elapsed_ms = (time.monotonic() - start) * 1000
+
+        if self._call_logger is not None:
+            from ares.dialectic.agents.strategies.observability import LLMCallRecord
+
+            record = LLMCallRecord(
+                timestamp=datetime.now(timezone.utc).isoformat(),
+                strategy_type="NarrativeGenerator",
+                model=model,
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                raw_response=raw_response,
+                parsed_result=None,
+                validated_result=result if not fallback_used else None,
+                validation_errors=(),
+                fallback_used=fallback_used,
+                fallback_reason=fallback_reason,
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                latency_ms=elapsed_ms,
+                error=error_msg,
+            )
+            self._call_logger.record(record)
+
+        return result
 
     def _build_user_prompt(
         self,

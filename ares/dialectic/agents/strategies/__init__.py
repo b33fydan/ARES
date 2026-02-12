@@ -22,6 +22,14 @@ LLM-powered:
 Client:
     AnthropicClient  - Thin API wrapper
     LLMResponse      - Frozen response container
+
+Observability:
+    LLMCallRecord    - Frozen diagnostic record per LLM call
+    LLMCallLogger    - Collects LLMCallRecords for inspection
+
+Cycle Helpers:
+    run_cycle_with_strategies       - Single-turn with strategy injection
+    run_multi_turn_with_strategies  - Multi-turn with strategy injection
 """
 
 from ares.dialectic.agents.strategies.protocol import (
@@ -47,6 +55,16 @@ from ares.dialectic.agents.strategies.client import (
     LLMResponse,
 )
 
+from ares.dialectic.agents.strategies.observability import (
+    LLMCallLogger,
+    LLMCallRecord,
+)
+
+from ares.dialectic.agents.strategies.live_cycle import (
+    run_cycle_with_strategies,
+    run_multi_turn_with_strategies,
+)
+
 __all__ = [
     # Protocols
     "ThreatAnalyzer",
@@ -63,4 +81,10 @@ __all__ = [
     # Client
     "AnthropicClient",
     "LLMResponse",
+    # Observability
+    "LLMCallRecord",
+    "LLMCallLogger",
+    # Cycle helpers
+    "run_cycle_with_strategies",
+    "run_multi_turn_with_strategies",
 ]

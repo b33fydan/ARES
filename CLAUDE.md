@@ -6,11 +6,11 @@ for cybersecurity defense using graph neural networks and multi-agent reasoning.
 
 ## Current Status
 - Phase 0: Architecture Crystallization ✅ COMPLETE
-- Phase 1: Minimal Viable Dialectic 🔄 IN PROGRESS
-- Session 009: LLM Infrastructure Layer ✅ COMPLETE
-- **Next: Session 010 — Live LLM Integration Harness + Observability**
+- Phase 1: Minimal Viable Dialectic ✅ COMPLETE
+- Session 010: Live LLM Integration Harness + Observability ✅ COMPLETE
+- **Phase 1 complete — all 10 sessions done**
 
-## Test Count: 1040 passing
+## Test Count: 1104 (1096 standard + 8 live_llm skipped by default)
 
 ## Tech Stack
 - Python 3.11, PyTorch, PyTorch Geometric
@@ -32,7 +32,7 @@ C:\ares-phase-zero
 
 ## Key Components
 
-### Completed (Sessions 001-009)
+### Completed (Sessions 001-010)
 ```
 ares/
 ├── graph/schema.py                    # Graph structure (Session 001)
@@ -60,12 +60,17 @@ ares/
     │   ├── architect.py               # ArchitectAgent - THESIS phase (Session 004, strategy-enabled Session 009)
     │   ├── skeptic.py                 # SkepticAgent - ANTITHESIS phase (Session 004, strategy-enabled Session 009)
     │   ├── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (Session 004, strategy-enabled Session 009)
-    │   └── strategies/                # Pluggable reasoning backends (Session 009)
+    │   └── strategies/                # Pluggable reasoning backends (Sessions 009-010)
     │       ├── protocol.py            # ThreatAnalyzer, ExplanationFinder, NarrativeGenerator
     │       ├── rule_based.py          # RuleBasedThreatAnalyzer, RuleBasedExplanationFinder, RuleBasedNarrativeGenerator
-    │       ├── llm_strategy.py        # LLMThreatAnalyzer, LLMExplanationFinder, LLMNarrativeGenerator
-    │       ├── client.py              # AnthropicClient, LLMResponse
-    │       └── prompts.py             # System prompt templates (closed-world enforced)
+    │       ├── llm_strategy.py        # LLMThreatAnalyzer, LLMExplanationFinder, LLMNarrativeGenerator + observability
+    │       ├── client.py              # AnthropicClient, LLMResponse + retry logic
+    │       ├── prompts.py             # System prompt templates (closed-world enforced)
+    │       ├── observability.py       # LLMCallRecord, LLMCallLogger (Session 010)
+    │       └── live_cycle.py          # run_cycle_with_strategies(), run_multi_turn_with_strategies() (Session 010)
+    ├── scripts/                       # Diagnostic tools (Session 010)
+    │   ├── sample_packets.py          # 3 sample scenarios (priv esc, lateral movement, benign admin)
+    │   └── run_live_cycle.py          # CLI runner for live LLM cycles
     └── memory/
         ├── errors.py                  # MemoryStreamError, ChainIntegrityError, DuplicateEntryError
         ├── entry.py                   # MemoryEntry (frozen, hash-chained)
@@ -88,6 +93,7 @@ ares/
 | 007 | Memory Stream (tamper-evident persistence) | 103 | 861 |
 | 008 | Multi-Turn Dialectical Cycles | 65 | 926 |
 | 009 | LLM Infrastructure Layer (Strategy Pattern + Anthropic API) | 114 | 1040 |
+| 010 | Live LLM Integration Harness + Observability | 64 | 1104 |
 
 ## Current Entry Points
 
@@ -119,6 +125,19 @@ client = AnthropicClient(api_key="sk-...")  # or set ANTHROPIC_API_KEY env var
 architect = ArchitectAgent(agent_id="arch-001", threat_analyzer=LLMThreatAnalyzer(client))
 skeptic = SkepticAgent(agent_id="skep-001", explanation_finder=LLMExplanationFinder(client))
 # Agents now use LLM reasoning with automatic rule-based fallback
+
+# Live LLM cycle with observability (Session 010)
+from ares.dialectic.agents.strategies.live_cycle import run_cycle_with_strategies
+from ares.dialectic.agents.strategies.observability import LLMCallLogger
+from ares.dialectic.scripts.sample_packets import build_privilege_escalation_packet
+
+logger = LLMCallLogger()
+result = run_cycle_with_strategies(
+    build_privilege_escalation_packet(),
+    threat_analyzer=LLMThreatAnalyzer(client, call_logger=logger),
+    explanation_finder=LLMExplanationFinder(client, call_logger=logger),
+)
+print(logger.summary())  # {total_calls, total_input_tokens, estimated_cost_usd, ...}
 ```
 
 ## Development Commands
@@ -144,7 +163,7 @@ pytest ares/ --run-live-llm -v
 - Main branch = stable, all tests passing, production-ready
 - Create a session branch before each session: `session/{number}-{short-description}`
 - Commit frequently to the session branch during work
-- All 1040+ tests must pass before merging to main
+- All 1100+ tests must pass before merging to main
 - Squash merge preferred for clean history (one commit per session)
 - Use `git branch -D` (capital D) after squash merge to delete branch
 
@@ -152,19 +171,19 @@ pytest ares/ --run-live-llm -v
 # Before session: create branch from main
 git checkout main
 git pull origin main
-git checkout -b session/010-live-llm-integration
+git checkout -b session/011-next-session-topic
 
 # During session: Claude Code commits to session branch
 # (multiple commits fine — it's a working branch)
 
 # After session: all tests green → merge to main
 git checkout main
-git merge --squash session/010-live-llm-integration
-git commit -m "Session 010: Live LLM Integration Harness - XX new tests (XXX total)"
+git merge --squash session/011-next-session-topic
+git commit -m "Session 011: Description - XX new tests (XXX total)"
 git push origin main
 
 # Clean up (capital -D required after squash merge)
-git branch -D session/010-live-llm-integration
+git branch -D session/011-next-session-topic
 ```
 
 ## Session Workflow
@@ -177,24 +196,28 @@ git branch -D session/010-live-llm-integration
 7. Merge to main only after all tests pass
 8. Document decisions in session logs
 
-## Phase 1 Roadmap
+## Phase 1 Roadmap (COMPLETE)
 ```
-Phase One: Minimal Viable Dialectic
+Phase One: Minimal Viable Dialectic ✅
 ├── [✓] Real data integration (Session 005)
 ├── [✓] Coordinator orchestration (Session 006)
 ├── [✓] Memory Stream (Session 007)
 ├── [✓] Multi-Turn Dialectical Cycles (Session 008)
 ├── [✓] LLM Infrastructure Layer (Session 009)
-└── [ ] Live LLM Integration Harness + Observability (Session 010) ← NEXT
+└── [✓] Live LLM Integration Harness + Observability (Session 010)
 ```
 
-## LLM Integration Architecture (Session 009)
+## LLM Integration Architecture (Sessions 009-010)
 - **Strategy Pattern**: ThreatAnalyzer, ExplanationFinder, NarrativeGenerator protocols
 - **RuleBasedStrategy**: Extracted current logic, zero behavior change, default for all agents
 - **LLMStrategy**: Anthropic API (Claude), validates output against EvidencePacket, closed-world fact_id enforcement
 - **Fallback**: LLM failure → automatic rule-based fallback (graceful degradation)
 - **OracleJudge stays deterministic** — no LLM touches verdict computation
-- **AnthropicClient**: Thin wrapper, model default claude-sonnet-4-20250514
+- **AnthropicClient**: Thin wrapper, model default claude-sonnet-4-20250514, retry with exponential backoff
+- **Observability**: LLMCallRecord captures full request/response lifecycle; LLMCallLogger aggregates across cycle
+- **Live cycle helpers**: run_cycle_with_strategies() / run_multi_turn_with_strategies() for strategy injection
+- **Sample packets**: 3 realistic scenarios built from WindowsEventExtractor for testing
+- **Live tests**: `pytest -m live_llm --run-live-llm` for real API integration testing
 
 ## Dan's Preferences
 - Direct, technical communication
