@@ -1,0 +1,363 @@
+{
+  "run_id": "f18f301d-318a-4826-bdf1-4186f4bf5d98",
+  "timestamp": "2026-02-14T22:34:43.434717",
+  "strategy_type": "rule_based",
+  "scenario_count": 12,
+  "total_duration_ms": 8,
+  "total_cost_usd": null,
+  "results": [
+    {
+      "scenario_id": "SC-001",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.375,
+      "architect_confidence": 0.5,
+      "skeptic_confidence": 0.25,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc001-fact-005",
+        "sc001-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc001-fact-004"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 0.42857142857142855,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: INCONCLUSIVE. Analysis could not determine whether activity is malicious or benign. Basis: Neither side has decisive advantage. Architect: 0.50 (2 facts), Skeptic: 0.25 (1 facts) Supporting evidence: 3 fact(s) analyzed. Confidence analysis: Architect proposed at 50%, Skeptic challenged at 25%."
+    },
+    {
+      "scenario_id": "SC-002",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.38,
+      "architect_confidence": 0.45999999999999996,
+      "skeptic_confidence": 0.3,
+      "architect_assertion_count": 3,
+      "skeptic_assertion_count": 2,
+      "architect_fact_ids_cited": [
+        "sc002-fact-003",
+        "sc002-fact-005",
+        "sc002-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc002-fact-003",
+        "sc002-fact-005"
+      ],
+      "total_facts_available": 6,
+      "fact_coverage_ratio": 0.5,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: INCONCLUSIVE. Analysis could not determine whether activity is malicious or benign. Basis: Neither side has decisive advantage. Architect: 0.46 (3 facts), Skeptic: 0.30 (2 facts) Supporting evidence: 3 fact(s) analyzed. Confidence analysis: Architect proposed at 46%, Skeptic challenged at 30%."
+    },
+    {
+      "scenario_id": "SC-003",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 1.0,
+      "architect_confidence": 1.0,
+      "skeptic_confidence": 0.19999999999999998,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc003-fact-001",
+        "sc003-fact-002",
+        "sc003-fact-004",
+        "sc003-fact-005",
+        "sc003-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc003-fact-003"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 0.8571428571428571,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: THREAT CONFIRMED. Analysis indicates the observed activity is likely malicious. Basis: Architect confidence (1.00) exceeds threshold (0.7) while Skeptic confidence (0.20) is below weak threshold (0.5) Supporting evidence: 5 fact(s) analyzed. Confidence analysis: Architect proposed at 100%, Skeptic challenged at 20%."
+    },
+    {
+      "scenario_id": "SC-004",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.5916666666666667,
+      "architect_confidence": 0.5833333333333334,
+      "skeptic_confidence": 0.6,
+      "architect_assertion_count": 4,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc004-fact-001",
+        "sc004-fact-002",
+        "sc004-fact-003",
+        "sc004-fact-004",
+        "sc004-fact-005",
+        "sc004-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc004-fact-001",
+        "sc004-fact-003",
+        "sc004-fact-004",
+        "sc004-fact-005"
+      ],
+      "total_facts_available": 9,
+      "fact_coverage_ratio": 0.6666666666666666,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: INCONCLUSIVE. Analysis could not determine whether activity is malicious or benign. Basis: Neither side has decisive advantage. Architect: 0.58 (6 facts), Skeptic: 0.60 (4 facts) Supporting evidence: 6 fact(s) analyzed. Confidence analysis: Architect proposed at 58%, Skeptic challenged at 60%."
+    },
+    {
+      "scenario_id": "SC-005",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.7775000000000001,
+      "architect_confidence": 0.7300000000000001,
+      "skeptic_confidence": 0.825,
+      "architect_assertion_count": 3,
+      "skeptic_assertion_count": 3,
+      "architect_fact_ids_cited": [
+        "sc005-fact-001",
+        "sc005-fact-002",
+        "sc005-fact-003",
+        "sc005-fact-004",
+        "sc005-fact-005",
+        "sc005-fact-006",
+        "sc005-fact-010"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc005-fact-002",
+        "sc005-fact-003",
+        "sc005-fact-004",
+        "sc005-fact-005",
+        "sc005-fact-007",
+        "sc005-fact-009"
+      ],
+      "total_facts_available": 11,
+      "fact_coverage_ratio": 0.8181818181818182,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: INCONCLUSIVE. Analysis could not determine whether activity is malicious or benign. Basis: Neither side has decisive advantage. Architect: 0.73 (7 facts), Skeptic: 0.82 (6 facts) Supporting evidence: 9 fact(s) analyzed. Confidence analysis: Architect proposed at 73%, Skeptic challenged at 82%."
+    },
+    {
+      "scenario_id": "SC-006",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.2791666666666667,
+      "architect_confidence": 0.1,
+      "skeptic_confidence": 0.45833333333333337,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 4,
+      "architect_fact_ids_cited": [
+        "sc006-fact-008"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc006-fact-001",
+        "sc006-fact-002",
+        "sc006-fact-004",
+        "sc006-fact-005",
+        "sc006-fact-007",
+        "sc006-fact-008"
+      ],
+      "total_facts_available": 8,
+      "fact_coverage_ratio": 0.75,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: INCONCLUSIVE. Analysis could not determine whether activity is malicious or benign. Basis: Neither side has decisive advantage. Architect: 0.10 (1 facts), Skeptic: 0.46 (6 facts) Supporting evidence: 6 fact(s) analyzed. Confidence analysis: Architect proposed at 10%, Skeptic challenged at 46%."
+    },
+    {
+      "scenario_id": "SC-007",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.195,
+      "architect_confidence": 0.1,
+      "skeptic_confidence": 0.29,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc007-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc007-fact-006"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 0.14285714285714285,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 1,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: INCONCLUSIVE. Analysis could not determine whether activity is malicious or benign. Basis: Neither side has decisive advantage. Architect: 0.10 (1 facts), Skeptic: 0.29 (1 facts) Supporting evidence: 1 fact(s) analyzed. Confidence analysis: Architect proposed at 10%, Skeptic challenged at 29%."
+    },
+    {
+      "scenario_id": "SC-008",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 1.0,
+      "architect_confidence": 0.42999999999999994,
+      "skeptic_confidence": 1.0,
+      "architect_assertion_count": 3,
+      "skeptic_assertion_count": 5,
+      "architect_fact_ids_cited": [
+        "sc008-fact-003",
+        "sc008-fact-004",
+        "sc008-fact-008"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc008-fact-001",
+        "sc008-fact-002",
+        "sc008-fact-003",
+        "sc008-fact-004",
+        "sc008-fact-005",
+        "sc008-fact-006",
+        "sc008-fact-007",
+        "sc008-fact-008"
+      ],
+      "total_facts_available": 8,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: THREAT DISMISSED. Analysis indicates the observed activity is likely benign. Basis: Skeptic confidence (1.00) exceeds threshold (0.7) while Architect confidence (0.43) is below weak threshold (0.5) Supporting evidence: 8 fact(s) analyzed. Confidence analysis: Architect proposed at 43%, Skeptic challenged at 100%."
+    },
+    {
+      "scenario_id": "SC-009",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.8615384615384616,
+      "architect_confidence": 0.8500000000000001,
+      "skeptic_confidence": 0.8615384615384616,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 4,
+      "architect_fact_ids_cited": [
+        "sc009-fact-006",
+        "sc009-fact-011"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc009-fact-005",
+        "sc009-fact-007",
+        "sc009-fact-008",
+        "sc009-fact-009",
+        "sc009-fact-010",
+        "sc009-fact-011"
+      ],
+      "total_facts_available": 11,
+      "fact_coverage_ratio": 0.6363636363636364,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: THREAT DISMISSED. Analysis indicates the observed activity is likely benign. Basis: Skeptic has high confidence (0.86) with significantly more evidence (6 vs 2 facts) Supporting evidence: 6 fact(s) analyzed. Confidence analysis: Architect proposed at 85%, Skeptic challenged at 86%."
+    },
+    {
+      "scenario_id": "SC-010",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.5638888888888889,
+      "architect_confidence": 0.6944444444444445,
+      "skeptic_confidence": 0.43333333333333335,
+      "architect_assertion_count": 4,
+      "skeptic_assertion_count": 4,
+      "architect_fact_ids_cited": [
+        "sc010-fact-003",
+        "sc010-fact-006",
+        "sc010-fact-007",
+        "sc010-fact-008",
+        "sc010-fact-009",
+        "sc010-fact-010",
+        "sc010-fact-012",
+        "sc010-fact-015"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc010-fact-003",
+        "sc010-fact-006",
+        "sc010-fact-008",
+        "sc010-fact-009",
+        "sc010-fact-011",
+        "sc010-fact-012"
+      ],
+      "total_facts_available": 16,
+      "fact_coverage_ratio": 0.5625,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: INCONCLUSIVE. Analysis could not determine whether activity is malicious or benign. Basis: Neither side has decisive advantage. Architect: 0.69 (8 facts), Skeptic: 0.43 (6 facts) Supporting evidence: 9 fact(s) analyzed. Confidence analysis: Architect proposed at 69%, Skeptic challenged at 43%."
+    },
+    {
+      "scenario_id": "SC-011",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.27499999999999997,
+      "architect_confidence": 0.1,
+      "skeptic_confidence": 0.44999999999999996,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 2,
+      "architect_fact_ids_cited": [
+        "sc011-fact-003"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc011-fact-001",
+        "sc011-fact-002",
+        "sc011-fact-003"
+      ],
+      "total_facts_available": 4,
+      "fact_coverage_ratio": 0.75,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: INCONCLUSIVE. Analysis could not determine whether activity is malicious or benign. Basis: Neither side has decisive advantage. Architect: 0.10 (1 facts), Skeptic: 0.45 (3 facts) Supporting evidence: 3 fact(s) analyzed. Confidence analysis: Architect proposed at 10%, Skeptic challenged at 45%."
+    },
+    {
+      "scenario_id": "SC-012",
+      "strategy_type": "rule_based",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.5428571428571429,
+      "architect_confidence": 0.5,
+      "skeptic_confidence": 0.5857142857142857,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 2,
+      "architect_fact_ids_cited": [
+        "sc012-fact-005",
+        "sc012-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc012-fact-001",
+        "sc012-fact-003",
+        "sc012-fact-005",
+        "sc012-fact-006"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 0.7142857142857143,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 0,
+      "token_usage": null,
+      "cost_usd": null,
+      "narrator_output": "VERDICT: INCONCLUSIVE. Analysis could not determine whether activity is malicious or benign. Basis: Neither side has decisive advantage. Architect: 0.50 (2 facts), Skeptic: 0.59 (4 facts) Supporting evidence: 5 fact(s) analyzed. Confidence analysis: Architect proposed at 50%, Skeptic challenged at 59%."
+    }
+  ]
+}

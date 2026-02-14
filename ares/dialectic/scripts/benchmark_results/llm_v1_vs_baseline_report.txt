@@ -1,0 +1,77 @@
+==============================================================================
+ARES BENCHMARK REPORT
+==============================================================================
+Run ID:         9aa9e966-92fa-4579-86f1-7dca9f566cce
+Timestamp:      2026-02-14T22:47:47.768311
+Strategy:       llm
+Scenarios:      12
+Total duration: 155731 ms
+Total cost:     $0.000000
+
+------------------------------------------------------------------------------
+SCENARIO SUMMARY
+------------------------------------------------------------------------------
+ID       Name                           Tier Expected           Actual             Match  Conf   Cov
+------------------------------------------------------------------------------
+SC-001   Privilege Escalation (Classic)    1 INCONCLUSIVE       inconclusive           Y  0.86  1.00
+SC-002   Suspicious Process Chain          1 THREAT_CONFIRMED   inconclusive           N  0.75  1.00
+SC-003   Credential Dumping                1 THREAT_CONFIRMED   inconclusive           N  0.90  1.00
+SC-004   Living-Off-the-Land (LOLBins)     2 THREAT_CONFIRMED   inconclusive           N  0.80  1.00
+SC-005   Lateral Movement via RDP + Pas    2 INCONCLUSIVE       inconclusive           Y  0.94  1.00
+SC-006   Data Staging Before Exfiltrati    2 INCONCLUSIVE       inconclusive           Y  0.81  0.88
+SC-007   Insider Threat — Behavioral An    2 INCONCLUSIVE       threat_dismissed       N  0.79  0.86
+SC-008   Benign Activity Mimicking Malw    3 THREAT_DISMISSED   threat_dismissed       Y  1.00  0.88
+SC-009   Authorized Red Team Exercise      3 THREAT_DISMISSED   inconclusive           N  0.98  0.91
+SC-010   Multi-Vector Campaign             4 THREAT_CONFIRMED   inconclusive           N  0.75  0.62
+SC-011   Slow-Roll Exfiltration            4 INCONCLUSIVE       inconclusive           Y  0.78  1.00
+SC-012   Supply Chain Compromise           4 INCONCLUSIVE       inconclusive           Y  0.79  0.86
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+AGGREGATE METRICS
+------------------------------------------------------------------------------
+Verdict match rate:     6/12 (50.0%)
+Average confidence:     0.846
+Average fact coverage:  0.917
+Total duration:         155731 ms
+Total cost (USD):       $0.000000
+
+------------------------------------------------------------------------------
+VERDICT DISTRIBUTION
+------------------------------------------------------------------------------
+  threat_confirmed       0
+  threat_dismissed       2
+  inconclusive           10
+
+------------------------------------------------------------------------------
+ANOMALY FLAGS (expected != actual)
+------------------------------------------------------------------------------
+  SC-002: expected THREAT_CONFIRMED, got inconclusive
+  SC-003: expected THREAT_CONFIRMED, got inconclusive
+  SC-004: expected THREAT_CONFIRMED, got inconclusive
+  SC-007: expected INCONCLUSIVE, got threat_dismissed
+  SC-009: expected THREAT_DISMISSED, got inconclusive
+  SC-010: expected THREAT_CONFIRMED, got inconclusive
+
+------------------------------------------------------------------------------
+DELTA ANALYSIS (baseline -> current)
+------------------------------------------------------------------------------
+ID       Base Verdict       Base Conf Curr Verdict       Curr Conf   Delta
+------------------------------------------------------------------------------
+SC-001   inconclusive           0.375 inconclusive           0.859  +0.484
+SC-002   inconclusive           0.380 inconclusive           0.751  +0.371
+SC-003   threat_confirmed       1.000 inconclusive           0.900  -0.100
+SC-004   inconclusive           0.592 inconclusive           0.798  +0.206
+SC-005   inconclusive           0.778 inconclusive           0.939  +0.161
+SC-006   inconclusive           0.279 inconclusive           0.812  +0.533
+SC-007   inconclusive           0.195 threat_dismissed       0.789  +0.594
+SC-008   threat_dismissed       1.000 threat_dismissed       1.000  +0.000
+SC-009   threat_dismissed       0.862 inconclusive           0.983  +0.122
+SC-010   inconclusive           0.564 inconclusive           0.750  +0.186
+SC-011   inconclusive           0.275 inconclusive           0.779  +0.504
+SC-012   inconclusive           0.543 inconclusive           0.792  +0.249
+------------------------------------------------------------------------------
+
+==============================================================================
+END OF REPORT
+==============================================================================
