@@ -9,7 +9,9 @@ Public API:
 
 from __future__ import annotations
 
+import logging
 import time
+import traceback
 import uuid
 from dataclasses import dataclass
 from datetime import datetime
@@ -23,6 +25,8 @@ from ares.dialectic.agents.strategies.rule_based import (
 )
 from ares.dialectic.coordinator.orchestrator import CycleResult
 from ares.dialectic.scripts.scenario_corpus import BenchmarkScenario
+
+logger = logging.getLogger("ares.benchmark")
 
 
 # =============================================================================
@@ -101,14 +105,57 @@ class BenchmarkRun:
 # Internal helpers
 # =============================================================================
 
+def _extract_llm_metrics(
+    call_logger: object,
+    start_index: int,
+) -> tuple[int, int, dict, float]:
+    """Extract LLM metrics from call_logger records added since start_index.
+
+    Args:
+        call_logger: LLMCallLogger instance with recorded calls.
+        start_index: Index into call_logger.records marking the start of
+            this scenario's records.
+
+    Returns:
+        Tuple of (validation_errors, fallback_triggers, token_usage, cost_usd).
+    """
+    records = call_logger.records[start_index:]
+    validation_errors = sum(len(r.validation_errors) for r in records)
+    fallback_triggers = sum(1 for r in records if r.fallback_used)
+    input_tokens = sum(r.input_tokens for r in records)
+    output_tokens = sum(r.output_tokens for r in records)
+    token_usage = {"input_tokens": input_tokens, "output_tokens": output_tokens}
+    cost_usd = (input_tokens / 1_000_000) * 3.0 + (output_tokens / 1_000_000) * 15.0
+    return validation_errors, fallback_triggers, token_usage, cost_usd
+
+
 def _extract_scenario_result(
     scenario: BenchmarkScenario,
     cycle_result: CycleResult,
     strategy_type: str,
     duration_ms: int,
     include_narration: bool,
+    validation_errors: int = 0,
+    fallback_triggers: int = 0,
+    token_usage: Optional[dict] = None,
+    cost_usd: Optional[float] = None,
 ) -> ScenarioResult:
-    """Extract metrics from a CycleResult into a ScenarioResult."""
+    """Extract metrics from a CycleResult into a ScenarioResult.
+
+    Args:
+        scenario: The BenchmarkScenario that produced this result.
+        cycle_result: The CycleResult from running the scenario.
+        strategy_type: "rule_based" or "llm".
+        duration_ms: Elapsed time in milliseconds.
+        include_narration: Whether to include narrator output.
+        validation_errors: Count of LLM validation errors (0 for rule-based).
+        fallback_triggers: Count of fallback triggers (0 for rule-based).
+        token_usage: Token usage dict (None for rule-based).
+        cost_usd: Cost in USD (None for rule-based).
+
+    Returns:
+        ScenarioResult with all metrics populated.
+    """
     architect_fact_ids = frozenset(
         cycle_result.architect_message.get_all_fact_ids()
     )
@@ -136,11 +183,11 @@ def _extract_scenario_result(
         skeptic_fact_ids_cited=skeptic_fact_ids,
         total_facts_available=total_facts,
         fact_coverage_ratio=coverage,
-        validation_errors=0,
-        fallback_triggers=0,
+        validation_errors=validation_errors,
+        fallback_triggers=fallback_triggers,
         duration_ms=duration_ms,
-        token_usage=None,
-        cost_usd=None,
+        token_usage=token_usage,
+        cost_usd=cost_usd,
         narrator_output=narrator_text,
     )
 
@@ -200,33 +247,96 @@ def run_benchmark(
                 LLMNarrativeGenerator,
                 LLMThreatAnalyzer,
             )
-            threat_analyzer = LLMThreatAnalyzer(client)
-            explanation_finder = LLMExplanationFinder(client)
-            narrative_generator = LLMNarrativeGenerator(client)
+            threat_analyzer = LLMThreatAnalyzer(client, call_logger=call_logger)
+            explanation_finder = LLMExplanationFinder(client, call_logger=call_logger)
+            narrative_generator = LLMNarrativeGenerator(
+                client, call_logger=call_logger
+            )
 
-        # Run the cycle with timing
+        # Snapshot logger state before cycle for per-scenario metric extraction
+        record_start = (
+            len(call_logger.records) if call_logger is not None else 0
+        )
+
+        # Run the cycle with timing and per-scenario error handling
         cycle_start = time.perf_counter()
-        cycle_result = run_cycle_with_strategies(
-            packet=scenario.packet,
-            threat_analyzer=threat_analyzer,
-            explanation_finder=explanation_finder,
-            narrative_generator=narrative_generator,
-            include_narration=include_narration,
-        )
-        cycle_end = time.perf_counter()
-        duration_ms = int((cycle_end - cycle_start) * 1000)
+        try:
+            cycle_result = run_cycle_with_strategies(
+                packet=scenario.packet,
+                threat_analyzer=threat_analyzer,
+                explanation_finder=explanation_finder,
+                narrative_generator=narrative_generator,
+                include_narration=include_narration,
+            )
+            cycle_end = time.perf_counter()
+            duration_ms = int((cycle_end - cycle_start) * 1000)
 
-        result = _extract_scenario_result(
-            scenario=scenario,
-            cycle_result=cycle_result,
-            strategy_type=strategy_type,
-            duration_ms=duration_ms,
-            include_narration=include_narration,
-        )
+            # Extract LLM metrics from logger if available
+            llm_validation_errors = 0
+            llm_fallback_triggers = 0
+            llm_token_usage: Optional[dict] = None
+            llm_cost_usd: Optional[float] = None
+            if strategy_type == "llm" and call_logger is not None:
+                (
+                    llm_validation_errors,
+                    llm_fallback_triggers,
+                    llm_token_usage,
+                    llm_cost_usd,
+                ) = _extract_llm_metrics(call_logger, record_start)
+
+            result = _extract_scenario_result(
+                scenario=scenario,
+                cycle_result=cycle_result,
+                strategy_type=strategy_type,
+                duration_ms=duration_ms,
+                include_narration=include_narration,
+                validation_errors=llm_validation_errors,
+                fallback_triggers=llm_fallback_triggers,
+                token_usage=llm_token_usage,
+                cost_usd=llm_cost_usd,
+            )
+
+        except Exception as exc:
+            cycle_end = time.perf_counter()
+            duration_ms = int((cycle_end - cycle_start) * 1000)
+            tb = traceback.format_exc()
+            error_msg = f"{type(exc).__name__}: {exc}\n{tb}"
+            logger.warning(
+                "Scenario %s failed: %s",
+                scenario.metadata.scenario_id,
+                exc,
+            )
+            result = ScenarioResult(
+                scenario_id=scenario.metadata.scenario_id,
+                strategy_type=strategy_type,
+                verdict_outcome="ERROR",
+                verdict_confidence=0.0,
+                architect_confidence=0.0,
+                skeptic_confidence=0.0,
+                architect_assertion_count=0,
+                skeptic_assertion_count=0,
+                architect_fact_ids_cited=frozenset(),
+                skeptic_fact_ids_cited=frozenset(),
+                total_facts_available=scenario.packet.fact_count,
+                fact_coverage_ratio=0.0,
+                validation_errors=0,
+                fallback_triggers=0,
+                duration_ms=duration_ms,
+                token_usage=None,
+                cost_usd=None,
+                narrator_output=error_msg[:500],
+            )
+
         results.append(result)
 
     run_end = time.perf_counter()
     total_duration_ms = int((run_end - run_start) * 1000)
+
+    # Aggregate total cost from per-scenario costs
+    if strategy_type == "rule_based":
+        total_cost: Optional[float] = None
+    else:
+        total_cost = sum(r.cost_usd for r in results if r.cost_usd is not None)
 
     return BenchmarkRun(
         run_id=run_id,
@@ -235,5 +345,5 @@ def run_benchmark(
         scenario_count=len(results),
         results=tuple(results),
         total_duration_ms=total_duration_ms,
-        total_cost_usd=None if strategy_type == "rule_based" else 0.0,
+        total_cost_usd=total_cost,
     )
