@@ -133,6 +133,12 @@ def main(argv: Optional[list] = None) -> Any:
         action="store_true",
         help="Disable require_new_evidence termination condition",
     )
+    parser.add_argument(
+        "--strategy",
+        choices=["llm", "multi_turn_llm"],
+        default="multi_turn_llm",
+        help="Strategy type: 'multi_turn_llm' (round-aware, default) or 'llm' (non-round-aware)",
+    )
     args = parser.parse_args(argv)
 
     # Determine output directory
@@ -167,6 +173,28 @@ def main(argv: Optional[list] = None) -> Any:
     client = AnthropicClient(api_key=api_key)
     call_logger = LLMCallLogger()
 
+    # Build strategy factories based on --strategy flag
+    strategy_factories: dict = {}
+    if args.strategy == "multi_turn_llm":
+        from ares.dialectic.agents.strategies.multi_turn_strategies import (
+            MultiTurnLLMExplanationFinder,
+            MultiTurnLLMNarrativeGenerator,
+            MultiTurnLLMThreatAnalyzer,
+        )
+        strategy_factories["threat_analyzer_factory"] = (
+            lambda: MultiTurnLLMThreatAnalyzer(client, call_logger=call_logger)
+        )
+        strategy_factories["explanation_finder_factory"] = (
+            lambda: MultiTurnLLMExplanationFinder(client, call_logger=call_logger)
+        )
+        strategy_factories["narrative_generator_factory"] = (
+            lambda: MultiTurnLLMNarrativeGenerator(client, call_logger=call_logger)
+        )
+        print(f"Strategy: multi_turn_llm (round-aware)")
+    else:
+        # Default LLM strategies (no factories — benchmark creates them)
+        print(f"Strategy: llm (non-round-aware)")
+
     # Run benchmark
     print(f"\nRunning multi-turn benchmark (max_rounds={args.max_rounds})...")
     run = run_multi_turn_benchmark(
@@ -176,6 +204,7 @@ def main(argv: Optional[list] = None) -> Any:
         max_rounds=args.max_rounds,
         confidence_delta=args.confidence_delta,
         require_new_evidence=not args.no_new_evidence,
+        **strategy_factories,
     )
 
     # Save results as JSON

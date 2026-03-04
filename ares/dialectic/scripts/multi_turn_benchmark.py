@@ -378,6 +378,15 @@ def _run_single_scenario(
         antithesis_fact_ids = antithesis_message.get_all_fact_ids()
         all_cited_fact_ids.update(antithesis_fact_ids)
 
+        # Pass round context to strategies for next round (duck-typed)
+        for strategy in [threat_analyzer, explanation_finder, narrative_generator]:
+            if hasattr(strategy, 'set_round_context'):
+                strategy.set_round_context(
+                    round_number=round_number + 1,
+                    previous_thesis=thesis_message,
+                    previous_antithesis=antithesis_message,
+                )
+
         # Record round
         debate_round = DebateRound(
             round_number=round_number,
@@ -426,6 +435,13 @@ def _run_single_scenario(
     assert termination_reason is not None, (
         "Bug: termination_reason not set after debate loop"
     )
+
+    # Set termination context on narrator strategy (duck-typed)
+    if hasattr(narrative_generator, 'set_termination_context'):
+        narrative_generator.set_termination_context(
+            total_rounds=len(rounds),
+            termination_reason=termination_reason.value,
+        )
 
     # Verdict computation (deterministic)
     final_round = rounds[-1]
@@ -496,6 +512,9 @@ def run_multi_turn_benchmark(
     max_rounds: int = 3,
     confidence_delta: float = 0.05,
     require_new_evidence: bool = True,
+    threat_analyzer_factory: object = None,
+    explanation_finder_factory: object = None,
+    narrative_generator_factory: object = None,
 ) -> MultiTurnBenchmarkRun:
     """Run all scenarios through multi-turn LLM-powered dialectical debate.
 
@@ -514,6 +533,12 @@ def run_multi_turn_benchmark(
         max_rounds: Maximum debate rounds per scenario (default 3).
         confidence_delta: Terminate if confidence shifts < this between rounds.
         require_new_evidence: Terminate if no new fact_ids introduced.
+        threat_analyzer_factory: Optional callable() -> ThreatAnalyzer.
+            If None, uses LLMThreatAnalyzer.
+        explanation_finder_factory: Optional callable() -> ExplanationFinder.
+            If None, uses LLMExplanationFinder.
+        narrative_generator_factory: Optional callable() -> NarrativeGenerator.
+            If None, uses LLMNarrativeGenerator.
 
     Returns:
         MultiTurnBenchmarkRun with full results.
@@ -530,16 +555,24 @@ def run_multi_turn_benchmark(
     results: list = []
 
     for scenario in scenarios:
-        # Lazy import to avoid hard dependency on anthropic SDK
-        from ares.dialectic.agents.strategies.llm_strategy import (
-            LLMExplanationFinder,
-            LLMNarrativeGenerator,
-            LLMThreatAnalyzer,
-        )
+        # Create strategies — use factories if provided, else default LLM strategies
+        if threat_analyzer_factory is not None:
+            threat_analyzer = threat_analyzer_factory()
+        else:
+            from ares.dialectic.agents.strategies.llm_strategy import LLMThreatAnalyzer
+            threat_analyzer = LLMThreatAnalyzer(client, call_logger=call_logger)
 
-        threat_analyzer = LLMThreatAnalyzer(client, call_logger=call_logger)
-        explanation_finder = LLMExplanationFinder(client, call_logger=call_logger)
-        narrative_generator = LLMNarrativeGenerator(client, call_logger=call_logger)
+        if explanation_finder_factory is not None:
+            explanation_finder = explanation_finder_factory()
+        else:
+            from ares.dialectic.agents.strategies.llm_strategy import LLMExplanationFinder
+            explanation_finder = LLMExplanationFinder(client, call_logger=call_logger)
+
+        if narrative_generator_factory is not None:
+            narrative_generator = narrative_generator_factory()
+        else:
+            from ares.dialectic.agents.strategies.llm_strategy import LLMNarrativeGenerator
+            narrative_generator = LLMNarrativeGenerator(client, call_logger=call_logger)
 
         # Snapshot logger state before cycle for per-scenario metric extraction
         record_start = (
