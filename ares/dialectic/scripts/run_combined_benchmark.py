@@ -198,6 +198,12 @@ def main() -> None:
                 generate_comparison_report,
             )
 
+            from ares.dialectic.agents.strategies.multi_turn_strategies import (
+                MultiTurnLLMExplanationFinder,
+                MultiTurnLLMNarrativeGenerator,
+                MultiTurnLLMThreatAnalyzer,
+            )
+
             print(f"--- Multi-turn (max_rounds={args.max_rounds}, delta={args.confidence_delta}) ---")
             multi_turn_run = run_multi_turn_benchmark(
                 scenarios=scenarios,
@@ -205,6 +211,9 @@ def main() -> None:
                 call_logger=call_logger,
                 max_rounds=args.max_rounds,
                 confidence_delta=args.confidence_delta,
+                threat_analyzer_factory=lambda: MultiTurnLLMThreatAnalyzer(client, call_logger=call_logger),
+                explanation_finder_factory=lambda: MultiTurnLLMExplanationFinder(client, call_logger=call_logger),
+                narrative_generator_factory=lambda: MultiTurnLLMNarrativeGenerator(client, call_logger=call_logger),
             )
 
             mt_report = generate_multi_turn_report(multi_turn_run)
