@@ -2,4 +2,9 @@
 
 from .in_memory import InMemoryBackend
 
-__all__ = ["InMemoryBackend"]
+try:
+    from .redis_backend import RedisBackend
+except ImportError:
+    pass  # Redis not installed — RedisBackend unavailable
+
+__all__ = ["InMemoryBackend", "RedisBackend"]
