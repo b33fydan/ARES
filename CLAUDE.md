@@ -1,5 +1,5 @@
 # ARES Development Project — CLAUDE.md
-# Last updated: Session 016 (March 2026)
+# Last updated: Session 018 (March 24, 2026)
 
 ## Context
 Building ARES (Adversarial Reasoning Engine System) — a dialectical AI framework
@@ -9,20 +9,30 @@ become schema violations rather than silent failures.
 
 ## Current Status
 - Phase 1: COMPLETE (Sessions 001–012)
-- Multi-turn experiment: COMPLETE (Sessions 013–014b)
-- Episode 4 content: COMPLETE (Session 015)
-- **Next: Session 016 — Syslog Evidence Extractor**
-- Total tests: 1,282 (zero regressions across all sessions)
+- Multi-turn experiment round 1: COMPLETE (Sessions 013–014b)
+- Evidence expansion: COMPLETE (Sessions 016–017)
+- Mixed-source re-test: COMPLETE (Session 018)
+- **Next: Session 019 — Redis Backend**
+- Total tests: 1,576 (zero regressions across all sessions)
 
-## Key Findings (Sessions 013–014)
-- Single-turn LLM accuracy: 91.7% (11/12 scenarios)
-- Multi-turn peak accuracy: 75.0% (9/12 scenarios)
-- **Debate amplifies commitment bias** unless explicitly calibrated for uncertainty
-- INCONCLUSIVE calibration fixed SC-011 (first time ever) but overcorrected clear threats
-- Multi-turn iteration parked until richer evidence distribution available (new extractors)
+## Key Findings
+
+### Single-Turn LLM (Production Path)
+- 83–92% accuracy across 18 scenarios, three evidence sources
+- Cross-source evidence synthesis works in a single pass
+- $0.31 per full corpus run (~$0.017/scenario)
+- Run-to-run variance: ±8%
+
+### Multi-Turn Debate (Research Finding)
+- 61.1% accuracy on 18-scenario corpus (vs 83–89% single-turn)
+- **Architect systematically retreats under Skeptic pressure** (avg -30 points per round)
+- Skeptic rarely moves regardless of Architect arguments
+- Evidence diversity does NOT fix the debate asymmetry
+- One genuine win: SC-017 — debate corrected an over-confident single-turn verdict
+- Fix requires protocol-level changes (conviction anchoring, Skeptic obligation to move)
 
 ## Tech Stack
-- Python 3.11, Anthropic API (Claude) for LLM reasoning
+- Python 3.11, Anthropic API (Claude Sonnet) for LLM reasoning
 - Frozen dataclasses throughout (immutability enforced at type level)
 - Windows + PowerShell + venv
 - Future: Redis backend, PyTorch/GNN components
@@ -39,6 +49,23 @@ C:\ares-phase-zero
 6. **New files over modifications** — Strict discipline of creating new files per session
 7. **Infrastructure before capability** — Measurement before optimization, always
 
+## Evidence Sources (3 Extractors)
+
+| Source | File | Events/Records |
+|--------|------|----------------|
+| Windows Event Log | `extractors/windows.py` | 4624 (logon), 4672 (privilege), 4688 (process) |
+| Syslog (RFC 3164) | `extractors/syslog.py` | SSH auth, UFW firewall, sudo, systemd |
+| NetFlow (CSV) | `extractors/netflow.py` | Flow records with timing, volume, direction |
+
+## Benchmark Corpus (18 Scenarios)
+
+| Range | Source | File |
+|-------|--------|------|
+| SC-001 to SC-012 | Single-source (Windows) | `scripts/scenario_corpus.py` |
+| SC-013 to SC-018 | Mixed-source (2-3 sources) | `scripts/mixed_source_scenarios.py` |
+
+Combined API: `get_combined_corpus()` returns all 18.
+
 ## File Tree (Complete)
 
 ```
@@ -52,7 +79,9 @@ ares/
     │   └── extractors/
     │       ├── __init__.py
     │       ├── protocol.py                      # ExtractionResult, ExtractorProtocol
-    │       └── windows.py                       # WindowsEventExtractor (4624/4672/4688)
+    │       ├── windows.py                       # WindowsEventExtractor (Session 005)
+    │       ├── syslog.py                        # SyslogExtractor (Session 016)
+    │       └── netflow.py                       # NetFlowExtractor (Session 017)
     ├── messages/
     │   ├── assertions.py                        # Assertion, AssertionType
     │   └── protocol.py                          # DialecticalMessage, Phase, MessageBuilder
@@ -100,7 +129,9 @@ ares/
         ├── benchmark_report.py                  # generate_report()
         ├── multi_turn_benchmark.py              # Session 013 (modified 014)
         ├── multi_turn_benchmark_report.py       # Session 013
-        └── run_multi_turn_llm_benchmark.py      # Session 013 (modified 014)
+        ├── run_multi_turn_llm_benchmark.py      # Session 013 (modified 014)
+        ├── mixed_source_scenarios.py            # Session 018: SC-013 to SC-018
+        └── run_combined_benchmark.py            # Session 018: combined CLI
 ```
 
 ## Session History
@@ -115,14 +146,17 @@ ares/
 | 006 | Coordinator Orchestration | 58 | 758 | Facade pattern, single-call entry |
 | 007 | Memory Stream | 103 | 861 | Hash-chained audit trail |
 | 008 | Multi-Turn Cycles | 65 | 926 | Iterative refinement before verdict |
-| 009 | LLM Infrastructure | 114 | 1040 | Strategy Pattern — extract then inject |
-| 010 | Live LLM Harness | 64 | 1104 | Zero validation errors on first live run |
-| 011a | Scenario Corpus + Benchmark | 60 | 1164 | Measure before you tune |
-| 011b | Prompt Optimization | 12 | 1176 | 50% → 91.7% via data-driven engineering |
-| 012 | Benchmark Hardening | 14 | 1190 | You can't optimize what you can't measure |
-| 013 | Multi-Turn Benchmark | 51 | 1241 | Debate without engagement is repetition |
-| 014/b | Round-Aware Strategies | 41 | 1282 | Debate amplifies commitment bias |
-| 015 | Episode 4 Content | — | 1282 | Content creation session |
+| 009 | LLM Infrastructure | 114 | 1,040 | Strategy Pattern — extract then inject |
+| 010 | Live LLM Harness | 64 | 1,104 | Zero validation errors on first live run |
+| 011a | Scenario Corpus + Benchmark | 60 | 1,164 | Measure before you tune |
+| 011b | Prompt Optimization | 12 | 1,176 | 50% → 91.7% via data-driven engineering |
+| 012 | Benchmark Hardening | 14 | 1,190 | You can't optimize what you can't measure |
+| 013 | Multi-Turn Benchmark | 51 | 1,241 | Debate without engagement is repetition |
+| 014/b | Round-Aware Strategies | 41 | 1,282 | Debate amplifies commitment bias |
+| 015 | Episode 4 Content | — | 1,282 | Content creation session |
+| 016 | Syslog Extractor | 126 | 1,408 | Second telemetry source (network layer) |
+| 017 | NetFlow Extractor | 95 | 1,503 | Third telemetry source (traffic metadata) |
+| 018 | Mixed-Source Scenarios | 73 | 1,576 | Evidence diversity doesn't fix debate asymmetry |
 
 ## Development Commands
 ```powershell
@@ -132,16 +166,19 @@ ares/
 # Run all tests
 python -m pytest ares/ -v
 
-# Run specific test file
-python -m pytest ares/dialectic/tests/evidence/extractors/test_windows.py -v
+# Run combined benchmark (rule-based)
+python -m ares.dialectic.scripts.run_combined_benchmark --strategy rule_based
+
+# Run combined benchmark (LLM single-turn)
+python -m ares.dialectic.scripts.run_combined_benchmark --strategy llm
+
+# Run combined benchmark (LLM single + multi-turn comparison)
+python -m ares.dialectic.scripts.run_combined_benchmark --strategy llm --compare-multi-turn --max-rounds 3
 ```
 
-## Roadmap (Sessions 016–020)
-- **016: Syslog Extractor** — Second telemetry source (network-layer evidence)
-- **017: NetFlow Extractor** — Third telemetry source (traffic metadata)
-- **018: Mixed-Source Benchmark** — Cross-source scenarios, re-test single-turn AND multi-turn
-- **019: Redis Backend** — Persistent Memory Stream
-- **020: Checkpoint** — Binary pass/fail against expanded corpus
+## Roadmap (Sessions 019–020)
+- **019: Redis Backend** — Persistent Memory Stream (second backend implementation)
+- **020: Checkpoint** — Binary pass/fail assessment, production path declaration
 
 ## Dan's Preferences
 - Direct, military-style communication (WILCO, SOLID, GO)
