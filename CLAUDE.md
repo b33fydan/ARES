@@ -1,189 +1,257 @@
-# ARES Development Project — CLAUDE.md
-# Last updated: Session 018 (March 24, 2026)
+# ARES Development Project
 
 ## Context
-Building ARES (Adversarial Reasoning Engine System) — a dialectical AI framework
-for cybersecurity defense. Three agents (Architect, Skeptic, Oracle) debate whether
-security events are threats within a closed-world evidence system where hallucinations
-become schema violations rather than silent failures.
+Building ARES (Adversarial Reasoning Engine System) - a dialectical AI framework 
+for cybersecurity defense using graph neural networks and multi-agent reasoning.
 
 ## Current Status
-- Phase 1: COMPLETE (Sessions 001–012)
-- Multi-turn experiment round 1: COMPLETE (Sessions 013–014b)
-- Evidence expansion: COMPLETE (Sessions 016–017)
-- Mixed-source re-test: COMPLETE (Session 018)
-- **Next: Session 019 — Redis Backend**
-- Total tests: 1,576 (zero regressions across all sessions)
+- Phase 0: Architecture Crystallization ✅ COMPLETE
+- Phase 1: Minimal Viable Dialectic ✅ COMPLETE
+- Phase 2: Evidence Expansion + Benchmarking ✅ COMPLETE (Sessions 011A–020)
+- **Phase 3: Selective Escalation Architecture — IN PROGRESS**
+  - Session 021: Corpus Expansion ✅ COMPLETE
+  - Session 022: Escalation Gate — NEXT
+  - Session 023: Per-Claim Evidence Extraction
+  - Session 024: Integration + Benchmark (FORCING FUNCTION)
 
-## Key Findings
+## Test Count: 1,663 passing (+ 65 skipped), 0 failed, zero regressions
 
-### Single-Turn LLM (Production Path)
-- 83–92% accuracy across 18 scenarios, three evidence sources
-- Cross-source evidence synthesis works in a single pass
-- $0.31 per full corpus run (~$0.017/scenario)
-- Run-to-run variance: ±8%
+## Key Findings (Sessions 013–020)
+- **Single-turn accuracy: 83.3% (15/18)** — production path
+- **Multi-turn accuracy: 66.7% (12/18)** — both original and anchored variants
+- **Diagnosed failure mechanism:** Architect retreat (-30pts/round), Skeptic rigidity, asymmetric calibration
+- **Conviction anchoring fix:** Traded one failure mode for another. Zero net improvement.
+- **Debate wins:** SC-011 (corrected over-dismissal) and SC-016 (reinforced justified conviction) — both original multi-turn only
+- **SC-017 CORRECTED:** Previously cited as flagship debate win. Verified wrong in all three modes across two independent runs. Removed from narrative.
+- **ETH Zurich convergence:** Independent study (arXiv:2603.01213v2) found same consensus failure in abstract game setting
 
-### Multi-Turn Debate (Research Finding)
-- 61.1% accuracy on 18-scenario corpus (vs 83–89% single-turn)
-- **Architect systematically retreats under Skeptic pressure** (avg -30 points per round)
-- Skeptic rarely moves regardless of Architect arguments
-- Evidence diversity does NOT fix the debate asymmetry
-- One genuine win: SC-017 — debate corrected an over-confident single-turn verdict
-- Fix requires protocol-level changes (conviction anchoring, Skeptic obligation to move)
+## Phase 3 Architecture: Selective Escalation with Per-Claim Audit
+Designed from Tribunal synthesis (GPT 5.4 Pro, Gemini 3.1 Pro, Perplexity — unanimous on direction):
+1. **Single-turn pass** — standard pipeline, Oracle renders verdict with confidence
+2. **Escalation gate** — if Oracle confidence is 0.35–0.65, escalate. Deterministic threshold.
+3. **Claim extraction** — Oracle identifies 3–5 contested claims tied to frozen EvidencePackets
+4. **Per-claim debate** — Architect/Skeptic argue each claim individually with specific evidence citations
+5. **Deterministic aggregation** — claim-level confidences weighted by evidence support count
+
+Reserve hypotheses if Phase 3 fails:
+- **Reserve A:** Adversarial Oracle (active stress-tester, not passive judge)
+- **Reserve B:** Deterministic Skeptic (replace LLM Skeptic with Python graph query function)
 
 ## Tech Stack
-- Python 3.11, Anthropic API (Claude Sonnet) for LLM reasoning
-- Frozen dataclasses throughout (immutability enforced at type level)
+- Python 3.11, PyTorch, PyTorch Geometric
+- NetworkX (Phase 0/1), Neo4j (Phase 2+)
+- Redis for Memory Stream (future — currently InMemoryBackend)
+- Anthropic API (Claude) for LLM integration — `anthropic` SDK installed
 - Windows + PowerShell + venv
-- Future: Redis backend, PyTorch/GNN components
 
 ## Code Location
 C:\ares-phase-zero
 
 ## Architecture Principles
-1. **Closed-world assumption** — Only frozen EvidencePackets as truth
-2. **Hallucinations = Schema violations** — Catchable errors, not silent bugs
-3. **Deterministic first, neural later** — Rule-based agents validated before LLM injection
-4. **Autoimmune metaphor** — Self/non-self discrimination guides design
-5. **Sensors don't get opinions** — Extractors parse and stamp provenance, reasoning happens downstream
-6. **New files over modifications** — Strict discipline of creating new files per session
-7. **Infrastructure before capability** — Measurement before optimization, always
+1. **Closed-world assumption** - Only frozen EvidencePackets as truth
+2. **Hallucinations = Schema violations** - Not mysterious AI behavior
+3. **Deterministic first, neural later** - Rule-based agents before LLM injection
+4. **Autoimmune metaphor** - Self/non-self discrimination guides design
+5. **Five invariants as bedrock** - Schema violations, not runtime checks
+6. **Strategy Pattern for reasoning** - Pluggable backends (rule-based default, LLM optional)
+7. **New files over modifications** - Never modify existing files, always create new ones
+8. **Measurement before optimization** - Build instrumentation first, then tune
 
-## Evidence Sources (3 Extractors)
+## Key Components
 
-| Source | File | Events/Records |
-|--------|------|----------------|
-| Windows Event Log | `extractors/windows.py` | 4624 (logon), 4672 (privilege), 4688 (process) |
-| Syslog (RFC 3164) | `extractors/syslog.py` | SSH auth, UFW firewall, sudo, systemd |
-| NetFlow (CSV) | `extractors/netflow.py` | Flow records with timing, volume, direction |
-
-## Benchmark Corpus (18 Scenarios)
-
-| Range | Source | File |
-|-------|--------|------|
-| SC-001 to SC-012 | Single-source (Windows) | `scripts/scenario_corpus.py` |
-| SC-013 to SC-018 | Mixed-source (2-3 sources) | `scripts/mixed_source_scenarios.py` |
-
-Combined API: `get_combined_corpus()` returns all 18.
-
-## File Tree (Complete)
-
+### Completed (Sessions 001–021)
 ```
 ares/
-├── graph/schema.py                              # Session 001 (110 tests)
+├── graph/schema.py                    # Graph structure (Session 001)
 └── dialectic/
     ├── evidence/
-    │   ├── provenance.py                        # Provenance, SourceType
-    │   ├── fact.py                              # Fact, EntityType
-    │   ├── packet.py                            # EvidencePacket
-    │   └── extractors/
-    │       ├── __init__.py
-    │       ├── protocol.py                      # ExtractionResult, ExtractorProtocol
-    │       ├── windows.py                       # WindowsEventExtractor (Session 005)
-    │       ├── syslog.py                        # SyslogExtractor (Session 016)
-    │       └── netflow.py                       # NetFlowExtractor (Session 017)
+    │   ├── provenance.py              # Source tracking (Session 002)
+    │   ├── fact.py                    # Immutable facts (Session 002)
+    │   ├── packet.py                  # Frozen evidence container (Session 002)
+    │   └── extractors/                # Telemetry parsing (Sessions 005, 011A/B, 016, 017)
+    │       ├── protocol.py            # ExtractionResult, ExtractorProtocol
+    │       ├── windows.py             # 4624/4672/4688 event parsing
+    │       ├── syslog.py              # SSH/firewall/sudo/systemd parsing
+    │       └── netflow.py             # Traffic metadata extraction
     ├── messages/
-    │   ├── assertions.py                        # Assertion, AssertionType
-    │   └── protocol.py                          # DialecticalMessage, Phase, MessageBuilder
+    │   ├── assertions.py              # ASSERT, LINK, ALT (Session 002)
+    │   └── protocol.py                # DialecticalMessage, Phase (Session 002)
     ├── coordinator/
-    │   ├── validator.py                         # MessageValidator
-    │   ├── cycle.py                             # CycleState, TerminationReason
-    │   ├── coordinator.py                       # Coordinator
-    │   └── orchestrator.py                      # DialecticalOrchestrator, CycleResult
+    │   ├── validator.py               # MessageValidator (Session 002)
+    │   ├── cycle.py                   # CycleState, TerminationReason (Session 002)
+    │   ├── coordinator.py             # Coordinator "the Bouncer" (Session 002)
+    │   ├── orchestrator.py            # DialecticalOrchestrator (Session 006)
+    │   └── multi_turn.py              # run_multi_turn_cycle() (Session 008)
     ├── agents/
-    │   ├── context.py                           # TurnContext, DataRequest
-    │   ├── base.py                              # AgentBase
-    │   ├── patterns.py                          # AnomalyPattern, BenignExplanation, Verdict
-    │   ├── architect.py                         # ArchitectAgent
-    │   ├── skeptic.py                           # SkepticAgent
-    │   ├── oracle.py                            # OracleJudge, OracleNarrator
-    │   └── strategies/
-    │       ├── __init__.py                      # Public exports
-    │       ├── protocol.py                      # ThreatAnalyzer, ExplanationFinder, NarrativeGenerator
-    │       ├── rule_based.py                    # Rule-based strategies
-    │       ├── llm_strategy.py                  # LLM strategies
-    │       ├── client.py                        # AnthropicClient
-    │       ├── prompts.py                       # System prompt templates
-    │       ├── observability.py                 # LLMCallRecord, LLMCallLogger
-    │       ├── live_cycle.py                    # run_cycle_with_strategies()
-    │       ├── multi_turn_prompts.py            # Session 014 (modified 014b)
-    │       └── multi_turn_strategies.py         # Session 014
+    │   ├── context.py                 # TurnContext, DataRequest (Session 003)
+    │   ├── base.py                    # AgentBase with invariants (Session 003)
+    │   ├── patterns.py                # AnomalyPattern, BenignExplanation, Verdict (Session 004)
+    │   ├── architect.py               # ArchitectAgent - THESIS (Session 004, strategy Session 009)
+    │   ├── skeptic.py                 # SkepticAgent - ANTITHESIS (Session 004, strategy Session 009)
+    │   ├── oracle.py                  # OracleJudge (deterministic) + OracleNarrator (Session 004)
+    │   └── strategies/                # Pluggable reasoning backends (Sessions 009–010)
+    │       ├── protocol.py            # ThreatAnalyzer, ExplanationFinder, NarrativeGenerator
+    │       ├── rule_based.py          # RuleBasedThreatAnalyzer, etc.
+    │       ├── llm_strategy.py        # LLMThreatAnalyzer, etc.
+    │       ├── client.py              # AnthropicClient with retry logic
+    │       ├── prompts.py             # System prompt templates
+    │       ├── observability.py       # LLMCallRecord, LLMCallLogger
+    │       └── live_cycle.py          # run_cycle_with_strategies(), run_multi_turn_with_strategies()
     ├── memory/
-    │   ├── __init__.py
-    │   ├── errors.py
-    │   ├── entry.py                             # MemoryEntry
-    │   ├── protocol.py                          # MemoryBackend protocol
-    │   ├── chain.py                             # HashChain
-    │   ├── stream.py                            # MemoryStream
+    │   ├── errors.py                  # MemoryStreamError, ChainIntegrityError
+    │   ├── entry.py                   # MemoryEntry (frozen, hash-chained)
+    │   ├── protocol.py                # MemoryBackend protocol
+    │   ├── chain.py                   # HashChain, ChainLink, GENESIS_HASH
+    │   ├── stream.py                  # MemoryStream (main API)
     │   └── backends/
-    │       ├── __init__.py
-    │       └── in_memory.py                     # InMemoryBackend
-    ├── multi_turn/
-    │   └── cycle.py                             # run_multi_turn_cycle()
+    │       └── in_memory.py           # InMemoryBackend (Session 007)
     └── scripts/
-        ├── __init__.py
-        ├── run_live_cycle.py
-        ├── sample_packets.py                    # 3 original scenarios
-        ├── scenario_corpus.py                   # 12 benchmark scenarios (SC-001 to SC-012)
-        ├── benchmark_runner.py                  # ScenarioResult, BenchmarkRun, run_benchmark()
-        ├── benchmark_report.py                  # generate_report()
-        ├── multi_turn_benchmark.py              # Session 013 (modified 014)
-        ├── multi_turn_benchmark_report.py       # Session 013
-        ├── run_multi_turn_llm_benchmark.py      # Session 013 (modified 014)
-        ├── mixed_source_scenarios.py            # Session 018: SC-013 to SC-018
-        └── run_combined_benchmark.py            # Session 018: combined CLI
+        ├── run_live_cycle.py          # CLI diagnostic runner
+        ├── sample_packets.py          # Realistic attack scenario packets
+        ├── scenario_corpus.py         # Original 12 scenarios (Session 011A)
+        ├── expanded_scenarios.py      # 15 new scenarios SC-019–SC-033 (Session 021)
+        ├── benchmark_runner.py        # ScenarioResult, BenchmarkRun (Session 011A)
+        ├── benchmark_report.py        # generate_report() with delta analysis
+        ├── benchmark_analysis.py      # FP/FN/Miscalibrated classification + per-tier accuracy (Session 021)
+        └── run_anchored_benchmark.py  # compare-all mode: single/original-MT/anchored-MT
 ```
 
-## Session History
+### Session Progress
+| Session | Component | Tests Added | Cumulative |
+|---------|-----------|-------------|------------|
+| 001 | Graph Schema | 110 | 110 |
+| 002 | Evidence + Messages + Coordinator | 292 | 402 |
+| 003 | Agent Foundation | 144 | 546 |
+| 004 | Concrete Agents + Integration | 134 | 570 |
+| 005 | Evidence Extractors (Windows Event Log) | 130 | 700 |
+| 006 | Coordinator Orchestration | 58 | 758 |
+| 007 | Memory Stream | 103 | 861 |
+| 008 | Multi-Turn Dialectical Cycles | 65 | 926 |
+| 009 | LLM Infrastructure Layer | 114 | 1,040 |
+| 010 | Live LLM Integration + Observability | 64 | 1,104 |
+| 011A | Scenario Corpus + Benchmark Infrastructure | 60 | 1,164 |
+| 011B | Prompt Optimization (50% → 91.7%) | 12 | 1,176 |
+| 012 | Benchmark Hardening | 14 | 1,190 |
+| 013 | Multi-Turn Benchmark (first negative result) | ~40 | ~1,230 |
+| 014 | Diagnosis + Analysis | ~30 | ~1,260 |
+| 015 | Mixed-Source Scenarios | ~50 | ~1,310 |
+| 016 | Syslog Extractor | ~40 | ~1,350 |
+| 017 | NetFlow Extractor | ~40 | ~1,390 |
+| 018–019 | Cross-Source Integration + Benchmarking | ~70 | ~1,460 |
+| 020 | Conviction Anchoring Protocol | ~68 | ~1,528 |
+| **021** | **Corpus Expansion (18→33) + Benchmark Analysis** | **68** | **1,663** |
 
-| Session | Component | Tests | Cumulative | Key Insight |
-|---------|-----------|-------|------------|-------------|
-| 001 | Graph Schema | 110 | 110 | Node/edge types for security data |
-| 002 | Dialectical Foundation | 292 | 402 | "Hallucinations = schema violations" |
-| 003 | Agent Foundation | 144 | 546 | Packet binding, phase enforcement |
-| 004 | Concrete Agents | 134 | 570 | Rule-based Architect/Skeptic/Oracle |
-| 005 | Evidence Extractors | 130 | 700 | "Sensors don't get opinions" |
-| 006 | Coordinator Orchestration | 58 | 758 | Facade pattern, single-call entry |
-| 007 | Memory Stream | 103 | 861 | Hash-chained audit trail |
-| 008 | Multi-Turn Cycles | 65 | 926 | Iterative refinement before verdict |
-| 009 | LLM Infrastructure | 114 | 1,040 | Strategy Pattern — extract then inject |
-| 010 | Live LLM Harness | 64 | 1,104 | Zero validation errors on first live run |
-| 011a | Scenario Corpus + Benchmark | 60 | 1,164 | Measure before you tune |
-| 011b | Prompt Optimization | 12 | 1,176 | 50% → 91.7% via data-driven engineering |
-| 012 | Benchmark Hardening | 14 | 1,190 | You can't optimize what you can't measure |
-| 013 | Multi-Turn Benchmark | 51 | 1,241 | Debate without engagement is repetition |
-| 014/b | Round-Aware Strategies | 41 | 1,282 | Debate amplifies commitment bias |
-| 015 | Episode 4 Content | — | 1,282 | Content creation session |
-| 016 | Syslog Extractor | 126 | 1,408 | Second telemetry source (network layer) |
-| 017 | NetFlow Extractor | 95 | 1,503 | Third telemetry source (traffic metadata) |
-| 018 | Mixed-Source Scenarios | 73 | 1,576 | Evidence diversity doesn't fix debate asymmetry |
+## Scenario Corpus (33 Scenarios)
+
+### Original Corpus (SC-001 through SC-018)
+| Tier | Count | Scenarios |
+|------|-------|-----------|
+| CLEAR_THREAT | 5 | SC-002, SC-003, SC-004, SC-010, SC-013, SC-014, SC-016 |
+| CLEAR_BENIGN | 3 | SC-008, SC-009, SC-015, SC-018 |
+| AMBIGUOUS | 6 | SC-001, SC-005, SC-006, SC-007, SC-011, SC-012 |
+| MIXED_SIGNALS | 4 | SC-017 |
+
+### Expanded Corpus (SC-019 through SC-033, Session 021)
+| Tier | Count | Scenarios |
+|------|-------|-----------|
+| CLEAR_THREAT | 2 | SC-019 (Ransomware Deployment), SC-020 (C2 Beaconing) |
+| CLEAR_BENIGN | 3 | SC-021 (Scheduled Backup), SC-022 (Admin PsExec Patching), SC-023 (Vulnerability Scanner Noise) |
+| AMBIGUOUS | 6 | SC-024 (Dual-Use PowerShell), SC-025 (Cloud Upload Ambiguity), SC-026 (Failed Logins Then Success), SC-027 (After-Hours Foreign VPN), SC-028 (WMI Remote Execution), SC-029 (Internal Port Scan) |
+| MIXED_SIGNALS | 4 | SC-030 (DGA DNS Minimal Traffic), SC-031 (Sudo Abuse No Exfil), SC-032 (Impossible Travel Normal Processes), SC-033 (Suspicious Binary Ansible Deploy) |
+
+## Benchmark Results (Session 020, N=18)
+| Mode | Accuracy | Cost |
+|------|----------|------|
+| Single-Turn LLM | 15/18 (83.3%) | $0.31 |
+| Multi-Turn Original | 12/18 (66.7%) | $0.67 |
+| Multi-Turn Anchored | 12/18 (66.7%) | $0.83 |
+
+**Session 021 expanded corpus benchmark (N=33): PENDING — run on next build day**
+
+## Current Entry Points
+
+```python
+# Single-turn with LLM strategies (production path)
+from ares.dialectic.agents.strategies.client import AnthropicClient
+from ares.dialectic.agents.strategies.llm_strategy import LLMThreatAnalyzer, LLMExplanationFinder, LLMNarrativeGenerator
+from ares.dialectic.agents.strategies.observability import LLMCallLogger
+from ares.dialectic.agents.strategies.live_cycle import run_cycle_with_strategies
+
+client = AnthropicClient()
+logger = LLMCallLogger()
+result = run_cycle_with_strategies(
+    packet,
+    threat_analyzer=LLMThreatAnalyzer(client, call_logger=logger),
+    explanation_finder=LLMExplanationFinder(client, call_logger=logger),
+    narrative_generator=LLMNarrativeGenerator(client, call_logger=logger),
+)
+
+# Benchmark (compare all modes)
+python -m ares.dialectic.scripts.run_anchored_benchmark --mode compare-all
+
+# Full corpus API
+from ares.dialectic.scripts.expanded_scenarios import get_full_corpus, get_expanded_scenarios
+all_33 = get_full_corpus()       # all scenarios
+new_15 = get_expanded_scenarios() # SC-019 through SC-033 only
+
+# Benchmark analysis (FP/FN/tier breakdown)
+from ares.dialectic.scripts.benchmark_analysis import classify_errors, format_analysis_report
+```
 
 ## Development Commands
 ```powershell
 # Activate venv
 .\venv\Scripts\Activate.ps1
 
-# Run all tests
-python -m pytest ares/ -v
+# Run all tests (excludes live LLM tests)
+pytest ares/ -v
 
-# Run combined benchmark (rule-based)
-python -m ares.dialectic.scripts.run_combined_benchmark --strategy rule_based
+# Run with coverage
+pytest ares/ --cov=ares --cov-report=term-missing
 
-# Run combined benchmark (LLM single-turn)
-python -m ares.dialectic.scripts.run_combined_benchmark --strategy llm
+# Run live LLM tests (requires ANTHROPIC_API_KEY)
+pytest ares/ -m live_llm --run-live-llm -v
 
-# Run combined benchmark (LLM single + multi-turn comparison)
-python -m ares.dialectic.scripts.run_combined_benchmark --strategy llm --compare-multi-turn --max-rounds 3
+# Benchmark (all modes, full corpus)
+python -m ares.dialectic.scripts.run_anchored_benchmark --mode compare-all
 ```
 
-## Roadmap (Sessions 019–020)
-- **019: Redis Backend** — Persistent Memory Stream (second backend implementation)
-- **020: Checkpoint** — Binary pass/fail assessment, production path declaration
+## Git Workflow
+- **NEVER commit directly to main**
+- Create session branch: `session/{number}-{short-description}`
+- All 1,663+ tests must pass before merging
+- Squash merge to main for clean history
+
+```powershell
+# Before session
+git checkout main && git pull origin main
+git checkout -b session/022-escalation-gate
+
+# After session (all tests green)
+git checkout main
+git merge --squash session/022-escalation-gate
+git commit -m "Session 022: Escalation Gate - XX new tests (XXXX total)"
+git push origin main
+git branch -D session/022-escalation-gate
+```
+
+## Next Session: 022 — Escalation Gate
+**Goal:** Implement the confidence-based escalation detector
+**Deliverables:**
+- EscalationGate frozen dataclass (takes Oracle output, returns RESOLVED or ESCALATE)
+- Configurable threshold band (defaults 0.35/0.65)
+- Gate accuracy test against expanded corpus
+- Escalation rate metrics (target: 15–25% of scenarios trigger)
+**Prerequisite:** Run compare-all on full 33-scenario corpus FIRST to establish expanded baseline
+
+## Session 024 Forcing Function
+Binary checkpoint: selective escalation accuracy on N=33 corpus ≥ 83.3% (single-turn baseline) with improved calibration on ambiguous-tier scenarios. Pass or fail. Documented either way.
 
 ## Dan's Preferences
-- Direct, military-style communication (WILCO, SOLID, GO)
-- New files over modifications — always
-- Frozen dataclasses everywhere
-- Test naming: `test_<what>_<condition>_<expected>`
-- Zero regressions is a hard requirement
-- Empirical rigor over aspirational framing
+- Direct, technical communication
+- Seek disconfirmation, honest feedback
+- Document everything in session logs
+- Test rigorously before moving forward
+- Military-style acknowledgments (WILCO, SOLID, etc.)
+- New files over modifications — strict discipline
+- Zero regressions — non-negotiable
