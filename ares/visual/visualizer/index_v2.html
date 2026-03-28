@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARES Visualizer v2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#e0f4ff;font-family:'Courier New',monospace;overflow:hidden}
+canvas{display:block;position:fixed;top:0;left:0;z-index:0}
+
+#hud{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10}
+
+#scenario-label{position:absolute;top:20px;left:24px;font-size:15px;opacity:0;transition:opacity .5s}
+#scenario-label .sid{font-size:20px;font-weight:bold;color:#00f0ff;text-shadow:0 0 8px #00f0ff55}
+#scenario-label .name{opacity:.7;font-size:13px}
+#scenario-label .meta{opacity:.5;font-size:11px;margin-top:2px}
+
+#round-indicator{position:absolute;top:70px;left:24px;font-size:14px;color:#ff00aa;opacity:0;
+  transition:opacity .3s;text-shadow:0 0 8px #ff00aa55}
+
+#accuracy{position:absolute;top:20px;right:24px;font-size:18px;opacity:0;transition:opacity .5s}
+#accuracy .pct{font-size:28px;font-weight:bold;text-shadow:0 0 10px currentColor}
+
+#confidence-panel{position:absolute;bottom:28px;right:24px;width:280px;opacity:0;transition:opacity .5s}
+.conf-row{display:flex;align-items:center;margin-bottom:6px}
+.conf-label{width:80px;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.conf-track{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;position:relative}
+.conf-fill{height:100%;border-radius:3px;transition:width .6s ease;width:0%}
+.conf-fill.arch{background:#00f0ff;box-shadow:0 0 6px #00f0ff88}
+.conf-fill.skep{background:#ff00aa;box-shadow:0 0 6px #ff00aa88}
+.conf-prev{position:absolute;top:0;height:100%;width:2px;background:rgba(255,255,255,.4);transition:left .6s ease;left:0}
+.conf-val{width:44px;text-align:right;font-size:12px;opacity:.8}
+#delta-row{font-size:12px;text-align:right;opacity:.6;margin-top:2px}
+
+#verdict-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+  font-size:28px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;
+  padding:14px 32px;border:2px solid;border-radius:4px;
+  transition:transform .4s cubic-bezier(.17,.67,.35,1.4),opacity .4s;opacity:0;
+  text-shadow:0 0 20px currentColor;background:rgba(10,10,15,.85)}
+#verdict-badge .sub{font-size:13px;letter-spacing:1px;margin-top:4px;opacity:.8}
+
+#debate-info{position:absolute;bottom:80px;left:24px;font-size:12px;opacity:0;transition:opacity .5s}
+#evolution-info{position:absolute;bottom:100px;left:24px;font-size:11px;opacity:0;transition:opacity .5s;color:#ff00aa}
+
+#status{position:absolute;bottom:10px;left:24px;font-size:11px;opacity:.5}
+#status.connected{color:#00ff66}
+#status.waiting{color:#ffaa00}
+
+#instructions{position:absolute;bottom:10px;right:24px;font-size:10px;opacity:.3}
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <div id="scenario-label">
+    <div class="sid"></div>
+    <div class="name"></div>
+    <div class="meta"></div>
+  </div>
+  <div id="round-indicator"></div>
+
+  <div id="accuracy">
+    <div class="pct"></div>
+    <div class="detail" style="font-size:12px;opacity:.6"></div>
+  </div>
+
+  <div id="confidence-panel">
+    <div class="conf-row">
+      <span class="conf-label" style="color:#00f0ff">Architect</span>
+      <div class="conf-track"><div class="conf-fill arch"></div><div class="conf-prev" id="arch-prev"></div></div>
+      <span class="conf-val" id="arch-val">0.00</span>
+    </div>
+    <div class="conf-row">
+      <span class="conf-label" style="color:#ff00aa">Skeptic</span>
+      <div class="conf-track"><div class="conf-fill skep"></div><div class="conf-prev" id="skep-prev"></div></div>
+      <span class="conf-val" id="skep-val">0.00</span>
+    </div>
+    <div id="delta-row"></div>
+  </div>
+
+  <div id="verdict-badge"><span class="text"></span><div class="sub"></div></div>
+  <div id="evolution-info"></div>
+  <div id="debate-info"></div>
+  <div id="status" class="waiting">Waiting for ARES...</div>
+  <div id="instructions">DRAG orbit | SCROLL zoom | SPACE pause | R reset | F fullscreen</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// =========================================================================
+// ARES STANDALONE VISUALIZER v2 — Session 037
+// Supports single-turn AND multi-turn events (per-round confidence shifts)
+// =========================================================================
+
+const params = new URLSearchParams(location.search);
+const WS_URL = params.get('ws') || 'ws://localhost:8765';
+const DEMO_MODE = params.get('demo') === 'true';
+const FIXTURE = params.get('fixture');
+
+const C = {
+  bg: 0x0a0a0f, cyan: 0x00f0ff, magenta: 0xff00aa,
+  threat: 0xff3300, dismiss: 0x00ff66, inconclusive: 0xffaa00,
+  dimCyan: 0x004455, brightCyan: 0x00f0ff, grid: 0x001a22,
+};
+const SOURCE_COLORS = {
+  process_list: 0x00f0ff, auth_log: 0xff00aa, syslog: 0x50c878,
+  netflow: 0xff8c00, windows_event_log: 0x4a90d9, dns_log: 0x20b2aa,
+  graph_computation: 0x87ceeb, manual: 0x888888, unknown: 0x666666,
+};
+const VERDICT_COLORS = {
+  threat_confirmed: '#ff3300', threat_dismissed: '#00ff66', inconclusive: '#ffaa00',
+};
+
+// --- Three.js ---
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(C.bg);
+scene.fog = new THREE.FogExp2(C.bg, 0.015);
+const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 200);
+camera.position.set(0, 3, 14);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.body.prepend(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0x112233, 0.4));
+const keyLight = new THREE.PointLight(0x00f0ff, 0.6, 60);
+keyLight.position.set(5, 10, 5);
+scene.add(keyLight);
+const fillLight = new THREE.PointLight(0xff00aa, 0.3, 40);
+fillLight.position.set(-5, 3, -5);
+scene.add(fillLight);
+
+const gridGeo = new THREE.PlaneGeometry(60, 60, 60, 60);
+gridGeo.rotateX(-Math.PI / 2);
+const gridMat = new THREE.MeshBasicMaterial({ color: C.grid, wireframe: true, transparent: true, opacity: 0.15 });
+const grid = new THREE.Mesh(gridGeo, gridMat);
+grid.position.y = -3;
+scene.add(grid);
+
+// --- State ---
+let factNodes = new Map();
+let edgeLines = [];
+let citedSets = { architect: new Set(), skeptic: new Set() };
+let clock = 0, paused = false, verdictMesh = null;
+let prevArchConf = 0, prevSkepConf = 0; // For multi-turn previous-round markers
+
+// --- Mouse orbit ---
+let isDragging = false, prevMouse = { x: 0, y: 0 };
+let orbitAngle = 0, orbitPitch = 0.3, orbitDist = 14;
+renderer.domElement.addEventListener('mousedown', e => { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; });
+addEventListener('mouseup', () => isDragging = false);
+addEventListener('mousemove', e => {
+  if (!isDragging) return;
+  orbitAngle -= (e.clientX - prevMouse.x) * 0.005;
+  orbitPitch = Math.max(-1, Math.min(1.2, orbitPitch + (e.clientY - prevMouse.y) * 0.005));
+  prevMouse = { x: e.clientX, y: e.clientY };
+});
+renderer.domElement.addEventListener('wheel', e => {
+  orbitDist = Math.max(4, Math.min(40, orbitDist + e.deltaY * 0.01));
+}, { passive: true });
+addEventListener('keydown', e => {
+  if (e.code === 'Space') { paused = !paused; e.preventDefault(); }
+  if (e.code === 'KeyR') { orbitAngle = 0; orbitPitch = 0.3; orbitDist = 14; }
+  if (e.code === 'KeyF') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+});
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+// --- HUD ---
+const $label = document.getElementById('scenario-label');
+const $sid = $label.querySelector('.sid');
+const $name = $label.querySelector('.name');
+const $meta = $label.querySelector('.meta');
+const $round = document.getElementById('round-indicator');
+const $accuracy = document.getElementById('accuracy');
+const $accPct = $accuracy.querySelector('.pct');
+const $accDetail = $accuracy.querySelector('.detail');
+const $confPanel = document.getElementById('confidence-panel');
+const $archFill = document.querySelector('.conf-fill.arch');
+const $skepFill = document.querySelector('.conf-fill.skep');
+const $archPrev = document.getElementById('arch-prev');
+const $skepPrev = document.getElementById('skep-prev');
+const $archVal = document.getElementById('arch-val');
+const $skepVal = document.getElementById('skep-val');
+const $delta = document.getElementById('delta-row');
+const $verdict = document.getElementById('verdict-badge');
+const $verdictText = $verdict.querySelector('.text');
+const $verdictSub = $verdict.querySelector('.sub');
+const $debate = document.getElementById('debate-info');
+const $evolution = document.getElementById('evolution-info');
+const $status = document.getElementById('status');
+
+function clearScene() {
+  factNodes.forEach(n => { n.geo.dispose(); n.mat.dispose(); scene.remove(n.mesh); });
+  factNodes.clear();
+  edgeLines.forEach(l => { l.geometry.dispose(); l.material.dispose(); scene.remove(l); });
+  edgeLines = [];
+  citedSets = { architect: new Set(), skeptic: new Set() };
+  if (verdictMesh) { verdictMesh.geometry.dispose(); verdictMesh.material.dispose(); scene.remove(verdictMesh); verdictMesh = null; }
+  $verdict.style.transform = 'translate(-50%,-50%) scale(0)'; $verdict.style.opacity = '0';
+  $confPanel.style.opacity = '0';
+  $archFill.style.width = '0%'; $skepFill.style.width = '0%';
+  $archPrev.style.left = '0%'; $skepPrev.style.left = '0%';
+  $debate.style.opacity = '0'; $evolution.style.opacity = '0';
+  $round.style.opacity = '0';
+  prevArchConf = 0; prevSkepConf = 0;
+}
+
+function nodePosition(factIndex, sourceIndex, entityType, totalFacts) {
+  const t = factIndex / Math.max(1, totalFacts - 1);
+  const angle = t * Math.PI * 4 + sourceIndex * 1.2;
+  const radius = 2.5 + t * 3.5;
+  const y = (entityType === 'edge' ? 1.5 : -0.5) + Math.sin(t * Math.PI) * 2;
+  return new THREE.Vector3(
+    Math.cos(angle) * radius + (Math.random() - 0.5) * 0.5,
+    y + (Math.random() - 0.5) * 0.4,
+    Math.sin(angle) * radius + (Math.random() - 0.5) * 0.5
+  );
+}
+
+// --- Event Handlers ---
+function handleEvent(data) {
+  switch (data.event_type) {
+    case 'scenario_start': onScenarioStart(data); break;
+    case 'fact_ingested': onFactIngested(data); break;
+    case 'fact_cited': onFactCited(data); break;
+    case 'confidence_update': onConfidenceUpdate(data); break;
+    case 'debate_summary': onDebateSummary(data); break;
+    case 'verdict_rendered': onVerdictRendered(data); break;
+    case 'accuracy_milestone': onAccuracyMilestone(data); break;
+    case 'scenario_end': onScenarioEnd(data); break;
+    // Multi-turn events (Session 037)
+    case 'round_start': onRoundStart(data); break;
+    case 'round_confidence': onRoundConfidence(data); break;
+    case 'debate_evolution': onDebateEvolution(data); break;
+    // v1 passthrough
+    case 'miscalibration_check': break;
+    case 'claim_audit': break;
+    case 'assertion_formed': break;
+  }
+}
+
+function onScenarioStart(d) {
+  clearScene();
+  $sid.textContent = d.scenario_id;
+  $name.textContent = d.scenario_name || '';
+  $meta.textContent = d.fact_count + ' facts | Expected: ' + (d.expected_verdict || '').replace('THREAT_', '');
+  $label.style.opacity = '1';
+  $confPanel.style.opacity = '0';
+}
+
+function onFactIngested(d) {
+  const color = SOURCE_COLORS[d.source_type] || SOURCE_COLORS.unknown;
+  const geo = new THREE.IcosahedronGeometry(0.18, 1);
+  const mat = new THREE.MeshStandardMaterial({
+    color: C.dimCyan, emissive: C.dimCyan, emissiveIntensity: 0.15,
+    metalness: 0.3, roughness: 0.6, transparent: true, opacity: 0.7
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  const pos = nodePosition(d.fact_index, d.source_index, d.entity_type, factNodes.size + 5);
+  mesh.position.copy(pos);
+  mesh.scale.set(0.01, 0.01, 0.01);
+  mesh.userData = { targetScale: 1, factId: d.fact_id, cited: false, sourceColor: color };
+  scene.add(mesh);
+  factNodes.set(d.fact_id, { mesh, geo, mat });
+  const lineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), pos]);
+  const lineMat = new THREE.LineBasicMaterial({ color: C.grid, transparent: true, opacity: 0.08 });
+  const line = new THREE.Line(lineGeo, lineMat);
+  scene.add(line);
+  edgeLines.push(line);
+}
+
+function onFactCited(d) {
+  const role = d.agent_role;
+  const color = role === 'architect' ? C.cyan : C.magenta;
+  (d.fact_ids || []).forEach(fid => {
+    citedSets[role].add(fid);
+    const node = factNodes.get(fid);
+    if (node) {
+      node.mat.color.setHex(color); node.mat.emissive.setHex(color);
+      node.mat.emissiveIntensity = 0.6; node.mat.opacity = 1.0;
+      node.mesh.userData.cited = true;
+    }
+  });
+  const positions = (d.fact_ids || []).map(fid => factNodes.get(fid)?.mesh.position).filter(Boolean);
+  for (let i = 0; i < positions.length - 1; i++) {
+    const lg = new THREE.BufferGeometry().setFromPoints([positions[i], positions[i + 1]]);
+    const lm = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.25 });
+    const line = new THREE.Line(lg, lm);
+    scene.add(line); edgeLines.push(line);
+  }
+}
+
+function _updateConfBars(arch, skep) {
+  $confPanel.style.opacity = '1';
+  // Show previous position marker
+  $archPrev.style.left = $archFill.style.width;
+  $skepPrev.style.left = $skepFill.style.width;
+  // Update bars
+  $archFill.style.width = (arch * 100) + '%';
+  $skepFill.style.width = (skep * 100) + '%';
+  $archVal.textContent = arch.toFixed(2);
+  $skepVal.textContent = skep.toFixed(2);
+  const delta = arch - skep;
+  $delta.textContent = 'DELTA  ' + (delta >= 0 ? '+' : '') + delta.toFixed(2);
+  prevArchConf = arch; prevSkepConf = skep;
+}
+
+function onConfidenceUpdate(d) { _updateConfBars(d.architect_confidence, d.skeptic_confidence); }
+
+function onDebateSummary(d) {
+  $debate.textContent = 'Architect: ' + d.architect_assertion_count + ' claims  |  Skeptic: ' + d.skeptic_assertion_count + ' claims';
+  $debate.style.opacity = '1';
+  setTimeout(() => $debate.style.opacity = '0', 3000);
+}
+
+function onVerdictRendered(d) {
+  const vc = VERDICT_COLORS[d.outcome] || '#ffffff';
+  const labels = { threat_confirmed: 'THREAT CONFIRMED', threat_dismissed: 'THREAT DISMISSED', inconclusive: 'INCONCLUSIVE' };
+  $verdictText.textContent = labels[d.outcome] || d.outcome;
+  $verdictSub.textContent = 'conf: ' + d.confidence.toFixed(2) + '  ' + (d.correct ? '+' : 'MISS');
+  $verdict.style.color = vc; $verdict.style.borderColor = vc;
+  $verdict.style.transform = 'translate(-50%,-50%) scale(1)'; $verdict.style.opacity = '1';
+  const pulseHex = d.outcome === 'threat_confirmed' ? C.threat : d.outcome === 'threat_dismissed' ? C.dismiss : C.inconclusive;
+  factNodes.forEach(n => { n.mat.emissive.setHex(pulseHex); n.mat.emissiveIntensity = 0.8; });
+  setTimeout(() => {
+    factNodes.forEach(n => {
+      n.mat.emissive.setHex(n.mesh.userData.cited ? n.mesh.userData.sourceColor : C.dimCyan);
+      n.mat.emissiveIntensity = n.mesh.userData.cited ? 0.4 : 0.15;
+    });
+  }, 1200);
+  const torusGeo = new THREE.TorusGeometry(1.0, 0.08, 12, 48);
+  const torusMat = new THREE.MeshStandardMaterial({
+    color: pulseHex, emissive: pulseHex, emissiveIntensity: 0.7,
+    metalness: 0.5, roughness: 0.2, transparent: true, opacity: 0.8
+  });
+  verdictMesh = new THREE.Mesh(torusGeo, torusMat);
+  verdictMesh.position.set(0, 1, 0);
+  scene.add(verdictMesh);
+}
+
+function onAccuracyMilestone(d) {
+  $accuracy.style.opacity = '1';
+  const pct = (d.running_accuracy * 100).toFixed(1);
+  $accPct.textContent = pct + '%';
+  $accDetail.textContent = d.scenarios_correct + '/' + d.scenarios_completed;
+  if (d.running_accuracy >= 0.85) $accPct.style.color = '#00ff66';
+  else if (d.running_accuracy >= 0.70) $accPct.style.color = '#ffaa00';
+  else $accPct.style.color = '#ff3300';
+}
+
+function onScenarioEnd(d) {
+  setTimeout(() => {
+    $verdict.style.transform = 'translate(-50%,-50%) scale(0)'; $verdict.style.opacity = '0';
+    $label.style.opacity = '0.3'; $round.style.opacity = '0';
+  }, 1500);
+}
+
+// --- Multi-turn event handlers ---
+
+function onRoundStart(d) {
+  $round.textContent = 'ROUND ' + d.round_number + ' / ' + d.max_rounds;
+  $round.style.opacity = '1';
+  // Flash nodes to indicate new round
+  factNodes.forEach(n => {
+    n.mat.emissiveIntensity = 0.5;
+    setTimeout(() => { n.mat.emissiveIntensity = n.mesh.userData.cited ? 0.4 : 0.15; }, 400);
+  });
+}
+
+function onRoundConfidence(d) {
+  _updateConfBars(d.architect_confidence, d.skeptic_confidence);
+  // Show round label in debate info
+  $debate.textContent = 'R' + d.round_number + ': arch=' + d.architect_confidence.toFixed(2) +
+    ' skep=' + d.skeptic_confidence.toFixed(2) +
+    ' | new facts: ' + d.architect_new_facts + '/' + d.skeptic_new_facts;
+  $debate.style.opacity = '1';
+  setTimeout(() => $debate.style.opacity = '0', 2500);
+}
+
+function onDebateEvolution(d) {
+  const traj = d.confidence_trajectory.map(p => '(' + p[0].toFixed(2) + '/' + p[1].toFixed(2) + ')').join(' -> ');
+  $evolution.textContent = d.total_rounds + ' rounds | ' + d.termination_reason + ' | ' + traj;
+  $evolution.style.opacity = '1';
+  setTimeout(() => $evolution.style.opacity = '0.4', 4000);
+}
+
+// --- Render loop ---
+function animate() {
+  requestAnimationFrame(animate);
+  if (paused) return;
+  clock += 0.008;
+  orbitAngle += 0.001;
+  camera.position.x = Math.sin(orbitAngle) * orbitDist;
+  camera.position.z = Math.cos(orbitAngle) * orbitDist;
+  camera.position.y = 2 + Math.sin(orbitPitch) * orbitDist * 0.4;
+  camera.lookAt(0, 0.5, 0);
+  factNodes.forEach(n => {
+    if (n.mesh.scale.x < n.mesh.userData.targetScale) {
+      n.mesh.scale.multiplyScalar(1.1);
+      if (n.mesh.scale.x > n.mesh.userData.targetScale)
+        n.mesh.scale.set(n.mesh.userData.targetScale, n.mesh.userData.targetScale, n.mesh.userData.targetScale);
+    }
+    n.mesh.position.y += Math.sin(clock * 2 + n.mesh.position.x) * 0.0005;
+    n.mesh.rotation.y += 0.003; n.mesh.rotation.x += 0.001;
+  });
+  if (verdictMesh) { verdictMesh.rotation.x = Math.sin(clock * 0.5) * 0.3; verdictMesh.rotation.z += 0.005; }
+  grid.position.z = Math.sin(clock * 0.2) * 0.5;
+  renderer.render(scene, camera);
+}
+animate();
+
+// --- WebSocket ---
+let ws = null, reconnectTimer = null;
+function connectWS() {
+  if (DEMO_MODE || FIXTURE) return;
+  try {
+    ws = new WebSocket(WS_URL);
+    ws.onopen = () => { $status.textContent = 'Connected to ARES'; $status.className = 'connected'; if (reconnectTimer) { clearInterval(reconnectTimer); reconnectTimer = null; } };
+    ws.onmessage = (e) => { try { handleEvent(JSON.parse(e.data)); } catch (err) { console.warn('Parse error:', err); } };
+    ws.onclose = () => { $status.textContent = 'Waiting for ARES...'; $status.className = 'waiting'; ws = null; if (!reconnectTimer) reconnectTimer = setInterval(connectWS, 2000); };
+    ws.onerror = () => { ws.close(); };
+  } catch (err) {
+    $status.textContent = 'Waiting for ARES...'; $status.className = 'waiting';
+    if (!reconnectTimer) reconnectTimer = setInterval(connectWS, 2000);
+  }
+}
+
+function loadFixture(path) {
+  fetch(path).then(r => r.json()).then(events => {
+    $status.textContent = 'Playing fixture'; $status.className = 'connected';
+    let baseTs = events[0]?.timestamp_ms || 0;
+    events.forEach(evt => setTimeout(() => handleEvent(evt), evt.timestamp_ms - baseTs));
+  }).catch(err => { $status.textContent = 'Fixture load failed'; console.error(err); });
+}
+
+function runDemo() {
+  $status.textContent = 'Demo mode'; $status.className = 'connected';
+  const scenarios = [
+    { id: 'DEMO-01', name: 'Credential Dumping (Clear Threat)', facts: 8, verdict: 'threat_confirmed', rounds: [{ a: 0.92, s: 0.25 }], correct: true },
+    { id: 'DEMO-02', name: 'Authorized Patching Window', facts: 5, verdict: 'threat_dismissed', rounds: [{ a: 0.15, s: 0.90 }], correct: true },
+    { id: 'DEMO-03', name: 'Debate Erosion Example', facts: 10, verdict: 'inconclusive', rounds: [{ a: 0.85, s: 0.30 }, { a: 0.60, s: 0.45 }, { a: 0.50, s: 0.50 }], correct: false },
+    { id: 'DEMO-04', name: 'Multi-Vector Kill Chain', facts: 16, verdict: 'threat_confirmed', rounds: [{ a: 1.00, s: 0.31 }, { a: 0.88, s: 0.35 }], correct: true },
+    { id: 'DEMO-05', name: 'Confidence Collapse', facts: 7, verdict: 'inconclusive', rounds: [{ a: 0.80, s: 0.40 }, { a: 0.55, s: 0.50 }], correct: false },
+  ];
+  let t = 0, completed = 0, correct = 0;
+  const sources = ['process_list', 'auth_log', 'syslog', 'netflow'];
+
+  scenarios.forEach((s, si) => {
+    const expected = s.correct ? s.verdict.toUpperCase() : 'THREAT_CONFIRMED';
+    setTimeout(() => handleEvent({ event_type: 'scenario_start', timestamp_ms: 0, scenario_id: s.id, scenario_name: s.name, expected_verdict: expected, fact_count: s.facts, source_types: sources.slice(0, 3) }), t);
+    t += 300;
+    for (let i = 0; i < s.facts; i++) {
+      const fi = i;
+      setTimeout(() => handleEvent({ event_type: 'fact_ingested', timestamp_ms: 0, scenario_id: s.id, fact_id: s.id + '-f' + fi, entity_type: fi % 3 === 0 ? 'edge' : 'node', entity_id: 'ent-' + fi, source_type: sources[fi % sources.length], field_name: 'field_' + fi, source_index: fi % 3, fact_index: fi }), t + fi * 120);
+    }
+    t += s.facts * 120 + 300;
+
+    // Per-round confidence (multi-turn demo)
+    s.rounds.forEach((r, ri) => {
+      setTimeout(() => handleEvent({ event_type: 'round_start', timestamp_ms: 0, scenario_id: s.id, round_number: ri + 1, max_rounds: s.rounds.length }), t);
+      t += 400;
+      setTimeout(() => handleEvent({ event_type: 'round_confidence', timestamp_ms: 0, scenario_id: s.id, round_number: ri + 1, architect_confidence: r.a, skeptic_confidence: r.s, architect_new_facts: ri === 0 ? s.facts : 0, skeptic_new_facts: ri === 0 ? s.facts : 0, architect_assertions: 3, skeptic_assertions: 2 }), t);
+      t += 600;
+    });
+
+    const lastR = s.rounds[s.rounds.length - 1];
+    // fact_cited
+    const archFacts = Array.from({ length: Math.ceil(s.facts * 0.8) }, (_, i) => s.id + '-f' + i);
+    const skepFacts = Array.from({ length: Math.ceil(s.facts * 0.4) }, (_, i) => s.id + '-f' + (s.facts - 1 - i));
+    setTimeout(() => handleEvent({ event_type: 'fact_cited', timestamp_ms: 0, scenario_id: s.id, agent_role: 'architect', fact_ids: archFacts, coverage_ratio: 0.8 }), t);
+    t += 300;
+    setTimeout(() => handleEvent({ event_type: 'fact_cited', timestamp_ms: 0, scenario_id: s.id, agent_role: 'skeptic', fact_ids: skepFacts, coverage_ratio: 0.4 }), t);
+    t += 300;
+
+    // evolution
+    const traj = s.rounds.map(r => [r.a, r.s]);
+    setTimeout(() => handleEvent({ event_type: 'debate_evolution', timestamp_ms: 0, scenario_id: s.id, total_rounds: s.rounds.length, termination_reason: s.rounds.length >= 3 ? 'max_turns_exceeded' : 'no_new_evidence', confidence_trajectory: traj, verdict_outcome: s.verdict, expected_verdict: s.correct ? s.verdict : 'threat_confirmed', is_correct: s.correct }), t);
+    t += 500;
+
+    setTimeout(() => handleEvent({ event_type: 'verdict_rendered', timestamp_ms: 0, scenario_id: s.id, outcome: s.verdict, confidence: lastR.a, correct: s.correct }), t);
+    t += 200;
+    completed++; if (s.correct) correct++;
+    const cc = correct, co = completed;
+    setTimeout(() => handleEvent({ event_type: 'accuracy_milestone', timestamp_ms: 0, scenarios_completed: co, scenarios_correct: cc, running_accuracy: cc / co }), t);
+    t += 100;
+    setTimeout(() => handleEvent({ event_type: 'scenario_end', timestamp_ms: 0, scenario_id: s.id, duration_ms: 3000 }), t);
+    t += 2500;
+  });
+}
+
+if (DEMO_MODE) runDemo();
+else if (FIXTURE) loadFixture(FIXTURE);
+else connectWS();
+</script>
+</body>
+</html>
