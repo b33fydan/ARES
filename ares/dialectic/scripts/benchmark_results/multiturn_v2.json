@@ -1,0 +1,1455 @@
+{
+  "run_id": "9ecbee26-542a-49ff-a2bb-dd7b2724a334",
+  "timestamp": "2026-03-28T12:07:53.396098",
+  "strategy_type": "multi_turn_llm",
+  "max_rounds": 3,
+  "confidence_delta": 0.05,
+  "require_new_evidence": true,
+  "scenario_count": 33,
+  "total_duration_ms": 673251,
+  "total_cost_usd": 1.0763399999999996,
+  "match_rate": 0.7575757575757576,
+  "avg_rounds_used": 2.1818181818181817,
+  "results": [
+    {
+      "scenario_id": "SC-001",
+      "scenario_name": "Privilege Escalation (Classic)",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.4964285714285715,
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.44285714285714295,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 21221,
+      "token_usage": {
+        "input_tokens": 5076,
+        "output_tokens": 1015
+      },
+      "cost_usd": 0.030453,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.8466666666666667,
+          "skeptic_confidence": 0.6124999999999999,
+          "architect_new_fact_count": 7,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 3
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.55,
+          "skeptic_confidence": 0.44285714285714295,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 3
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-002",
+      "scenario_name": "Suspicious Process Chain",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.42500000000000004,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.4000000000000001,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 15104,
+      "token_usage": {
+        "input_tokens": 4707,
+        "output_tokens": 604
+      },
+      "cost_usd": 0.023181,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.85,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.4000000000000001,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-003",
+      "scenario_name": "Credential Dumping",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.3,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 19593,
+      "token_usage": {
+        "input_tokens": 5110,
+        "output_tokens": 745
+      },
+      "cost_usd": 0.026505,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.9499999999999998,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 6,
+          "skeptic_new_fact_count": 5,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.75,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-004",
+      "scenario_name": "Living-Off-the-Land (LOLBins)",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.475,
+      "architect_confidence": 0.65,
+      "skeptic_confidence": 0.3,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 25454,
+      "token_usage": {
+        "input_tokens": 6159,
+        "output_tokens": 1077
+      },
+      "cost_usd": 0.034631999999999996,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.9300000000000002,
+          "skeptic_confidence": 0.3727272727272727,
+          "architect_new_fact_count": 8,
+          "skeptic_new_fact_count": 9,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 3
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.65,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-005",
+      "scenario_name": "Lateral Movement via RDP + Pass-the-Hash",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.43125,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.4125,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 18737,
+      "token_usage": {
+        "input_tokens": 6672,
+        "output_tokens": 907
+      },
+      "cost_usd": 0.033621,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.68125,
+          "skeptic_confidence": 0.75,
+          "architect_new_fact_count": 7,
+          "skeptic_new_fact_count": 10,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 4
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.4125,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-006",
+      "scenario_name": "Data Staging Before Exfiltration",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.525,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.6,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 17047,
+      "token_usage": {
+        "input_tokens": 5407,
+        "output_tokens": 645
+      },
+      "cost_usd": 0.025896,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.65,
+          "skeptic_confidence": 0.7,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 7,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-007",
+      "scenario_name": "Insider Threat \u2014 Behavioral Anomaly",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.42500000000000004,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.4,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 0.8571428571428571,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 17662,
+      "token_usage": {
+        "input_tokens": 5084,
+        "output_tokens": 679
+      },
+      "cost_usd": 0.025437,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.65,
+          "skeptic_confidence": 0.6000000000000001,
+          "architect_new_fact_count": 4,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.4,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-008",
+      "scenario_name": "Benign Activity Mimicking Malware",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.4,
+      "skeptic_confidence": 0.9,
+      "rounds_used": 3,
+      "max_rounds_configured": 3,
+      "termination_reason": "max_turns_exceeded",
+      "coverage": 0.75,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 22056,
+      "token_usage": {
+        "input_tokens": 8194,
+        "output_tokens": 741
+      },
+      "cost_usd": 0.035697,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.2,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 2,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.4,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 1,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 3,
+          "architect_confidence": 0.4,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-009",
+      "scenario_name": "Authorized Red Team Exercise",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 1.0,
+      "architect_confidence": 0.44545454545454544,
+      "skeptic_confidence": 1.0,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 21035,
+      "token_usage": {
+        "input_tokens": 6517,
+        "output_tokens": 987
+      },
+      "cost_usd": 0.034356,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.2,
+          "skeptic_confidence": 0.95,
+          "architect_new_fact_count": 7,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.44545454545454544,
+          "skeptic_confidence": 1.0,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 3
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-010",
+      "scenario_name": "Multi-Vector Campaign",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.8833333333333333,
+      "architect_confidence": 0.8833333333333333,
+      "skeptic_confidence": 0.44333333333333336,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 0.9375,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 31486,
+      "token_usage": {
+        "input_tokens": 8464,
+        "output_tokens": 1795
+      },
+      "cost_usd": 0.052316999999999995,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 1.0,
+          "skeptic_confidence": 0.42692307692307696,
+          "architect_new_fact_count": 15,
+          "skeptic_new_fact_count": 13,
+          "architect_assertion_count": 4,
+          "skeptic_assertion_count": 4
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.8833333333333333,
+          "skeptic_confidence": 0.44333333333333336,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 4,
+          "skeptic_assertion_count": 4
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-011",
+      "scenario_name": "Slow-Roll Exfiltration",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.525,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.6,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 15556,
+      "token_usage": {
+        "input_tokens": 4293,
+        "output_tokens": 581
+      },
+      "cost_usd": 0.021594000000000002,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.4000000000000001,
+          "skeptic_confidence": 0.8,
+          "architect_new_fact_count": 3,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-012",
+      "scenario_name": "Supply Chain Compromise",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.525,
+      "architect_confidence": 0.65,
+      "skeptic_confidence": 0.4,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 17658,
+      "token_usage": {
+        "input_tokens": 5160,
+        "output_tokens": 697
+      },
+      "cost_usd": 0.025935,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.82,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 6,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.65,
+          "skeptic_confidence": 0.4,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-013",
+      "scenario_name": "Coordinated Brute Force Attack",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.725,
+      "architect_confidence": 0.725,
+      "skeptic_confidence": 0.3857142857142857,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 0.875,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 28911,
+      "token_usage": {
+        "input_tokens": 8769,
+        "output_tokens": 1433
+      },
+      "cost_usd": 0.047802000000000004,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.9433333333333334,
+          "skeptic_confidence": 0.4071428571428572,
+          "architect_new_fact_count": 14,
+          "skeptic_new_fact_count": 14,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 5
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.725,
+          "skeptic_confidence": 0.3857142857142857,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 4
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-014",
+      "scenario_name": "Data Exfiltration with Cover Traffic",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.475,
+      "architect_confidence": 0.65,
+      "skeptic_confidence": 0.3,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 0.7692307692307693,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 23998,
+      "token_usage": {
+        "input_tokens": 8253,
+        "output_tokens": 1065
+      },
+      "cost_usd": 0.040734,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.976923076923077,
+          "skeptic_confidence": 0.29285714285714287,
+          "architect_new_fact_count": 10,
+          "skeptic_new_fact_count": 5,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.65,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-015",
+      "scenario_name": "Legitimate Infrastructure Maintenance",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9874999999999998,
+      "architect_confidence": 0.37857142857142856,
+      "skeptic_confidence": 0.9874999999999998,
+      "rounds_used": 3,
+      "max_rounds_configured": 3,
+      "termination_reason": "max_turns_exceeded",
+      "coverage": 0.75,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 26877,
+      "token_usage": {
+        "input_tokens": 11954,
+        "output_tokens": 1291
+      },
+      "cost_usd": 0.055227,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.2,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 2,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.4,
+          "skeptic_confidence": 0.9285714285714287,
+          "architect_new_fact_count": 3,
+          "skeptic_new_fact_count": 3,
+          "architect_assertion_count": 2,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 3,
+          "architect_confidence": 0.37857142857142856,
+          "skeptic_confidence": 0.9874999999999998,
+          "architect_new_fact_count": 1,
+          "skeptic_new_fact_count": 5,
+          "architect_assertion_count": 2,
+          "skeptic_assertion_count": 3
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-016",
+      "scenario_name": "C2 Beaconing with Lateral Movement",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.8388888888888889,
+      "architect_confidence": 0.8388888888888889,
+      "skeptic_confidence": 0.33333333333333337,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 25880,
+      "token_usage": {
+        "input_tokens": 8988,
+        "output_tokens": 1478
+      },
+      "cost_usd": 0.049134,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 1.0,
+          "skeptic_confidence": 0.4633333333333333,
+          "architect_new_fact_count": 15,
+          "skeptic_new_fact_count": 15,
+          "architect_assertion_count": 4,
+          "skeptic_assertion_count": 4
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.8388888888888889,
+          "skeptic_confidence": 0.33333333333333337,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 3
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-017",
+      "scenario_name": "Cloud Backup vs Exfiltration (Ambiguous)",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.7,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.7,
+      "rounds_used": 3,
+      "max_rounds_configured": 3,
+      "termination_reason": "max_turns_exceeded",
+      "coverage": 0.9090909090909091,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 21871,
+      "token_usage": {
+        "input_tokens": 9960,
+        "output_tokens": 881
+      },
+      "cost_usd": 0.043095,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.4000000000000001,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 3,
+          "skeptic_new_fact_count": 8,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 1,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 3,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.7,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-018",
+      "scenario_name": "Multi-Source False Positive Cascade",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9499999999999998,
+      "architect_confidence": 0.25,
+      "skeptic_confidence": 0.9499999999999998,
+      "rounds_used": 3,
+      "max_rounds_configured": 3,
+      "termination_reason": "max_turns_exceeded",
+      "coverage": 0.6666666666666666,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 22513,
+      "token_usage": {
+        "input_tokens": 13173,
+        "output_tokens": 947
+      },
+      "cost_usd": 0.053724,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.2,
+          "skeptic_confidence": 0.9499999999999998,
+          "architect_new_fact_count": 8,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.3,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 1,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 3,
+          "architect_confidence": 0.25,
+          "skeptic_confidence": 0.9499999999999998,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-019",
+      "scenario_name": "Ransomware Deployment",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.49062500000000003,
+      "architect_confidence": 0.6687500000000001,
+      "skeptic_confidence": 0.3125,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 22083,
+      "token_usage": {
+        "input_tokens": 5429,
+        "output_tokens": 1061
+      },
+      "cost_usd": 0.032202,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 1.0,
+          "skeptic_confidence": 0.3857142857142857,
+          "architect_new_fact_count": 8,
+          "skeptic_new_fact_count": 7,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 4
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.6687500000000001,
+          "skeptic_confidence": 0.3125,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 2,
+          "skeptic_assertion_count": 2
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-020",
+      "scenario_name": "C2 Beaconing Pattern",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.83125,
+      "architect_confidence": 0.83125,
+      "skeptic_confidence": 0.35,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 23713,
+      "token_usage": {
+        "input_tokens": 6086,
+        "output_tokens": 1039
+      },
+      "cost_usd": 0.033843,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.8625,
+          "skeptic_confidence": 0.2875,
+          "architect_new_fact_count": 8,
+          "skeptic_new_fact_count": 8,
+          "architect_assertion_count": 2,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.83125,
+          "skeptic_confidence": 0.35,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 2,
+          "skeptic_assertion_count": 2
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-021",
+      "scenario_name": "Scheduled Backup Transfer",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.85,
+      "architect_confidence": 0.4000000000000001,
+      "skeptic_confidence": 0.85,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 17560,
+      "token_usage": {
+        "input_tokens": 5017,
+        "output_tokens": 634
+      },
+      "cost_usd": 0.024561,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.20000000000000004,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 6,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.4000000000000001,
+          "skeptic_confidence": 0.85,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-022",
+      "scenario_name": "Admin PsExec Patching",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.4000000000000001,
+      "skeptic_confidence": 0.9,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 17203,
+      "token_usage": {
+        "input_tokens": 5229,
+        "output_tokens": 684
+      },
+      "cost_usd": 0.025946999999999998,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.4,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 4,
+          "skeptic_new_fact_count": 5,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.4000000000000001,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-023",
+      "scenario_name": "Vulnerability Scanner Noise",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.35,
+      "skeptic_confidence": 0.9,
+      "rounds_used": 3,
+      "max_rounds_configured": 3,
+      "termination_reason": "max_turns_exceeded",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 24192,
+      "token_usage": {
+        "input_tokens": 8206,
+        "output_tokens": 938
+      },
+      "cost_usd": 0.038688,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.2,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 5,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.4,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 2,
+          "skeptic_new_fact_count": 2,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 3,
+          "architect_confidence": 0.35,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-024",
+      "scenario_name": "Dual-Use PowerShell (Encoded)",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.525,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.6,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 0.8333333333333334,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 14777,
+      "token_usage": {
+        "input_tokens": 5204,
+        "output_tokens": 523
+      },
+      "cost_usd": 0.023457000000000002,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.4000000000000001,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 3,
+          "skeptic_new_fact_count": 3,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-025",
+      "scenario_name": "Cloud Upload Ambiguity",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.475,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.5,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 17715,
+      "token_usage": {
+        "input_tokens": 5172,
+        "output_tokens": 716
+      },
+      "cost_usd": 0.026256,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.65,
+          "skeptic_confidence": 0.6999999999999998,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.5,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-026",
+      "scenario_name": "Failed Logins Then Success",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.575,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.6999999999999998,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 16657,
+      "token_usage": {
+        "input_tokens": 5301,
+        "output_tokens": 659
+      },
+      "cost_usd": 0.025788,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.75,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 6,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.6999999999999998,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-027",
+      "scenario_name": "After-Hours Foreign VPN",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.5,
+      "architect_confidence": 0.4,
+      "skeptic_confidence": 0.6,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 0.7142857142857143,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 15412,
+      "token_usage": {
+        "input_tokens": 4814,
+        "output_tokens": 558
+      },
+      "cost_usd": 0.022812,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.75,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 2,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.4,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-028",
+      "scenario_name": "WMI Remote Execution",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.5071428571428572,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.5642857142857144,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 17453,
+      "token_usage": {
+        "input_tokens": 4678,
+        "output_tokens": 683
+      },
+      "cost_usd": 0.024279000000000002,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.85,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 6,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.5642857142857144,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-029",
+      "scenario_name": "Internal Port Scan Ambiguity",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.51875,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.5875,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 16567,
+      "token_usage": {
+        "input_tokens": 5735,
+        "output_tokens": 717
+      },
+      "cost_usd": 0.02796,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.4000000000000001,
+          "skeptic_confidence": 0.8000000000000002,
+          "architect_new_fact_count": 6,
+          "skeptic_new_fact_count": 3,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.5875,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-030",
+      "scenario_name": "DGA DNS with Minimal Traffic",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.3,
+      "rounds_used": 3,
+      "max_rounds_configured": 3,
+      "termination_reason": "max_turns_exceeded",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 25664,
+      "token_usage": {
+        "input_tokens": 7685,
+        "output_tokens": 927
+      },
+      "cost_usd": 0.03696,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.75,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 1,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 3,
+          "architect_confidence": 0.75,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-031",
+      "scenario_name": "Sudo Abuse Without Exfiltration",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.55,
+      "architect_confidence": 0.5,
+      "skeptic_confidence": 0.6,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 0.8571428571428571,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 17276,
+      "token_usage": {
+        "input_tokens": 4891,
+        "output_tokens": 628
+      },
+      "cost_usd": 0.024093000000000003,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.85,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.5,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-032",
+      "scenario_name": "Impossible Travel Normal Processes",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.525,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.6,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 17748,
+      "token_usage": {
+        "input_tokens": 5095,
+        "output_tokens": 715
+      },
+      "cost_usd": 0.02601,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.75,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 8,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    },
+    {
+      "scenario_id": "SC-033",
+      "scenario_name": "Suspicious Binary with Ansible Deploy",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.85,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.85,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "coverage": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 16554,
+      "token_usage": {
+        "input_tokens": 4973,
+        "output_tokens": 615
+      },
+      "cost_usd": 0.024144,
+      "total_facts_available": 0,
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.2,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 7,
+          "skeptic_new_fact_count": 5,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.85,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ]
+    }
+  ]
+}
