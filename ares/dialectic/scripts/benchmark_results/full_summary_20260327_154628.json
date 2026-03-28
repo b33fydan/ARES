@@ -1,0 +1,20 @@
+{
+  "timestamp": "20260327_154628",
+  "accuracy": 72.72727272727273,
+  "correct": 24,
+  "total": 33,
+  "misclassified": [
+    "SC-010",
+    "SC-011",
+    "SC-016",
+    "SC-017",
+    "SC-020",
+    "SC-023",
+    "SC-026",
+    "SC-031",
+    "SC-032"
+  ],
+  "total_cost_usd": 0.3247649999999999,
+  "duration_s": 352.091,
+  "results_file": "full_llm_20260327_154628.json"
+}

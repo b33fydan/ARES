@@ -1,0 +1,537 @@
+{
+  "run_id": "33f9f77c-9174-4d53-ba19-7def3d6ccffd",
+  "timestamp": "2026-03-04T22:46:44.064902",
+  "strategy_type": "multi_turn_llm",
+  "max_rounds": 3,
+  "confidence_delta": 0.05,
+  "require_new_evidence": true,
+  "scenario_count": 12,
+  "total_cost_usd": 0.385284,
+  "total_duration_ms": 244368,
+  "match_rate": 0.75,
+  "avg_rounds_used": 2.1666666666666665,
+  "results": [
+    {
+      "scenario_id": "SC-001",
+      "scenario_name": "Privilege Escalation (Classic)",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.48000000000000004,
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.41000000000000003,
+      "coverage": 1.0,
+      "narrator_output": "The threat assessment is inconclusive due to conflicting evidence regarding privilege escalation activity. While the assignment of high-risk privileges SeDebugPrivilege and SeTcbPrivilege (sc001-fact-003, sc001-fact-004) to user jdoe suggests potential unauthorized elevation, the legitimate administrative context indicated by the RemoteInteractive logon type (sc001-fact-001) and standard privilege enumeration command (sc001-fact-006) provides reasonable doubt. The unknown source workstation (sc001-fact-007) adds suspicion but is insufficient to definitively establish malicious intent, resulting in an evenly balanced assessment that cannot conclusively determine whether this represents authorized administrative activity or a security threat.",
+      "duration_ms": 26651,
+      "rounds_used": 3,
+      "max_rounds_configured": 3,
+      "termination_reason": "max_turns_exceeded",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.8525,
+          "skeptic_confidence": 0.6142857142857142,
+          "architect_new_fact_count": 6,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 3
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.40714285714285714,
+          "architect_new_fact_count": 1,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 3,
+          "architect_confidence": 0.55,
+          "skeptic_confidence": 0.41000000000000003,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 7632,
+        "output_tokens": 1210
+      },
+      "cost_usd": 0.041046
+    },
+    {
+      "scenario_id": "SC-002",
+      "scenario_name": "Suspicious Process Chain",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.475,
+      "architect_confidence": 0.65,
+      "skeptic_confidence": 0.3,
+      "coverage": 1.0,
+      "narrator_output": "The verdict remains inconclusive due to conflicting evidence regarding the process chain's legitimacy. While the execution sequence from Excel to cmd.exe to PowerShell (sc002-fact-001, sc002-fact-004, sc002-fact-005) could indicate macro-based malicious activity, the base64-encoded PowerShell command (sc002-fact-006) is only partially visible and cannot be definitively classified as malicious. The legitimate user context (sc002-fact-002) and standard system paths (sc002-fact-003) provide some evidence of normal operations, but insufficient evidence exists to conclusively determine whether this represents authorized business activity or a security threat.",
+      "duration_ms": 16214,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.85,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.65,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 4708,
+        "output_tokens": 631
+      },
+      "cost_usd": 0.023589000000000002
+    },
+    {
+      "scenario_id": "SC-003",
+      "scenario_name": "Credential Dumping",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.3,
+      "coverage": 1.0,
+      "narrator_output": "This threat assessment confirms credential dumping activity based on multiple corroborating indicators. The evidence shows procdump.exe being used to create a memory dump of the LSASS process (sc003-fact-003, sc003-fact-004), which resulted in a dump file being created (sc003-fact-006), and most critically, the detection of credential extraction patterns typically associated with tools like Mimikatz (sc003-fact-005). The combination of LSASS memory access permissions (sc003-fact-002) and the presence of credential harvesting signatures provides strong evidence of an active credential theft attempt by the CORP\\svc_backup account (sc003-fact-007).",
+      "duration_ms": 15081,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.9499999999999998,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 6,
+          "skeptic_new_fact_count": 1,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.75,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 4960,
+        "output_tokens": 609
+      },
+      "cost_usd": 0.024015
+    },
+    {
+      "scenario_id": "SC-004",
+      "scenario_name": "Living-Off-the-Land (LOLBins)",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.725,
+      "architect_confidence": 0.725,
+      "skeptic_confidence": 0.40714285714285714,
+      "coverage": 1.0,
+      "narrator_output": "The threat is confirmed based on evidence of multiple Living-off-the-Land Binary (LOLBIN) abuse techniques executed in sequence. The activity shows certutil.exe downloading a suspicious payload from an uncategorized IP address (sc004-fact-002, sc004-fact-008), followed by mshta.exe executing an HTA file (sc004-fact-004) and regsvr32.exe connecting to the same remote server to download and execute a script (sc004-fact-006, sc004-fact-007). This coordinated use of legitimate Windows binaries for malicious purposes, combined with connections to a recently observed IP address, strongly indicates threat actor activity designed to evade detection while establishing persistence or executing malicious code.",
+      "duration_ms": 22553,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.95,
+          "skeptic_confidence": 0.3,
+          "architect_new_fact_count": 8,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.725,
+          "skeptic_confidence": 0.40714285714285714,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 2,
+          "skeptic_assertion_count": 2
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 5853,
+        "output_tokens": 943
+      },
+      "cost_usd": 0.031703999999999996
+    },
+    {
+      "scenario_id": "SC-005",
+      "scenario_name": "Lateral Movement via RDP + Pass-the-Hash",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.6610795454545455,
+      "architect_confidence": 0.6312500000000001,
+      "skeptic_confidence": 0.6909090909090909,
+      "coverage": 1.0,
+      "narrator_output": "The threat assessment remains inconclusive due to conflicting evidence regarding RDP lateral movement activity. While suspicious indicators exist including pass-the-hash authentication patterns (sc005-fact-006) and multiple RDP sessions across critical servers (sc005-fact-003, sc005-fact-004, sc005-fact-005), legitimate operational context is also present with an authorized maintenance window (sc005-fact-009) and activity originating from an IT workstation (sc005-fact-008). The service account's elevated privileges (sc005-fact-011) and operational role (sc005-fact-007) provide plausible justification for the observed behavior, preventing a definitive malicious verdict despite the presence of concerning technical indicators.",
+      "duration_ms": 22804,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.6727272727272728,
+          "skeptic_confidence": 0.925,
+          "architect_new_fact_count": 10,
+          "skeptic_new_fact_count": 8,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 4
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.6312500000000001,
+          "skeptic_confidence": 0.6909090909090909,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 3,
+          "skeptic_assertion_count": 4
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 6932,
+        "output_tokens": 1210
+      },
+      "cost_usd": 0.038945999999999995
+    },
+    {
+      "scenario_id": "SC-006",
+      "scenario_name": "Data Staging Before Exfiltration",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.7,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.7,
+      "coverage": 1.0,
+      "narrator_output": "The threat is dismissed based on legitimate business activity by an authorized HR analyst. The evidence shows hr_analyst02 has proper read access to HR folders (sc006-fact-007) and was copying personnel and payroll files (sc006-fact-001, sc006-fact-002) to a staging directory before creating a password-protected archive (sc006-fact-004, sc006-fact-005). Most critically, no outbound network transfers were detected from the workstation (sc006-fact-008), indicating the archived data remained on the local system rather than being exfiltrated.",
+      "duration_ms": 21760,
+      "rounds_used": 3,
+      "max_rounds_configured": 3,
+      "termination_reason": "max_turns_exceeded",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.65,
+          "skeptic_confidence": 0.6999999999999998,
+          "architect_new_fact_count": 5,
+          "skeptic_new_fact_count": 6,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.75,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 1,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 3,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.7,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 8225,
+        "output_tokens": 873
+      },
+      "cost_usd": 0.03777
+    },
+    {
+      "scenario_id": "SC-007",
+      "scenario_name": "Insider Threat \u2014 Behavioral Anomaly",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.7166666666666667,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.7166666666666667,
+      "coverage": 0.8571428571428571,
+      "narrator_output": "The threat is dismissed based on legitimate authorization evidence that outweighs suspicious activity patterns. While the user accessed 70 files in a 15-minute window outside normal hours (sc007-fact-002, sc007-fact-005), the finance manager has proper authorization for Finance directory access (sc007-fact-006) and no malware indicators were detected (sc007-fact-007). The bulk file access, though anomalous, can be reasonably explained by legitimate business activities such as quarterly reporting preparation, making this more likely an operational workflow than a malicious insider threat.",
+      "duration_ms": 17846,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.75,
+          "skeptic_confidence": 0.6000000000000001,
+          "architect_new_fact_count": 4,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.45,
+          "skeptic_confidence": 0.7166666666666667,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 5046,
+        "output_tokens": 678
+      },
+      "cost_usd": 0.025308
+    },
+    {
+      "scenario_id": "SC-008",
+      "scenario_name": "Benign Activity Mimicking Malware",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.35,
+      "skeptic_confidence": 0.9,
+      "coverage": 0.75,
+      "narrator_output": "The observed activity represents normal Windows Defender antivirus operations rather than a security threat. Key evidence supporting this assessment includes the legitimate Windows Defender process (sc008-fact-001) performing standard LSASS access for scanning purposes (sc008-fact-002), an authentically signed Microsoft PowerShell script for signature updates (sc008-fact-006), and the creation of legitimate definition update files (sc008-fact-007). The WinDefend service running under the SYSTEM account (sc008-fact-008) and the scheduled task modification for routine scans (sc008-fact-005) further confirm this is expected antivirus behavior with no malicious indicators present.",
+      "duration_ms": 14745,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.20000000000000004,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 3,
+          "skeptic_new_fact_count": 5,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.35,
+          "skeptic_confidence": 0.9,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 5443,
+        "output_tokens": 564
+      },
+      "cost_usd": 0.024789
+    },
+    {
+      "scenario_id": "SC-009",
+      "scenario_name": "Authorized Red Team Exercise",
+      "expected_verdict": "THREAT_DISMISSED",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 1.0,
+      "architect_confidence": 0.44666666666666666,
+      "skeptic_confidence": 1.0,
+      "coverage": 1.0,
+      "narrator_output": "The threat has been dismissed as this activity represents an authorized penetration testing engagement rather than a malicious attack. Key evidence supporting this determination includes the authenticated penetration tester account (sc009-fact-008), formal authorization documentation for engagement PT-2026-Q1 covering the target scope (sc009-fact-009), an active change window specifically for this testing (sc009-fact-010), and official SOC notification of the red team exercise (sc009-fact-011). While the observed activities including network scanning (sc009-fact-003), credential extraction (sc009-fact-006), and lateral movement (sc009-fact-007) would normally indicate compromise, the comprehensive authorization framework confirms these are legitimate security testing activities.",
+      "duration_ms": 19762,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.4,
+          "skeptic_confidence": 0.95,
+          "architect_new_fact_count": 7,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.44666666666666666,
+          "skeptic_confidence": 1.0,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 4,
+          "skeptic_assertion_count": 3
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 6634,
+        "output_tokens": 1039
+      },
+      "cost_usd": 0.035487
+    },
+    {
+      "scenario_id": "SC-010",
+      "scenario_name": "Multi-Vector Campaign",
+      "expected_verdict": "THREAT_CONFIRMED",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.9093749999999999,
+      "architect_confidence": 0.9093749999999999,
+      "skeptic_confidence": 0.36875,
+      "coverage": 1.0,
+      "narrator_output": "The threat is confirmed based on a complete attack chain from initial compromise through data exfiltration. The attack began with a macro-enabled document (sc010-fact-002) spawning a malicious command shell (sc010-fact-004), followed by credential dumping using procdump64.exe against lsass.exe (sc010-fact-006, sc010-fact-007). The attacker then performed lateral movement across multiple servers (sc010-fact-008, sc010-fact-009, sc010-fact-010), staged confidential files for exfiltration (sc010-fact-011), compressed the data (sc010-fact-013), and transmitted 85MB to a known C2 server (sc010-fact-014, sc010-fact-015).",
+      "duration_ms": 31811,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 1.0,
+          "skeptic_confidence": 0.4357142857142857,
+          "architect_new_fact_count": 15,
+          "skeptic_new_fact_count": 14,
+          "architect_assertion_count": 4,
+          "skeptic_assertion_count": 4
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.9093749999999999,
+          "skeptic_confidence": 0.36875,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 4,
+          "skeptic_assertion_count": 4
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 8490,
+        "output_tokens": 1808
+      },
+      "cost_usd": 0.05259
+    },
+    {
+      "scenario_id": "SC-011",
+      "scenario_name": "Slow-Roll Exfiltration",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.5,
+      "architect_confidence": 0.4000000000000001,
+      "skeptic_confidence": 0.6,
+      "coverage": 1.0,
+      "narrator_output": "The analysis reveals conflicting interpretations of the observed network activity, resulting in an inconclusive verdict. While the regular HTTPS uploads to storage.cloudprovider.com at consistent 4-hour intervals (sc011-fact-001, sc011-fact-002, sc011-fact-003) exhibit patterns potentially consistent with data exfiltration, the presence of a legitimate business user account (sc011-fact-004) who utilizes cloud storage for authorized project collaboration provides a plausible alternative explanation. The evidence is insufficient to definitively distinguish between malicious data exfiltration and normal business operations, particularly given the moderate file sizes and use of a standard cloud storage service.",
+      "duration_ms": 14232,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.4000000000000001,
+          "skeptic_confidence": 0.8,
+          "architect_new_fact_count": 3,
+          "skeptic_new_fact_count": 4,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.4000000000000001,
+          "skeptic_confidence": 0.6,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 1
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 4279,
+        "output_tokens": 581
+      },
+      "cost_usd": 0.021552
+    },
+    {
+      "scenario_id": "SC-012",
+      "scenario_name": "Supply Chain Compromise",
+      "expected_verdict": "INCONCLUSIVE",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.4625,
+      "architect_confidence": 0.525,
+      "skeptic_confidence": 0.4,
+      "coverage": 1.0,
+      "narrator_output": "The verdict is inconclusive due to conflicting evidence that presents both legitimate software behavior and suspicious indicators. While the updater process shows strong legitimacy signals including valid Authenticode signing (sc012-fact-002) and proper HTTPS downloads from the vendor's domain (sc012-fact-003), concerning anomalies include an unexpected HTTPS callback to an IP outside TrustedVendor's range (sc012-fact-004) and the spawning of rundll32.exe as a child process (sc012-fact-005, sc012-fact-006), which is atypical behavior for a software updater. The evidence packet contains insufficient information to definitively determine whether this represents a supply chain compromise or legitimate but unusual software functionality.",
+      "duration_ms": 20904,
+      "rounds_used": 2,
+      "max_rounds_configured": 3,
+      "termination_reason": "no_new_evidence",
+      "round_snapshots": [
+        {
+          "round_number": 1,
+          "architect_confidence": 0.85,
+          "skeptic_confidence": 0.59,
+          "architect_new_fact_count": 6,
+          "skeptic_new_fact_count": 5,
+          "architect_assertion_count": 1,
+          "skeptic_assertion_count": 2
+        },
+        {
+          "round_number": 2,
+          "architect_confidence": 0.525,
+          "skeptic_confidence": 0.4,
+          "architect_new_fact_count": 0,
+          "skeptic_new_fact_count": 0,
+          "architect_assertion_count": 2,
+          "skeptic_assertion_count": 2
+        }
+      ],
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "token_usage": {
+        "input_tokens": 5201,
+        "output_tokens": 859
+      },
+      "cost_usd": 0.028488
+    }
+  ]
+}

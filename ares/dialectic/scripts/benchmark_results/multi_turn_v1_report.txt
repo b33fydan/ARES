@@ -1,0 +1,101 @@
+==========================================================================================
+ARES MULTI-TURN BENCHMARK REPORT
+==========================================================================================
+Run ID:             33f9f77c-9174-4d53-ba19-7def3d6ccffd
+Timestamp:          2026-03-04T22:46:44.064902
+Strategy:           multi_turn_llm
+Max Rounds:         3
+Confidence Delta:   0.05
+Require New Evid:   True
+Scenarios:          12
+Total duration:     244368 ms
+Total cost:         $0.385284
+
+------------------------------------------------------------------------------------------
+SCENARIO SUMMARY
+------------------------------------------------------------------------------------------
+ID       Name                      Expected           Actual             Match  Conf Rnds Termination         
+------------------------------------------------------------------------------------------
+SC-001   Privilege Escalation (Cla INCONCLUSIVE       inconclusive           Y  0.48    3 max_turns_exceeded  
+SC-002   Suspicious Process Chain  THREAT_CONFIRMED   inconclusive           N  0.47    2 no_new_evidence     
+SC-003   Credential Dumping        THREAT_CONFIRMED   threat_confirmed       Y  0.75    2 no_new_evidence     
+SC-004   Living-Off-the-Land (LOLB THREAT_CONFIRMED   threat_confirmed       Y  0.72    2 no_new_evidence     
+SC-005   Lateral Movement via RDP  INCONCLUSIVE       inconclusive           Y  0.66    2 no_new_evidence     
+SC-006   Data Staging Before Exfil INCONCLUSIVE       threat_dismissed       N  0.70    3 max_turns_exceeded  
+SC-007   Insider Threat — Behavior INCONCLUSIVE       threat_dismissed       N  0.72    2 no_new_evidence     
+SC-008   Benign Activity Mimicking THREAT_DISMISSED   threat_dismissed       Y  0.90    2 no_new_evidence     
+SC-009   Authorized Red Team Exerc THREAT_DISMISSED   threat_dismissed       Y  1.00    2 no_new_evidence     
+SC-010   Multi-Vector Campaign     THREAT_CONFIRMED   threat_confirmed       Y  0.91    2 no_new_evidence     
+SC-011   Slow-Roll Exfiltration    INCONCLUSIVE       inconclusive           Y  0.50    2 no_new_evidence     
+SC-012   Supply Chain Compromise   INCONCLUSIVE       inconclusive           Y  0.46    2 no_new_evidence     
+------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------
+AGGREGATE METRICS
+------------------------------------------------------------------------------------------
+Verdict match rate:     9/12 (75.0%)
+Average confidence:     0.690
+Average fact coverage:  0.967
+Average rounds used:    2.2
+Total duration:         244368 ms
+Total cost (USD):       $0.385284
+Cost per scenario:      $0.032107
+
+------------------------------------------------------------------------------------------
+TERMINATION REASON DISTRIBUTION
+------------------------------------------------------------------------------------------
+  max_turns_exceeded             2
+  no_new_evidence                10
+
+------------------------------------------------------------------------------------------
+ROUND SNAPSHOT EVOLUTION
+------------------------------------------------------------------------------------------
+  SC-001 (Privilege Escalation (Classic)):
+    Round 1: arch_conf=0.85 skep_conf=0.61 new_facts(A=6,S=6) assertions(A=3,S=3)
+    Round 2: arch_conf=0.45 skep_conf=0.41 new_facts(A=1,S=0) assertions(A=1,S=2)
+    Round 3: arch_conf=0.55 skep_conf=0.41 new_facts(A=0,S=0) assertions(A=1,S=2)
+  SC-002 (Suspicious Process Chain):
+    Round 1: arch_conf=0.85 skep_conf=0.30 new_facts(A=5,S=6) assertions(A=1,S=1)
+    Round 2: arch_conf=0.65 skep_conf=0.30 new_facts(A=0,S=0) assertions(A=1,S=1)
+  SC-003 (Credential Dumping):
+    Round 1: arch_conf=0.95 skep_conf=0.30 new_facts(A=6,S=1) assertions(A=1,S=1)
+    Round 2: arch_conf=0.75 skep_conf=0.30 new_facts(A=0,S=0) assertions(A=1,S=1)
+  SC-004 (Living-Off-the-Land (LOLBins)):
+    Round 1: arch_conf=0.95 skep_conf=0.30 new_facts(A=8,S=6) assertions(A=1,S=2)
+    Round 2: arch_conf=0.72 skep_conf=0.41 new_facts(A=0,S=0) assertions(A=2,S=2)
+  SC-005 (Lateral Movement via RDP + Pas):
+    Round 1: arch_conf=0.67 skep_conf=0.93 new_facts(A=10,S=8) assertions(A=3,S=4)
+    Round 2: arch_conf=0.63 skep_conf=0.69 new_facts(A=0,S=0) assertions(A=3,S=4)
+  SC-006 (Data Staging Before Exfiltrati):
+    Round 1: arch_conf=0.65 skep_conf=0.70 new_facts(A=5,S=6) assertions(A=1,S=1)
+    Round 2: arch_conf=0.45 skep_conf=0.75 new_facts(A=0,S=1) assertions(A=1,S=1)
+    Round 3: arch_conf=0.45 skep_conf=0.70 new_facts(A=0,S=0) assertions(A=1,S=1)
+  SC-007 (Insider Threat — Behavioral An):
+    Round 1: arch_conf=0.75 skep_conf=0.60 new_facts(A=4,S=4) assertions(A=1,S=2)
+    Round 2: arch_conf=0.45 skep_conf=0.72 new_facts(A=0,S=0) assertions(A=1,S=2)
+  SC-008 (Benign Activity Mimicking Malw):
+    Round 1: arch_conf=0.20 skep_conf=0.90 new_facts(A=3,S=5) assertions(A=1,S=1)
+    Round 2: arch_conf=0.35 skep_conf=0.90 new_facts(A=0,S=0) assertions(A=1,S=1)
+  SC-009 (Authorized Red Team Exercise):
+    Round 1: arch_conf=0.40 skep_conf=0.95 new_facts(A=7,S=4) assertions(A=1,S=1)
+    Round 2: arch_conf=0.45 skep_conf=1.00 new_facts(A=0,S=0) assertions(A=4,S=3)
+  SC-010 (Multi-Vector Campaign):
+    Round 1: arch_conf=1.00 skep_conf=0.44 new_facts(A=15,S=14) assertions(A=4,S=4)
+    Round 2: arch_conf=0.91 skep_conf=0.37 new_facts(A=0,S=0) assertions(A=4,S=4)
+  SC-011 (Slow-Roll Exfiltration):
+    Round 1: arch_conf=0.40 skep_conf=0.80 new_facts(A=3,S=4) assertions(A=1,S=1)
+    Round 2: arch_conf=0.40 skep_conf=0.60 new_facts(A=0,S=0) assertions(A=1,S=1)
+  SC-012 (Supply Chain Compromise):
+    Round 1: arch_conf=0.85 skep_conf=0.59 new_facts(A=6,S=5) assertions(A=1,S=2)
+    Round 2: arch_conf=0.53 skep_conf=0.40 new_facts(A=0,S=0) assertions(A=2,S=2)
+
+------------------------------------------------------------------------------------------
+ANOMALY FLAGS (expected != actual)
+------------------------------------------------------------------------------------------
+  SC-002: expected THREAT_CONFIRMED, got inconclusive
+  SC-006: expected INCONCLUSIVE, got threat_dismissed
+  SC-007: expected INCONCLUSIVE, got threat_dismissed
+
+==========================================================================================
+END OF REPORT
+==========================================================================================

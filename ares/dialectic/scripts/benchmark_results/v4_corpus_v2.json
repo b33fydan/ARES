@@ -1,0 +1,1324 @@
+{
+  "run_id": "b65e65cc3ee7",
+  "timestamp": "2026-03-27T20:10:21.699745+00:00",
+  "strategy_type": "llm_v4",
+  "scenario_count": 33,
+  "total_duration_ms": 264088,
+  "total_cost_usd": 0.43640399999999996,
+  "results": [
+    {
+      "scenario_id": "SC-001",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.44285714285714295,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 3,
+      "architect_fact_ids_cited": [
+        "sc001-fact-001",
+        "sc001-fact-002",
+        "sc001-fact-003",
+        "sc001-fact-004",
+        "sc001-fact-005",
+        "sc001-fact-006",
+        "sc001-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc001-fact-001",
+        "sc001-fact-002",
+        "sc001-fact-003",
+        "sc001-fact-004",
+        "sc001-fact-005",
+        "sc001-fact-006",
+        "sc001-fact-007"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 8669,
+      "token_usage": {
+        "input_tokens": 2149,
+        "output_tokens": 422
+      },
+      "cost_usd": 0.012777,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-002",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.82,
+      "architect_confidence": 0.82,
+      "skeptic_confidence": 0.3,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc002-fact-001",
+        "sc002-fact-002",
+        "sc002-fact-003",
+        "sc002-fact-004",
+        "sc002-fact-005",
+        "sc002-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc002-fact-002",
+        "sc002-fact-006"
+      ],
+      "total_facts_available": 6,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 5569,
+      "token_usage": {
+        "input_tokens": 2084,
+        "output_tokens": 223
+      },
+      "cost_usd": 0.009597,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-003",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.88,
+      "architect_confidence": 0.88,
+      "skeptic_confidence": 0.3,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc003-fact-001",
+        "sc003-fact-002",
+        "sc003-fact-003",
+        "sc003-fact-004",
+        "sc003-fact-005",
+        "sc003-fact-006",
+        "sc003-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc003-fact-007"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 6737,
+      "token_usage": {
+        "input_tokens": 2200,
+        "output_tokens": 239
+      },
+      "cost_usd": 0.010185,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-004",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.9116666666666665,
+      "architect_confidence": 0.9116666666666665,
+      "skeptic_confidence": 0.31363636363636366,
+      "architect_assertion_count": 3,
+      "skeptic_assertion_count": 3,
+      "architect_fact_ids_cited": [
+        "sc004-fact-001",
+        "sc004-fact-002",
+        "sc004-fact-003",
+        "sc004-fact-004",
+        "sc004-fact-005",
+        "sc004-fact-006",
+        "sc004-fact-007",
+        "sc004-fact-008",
+        "sc004-fact-009"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc004-fact-001",
+        "sc004-fact-002",
+        "sc004-fact-003",
+        "sc004-fact-004",
+        "sc004-fact-005",
+        "sc004-fact-006",
+        "sc004-fact-007",
+        "sc004-fact-009"
+      ],
+      "total_facts_available": 9,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 10438,
+      "token_usage": {
+        "input_tokens": 2613,
+        "output_tokens": 534
+      },
+      "cost_usd": 0.015849,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-005",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.7,
+      "architect_confidence": 0.6,
+      "skeptic_confidence": 0.8,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc005-fact-001",
+        "sc005-fact-002",
+        "sc005-fact-003",
+        "sc005-fact-004",
+        "sc005-fact-005",
+        "sc005-fact-006",
+        "sc005-fact-007",
+        "sc005-fact-008",
+        "sc005-fact-009",
+        "sc005-fact-010",
+        "sc005-fact-011"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc005-fact-007",
+        "sc005-fact-008",
+        "sc005-fact-009",
+        "sc005-fact-011"
+      ],
+      "total_facts_available": 11,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 9171,
+      "token_usage": {
+        "input_tokens": 2970,
+        "output_tokens": 431
+      },
+      "cost_usd": 0.015375,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-006",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.625,
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.7,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc006-fact-001",
+        "sc006-fact-002",
+        "sc006-fact-003",
+        "sc006-fact-004",
+        "sc006-fact-005",
+        "sc006-fact-006",
+        "sc006-fact-007",
+        "sc006-fact-008"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc006-fact-001",
+        "sc006-fact-002",
+        "sc006-fact-003",
+        "sc006-fact-004",
+        "sc006-fact-005",
+        "sc006-fact-006",
+        "sc006-fact-007",
+        "sc006-fact-008"
+      ],
+      "total_facts_available": 8,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 7079,
+      "token_usage": {
+        "input_tokens": 2385,
+        "output_tokens": 281
+      },
+      "cost_usd": 0.01137,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-007",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.51,
+      "architect_confidence": 0.62,
+      "skeptic_confidence": 0.4000000000000001,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc007-fact-001",
+        "sc007-fact-002",
+        "sc007-fact-003",
+        "sc007-fact-004",
+        "sc007-fact-005",
+        "sc007-fact-006",
+        "sc007-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc007-fact-002",
+        "sc007-fact-005",
+        "sc007-fact-006"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 5571,
+      "token_usage": {
+        "input_tokens": 2245,
+        "output_tokens": 233
+      },
+      "cost_usd": 0.01023,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-008",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.15,
+      "skeptic_confidence": 0.9,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc008-fact-001",
+        "sc008-fact-002",
+        "sc008-fact-003",
+        "sc008-fact-004",
+        "sc008-fact-005",
+        "sc008-fact-006",
+        "sc008-fact-007",
+        "sc008-fact-008"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc008-fact-001",
+        "sc008-fact-002",
+        "sc008-fact-003",
+        "sc008-fact-004",
+        "sc008-fact-005",
+        "sc008-fact-006",
+        "sc008-fact-007",
+        "sc008-fact-008"
+      ],
+      "total_facts_available": 8,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 7154,
+      "token_usage": {
+        "input_tokens": 2447,
+        "output_tokens": 320
+      },
+      "cost_usd": 0.012141,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-009",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.95,
+      "architect_confidence": 0.25,
+      "skeptic_confidence": 0.95,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc009-fact-001",
+        "sc009-fact-002",
+        "sc009-fact-003",
+        "sc009-fact-004",
+        "sc009-fact-005",
+        "sc009-fact-006",
+        "sc009-fact-007",
+        "sc009-fact-008",
+        "sc009-fact-009",
+        "sc009-fact-010",
+        "sc009-fact-011"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc009-fact-008",
+        "sc009-fact-009",
+        "sc009-fact-010",
+        "sc009-fact-011"
+      ],
+      "total_facts_available": 11,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 7784,
+      "token_usage": {
+        "input_tokens": 2931,
+        "output_tokens": 387
+      },
+      "cost_usd": 0.014598,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-010",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 1.0,
+      "architect_confidence": 1.0,
+      "skeptic_confidence": 0.309375,
+      "architect_assertion_count": 4,
+      "skeptic_assertion_count": 4,
+      "architect_fact_ids_cited": [
+        "sc010-fact-001",
+        "sc010-fact-002",
+        "sc010-fact-003",
+        "sc010-fact-004",
+        "sc010-fact-005",
+        "sc010-fact-006",
+        "sc010-fact-007",
+        "sc010-fact-008",
+        "sc010-fact-009",
+        "sc010-fact-010",
+        "sc010-fact-011",
+        "sc010-fact-012",
+        "sc010-fact-013",
+        "sc010-fact-014",
+        "sc010-fact-015",
+        "sc010-fact-016"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc010-fact-001",
+        "sc010-fact-002",
+        "sc010-fact-003",
+        "sc010-fact-004",
+        "sc010-fact-005",
+        "sc010-fact-006",
+        "sc010-fact-007",
+        "sc010-fact-008",
+        "sc010-fact-009",
+        "sc010-fact-010",
+        "sc010-fact-011",
+        "sc010-fact-012",
+        "sc010-fact-013",
+        "sc010-fact-014",
+        "sc010-fact-015",
+        "sc010-fact-016"
+      ],
+      "total_facts_available": 16,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 14247,
+      "token_usage": {
+        "input_tokens": 3496,
+        "output_tokens": 823
+      },
+      "cost_usd": 0.022833,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-011",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.8,
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.8,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc011-fact-001",
+        "sc011-fact-002",
+        "sc011-fact-003",
+        "sc011-fact-004"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc011-fact-001",
+        "sc011-fact-002",
+        "sc011-fact-003",
+        "sc011-fact-004"
+      ],
+      "total_facts_available": 4,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 5488,
+      "token_usage": {
+        "input_tokens": 1934,
+        "output_tokens": 236
+      },
+      "cost_usd": 0.009342,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-012",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.4,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc012-fact-001",
+        "sc012-fact-002",
+        "sc012-fact-003",
+        "sc012-fact-004",
+        "sc012-fact-005",
+        "sc012-fact-006",
+        "sc012-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc012-fact-001",
+        "sc012-fact-002",
+        "sc012-fact-003",
+        "sc012-fact-007"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 7469,
+      "token_usage": {
+        "input_tokens": 2268,
+        "output_tokens": 254
+      },
+      "cost_usd": 0.010614,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-013",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 1.0,
+      "architect_confidence": 1.0,
+      "skeptic_confidence": 0.3807692307692308,
+      "architect_assertion_count": 4,
+      "skeptic_assertion_count": 5,
+      "architect_fact_ids_cited": [
+        "sc013-fact-001",
+        "sc013-fact-002",
+        "sc013-fact-003",
+        "sc013-fact-004",
+        "sc013-fact-005",
+        "sc013-fact-006",
+        "sc013-fact-007",
+        "sc013-fact-008",
+        "sc013-fact-009",
+        "sc013-fact-010",
+        "sc013-fact-011",
+        "sc013-fact-012",
+        "sc013-fact-013",
+        "sc013-fact-014",
+        "sc013-fact-015",
+        "sc013-fact-016"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc013-fact-001",
+        "sc013-fact-003",
+        "sc013-fact-004",
+        "sc013-fact-005",
+        "sc013-fact-006",
+        "sc013-fact-009",
+        "sc013-fact-010",
+        "sc013-fact-011",
+        "sc013-fact-012",
+        "sc013-fact-013",
+        "sc013-fact-014",
+        "sc013-fact-015",
+        "sc013-fact-016"
+      ],
+      "total_facts_available": 16,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 13642,
+      "token_usage": {
+        "input_tokens": 3653,
+        "output_tokens": 763
+      },
+      "cost_usd": 0.022404,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-014",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.9466666666666668,
+      "architect_confidence": 0.9466666666666668,
+      "skeptic_confidence": 0.30999999999999994,
+      "architect_assertion_count": 3,
+      "skeptic_assertion_count": 2,
+      "architect_fact_ids_cited": [
+        "sc014-fact-001",
+        "sc014-fact-002",
+        "sc014-fact-003",
+        "sc014-fact-004",
+        "sc014-fact-005",
+        "sc014-fact-006",
+        "sc014-fact-007",
+        "sc014-fact-008",
+        "sc014-fact-009",
+        "sc014-fact-010",
+        "sc014-fact-011",
+        "sc014-fact-012",
+        "sc014-fact-013"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc014-fact-001",
+        "sc014-fact-002",
+        "sc014-fact-003",
+        "sc014-fact-004",
+        "sc014-fact-005",
+        "sc014-fact-006",
+        "sc014-fact-011",
+        "sc014-fact-012"
+      ],
+      "total_facts_available": 13,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 13146,
+      "token_usage": {
+        "input_tokens": 3534,
+        "output_tokens": 551
+      },
+      "cost_usd": 0.018867000000000002,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-015",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.15,
+      "skeptic_confidence": 0.9,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc015-fact-001",
+        "sc015-fact-002",
+        "sc015-fact-003",
+        "sc015-fact-004",
+        "sc015-fact-005",
+        "sc015-fact-006",
+        "sc015-fact-007",
+        "sc015-fact-008",
+        "sc015-fact-009",
+        "sc015-fact-010",
+        "sc015-fact-011",
+        "sc015-fact-012",
+        "sc015-fact-013",
+        "sc015-fact-014",
+        "sc015-fact-015",
+        "sc015-fact-016"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc015-fact-002",
+        "sc015-fact-003",
+        "sc015-fact-007",
+        "sc015-fact-008",
+        "sc015-fact-010",
+        "sc015-fact-014",
+        "sc015-fact-015",
+        "sc015-fact-016"
+      ],
+      "total_facts_available": 16,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 8885,
+      "token_usage": {
+        "input_tokens": 3569,
+        "output_tokens": 446
+      },
+      "cost_usd": 0.017397000000000003,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-016",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 1.0,
+      "architect_confidence": 1.0,
+      "skeptic_confidence": 0.39,
+      "architect_assertion_count": 4,
+      "skeptic_assertion_count": 4,
+      "architect_fact_ids_cited": [
+        "sc016-fact-001",
+        "sc016-fact-002",
+        "sc016-fact-003",
+        "sc016-fact-004",
+        "sc016-fact-005",
+        "sc016-fact-006",
+        "sc016-fact-007",
+        "sc016-fact-008",
+        "sc016-fact-009",
+        "sc016-fact-010",
+        "sc016-fact-011",
+        "sc016-fact-012",
+        "sc016-fact-013",
+        "sc016-fact-014",
+        "sc016-fact-015"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc016-fact-001",
+        "sc016-fact-002",
+        "sc016-fact-003",
+        "sc016-fact-004",
+        "sc016-fact-005",
+        "sc016-fact-006",
+        "sc016-fact-007",
+        "sc016-fact-008",
+        "sc016-fact-009",
+        "sc016-fact-010",
+        "sc016-fact-011",
+        "sc016-fact-012",
+        "sc016-fact-013",
+        "sc016-fact-014",
+        "sc016-fact-015"
+      ],
+      "total_facts_available": 15,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 12884,
+      "token_usage": {
+        "input_tokens": 3762,
+        "output_tokens": 784
+      },
+      "cost_usd": 0.023046,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-017",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.675,
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.8,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc017-fact-001",
+        "sc017-fact-002",
+        "sc017-fact-003",
+        "sc017-fact-004",
+        "sc017-fact-005",
+        "sc017-fact-006",
+        "sc017-fact-007",
+        "sc017-fact-008",
+        "sc017-fact-009",
+        "sc017-fact-010",
+        "sc017-fact-011"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc017-fact-001",
+        "sc017-fact-002",
+        "sc017-fact-003",
+        "sc017-fact-004",
+        "sc017-fact-005",
+        "sc017-fact-008",
+        "sc017-fact-010",
+        "sc017-fact-011"
+      ],
+      "total_facts_available": 11,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 7996,
+      "token_usage": {
+        "input_tokens": 2954,
+        "output_tokens": 361
+      },
+      "cost_usd": 0.014277,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-018",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.25,
+      "skeptic_confidence": 0.9,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc018-fact-001",
+        "sc018-fact-002",
+        "sc018-fact-003",
+        "sc018-fact-004",
+        "sc018-fact-005",
+        "sc018-fact-006",
+        "sc018-fact-007",
+        "sc018-fact-008",
+        "sc018-fact-009",
+        "sc018-fact-010",
+        "sc018-fact-011",
+        "sc018-fact-012",
+        "sc018-fact-013",
+        "sc018-fact-014",
+        "sc018-fact-015",
+        "sc018-fact-016",
+        "sc018-fact-017",
+        "sc018-fact-018"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc018-fact-012",
+        "sc018-fact-013",
+        "sc018-fact-014",
+        "sc018-fact-015",
+        "sc018-fact-016",
+        "sc018-fact-017",
+        "sc018-fact-018"
+      ],
+      "total_facts_available": 18,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 8563,
+      "token_usage": {
+        "input_tokens": 3966,
+        "output_tokens": 466
+      },
+      "cost_usd": 0.018888,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-019",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 1.0,
+      "architect_confidence": 1.0,
+      "skeptic_confidence": 0.22142857142857142,
+      "architect_assertion_count": 2,
+      "skeptic_assertion_count": 2,
+      "architect_fact_ids_cited": [
+        "sc019-fact-001",
+        "sc019-fact-002",
+        "sc019-fact-003",
+        "sc019-fact-004",
+        "sc019-fact-005",
+        "sc019-fact-006",
+        "sc019-fact-007",
+        "sc019-fact-008"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc019-fact-001",
+        "sc019-fact-002",
+        "sc019-fact-003",
+        "sc019-fact-004",
+        "sc019-fact-005",
+        "sc019-fact-006",
+        "sc019-fact-008"
+      ],
+      "total_facts_available": 8,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 11010,
+      "token_usage": {
+        "input_tokens": 2315,
+        "output_tokens": 387
+      },
+      "cost_usd": 0.01275,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-020",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.82,
+      "architect_confidence": 0.82,
+      "skeptic_confidence": 0.3,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc020-fact-001",
+        "sc020-fact-002",
+        "sc020-fact-003",
+        "sc020-fact-004",
+        "sc020-fact-005",
+        "sc020-fact-006",
+        "sc020-fact-007",
+        "sc020-fact-008"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc020-fact-007"
+      ],
+      "total_facts_available": 8,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 5942,
+      "token_usage": {
+        "input_tokens": 2549,
+        "output_tokens": 235
+      },
+      "cost_usd": 0.011172,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-021",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.25,
+      "skeptic_confidence": 0.9,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc021-fact-001",
+        "sc021-fact-002",
+        "sc021-fact-003",
+        "sc021-fact-004",
+        "sc021-fact-005",
+        "sc021-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc021-fact-001",
+        "sc021-fact-002",
+        "sc021-fact-003",
+        "sc021-fact-004",
+        "sc021-fact-005",
+        "sc021-fact-006"
+      ],
+      "total_facts_available": 6,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 6152,
+      "token_usage": {
+        "input_tokens": 2199,
+        "output_tokens": 260
+      },
+      "cost_usd": 0.010497,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-022",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.35,
+      "skeptic_confidence": 0.9,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc022-fact-001",
+        "sc022-fact-002",
+        "sc022-fact-003",
+        "sc022-fact-004",
+        "sc022-fact-005",
+        "sc022-fact-006",
+        "sc022-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc022-fact-002",
+        "sc022-fact-003",
+        "sc022-fact-004",
+        "sc022-fact-005",
+        "sc022-fact-007"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 7412,
+      "token_usage": {
+        "input_tokens": 2320,
+        "output_tokens": 314
+      },
+      "cost_usd": 0.01167,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-023",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.25,
+      "skeptic_confidence": 0.9,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc023-fact-001",
+        "sc023-fact-002",
+        "sc023-fact-003",
+        "sc023-fact-004",
+        "sc023-fact-005",
+        "sc023-fact-006",
+        "sc023-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc023-fact-001",
+        "sc023-fact-002",
+        "sc023-fact-003",
+        "sc023-fact-004",
+        "sc023-fact-005",
+        "sc023-fact-006",
+        "sc023-fact-007"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 6039,
+      "token_usage": {
+        "input_tokens": 2362,
+        "output_tokens": 273
+      },
+      "cost_usd": 0.011181,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-024",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.575,
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.6,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc024-fact-001",
+        "sc024-fact-002",
+        "sc024-fact-003",
+        "sc024-fact-004",
+        "sc024-fact-005",
+        "sc024-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc024-fact-004",
+        "sc024-fact-005",
+        "sc024-fact-006"
+      ],
+      "total_facts_available": 6,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 5949,
+      "token_usage": {
+        "input_tokens": 2318,
+        "output_tokens": 217
+      },
+      "cost_usd": 0.010209,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-025",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.6599999999999999,
+      "architect_confidence": 0.62,
+      "skeptic_confidence": 0.7,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc025-fact-001",
+        "sc025-fact-002",
+        "sc025-fact-003",
+        "sc025-fact-004",
+        "sc025-fact-005",
+        "sc025-fact-006",
+        "sc025-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc025-fact-003",
+        "sc025-fact-004",
+        "sc025-fact-005",
+        "sc025-fact-006"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 5881,
+      "token_usage": {
+        "input_tokens": 2248,
+        "output_tokens": 247
+      },
+      "cost_usd": 0.010449,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-026",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.5,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc026-fact-001",
+        "sc026-fact-002",
+        "sc026-fact-003",
+        "sc026-fact-004",
+        "sc026-fact-005",
+        "sc026-fact-006",
+        "sc026-fact-007",
+        "sc026-fact-008",
+        "sc026-fact-009"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc026-fact-002",
+        "sc026-fact-003"
+      ],
+      "total_facts_available": 9,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 7115,
+      "token_usage": {
+        "input_tokens": 2337,
+        "output_tokens": 266
+      },
+      "cost_usd": 0.011001,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-027",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.4000000000000001,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc027-fact-001",
+        "sc027-fact-002",
+        "sc027-fact-003",
+        "sc027-fact-004",
+        "sc027-fact-005",
+        "sc027-fact-006",
+        "sc027-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc027-fact-001",
+        "sc027-fact-003",
+        "sc027-fact-004"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 6269,
+      "token_usage": {
+        "input_tokens": 2157,
+        "output_tokens": 233
+      },
+      "cost_usd": 0.009966,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-028",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.675,
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.8,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc028-fact-001",
+        "sc028-fact-002",
+        "sc028-fact-003",
+        "sc028-fact-004",
+        "sc028-fact-005",
+        "sc028-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc028-fact-001",
+        "sc028-fact-002",
+        "sc028-fact-003",
+        "sc028-fact-005"
+      ],
+      "total_facts_available": 6,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 7444,
+      "token_usage": {
+        "input_tokens": 2120,
+        "output_tokens": 309
+      },
+      "cost_usd": 0.010994999999999998,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-029",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "inconclusive",
+      "verdict_confidence": 0.675,
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.8,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc029-fact-001",
+        "sc029-fact-002",
+        "sc029-fact-003",
+        "sc029-fact-004",
+        "sc029-fact-005",
+        "sc029-fact-006",
+        "sc029-fact-007",
+        "sc029-fact-008"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc029-fact-001",
+        "sc029-fact-002",
+        "sc029-fact-003",
+        "sc029-fact-004",
+        "sc029-fact-005",
+        "sc029-fact-006",
+        "sc029-fact-007",
+        "sc029-fact-008"
+      ],
+      "total_facts_available": 8,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 9069,
+      "token_usage": {
+        "input_tokens": 2634,
+        "output_tokens": 417
+      },
+      "cost_usd": 0.014157,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-030",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.3,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc030-fact-001",
+        "sc030-fact-002",
+        "sc030-fact-003",
+        "sc030-fact-004",
+        "sc030-fact-005",
+        "sc030-fact-006"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc030-fact-001",
+        "sc030-fact-002",
+        "sc030-fact-003",
+        "sc030-fact-004",
+        "sc030-fact-005"
+      ],
+      "total_facts_available": 6,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 6834,
+      "token_usage": {
+        "input_tokens": 2213,
+        "output_tokens": 279
+      },
+      "cost_usd": 0.010824,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-031",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.4,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc031-fact-001",
+        "sc031-fact-002",
+        "sc031-fact-003",
+        "sc031-fact-004",
+        "sc031-fact-005",
+        "sc031-fact-006",
+        "sc031-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc031-fact-001",
+        "sc031-fact-002",
+        "sc031-fact-003",
+        "sc031-fact-004",
+        "sc031-fact-005"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 6052,
+      "token_usage": {
+        "input_tokens": 2198,
+        "output_tokens": 274
+      },
+      "cost_usd": 0.010703999999999998,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-032",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_confirmed",
+      "verdict_confidence": 0.75,
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.4000000000000001,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc032-fact-001",
+        "sc032-fact-002",
+        "sc032-fact-003",
+        "sc032-fact-004",
+        "sc032-fact-005"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc032-fact-006",
+        "sc032-fact-007",
+        "sc032-fact-008"
+      ],
+      "total_facts_available": 8,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 6169,
+      "token_usage": {
+        "input_tokens": 2220,
+        "output_tokens": 252
+      },
+      "cost_usd": 0.010440000000000001,
+      "narrator_output": null
+    },
+    {
+      "scenario_id": "SC-033",
+      "strategy_type": "llm_v4",
+      "verdict_outcome": "threat_dismissed",
+      "verdict_confidence": 0.9,
+      "architect_confidence": 0.25,
+      "skeptic_confidence": 0.9,
+      "architect_assertion_count": 1,
+      "skeptic_assertion_count": 1,
+      "architect_fact_ids_cited": [
+        "sc033-fact-001",
+        "sc033-fact-002",
+        "sc033-fact-003",
+        "sc033-fact-004",
+        "sc033-fact-005",
+        "sc033-fact-006",
+        "sc033-fact-007"
+      ],
+      "skeptic_fact_ids_cited": [
+        "sc033-fact-002",
+        "sc033-fact-005",
+        "sc033-fact-006",
+        "sc033-fact-007"
+      ],
+      "total_facts_available": 7,
+      "fact_coverage_ratio": 1.0,
+      "validation_errors": 0,
+      "fallback_triggers": 0,
+      "duration_ms": 6244,
+      "token_usage": {
+        "input_tokens": 2198,
+        "output_tokens": 267
+      },
+      "cost_usd": 0.010598999999999999,
+      "narrator_output": null
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+====================================================================================================
+SINGLE-TURN vs MULTI-TURN COMPARISON
+====================================================================================================
+Single-turn: 11/12 (91.7% accuracy)
+Multi-turn:  10/12 (83.3% accuracy)
+
+----------------------------------------------------------------------------------------------------
+ID       ST Verdict         MT Verdict         ST Conf MT Conf Rounds Termination         
+----------------------------------------------------------------------------------------------------
+SC-001   inconclusive       inconclusive         0.717   0.717      2 no_new_evidence     
+SC-002   threat_confirmed   threat_confirmed     0.850   0.850      2 no_new_evidence     
+SC-003   threat_confirmed   threat_confirmed     0.950   0.950      2 no_new_evidence     
+SC-004   threat_confirmed   threat_confirmed     0.960   0.930      2 no_new_evidence     
+SC-005   inconclusive       inconclusive         0.878   0.805      2 no_new_evidence     
+SC-006   inconclusive       inconclusive         0.625   0.725      2 no_new_evidence     
+SC-007   inconclusive       inconclusive         0.621   0.625      2 no_new_evidence     
+SC-008   threat_dismissed   threat_dismissed     0.900   0.900      2 no_new_evidence     
+SC-009   threat_dismissed   threat_dismissed     0.900   0.900      2 no_new_evidence     
+SC-010   threat_confirmed   threat_confirmed     1.000   1.000      2 no_new_evidence     
+SC-011   threat_dismissed   threat_dismissed     0.800   0.800      2 no_new_evidence     
+SC-012   inconclusive       threat_confirmed     0.662   0.775      2 no_new_evidence     
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+AGGREGATE COMPARISON
+----------------------------------------------------------------------------------------------------
+Match Rate:       11/12 (91.7%) -> 10/12 (83.3%)   delta -8.3%
+Avg Confidence:   0.822 -> 0.831   delta +0.009
+Avg Coverage:     0.946 -> 0.983   delta +0.036
+Avg Rounds:       N/A -> 2.0
+Total Cost:       $0.0000 -> $0.3120   delta $+0.3120
+Cost/Scenario:    $0.0000 -> $0.0260
+
+====================================================================================================
+END OF COMPARISON REPORT
+====================================================================================================

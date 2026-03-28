@@ -1,0 +1,805 @@
+{
+  "v1_accuracy": 27,
+  "total_scenarios": 33,
+  "best_overall": {
+    "accuracy": 29,
+    "config": {
+      "confirm_delta": 0.35,
+      "min_winner": 0.55,
+      "dom_max": 0.55
+    },
+    "regressions": [
+      "SC-032"
+    ]
+  },
+  "best_zero_regression": {
+    "accuracy": 28,
+    "config": {
+      "delta": 0.3,
+      "min_winner": 0.55,
+      "dom_max": 0.55,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    }
+  },
+  "all_results": [
+    {
+      "delta": 0.35,
+      "min_winner": 0.55,
+      "dom_max": 0.55,
+      "accuracy": 29,
+      "regressions": 1,
+      "confirmed": 10,
+      "dismissed": 9,
+      "inconclusive": 10,
+      "regression_ids": [
+        "SC-032"
+      ]
+    },
+    {
+      "delta": 0.35,
+      "min_winner": 0.6,
+      "dom_max": 0.55,
+      "accuracy": 29,
+      "regressions": 1,
+      "confirmed": 10,
+      "dismissed": 9,
+      "inconclusive": 10,
+      "regression_ids": [
+        "SC-032"
+      ]
+    },
+    {
+      "delta": 0.35,
+      "min_winner": 0.65,
+      "dom_max": 0.55,
+      "accuracy": 29,
+      "regressions": 1,
+      "confirmed": 10,
+      "dismissed": 9,
+      "inconclusive": 10,
+      "regression_ids": [
+        "SC-032"
+      ]
+    },
+    {
+      "delta": 0.35,
+      "min_winner": 0.55,
+      "dom_max": 0.6,
+      "accuracy": 29,
+      "regressions": 1,
+      "confirmed": 10,
+      "dismissed": 9,
+      "inconclusive": 10,
+      "regression_ids": [
+        "SC-032"
+      ]
+    },
+    {
+      "delta": 0.35,
+      "min_winner": 0.6,
+      "dom_max": 0.6,
+      "accuracy": 29,
+      "regressions": 1,
+      "confirmed": 10,
+      "dismissed": 9,
+      "inconclusive": 10,
+      "regression_ids": [
+        "SC-032"
+      ]
+    },
+    {
+      "delta": 0.35,
+      "min_winner": 0.65,
+      "dom_max": 0.6,
+      "accuracy": 29,
+      "regressions": 1,
+      "confirmed": 10,
+      "dismissed": 9,
+      "inconclusive": 10,
+      "regression_ids": [
+        "SC-032"
+      ]
+    },
+    {
+      "delta": 0.35,
+      "min_winner": 0.55,
+      "dom_max": 0.65,
+      "accuracy": 29,
+      "regressions": 1,
+      "confirmed": 10,
+      "dismissed": 9,
+      "inconclusive": 10,
+      "regression_ids": [
+        "SC-032"
+      ]
+    },
+    {
+      "delta": 0.35,
+      "min_winner": 0.6,
+      "dom_max": 0.65,
+      "accuracy": 29,
+      "regressions": 1,
+      "confirmed": 10,
+      "dismissed": 9,
+      "inconclusive": 10,
+      "regression_ids": [
+        "SC-032"
+      ]
+    },
+    {
+      "delta": 0.35,
+      "min_winner": 0.65,
+      "dom_max": 0.65,
+      "accuracy": 29,
+      "regressions": 1,
+      "confirmed": 10,
+      "dismissed": 9,
+      "inconclusive": 10,
+      "regression_ids": [
+        "SC-032"
+      ]
+    },
+    {
+      "delta": 0.3,
+      "min_winner": 0.55,
+      "dom_max": 0.55,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    },
+    {
+      "delta": 0.3,
+      "min_winner": 0.6,
+      "dom_max": 0.55,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    },
+    {
+      "delta": 0.3,
+      "min_winner": 0.65,
+      "dom_max": 0.55,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    },
+    {
+      "delta": 0.3,
+      "min_winner": 0.55,
+      "dom_max": 0.6,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    },
+    {
+      "delta": 0.3,
+      "min_winner": 0.6,
+      "dom_max": 0.6,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    },
+    {
+      "delta": 0.3,
+      "min_winner": 0.65,
+      "dom_max": 0.6,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    },
+    {
+      "delta": 0.3,
+      "min_winner": 0.55,
+      "dom_max": 0.65,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    },
+    {
+      "delta": 0.3,
+      "min_winner": 0.6,
+      "dom_max": 0.65,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    },
+    {
+      "delta": 0.3,
+      "min_winner": 0.65,
+      "dom_max": 0.65,
+      "accuracy": 28,
+      "regressions": 0,
+      "confirmed": 11,
+      "dismissed": 9,
+      "inconclusive": 8,
+      "regression_ids": []
+    },
+    {
+      "delta": 0.25,
+      "min_winner": 0.55,
+      "dom_max": 0.55,
+      "accuracy": 26,
+      "regressions": 2,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 5,
+      "regression_ids": [
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.25,
+      "min_winner": 0.6,
+      "dom_max": 0.55,
+      "accuracy": 26,
+      "regressions": 2,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 5,
+      "regression_ids": [
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.25,
+      "min_winner": 0.65,
+      "dom_max": 0.55,
+      "accuracy": 26,
+      "regressions": 2,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 5,
+      "regression_ids": [
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.25,
+      "min_winner": 0.55,
+      "dom_max": 0.6,
+      "accuracy": 26,
+      "regressions": 2,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 5,
+      "regression_ids": [
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.25,
+      "min_winner": 0.6,
+      "dom_max": 0.6,
+      "accuracy": 26,
+      "regressions": 2,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 5,
+      "regression_ids": [
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.25,
+      "min_winner": 0.65,
+      "dom_max": 0.6,
+      "accuracy": 26,
+      "regressions": 2,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 5,
+      "regression_ids": [
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.25,
+      "min_winner": 0.55,
+      "dom_max": 0.65,
+      "accuracy": 26,
+      "regressions": 2,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 5,
+      "regression_ids": [
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.25,
+      "min_winner": 0.6,
+      "dom_max": 0.65,
+      "accuracy": 26,
+      "regressions": 2,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 5,
+      "regression_ids": [
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.25,
+      "min_winner": 0.65,
+      "dom_max": 0.65,
+      "accuracy": 26,
+      "regressions": 2,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 5,
+      "regression_ids": [
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.15,
+      "min_winner": 0.65,
+      "dom_max": 0.55,
+      "accuracy": 25,
+      "regressions": 3,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 4,
+      "regression_ids": [
+        "SC-005",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.2,
+      "min_winner": 0.65,
+      "dom_max": 0.55,
+      "accuracy": 25,
+      "regressions": 3,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 4,
+      "regression_ids": [
+        "SC-005",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.15,
+      "min_winner": 0.65,
+      "dom_max": 0.6,
+      "accuracy": 25,
+      "regressions": 3,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 4,
+      "regression_ids": [
+        "SC-005",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.2,
+      "min_winner": 0.65,
+      "dom_max": 0.6,
+      "accuracy": 25,
+      "regressions": 3,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 4,
+      "regression_ids": [
+        "SC-005",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.15,
+      "min_winner": 0.65,
+      "dom_max": 0.65,
+      "accuracy": 25,
+      "regressions": 3,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 4,
+      "regression_ids": [
+        "SC-005",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.2,
+      "min_winner": 0.65,
+      "dom_max": 0.65,
+      "accuracy": 25,
+      "regressions": 3,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 4,
+      "regression_ids": [
+        "SC-005",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.15,
+      "min_winner": 0.55,
+      "dom_max": 0.55,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.2,
+      "min_winner": 0.55,
+      "dom_max": 0.55,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.15,
+      "min_winner": 0.6,
+      "dom_max": 0.55,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.2,
+      "min_winner": 0.6,
+      "dom_max": 0.55,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.1,
+      "min_winner": 0.65,
+      "dom_max": 0.55,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-006",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.15,
+      "min_winner": 0.55,
+      "dom_max": 0.6,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.2,
+      "min_winner": 0.55,
+      "dom_max": 0.6,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.15,
+      "min_winner": 0.6,
+      "dom_max": 0.6,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.2,
+      "min_winner": 0.6,
+      "dom_max": 0.6,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.1,
+      "min_winner": 0.65,
+      "dom_max": 0.6,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-006",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.15,
+      "min_winner": 0.55,
+      "dom_max": 0.65,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.2,
+      "min_winner": 0.55,
+      "dom_max": 0.65,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.15,
+      "min_winner": 0.6,
+      "dom_max": 0.65,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.2,
+      "min_winner": 0.6,
+      "dom_max": 0.65,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.1,
+      "min_winner": 0.65,
+      "dom_max": 0.65,
+      "accuracy": 24,
+      "regressions": 4,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 3,
+      "regression_ids": [
+        "SC-005",
+        "SC-006",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.1,
+      "min_winner": 0.55,
+      "dom_max": 0.55,
+      "accuracy": 23,
+      "regressions": 5,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 2,
+      "regression_ids": [
+        "SC-005",
+        "SC-006",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.1,
+      "min_winner": 0.6,
+      "dom_max": 0.55,
+      "accuracy": 23,
+      "regressions": 5,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 2,
+      "regression_ids": [
+        "SC-005",
+        "SC-006",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.1,
+      "min_winner": 0.55,
+      "dom_max": 0.6,
+      "accuracy": 23,
+      "regressions": 5,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 2,
+      "regression_ids": [
+        "SC-005",
+        "SC-006",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.1,
+      "min_winner": 0.6,
+      "dom_max": 0.6,
+      "accuracy": 23,
+      "regressions": 5,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 2,
+      "regression_ids": [
+        "SC-005",
+        "SC-006",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.1,
+      "min_winner": 0.55,
+      "dom_max": 0.65,
+      "accuracy": 23,
+      "regressions": 5,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 2,
+      "regression_ids": [
+        "SC-005",
+        "SC-006",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    },
+    {
+      "delta": 0.1,
+      "min_winner": 0.6,
+      "dom_max": 0.65,
+      "accuracy": 23,
+      "regressions": 5,
+      "confirmed": 11,
+      "dismissed": 10,
+      "inconclusive": 2,
+      "regression_ids": [
+        "SC-005",
+        "SC-006",
+        "SC-007",
+        "SC-028",
+        "SC-029"
+      ]
+    }
+  ]
+}
