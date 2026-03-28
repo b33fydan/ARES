@@ -1,0 +1,122 @@
+==============================================================================
+ARES BENCHMARK REPORT
+==============================================================================
+Run ID:         584cf5c1-d143-45e7-b134-a9674ba40162
+Timestamp:      2026-03-27T15:46:28.596315
+Strategy:       llm
+Scenarios:      33
+Total duration: 352091 ms
+Total cost:     $0.324765
+
+------------------------------------------------------------------------------
+SCENARIO SUMMARY
+------------------------------------------------------------------------------
+ID       Name                           Tier Expected           Actual             Match  Conf   Cov
+------------------------------------------------------------------------------
+SC-001   Privilege Escalation (Classic)    1 INCONCLUSIVE       inconclusive           Y  0.72  1.00
+SC-002   Suspicious Process Chain          1 THREAT_CONFIRMED   threat_confirmed       Y  0.85  1.00
+SC-003   Credential Dumping                1 THREAT_CONFIRMED   threat_confirmed       Y  0.95  1.00
+SC-004   Living-Off-the-Land (LOLBins)     2 THREAT_CONFIRMED   threat_confirmed       Y  0.90  1.00
+SC-005   Lateral Movement via RDP + Pas    2 INCONCLUSIVE       inconclusive           Y  0.80  1.00
+SC-006   Data Staging Before Exfiltrati    2 INCONCLUSIVE       inconclusive           Y  0.68  1.00
+SC-007   Insider Threat — Behavioral An    2 INCONCLUSIVE       inconclusive           Y  0.20  0.14
+SC-008   Benign Activity Mimicking Malw    3 THREAT_DISMISSED   threat_dismissed       Y  1.00  1.00
+SC-009   Authorized Red Team Exercise      3 THREAT_DISMISSED   threat_dismissed       Y  0.86  0.64
+SC-010   Multi-Vector Campaign             4 THREAT_CONFIRMED   inconclusive           N  0.56  0.56
+SC-011   Slow-Roll Exfiltration            4 INCONCLUSIVE       threat_dismissed       N  0.80  1.00
+SC-012   Supply Chain Compromise           4 INCONCLUSIVE       inconclusive           Y  0.67  1.00
+SC-013   Coordinated Brute Force Attack    2 THREAT_CONFIRMED   threat_confirmed       Y  0.99  0.88
+SC-014   Data Exfiltration with Cover T    3 THREAT_CONFIRMED   threat_confirmed       Y  0.98  0.77
+SC-015   Legitimate Infrastructure Main    3 THREAT_DISMISSED   threat_dismissed       Y  0.95  0.25
+SC-016   C2 Beaconing with Lateral Move    4 THREAT_CONFIRMED   inconclusive           N  0.76  1.00
+SC-017   Cloud Backup vs Exfiltration (    4 INCONCLUSIVE       threat_dismissed       N  0.85  0.82
+SC-018   Multi-Source False Positive Ca    3 THREAT_DISMISSED   threat_dismissed       Y  0.95  0.61
+SC-019   Ransomware Deployment             1 THREAT_CONFIRMED   threat_confirmed       Y  1.00  1.00
+SC-020   C2 Beaconing Pattern              1 THREAT_CONFIRMED   inconclusive           N  0.38  0.38
+SC-021   Scheduled Backup Transfer         3 THREAT_DISMISSED   threat_dismissed       Y  0.99  0.67
+SC-022   Admin PsExec Patching             3 THREAT_DISMISSED   threat_dismissed       Y  0.71  0.86
+SC-023   Vulnerability Scanner Noise       3 THREAT_DISMISSED   inconclusive           N  0.23  0.29
+SC-024   Dual-Use PowerShell (Encoded)     2 INCONCLUSIVE       inconclusive           Y  0.50  0.67
+SC-025   Cloud Upload Ambiguity            2 INCONCLUSIVE       inconclusive           Y  0.68  0.86
+SC-026   Failed Logins Then Success        2 INCONCLUSIVE       threat_confirmed       N  0.75  1.00
+SC-027   After-Hours Foreign VPN           2 INCONCLUSIVE       inconclusive           Y  0.22  0.29
+SC-028   WMI Remote Execution              2 INCONCLUSIVE       inconclusive           Y  0.20  0.17
+SC-029   Internal Port Scan Ambiguity      2 INCONCLUSIVE       inconclusive           Y  0.20  0.12
+SC-030   DGA DNS with Minimal Traffic      4 INCONCLUSIVE       inconclusive           Y  0.20  0.17
+SC-031   Sudo Abuse Without Exfiltratio    4 THREAT_CONFIRMED   inconclusive           N  0.68  0.71
+SC-032   Impossible Travel Normal Proce    4 THREAT_CONFIRMED   inconclusive           N  0.68  1.00
+SC-033   Suspicious Binary with Ansible    4 THREAT_DISMISSED   threat_dismissed       Y  0.90  1.00
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+AGGREGATE METRICS
+------------------------------------------------------------------------------
+Verdict match rate:     24/33 (72.7%)
+Average confidence:     0.689
+Average fact coverage:  0.722
+Total duration:         352091 ms
+Total cost (USD):       $0.324765
+
+------------------------------------------------------------------------------
+VERDICT DISTRIBUTION
+------------------------------------------------------------------------------
+  threat_confirmed       7
+  threat_dismissed       9
+  inconclusive           17
+
+------------------------------------------------------------------------------
+ANOMALY FLAGS (expected != actual)
+------------------------------------------------------------------------------
+  SC-010: expected THREAT_CONFIRMED, got inconclusive
+  SC-011: expected INCONCLUSIVE, got threat_dismissed
+  SC-016: expected THREAT_CONFIRMED, got inconclusive
+  SC-017: expected INCONCLUSIVE, got threat_dismissed
+  SC-020: expected THREAT_CONFIRMED, got inconclusive
+  SC-023: expected THREAT_DISMISSED, got inconclusive
+  SC-026: expected INCONCLUSIVE, got threat_confirmed
+  SC-031: expected THREAT_CONFIRMED, got inconclusive
+  SC-032: expected THREAT_CONFIRMED, got inconclusive
+
+------------------------------------------------------------------------------
+DELTA ANALYSIS (baseline -> current)
+------------------------------------------------------------------------------
+ID       Base Verdict       Base Conf Curr Verdict       Curr Conf   Delta
+------------------------------------------------------------------------------
+SC-001   inconclusive           0.375 inconclusive           0.717  +0.342
+SC-002   inconclusive           0.380 threat_confirmed       0.850  +0.470
+SC-003   threat_confirmed       1.000 threat_confirmed       0.950  -0.050
+SC-004   inconclusive           0.592 threat_confirmed       0.900  +0.308
+SC-005   inconclusive           0.778 inconclusive           0.802  +0.025
+SC-006   inconclusive           0.279 inconclusive           0.675  +0.396
+SC-007   inconclusive           0.195 inconclusive           0.195  +0.000
+SC-008   threat_dismissed       1.000 threat_dismissed       1.000  +0.000
+SC-009   threat_dismissed       0.862 threat_dismissed       0.862  +0.000
+SC-010   inconclusive           0.564 inconclusive           0.564  +0.000
+SC-011   inconclusive           0.275 threat_dismissed       0.800  +0.525
+SC-012   inconclusive           0.543 inconclusive           0.670  +0.127
+SC-013   inconclusive           0.465 threat_confirmed       0.986  +0.521
+SC-014   inconclusive           0.544 threat_confirmed       0.983  +0.440
+SC-015   threat_dismissed       0.918 threat_dismissed       0.950  +0.032
+SC-016   inconclusive           0.285 inconclusive           0.758  +0.473
+SC-017   threat_dismissed       0.895 threat_dismissed       0.850  -0.045
+SC-018   threat_dismissed       0.907 threat_dismissed       0.950  +0.043
+SC-019   inconclusive           0.350 threat_confirmed       1.000  +0.650
+SC-020   inconclusive           0.375 inconclusive           0.375  +0.000
+SC-021   threat_dismissed       0.986 threat_dismissed       0.986  +0.000
+SC-022   threat_dismissed       0.714 threat_dismissed       0.714  +0.000
+SC-023   inconclusive           0.225 inconclusive           0.225  +0.000
+SC-024   inconclusive           0.330 inconclusive           0.500  +0.170
+SC-025   inconclusive           0.200 inconclusive           0.675  +0.475
+SC-026   inconclusive           0.195 threat_confirmed       0.750  +0.555
+SC-027   inconclusive           0.225 inconclusive           0.225  +0.000
+SC-028   inconclusive           0.195 inconclusive           0.195  +0.000
+SC-029   inconclusive           0.195 inconclusive           0.195  +0.000
+SC-030   inconclusive           0.195 inconclusive           0.195  +0.000
+SC-031   inconclusive           0.200 inconclusive           0.675  +0.475
+SC-032   inconclusive           0.195 inconclusive           0.675  +0.480
+SC-033   inconclusive           0.370 threat_dismissed       0.900  +0.530
+------------------------------------------------------------------------------
+
+==============================================================================
+END OF REPORT
+==============================================================================

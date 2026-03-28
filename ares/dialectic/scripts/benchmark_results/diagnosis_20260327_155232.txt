@@ -1,0 +1,118 @@
+==============================================================================
+ARES Misclassification Diagnosis Report
+Benchmark: 2026-03-27T15:46:28.596315
+Accuracy: 24/33 (72.7%)
+Misclassified: 9  |  Errors: 0
+==============================================================================
+
+Failure Mode Distribution
+----------------------------------------
+  CONFIDENCE_CALIBRATION        4  ####
+  EVIDENCE_GAP                  3  ###
+  AMBIGUITY_MISMATCH            2  ##
+
+==============================================================================
+Per-Scenario Diagnosis
+==============================================================================
+
+--- SC-010: Multi-Vector Campaign ---
+  Expected: threat_confirmed
+  Actual:   inconclusive
+  Mode:     EVIDENCE_GAP
+  Arch=0.69  Skep=0.43  Verdict=0.56  Coverage=0.56  Facts=16
+  Evidence: 16 facts from auth_log, netflow, process_list. Entities: compress, cred-lsass, exfil-conn, exfil-ip, lateral-1.... Fields observed: command_line, file_copy_operation, file_opened, logon_account, lsass_access_granted, network_connection.... Tier 4 (Multiple (kill chain)).
+  Why:      Expected threat_confirmed, got inconclusive. Fact coverage (0.56) too low — not enough evidence was cited to reach correct conclusion.
+  Fix:      No prompt fix — SC-010 has fact_coverage=0.56. Consider adding facts to the scenario or reviewing expected verdict.
+
+--- SC-011: Slow-Roll Exfiltration ---
+  Expected: inconclusive
+  Actual:   threat_dismissed
+  Mode:     AMBIGUITY_MISMATCH
+  Arch=0.40  Skep=0.80  Verdict=0.80  Coverage=1.00  Facts=4
+  Evidence: 4 facts from auth_log, netflow. Entities: upload-1, upload-2, upload-3, user-research03. Fields observed: logon_account, network_connection. Tier 4 (Exfiltration).
+  Why:      Expected inconclusive, got threat_dismissed. The system's verdict is arguably defensible given the evidence (arch=0.40, skep=0.80). Expected verdict may be debatable.
+  Fix:      Review expected verdict for SC-011 — system behavior is defensible. Consider whether INCONCLUSIVE is truly the right label.
+
+--- SC-016: C2 Beaconing with Lateral Movement ---
+  Expected: threat_confirmed
+  Actual:   inconclusive
+  Mode:     CONFIDENCE_CALIBRATION
+  Arch=1.00  Skep=0.52  Verdict=0.76  Coverage=1.00  Facts=15
+  Evidence: 15 facts from netflow, syslog. Entities: beacon-1, beacon-2, beacon-3, beacon-4, beacon-5.... Fields observed: beacon_interval, command, event_type, network_connection, source_ip. Tier 4 (Command and Control).
+  Why:      Expected threat_confirmed, got inconclusive. Close confidence values (arch=1.00, skep=0.52, delta=0.48) — the margin flipped the wrong direction.
+  Fix:      Adjust Oracle scoring weights — SC-016 had confidence delta of only 0.48 (arch=1.00, skep=0.52). The margin was too thin and flipped the wrong way.
+
+--- SC-017: Cloud Backup vs Exfiltration (Ambiguous) ---
+  Expected: inconclusive
+  Actual:   threat_dismissed
+  Mode:     AMBIGUITY_MISMATCH
+  Arch=0.40  Skep=0.85  Verdict=0.85  Coverage=0.82  Facts=11
+  Evidence: 11 facts from netflow, process_list. Entities: flow-backup, flow-dns, proc-backup, proc-child, task-sched.... Fields observed: bytes_transferred, command_line, destination_reputation, flow_direction, network_connection, process_name.... Tier 4 (Exfiltration (or Legitimate Backup)).
+  Why:      Expected inconclusive, got threat_dismissed. The system's verdict is arguably defensible given the evidence (arch=0.40, skep=0.85). Expected verdict may be debatable.
+  Fix:      Review expected verdict for SC-017 — system behavior is defensible. Consider whether INCONCLUSIVE is truly the right label.
+
+--- SC-020: C2 Beaconing Pattern ---
+  Expected: threat_confirmed
+  Actual:   inconclusive
+  Mode:     EVIDENCE_GAP
+  Arch=0.50  Skep=0.25  Verdict=0.38  Coverage=0.38  Facts=8
+  Evidence: 8 facts from netflow, process_list. Entities: flow-beacon-1, flow-beacon-2, flow-beacon-3, flow-beacon-4, flow-beacon-5.... Fields observed: command_line, network_connection, parent_process, process_name. Tier 1 (Command and Control).
+  Why:      Expected threat_confirmed, got inconclusive. Fact coverage (0.38) too low — not enough evidence was cited to reach correct conclusion.
+  Fix:      No prompt fix — SC-020 has fact_coverage=0.38. Consider adding facts to the scenario or reviewing expected verdict.
+
+--- SC-023: Vulnerability Scanner Noise ---
+  Expected: threat_dismissed
+  Actual:   inconclusive
+  Mode:     EVIDENCE_GAP
+  Arch=0.10  Skep=0.35  Verdict=0.23  Coverage=0.29  Facts=7
+  Evidence: 7 facts from netflow, syslog. Entities: flow-scan-1, flow-scan-2, flow-scan-3, scan-auth-fail, scan-schedule.... Fields observed: asset_tag, event_type, network_connection, scheduled_task, source_ip. Tier 3 (Discovery).
+  Why:      Expected threat_dismissed, got inconclusive. Fact coverage (0.29) too low — not enough evidence was cited to reach correct conclusion.
+  Fix:      No prompt fix — SC-023 has fact_coverage=0.29. Consider adding facts to the scenario or reviewing expected verdict.
+
+--- SC-026: Failed Logins Then Success ---
+  Expected: inconclusive
+  Actual:   threat_confirmed
+  Mode:     CONFIDENCE_CALIBRATION
+  Arch=0.75  Skep=0.60  Verdict=0.75  Coverage=1.00  Facts=9
+  Evidence: 9 facts from auth_log. Entities: fail-1, fail-2, fail-3, fail-4, fail-5.... Fields observed: event_type, logon_type, source_workstation, target_account. Tier 2 (Credential Access).
+  Why:      Expected inconclusive, got threat_confirmed. Close confidence values (arch=0.75, skep=0.60, delta=0.15) — the margin flipped the wrong direction.
+  Fix:      Adjust Oracle scoring weights — SC-026 had confidence delta of only 0.15 (arch=0.75, skep=0.60). The margin was too thin and flipped the wrong way.
+
+--- SC-031: Sudo Abuse Without Exfiltration ---
+  Expected: threat_confirmed
+  Actual:   inconclusive
+  Mode:     CONFIDENCE_CALIBRATION
+  Arch=0.75  Skep=0.60  Verdict=0.68  Coverage=0.71  Facts=7
+  Evidence: 7 facts from netflow, syslog. Entities: flow-no-exfil, flow-normal, sudo-root, sudo-root-2. Fields observed: event_type, network_connection, sudo_command, sudo_user. Tier 4 (Credential Access).
+  Why:      Expected threat_confirmed, got inconclusive. Close confidence values (arch=0.75, skep=0.60, delta=0.15) — the margin flipped the wrong direction.
+  Fix:      Adjust Oracle scoring weights — SC-031 had confidence delta of only 0.15 (arch=0.75, skep=0.60). The margin was too thin and flipped the wrong way.
+
+--- SC-032: Impossible Travel Normal Processes ---
+  Expected: threat_confirmed
+  Actual:   inconclusive
+  Mode:     CONFIDENCE_CALIBRATION
+  Arch=0.75  Skep=0.60  Verdict=0.68  Coverage=1.00  Facts=8
+  Evidence: 8 facts from auth_log, process_list. Entities: login-ny, login-uk, proc-office, proc-office-2, proc-teams. Fields observed: event_type, logon_account, process_name, source_ip. Tier 4 (Initial Access).
+  Why:      Expected threat_confirmed, got inconclusive. Close confidence values (arch=0.75, skep=0.60, delta=0.15) — the margin flipped the wrong direction.
+  Fix:      Adjust Oracle scoring weights — SC-032 had confidence delta of only 0.15 (arch=0.75, skep=0.60). The margin was too thin and flipped the wrong way.
+
+==============================================================================
+Prioritized Recommendations (by failure mode frequency)
+==============================================================================
+
+CONFIDENCE_CALIBRATION (4 scenarios):
+  - SC-016: Adjust Oracle scoring weights — SC-016 had confidence delta of only 0.48 (arch=1.00, skep=0.52). The margin was too thin and flipped the wrong way.
+  - SC-026: Adjust Oracle scoring weights — SC-026 had confidence delta of only 0.15 (arch=0.75, skep=0.60). The margin was too thin and flipped the wrong way.
+  - SC-031: Adjust Oracle scoring weights — SC-031 had confidence delta of only 0.15 (arch=0.75, skep=0.60). The margin was too thin and flipped the wrong way.
+  - SC-032: Adjust Oracle scoring weights — SC-032 had confidence delta of only 0.15 (arch=0.75, skep=0.60). The margin was too thin and flipped the wrong way.
+
+EVIDENCE_GAP (3 scenarios):
+  - SC-010: No prompt fix — SC-010 has fact_coverage=0.56. Consider adding facts to the scenario or reviewing expected verdict.
+  - SC-020: No prompt fix — SC-020 has fact_coverage=0.38. Consider adding facts to the scenario or reviewing expected verdict.
+  - SC-023: No prompt fix — SC-023 has fact_coverage=0.29. Consider adding facts to the scenario or reviewing expected verdict.
+
+AMBIGUITY_MISMATCH (2 scenarios):
+  - SC-011: Review expected verdict for SC-011 — system behavior is defensible. Consider whether INCONCLUSIVE is truly the right label.
+  - SC-017: Review expected verdict for SC-017 — system behavior is defensible. Consider whether INCONCLUSIVE is truly the right label.
+
+==============================================================================
