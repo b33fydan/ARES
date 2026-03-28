@@ -1,0 +1,45 @@
+[
+  {
+    "event_type": "scenario_start",
+    "timestamp_ms": 0,
+    "scenario_id": "SC-DEMO-1",
+    "scenario_name": "Credential Dumping Attack",
+    "expected_verdict": "THREAT_CONFIRMED",
+    "fact_count": 6,
+    "source_types": ["process_list", "auth_log", "syslog"]
+  },
+  {"event_type": "fact_ingested", "timestamp_ms": 200, "scenario_id": "SC-DEMO-1", "fact_id": "d1-f1", "entity_type": "node", "entity_id": "proc-word", "source_type": "process_list", "field_name": "process_name", "source_index": 0, "fact_index": 0},
+  {"event_type": "fact_ingested", "timestamp_ms": 400, "scenario_id": "SC-DEMO-1", "fact_id": "d1-f2", "entity_type": "node", "entity_id": "proc-cmd", "source_type": "process_list", "field_name": "command_line", "source_index": 0, "fact_index": 1},
+  {"event_type": "fact_ingested", "timestamp_ms": 600, "scenario_id": "SC-DEMO-1", "fact_id": "d1-f3", "entity_type": "node", "entity_id": "proc-lsass", "source_type": "process_list", "field_name": "lsass_access", "source_index": 0, "fact_index": 2},
+  {"event_type": "fact_ingested", "timestamp_ms": 800, "scenario_id": "SC-DEMO-1", "fact_id": "d1-f4", "entity_type": "edge", "entity_id": "logon-1", "source_type": "auth_log", "field_name": "logon_event", "source_index": 1, "fact_index": 3},
+  {"event_type": "fact_ingested", "timestamp_ms": 1000, "scenario_id": "SC-DEMO-1", "fact_id": "d1-f5", "entity_type": "node", "entity_id": "proc-dump", "source_type": "process_list", "field_name": "process_name", "source_index": 0, "fact_index": 4},
+  {"event_type": "fact_ingested", "timestamp_ms": 1200, "scenario_id": "SC-DEMO-1", "fact_id": "d1-f6", "entity_type": "edge", "entity_id": "alert-1", "source_type": "syslog", "field_name": "alert_type", "source_index": 2, "fact_index": 5},
+  {"event_type": "fact_cited", "timestamp_ms": 1700, "scenario_id": "SC-DEMO-1", "agent_role": "architect", "fact_ids": ["d1-f1", "d1-f2", "d1-f3", "d1-f5", "d1-f6"], "coverage_ratio": 0.83},
+  {"event_type": "fact_cited", "timestamp_ms": 2000, "scenario_id": "SC-DEMO-1", "agent_role": "skeptic", "fact_ids": ["d1-f4"], "coverage_ratio": 0.17},
+  {"event_type": "confidence_update", "timestamp_ms": 2300, "scenario_id": "SC-DEMO-1", "architect_confidence": 0.92, "skeptic_confidence": 0.25, "delta": 0.67},
+  {"event_type": "debate_summary", "timestamp_ms": 2500, "scenario_id": "SC-DEMO-1", "architect_assertion_count": 3, "skeptic_assertion_count": 1, "verdict_outcome": "threat_confirmed", "verdict_confidence": 0.92, "expected_verdict": "threat_confirmed", "is_correct": true},
+  {"event_type": "verdict_rendered", "timestamp_ms": 3000, "scenario_id": "SC-DEMO-1", "outcome": "threat_confirmed", "confidence": 0.92, "correct": true},
+  {"event_type": "accuracy_milestone", "timestamp_ms": 3100, "scenarios_completed": 1, "scenarios_correct": 1, "running_accuracy": 1.0},
+  {"event_type": "scenario_end", "timestamp_ms": 3300, "scenario_id": "SC-DEMO-1", "duration_ms": 3300},
+
+  {
+    "event_type": "scenario_start",
+    "timestamp_ms": 5300,
+    "scenario_id": "SC-DEMO-2",
+    "scenario_name": "Authorized Maintenance Window",
+    "expected_verdict": "THREAT_DISMISSED",
+    "fact_count": 4,
+    "source_types": ["auth_log", "syslog"]
+  },
+  {"event_type": "fact_ingested", "timestamp_ms": 5500, "scenario_id": "SC-DEMO-2", "fact_id": "d2-f1", "entity_type": "node", "entity_id": "admin-user", "source_type": "auth_log", "field_name": "logon_account", "source_index": 0, "fact_index": 0},
+  {"event_type": "fact_ingested", "timestamp_ms": 5700, "scenario_id": "SC-DEMO-2", "fact_id": "d2-f2", "entity_type": "node", "entity_id": "change-ticket", "source_type": "syslog", "field_name": "change_request", "source_index": 1, "fact_index": 1},
+  {"event_type": "fact_ingested", "timestamp_ms": 5900, "scenario_id": "SC-DEMO-2", "fact_id": "d2-f3", "entity_type": "edge", "entity_id": "rdp-session", "source_type": "auth_log", "field_name": "remote_access", "source_index": 0, "fact_index": 2},
+  {"event_type": "fact_ingested", "timestamp_ms": 6100, "scenario_id": "SC-DEMO-2", "fact_id": "d2-f4", "entity_type": "node", "entity_id": "patch-proc", "source_type": "syslog", "field_name": "scheduled_task", "source_index": 1, "fact_index": 3},
+  {"event_type": "fact_cited", "timestamp_ms": 6600, "scenario_id": "SC-DEMO-2", "agent_role": "architect", "fact_ids": ["d2-f1", "d2-f3"], "coverage_ratio": 0.5},
+  {"event_type": "fact_cited", "timestamp_ms": 6900, "scenario_id": "SC-DEMO-2", "agent_role": "skeptic", "fact_ids": ["d2-f1", "d2-f2", "d2-f3", "d2-f4"], "coverage_ratio": 1.0},
+  {"event_type": "confidence_update", "timestamp_ms": 7200, "scenario_id": "SC-DEMO-2", "architect_confidence": 0.20, "skeptic_confidence": 0.90, "delta": -0.70},
+  {"event_type": "debate_summary", "timestamp_ms": 7400, "scenario_id": "SC-DEMO-2", "architect_assertion_count": 1, "skeptic_assertion_count": 3, "verdict_outcome": "threat_dismissed", "verdict_confidence": 0.90, "expected_verdict": "threat_dismissed", "is_correct": true},
+  {"event_type": "verdict_rendered", "timestamp_ms": 7900, "scenario_id": "SC-DEMO-2", "outcome": "threat_dismissed", "confidence": 0.90, "correct": true},
+  {"event_type": "accuracy_milestone", "timestamp_ms": 8000, "scenarios_completed": 2, "scenarios_correct": 2, "running_accuracy": 1.0},
+  {"event_type": "scenario_end", "timestamp_ms": 8200, "scenario_id": "SC-DEMO-2", "duration_ms": 2900}
+]
