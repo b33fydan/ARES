@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ARES-VISION :: Dark Interactive Particles</title>
+<title>ARES-VISION :: Live Analysis</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#e0f4ff;font-family:'Courier New',monospace;overflow:hidden}
@@ -45,6 +45,13 @@ canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 #status.connected{color:#00ff66}
 #status.waiting{color:#ffaa00}
 #instructions{position:absolute;bottom:10px;right:20px;font-size:9px;opacity:.2;letter-spacing:.5px}
+
+/* --- ANALYZING indicator (Session 039) --- */
+#analyzing{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:13px;letter-spacing:4px;color:#00f0ff;opacity:0;transition:opacity .5s;
+  text-shadow:0 0 15px #00f0ff44}
+@keyframes pulse-analyze{0%,100%{opacity:.3}50%{opacity:.8}}
+#analyzing.active{opacity:1;animation:pulse-analyze 2s ease-in-out infinite}
 </style>
 </head>
 <body>
@@ -81,6 +88,7 @@ canvas{display:block;position:fixed;top:0;left:0;z-index:0}
     <div id="verdict-sub"></div>
   </div>
 
+  <div id="analyzing">ANALYZING...</div>
   <div id="status" class="waiting">Waiting for ARES...</div>
   <div id="instructions">DRAG orbit | SCROLL zoom | SPACE pause | R reset | F fullscreen</div>
 </div>
@@ -88,9 +96,9 @@ canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // =========================================================================
-// ARES-VISION :: Dark Interactive Particles  --  Session 038
-// North star: "That looks dangerous and beautiful"
-// AKIRA holographic overlays + spatiotemporal sound model aesthetic
+// ARES-VISION :: Live Analysis  --  Session 039 (based on 038)
+// Added: ANALYZING... indicator during live LLM calls
+// + analysis_status event handler (backwards compatible with replay)
 // =========================================================================
 
 const params = new URLSearchParams(location.search);
@@ -284,6 +292,7 @@ const $verdText  = el('verdict-text');
 const $verdMiss  = el('verdict-miss');
 const $verdSub   = el('verdict-sub');
 const $status    = el('status');
+const $analyzing = el('analyzing');
 
 // =========================================================================
 // PARTICLE CLUSTER FACTORY
@@ -359,6 +368,7 @@ function clearAll() {
   $archFill.style.width = '0%'; $skepFill.style.width = '0%';
   $archVal.textContent = '--'; $skepVal.textContent = '--';
   $delta.textContent = ''; $roundInfo.textContent = '';
+  $analyzing.className = '';
 }
 
 // =========================================================================
@@ -378,6 +388,7 @@ function handleEvent(d) {
     case 'round_confidence':     evRoundConf(d); break;
     case 'debate_evolution':     break;
     case 'assertion_formed':     evAssertion(d); break;
+    case 'analysis_status':      evAnalysisStatus(d); break;
     case 'miscalibration_check': break;
     case 'claim_audit':          break;
   }
@@ -391,6 +402,16 @@ function evStart(d) {
   $sname.textContent = d.scenario_name || '';
   $meta.textContent = (d.fact_count || 0) + ' facts';
   $label.style.opacity = '1';
+  $analyzing.className = '';  // hide analyzing indicator on new scenario
+}
+
+// --- analysis_status (Session 039: live LLM indicator) ---
+function evAnalysisStatus(d) {
+  if (d.status === 'analyzing') {
+    $analyzing.className = 'active';
+  } else {
+    $analyzing.className = '';
+  }
 }
 
 // --- fact_ingested ---
@@ -430,6 +451,7 @@ function evFact(d) {
 
 // --- fact_cited ---
 function evCited(d) {
+  $analyzing.className = '';  // LLM responded — hide analyzing indicator
   const role = d.agent_role;
   const aHex = AGENT_HEX[role] || 0xffffff;
   const ids = d.fact_ids || [];
