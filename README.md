@@ -1,8 +1,10 @@
-# 🔱 ARES - Adversarial Reasoning Engine System
+# ARES — Adversarial Reasoning Engine System
 
 **A dialectical AI framework for hallucination-resistant cybersecurity threat detection.**
 
-ARES uses structured debate between AI agents to analyze security threats. Instead of trusting a single model's output, three specialized agents argue within a closed-world evidence system where hallucinations become schema violations—not mysterious AI behavior.
+ARES uses structured debate between AI agents to analyze security threats. Instead of trusting a single model's output, three specialized agents argue within a closed-world evidence system where hallucinations become schema violations — not mysterious AI behavior.
+
+> *2,246 tests | 39 development sessions | Zero regressions*
 
 ---
 
@@ -40,31 +42,72 @@ Traditional AI security tools have a fatal flaw: they can confidently fabricate 
 
 ```
 ares/
-├── graph/                    # Security graph schema (Session 001)
-│   └── schema.py             # Node/Edge definitions for security data
+├── graph/                        # Security graph schema
+│   ├── schema.py                 # Node/Edge definitions for security data
+│   ├── store.py                  # Graph storage
+│   └── validators.py             # Graph validation
 │
-└── dialectic/                # Dialectical reasoning engine
-    ├── evidence/             # Evidence system (Session 002)
-    │   ├── provenance.py     # Source tracking
-    │   ├── fact.py           # Immutable fact representation
-    │   └── packet.py         # Frozen evidence container
-    │
-    ├── messages/             # Communication protocol (Session 002)
-    │   ├── assertions.py     # ASSERT, LINK, ALT assertion types
-    │   └── protocol.py       # DialecticalMessage, MessageBuilder
-    │
-    ├── coordinator/          # Enforcement layer (Session 002)
-    │   ├── validator.py      # Message validation against evidence
-    │   ├── cycle.py          # Dialectical cycle state machine
-    │   └── coordinator.py    # Central authority (the "Bouncer")
-    │
-    └── agents/               # Reasoning agents (Sessions 003-004)
-        ├── context.py        # TurnContext, DataRequest
-        ├── base.py           # AgentBase with critical invariants
-        ├── patterns.py       # AnomalyPattern, BenignExplanation, Verdict
-        ├── architect.py      # THESIS phase - threat hypothesis
-        ├── skeptic.py        # ANTITHESIS phase - benign alternatives
-        └── oracle.py         # SYNTHESIS phase - Judge + Narrator
+├── dialectic/                    # Dialectical reasoning engine
+│   ├── evidence/                 # Evidence system
+│   │   ├── provenance.py         # Source tracking
+│   │   ├── fact.py               # Immutable fact representation
+│   │   ├── packet.py             # Frozen evidence container
+│   │   └── extractors/           # Log-to-evidence converters
+│   │       ├── protocol.py       # Extractor protocol
+│   │       ├── windows.py        # Windows Event Log extractor
+│   │       ├── syslog.py         # Syslog extractor
+│   │       └── netflow.py        # NetFlow extractor
+│   │
+│   ├── messages/                 # Communication protocol
+│   │   ├── assertions.py         # ASSERT, LINK, ALT assertion types
+│   │   └── protocol.py           # DialecticalMessage, MessageBuilder
+│   │
+│   ├── coordinator/              # Enforcement layer
+│   │   ├── validator.py          # Message validation against evidence
+│   │   ├── cycle.py              # Dialectical cycle state machine
+│   │   ├── coordinator.py        # Central authority (the "Bouncer")
+│   │   ├── orchestrator.py       # Single-turn production pipeline
+│   │   └── multi_turn.py         # Multi-turn debate orchestration
+│   │
+│   ├── agents/                   # Reasoning agents
+│   │   ├── base.py               # AgentBase with critical invariants
+│   │   ├── context.py            # TurnContext, DataRequest
+│   │   ├── patterns.py           # AnomalyPattern, BenignExplanation, Verdict
+│   │   ├── architect.py          # THESIS phase — threat hypothesis
+│   │   ├── skeptic.py            # ANTITHESIS phase — benign alternatives
+│   │   ├── oracle.py             # SYNTHESIS phase — Judge + Narrator
+│   │   └── strategies/           # LLM and rule-based agent strategies
+│   │       ├── protocol.py       # Strategy protocol
+│   │       ├── rule_based.py     # Deterministic strategy
+│   │       ├── llm_strategy.py   # Claude-powered strategy
+│   │       ├── client.py         # Anthropic API client
+│   │       ├── prompts.py        # Agent prompt templates
+│   │       ├── live_cycle.py     # Live LLM cycle runner
+│   │       └── observability.py  # Cycle metrics and logging
+│   │
+│   ├── memory/                   # Memory stream
+│   │   ├── entry.py              # Memory entry representation
+│   │   ├── stream.py             # Stream interface
+│   │   ├── chain.py              # Evidence chain tracking
+│   │   └── backends/             # Storage backends
+│   │       └── in_memory.py      # In-memory backend
+│   │
+│   └── scripts/                  # Benchmark and corpus tools
+│       ├── scenario_corpus.py    # 33-scenario test corpus
+│       ├── run_llm_benchmark.py  # Live LLM benchmark runner
+│       ├── benchmark_report.py   # Report generation
+│       ├── run_live_cycle.py     # Single-scenario live runner
+│       └── sample_packets.py     # Example evidence packets
+│
+└── visual/                       # ARES-VISION visualization system
+    ├── events.py                 # Dialectical event model
+    ├── emitter.py                # Event emitter for cycles
+    ├── live_emitter.py           # Real-time WebSocket emitter
+    ├── replayer.py               # Session replay engine
+    ├── diagnostics.py            # Visual diagnostics
+    ├── visualizer/               # Three.js particle physics visualizer
+    │   └── index_v5.html         # Standalone visualizer (latest)
+    └── tests/                    # Visual pipeline tests
 ```
 
 ---
@@ -74,7 +117,7 @@ ares/
 ### Requirements
 
 - Python 3.11+
-- pytest
+- An [Anthropic API key](https://console.anthropic.com/) (for live LLM analysis)
 
 ### Installation
 
@@ -85,8 +128,8 @@ cd ARES
 
 # Create virtual environment
 python -m venv venv
-venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # Linux/Mac
 
 # Install dependencies
 pip install -r requirements.txt
@@ -95,12 +138,16 @@ pip install -r requirements.txt
 ### Run Tests
 
 ```bash
-# Run all tests
+# Run all tests (2,246 tests)
 python -m pytest ares/ -v
 
-# Run specific component tests
+# Run by component
 python -m pytest ares/dialectic/tests/agents/ -v
-python -m pytest ares/dialectic/tests/test_integration.py -v
+python -m pytest ares/dialectic/tests/coordinator/ -v
+python -m pytest ares/visual/tests/ -v
+
+# Run live LLM tests (requires ANTHROPIC_API_KEY)
+python -m pytest ares/ -v --run-live-llm
 
 # Run with coverage
 python -m pytest ares/ --cov=ares --cov-report=term-missing
@@ -126,15 +173,13 @@ packet.add_fact(Fact(
 ))
 packet.freeze()
 
-# 2. Create agents
+# 2. Create agents and bind to evidence
 architect = ArchitectAgent(agent_id="arch-001")
 skeptic = SkepticAgent(agent_id="skep-001")
-
-# 3. Bind agents to evidence
 architect.observe(packet)
 skeptic.observe(packet)
 
-# 4. Run dialectical cycle
+# 3. Run dialectical cycle
 arch_context = TurnContext(
     phase=Phase.THESIS,
     packet_id=packet.packet_id,
@@ -156,16 +201,16 @@ skep_context = TurnContext(
 )
 skep_result = skeptic.act(skep_context)
 
-# 5. Get verdict
+# 4. Get verdict
 verdict = OracleJudge.compute_verdict(
     architect_msg=arch_result.message,
     skeptic_msg=skep_result.message,
     packet=packet
 )
 
-print(f"Verdict: {verdict.outcome}")  # THREAT_CONFIRMED, THREAT_DISMISSED, or INCONCLUSIVE
+print(f"Verdict: {verdict.outcome}")     # THREAT_CONFIRMED, THREAT_DISMISSED, or INCONCLUSIVE
 print(f"Confidence: {verdict.confidence}")
-print(f"Supporting evidence: {verdict.supporting_fact_ids}")
+print(f"Evidence: {verdict.supporting_fact_ids}")
 ```
 
 ---
@@ -184,23 +229,20 @@ agent.act(context_for_packet_b)  # raises PacketMismatchError
 ### 2. Phase Enforcement
 Each agent can only operate in its designated phase.
 ```python
-# Architect = THESIS only
-# Skeptic = ANTITHESIS only  
-# Oracle = SYNTHESIS only
+# Architect = THESIS only | Skeptic = ANTITHESIS only | Oracle = SYNTHESIS only
 architect.act(antithesis_context)  # raises PhaseViolationError
 ```
 
 ### 3. Evidence Grounding
 All assertions must cite `fact_ids` that exist in the bound packet.
 ```python
-# Coordinator rejects messages with non-existent fact references
 coordinator.submit(message_with_fake_facts)  # raises ValidationError
 ```
 
 ### 4. Oracle Split
 The Oracle is split into Judge (deterministic) and Narrator (constrained):
-- **OracleJudge**: Pure function, no LLM, computes verdict from evidence
-- **OracleNarrator**: Explains verdict, cannot modify it
+- **OracleJudge** — Pure function, no LLM, computes verdict from evidence
+- **OracleNarrator** — Explains verdict, cannot modify it
 
 ### 5. Verdict Locking
 Once OracleJudge computes a verdict, it cannot be changed. OracleNarrator receives a locked verdict at construction.
@@ -225,57 +267,47 @@ ARES is modeled after the biological immune system:
 
 ## Development Status
 
-### Phase Zero: Architecture Crystallization ✓ COMPLETE
+ARES has been developed across 39 sessions with a zero-regression policy.
 
-| Component | Tests | Status |
-|-----------|-------|--------|
-| Graph Schema | 110 | ✓ |
-| Evidence System | 98 | ✓ |
-| Message Protocol | 85 | ✓ |
-| Coordinator | 109 | ✓ |
-| Agent Foundation | 144 | ✓ |
-| Concrete Agents | 134 | ✓ |
-| **Total** | **570** | ✓ |
+### Phase 1: Architecture Crystallization — COMPLETE
+Core graph schema, evidence system, message protocol, coordinator, and agent foundation.
 
-### Phase One: Minimal Viable Dialectic (Planned)
-- [ ] Real data integration (Windows Event Logs, Sysmon)
-- [ ] Memory Stream (Redis-backed persistence)
-- [ ] LLM integration (with deterministic Judge preserved)
-- [ ] Full Coordinator orchestration
+### Phase 2: LLM Integration & Benchmarking — COMPLETE
+Live Anthropic integration, strategy pattern, prompt engineering, 33-scenario benchmark corpus, multi-turn debate infrastructure.
 
-### Future Phases
-- Phase Two: Chaos Engineering & Adversarial Testing
-- Phase Three: Model Security & Adversarial ML Defense
-- Phase Four: Regulatory Compliance Layer
-- Phase Five: Autonomous Defense Protocols
+### Phase 3: Selective Escalation — COMPLETE (Negative Result)
+Investigated whether multi-turn debate improves accuracy. Finding: single-turn pipelines outperform multi-turn debate. This is a valid research outcome that informed the single-turn production architecture.
 
----
+### Phase 4: Accuracy Improvement & Visualization — COMPLETE
+Evidence extractors (Windows, Syslog, NetFlow), accuracy hardening, ARES-VISION particle physics visualizer with real-time WebSocket streaming and session replay.
 
-## Session Logs
-
-Detailed development history is maintained in session logs:
-
-- `SESSION_001_GRAPH_SCHEMA.md` - Security graph node/edge definitions
-- `SESSION_002_DIALECTICAL_FOUNDATION.md` - Evidence, messages, coordinator
-- `SESSION_003_AGENT_FOUNDATION.md` - AgentBase, TurnContext, invariants
-- `SESSION_004_CONCRETE_AGENTS.md` - Architect, Skeptic, Oracle implementation
+| Component | Tests |
+|-----------|-------|
+| Evidence System | 449 |
+| Agents & Strategies | 505 |
+| Coordinator & Orchestration | 389 |
+| Benchmark & Scripts | 367 |
+| Visual Pipeline | 213 |
+| Memory Stream | 158 |
+| Messages | 85 |
+| **Total** | **2,246** |
 
 ---
 
 ## Tech Stack
 
 - **Language:** Python 3.11
-- **Testing:** pytest
-- **Graph (Phase 0):** NetworkX
-- **Graph (Phase 2+):** Neo4j (planned)
-- **Memory Stream:** Redis (planned)
-- **ML Framework:** PyTorch, PyTorch Geometric (Phase 1+)
+- **LLM:** Anthropic Claude (via `anthropic` SDK)
+- **Testing:** pytest (2,246 tests, 65 skipped for live LLM)
+- **Graph:** NetworkX
+- **Visualization:** Three.js, WebSocket, particle physics engine
+- **Data:** Frozen dataclasses (immutability as architectural constraint)
 
 ---
 
 ## Contributing
 
-This project is in active development. The architecture is stabilizing but not yet ready for external contributions. Watch this space.
+This project is in active development. Contributions, issues, and discussions are welcome.
 
 ---
 
@@ -287,6 +319,6 @@ This project is in active development. The architecture is stabilizing but not y
 
 ## Author
 
-Built with structured paranoia and adversarial thinking.
+Built by [Daniel Gmys-Casiano](https://github.com/b33fydan) with structured paranoia and adversarial thinking.
 
 *"Hallucinations are schema violations, not mysterious AI behavior."*
