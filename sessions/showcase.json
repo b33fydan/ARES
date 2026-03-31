@@ -1,0 +1,1534 @@
+{
+  "ares_version": "v5",
+  "captured_at": "2026-03-31T01:53:49Z",
+  "scenario_count": 5,
+  "scenario_ids": [
+    "SC-001",
+    "SC-018",
+    "SC-011",
+    "SC-010",
+    "SC-016"
+  ],
+  "total_events": 105,
+  "duration_ms": 80016,
+  "accuracy": "3/5",
+  "events": [
+    {
+      "timestamp_ms": 0,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1774921949319,
+        "scenario_id": "SC-001",
+        "scenario_name": "Privilege Escalation (Classic)",
+        "expected_verdict": "INCONCLUSIVE",
+        "fact_count": 7,
+        "source_types": [
+          "auth_log",
+          "process_list"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 202,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921949522,
+        "scenario_id": "SC-001",
+        "fact_id": "sc001-fact-001",
+        "entity_type": "node",
+        "entity_id": "user-jdoe",
+        "source_type": "auth_log",
+        "field_name": "logon_type",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 403,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921949723,
+        "scenario_id": "SC-001",
+        "fact_id": "sc001-fact-002",
+        "entity_type": "node",
+        "entity_id": "user-jdoe",
+        "source_type": "auth_log",
+        "field_name": "logon_account",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 605,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921949924,
+        "scenario_id": "SC-001",
+        "fact_id": "sc001-fact-003",
+        "entity_type": "node",
+        "entity_id": "user-jdoe",
+        "source_type": "auth_log",
+        "field_name": "privilege_assigned",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 807,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921950126,
+        "scenario_id": "SC-001",
+        "fact_id": "sc001-fact-004",
+        "entity_type": "node",
+        "entity_id": "user-jdoe",
+        "source_type": "auth_log",
+        "field_name": "privilege_assigned",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 1008,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921950327,
+        "scenario_id": "SC-001",
+        "fact_id": "sc001-fact-005",
+        "entity_type": "node",
+        "entity_id": "proc-whoami",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 1210,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921950529,
+        "scenario_id": "SC-001",
+        "fact_id": "sc001-fact-006",
+        "entity_type": "node",
+        "entity_id": "proc-whoami",
+        "source_type": "process_list",
+        "field_name": "command_line",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 1411,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921950730,
+        "scenario_id": "SC-001",
+        "fact_id": "sc001-fact-007",
+        "entity_type": "node",
+        "entity_id": "user-jdoe",
+        "source_type": "auth_log",
+        "field_name": "source_workstation",
+        "source_index": 0,
+        "fact_index": 6
+      }
+    },
+    {
+      "timestamp_ms": 1612,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "SC-001",
+        "status": "analyzing",
+        "timestamp_ms": 1774921950931
+      }
+    },
+    {
+      "timestamp_ms": 7556,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774921956875,
+        "scenario_id": "SC-001",
+        "agent_role": "architect",
+        "fact_ids": [
+          "sc001-fact-001",
+          "sc001-fact-002",
+          "sc001-fact-003",
+          "sc001-fact-004",
+          "sc001-fact-005",
+          "sc001-fact-006",
+          "sc001-fact-007"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 7856,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774921957175,
+        "scenario_id": "SC-001",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "sc001-fact-002",
+          "sc001-fact-003",
+          "sc001-fact-004"
+        ],
+        "coverage_ratio": 0.42857142857142855
+      }
+    },
+    {
+      "timestamp_ms": 8156,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1774921957476,
+        "scenario_id": "SC-001",
+        "architect_confidence": 0.78,
+        "skeptic_confidence": 0.4000000000000001,
+        "delta": 0.37999999999999995
+      }
+    },
+    {
+      "timestamp_ms": 8457,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1774921957776,
+        "scenario_id": "SC-001",
+        "architect_assertion_count": 1,
+        "skeptic_assertion_count": 1,
+        "verdict_outcome": "threat_confirmed",
+        "verdict_confidence": 0.78,
+        "expected_verdict": "INCONCLUSIVE",
+        "is_correct": false
+      }
+    },
+    {
+      "timestamp_ms": 8658,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1774921957977,
+        "scenario_id": "SC-001",
+        "outcome": "threat_confirmed",
+        "confidence": 0.78,
+        "correct": false
+      }
+    },
+    {
+      "timestamp_ms": 8860,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1774921958179,
+        "scenarios_completed": 1,
+        "scenarios_correct": 0,
+        "running_accuracy": 0.0
+      }
+    },
+    {
+      "timestamp_ms": 8964,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1774921958283,
+        "scenario_id": "SC-001",
+        "duration_ms": 5953
+      }
+    },
+    {
+      "timestamp_ms": 11978,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1774921961297,
+        "scenario_id": "SC-018",
+        "scenario_name": "Multi-Source False Positive Cascade",
+        "expected_verdict": "THREAT_DISMISSED",
+        "fact_count": 18,
+        "source_types": [
+          "auth_log",
+          "netflow",
+          "process_list",
+          "syslog"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 12182,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921961500,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-001",
+        "entity_type": "node",
+        "entity_id": "fw-block-scan-1",
+        "source_type": "syslog",
+        "field_name": "event_type",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 12389,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921961709,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-002",
+        "entity_type": "node",
+        "entity_id": "fw-block-scan-1",
+        "source_type": "syslog",
+        "field_name": "src_ip",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 12592,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921961912,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-003",
+        "entity_type": "node",
+        "entity_id": "fw-block-scan-2",
+        "source_type": "syslog",
+        "field_name": "event_type",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 12798,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921962117,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-004",
+        "entity_type": "node",
+        "entity_id": "ssh-scan-fail",
+        "source_type": "syslog",
+        "field_name": "event_type",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 13004,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921962323,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-005",
+        "entity_type": "node",
+        "entity_id": "scanner-proc-syslog",
+        "source_type": "syslog",
+        "field_name": "event_type",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 13213,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921962532,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-006",
+        "entity_type": "node",
+        "entity_id": "scanner-proc-syslog",
+        "source_type": "syslog",
+        "field_name": "command",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 13419,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921962737,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-007",
+        "entity_type": "edge",
+        "entity_id": "scan-flow-1",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 0,
+        "fact_index": 6
+      }
+    },
+    {
+      "timestamp_ms": 13624,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921962943,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-008",
+        "entity_type": "edge",
+        "entity_id": "scan-flow-2",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 1,
+        "fact_index": 7
+      }
+    },
+    {
+      "timestamp_ms": 13830,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921963149,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-009",
+        "entity_type": "edge",
+        "entity_id": "scan-flow-3",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 2,
+        "fact_index": 8
+      }
+    },
+    {
+      "timestamp_ms": 14031,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921963350,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-010",
+        "entity_type": "edge",
+        "entity_id": "scan-flow-4",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 0,
+        "fact_index": 9
+      }
+    },
+    {
+      "timestamp_ms": 14241,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921963560,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-011",
+        "entity_type": "edge",
+        "entity_id": "scan-flow-5",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 1,
+        "fact_index": 10
+      }
+    },
+    {
+      "timestamp_ms": 14445,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921963764,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-012",
+        "entity_type": "node",
+        "entity_id": "scanner-logon",
+        "source_type": "auth_log",
+        "field_name": "logon_type",
+        "source_index": 2,
+        "fact_index": 11
+      }
+    },
+    {
+      "timestamp_ms": 14649,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921963968,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-013",
+        "entity_type": "node",
+        "entity_id": "scanner-logon",
+        "source_type": "auth_log",
+        "field_name": "logon_account",
+        "source_index": 0,
+        "fact_index": 12
+      }
+    },
+    {
+      "timestamp_ms": 14859,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921964178,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-014",
+        "entity_type": "node",
+        "entity_id": "scanner-auth",
+        "source_type": "auth_log",
+        "field_name": "authorization_status",
+        "source_index": 1,
+        "fact_index": 13
+      }
+    },
+    {
+      "timestamp_ms": 15072,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921964391,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-015",
+        "entity_type": "node",
+        "entity_id": "scan-schedule",
+        "source_type": "auth_log",
+        "field_name": "scheduled_task",
+        "source_index": 2,
+        "fact_index": 14
+      }
+    },
+    {
+      "timestamp_ms": 15283,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921964602,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-016",
+        "entity_type": "node",
+        "entity_id": "nessus-proc",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 0,
+        "fact_index": 15
+      }
+    },
+    {
+      "timestamp_ms": 15488,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921964807,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-017",
+        "entity_type": "node",
+        "entity_id": "nessus-proc",
+        "source_type": "process_list",
+        "field_name": "command_line",
+        "source_index": 1,
+        "fact_index": 16
+      }
+    },
+    {
+      "timestamp_ms": 15691,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921965009,
+        "scenario_id": "SC-018",
+        "fact_id": "sc018-fact-018",
+        "entity_type": "node",
+        "entity_id": "scan-scope",
+        "source_type": "process_list",
+        "field_name": "scan_scope",
+        "source_index": 2,
+        "fact_index": 17
+      }
+    },
+    {
+      "timestamp_ms": 15895,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "SC-018",
+        "status": "analyzing",
+        "timestamp_ms": 1774921965214
+      }
+    },
+    {
+      "timestamp_ms": 24341,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774921973660,
+        "scenario_id": "SC-018",
+        "agent_role": "architect",
+        "fact_ids": [
+          "sc018-fact-001",
+          "sc018-fact-002",
+          "sc018-fact-003",
+          "sc018-fact-004",
+          "sc018-fact-005",
+          "sc018-fact-006",
+          "sc018-fact-007",
+          "sc018-fact-008",
+          "sc018-fact-009",
+          "sc018-fact-010",
+          "sc018-fact-011",
+          "sc018-fact-012",
+          "sc018-fact-013",
+          "sc018-fact-014",
+          "sc018-fact-015",
+          "sc018-fact-016",
+          "sc018-fact-017",
+          "sc018-fact-018"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 24642,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774921973961,
+        "scenario_id": "SC-018",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "sc018-fact-006",
+          "sc018-fact-013",
+          "sc018-fact-014",
+          "sc018-fact-015",
+          "sc018-fact-016",
+          "sc018-fact-017"
+        ],
+        "coverage_ratio": 0.3333333333333333
+      }
+    },
+    {
+      "timestamp_ms": 24951,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1774921974270,
+        "scenario_id": "SC-018",
+        "architect_confidence": 0.15,
+        "skeptic_confidence": 0.9499999999999998,
+        "delta": -0.7999999999999998
+      }
+    },
+    {
+      "timestamp_ms": 25254,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1774921974573,
+        "scenario_id": "SC-018",
+        "architect_assertion_count": 1,
+        "skeptic_assertion_count": 1,
+        "verdict_outcome": "threat_dismissed",
+        "verdict_confidence": 0.9499999999999998,
+        "expected_verdict": "THREAT_DISMISSED",
+        "is_correct": true
+      }
+    },
+    {
+      "timestamp_ms": 25470,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1774921974789,
+        "scenario_id": "SC-018",
+        "outcome": "threat_dismissed",
+        "confidence": 0.9499999999999998,
+        "correct": true
+      }
+    },
+    {
+      "timestamp_ms": 25672,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1774921974991,
+        "scenarios_completed": 2,
+        "scenarios_correct": 1,
+        "running_accuracy": 0.5
+      }
+    },
+    {
+      "timestamp_ms": 25782,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1774921975101,
+        "scenario_id": "SC-018",
+        "duration_ms": 8437
+      }
+    },
+    {
+      "timestamp_ms": 28800,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1774921978119,
+        "scenario_id": "SC-011",
+        "scenario_name": "Slow-Roll Exfiltration",
+        "expected_verdict": "THREAT_DISMISSED",
+        "fact_count": 4,
+        "source_types": [
+          "auth_log",
+          "netflow"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 29012,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921978331,
+        "scenario_id": "SC-011",
+        "fact_id": "sc011-fact-001",
+        "entity_type": "edge",
+        "entity_id": "upload-1",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 29217,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921978536,
+        "scenario_id": "SC-011",
+        "fact_id": "sc011-fact-002",
+        "entity_type": "edge",
+        "entity_id": "upload-2",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 29418,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921978737,
+        "scenario_id": "SC-011",
+        "fact_id": "sc011-fact-003",
+        "entity_type": "edge",
+        "entity_id": "upload-3",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 29619,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921978938,
+        "scenario_id": "SC-011",
+        "fact_id": "sc011-fact-004",
+        "entity_type": "node",
+        "entity_id": "user-research03",
+        "source_type": "auth_log",
+        "field_name": "logon_account",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 29820,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "SC-011",
+        "status": "analyzing",
+        "timestamp_ms": 1774921979139
+      }
+    },
+    {
+      "timestamp_ms": 35532,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774921984851,
+        "scenario_id": "SC-011",
+        "agent_role": "architect",
+        "fact_ids": [
+          "sc011-fact-001",
+          "sc011-fact-002",
+          "sc011-fact-003",
+          "sc011-fact-004"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 35832,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774921985151,
+        "scenario_id": "SC-011",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "sc011-fact-004"
+        ],
+        "coverage_ratio": 0.25
+      }
+    },
+    {
+      "timestamp_ms": 36132,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1774921985451,
+        "scenario_id": "SC-011",
+        "architect_confidence": 0.55,
+        "skeptic_confidence": 0.6,
+        "delta": -0.04999999999999993
+      }
+    },
+    {
+      "timestamp_ms": 36433,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1774921985752,
+        "scenario_id": "SC-011",
+        "architect_assertion_count": 1,
+        "skeptic_assertion_count": 1,
+        "verdict_outcome": "inconclusive",
+        "verdict_confidence": 0.575,
+        "expected_verdict": "THREAT_DISMISSED",
+        "is_correct": false
+      }
+    },
+    {
+      "timestamp_ms": 36635,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1774921985954,
+        "scenario_id": "SC-011",
+        "outcome": "inconclusive",
+        "confidence": 0.575,
+        "correct": false
+      }
+    },
+    {
+      "timestamp_ms": 36837,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1774921986156,
+        "scenarios_completed": 3,
+        "scenarios_correct": 1,
+        "running_accuracy": 0.3333333333333333
+      }
+    },
+    {
+      "timestamp_ms": 36938,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1774921986257,
+        "scenario_id": "SC-011",
+        "duration_ms": 5702
+      }
+    },
+    {
+      "timestamp_ms": 39939,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1774921989258,
+        "scenario_id": "SC-010",
+        "scenario_name": "Multi-Vector Campaign",
+        "expected_verdict": "THREAT_CONFIRMED",
+        "fact_count": 16,
+        "source_types": [
+          "auth_log",
+          "netflow",
+          "process_list"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 40140,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921989459,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-001",
+        "entity_type": "node",
+        "entity_id": "proc-word",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 40342,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921989661,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-002",
+        "entity_type": "node",
+        "entity_id": "proc-word",
+        "source_type": "process_list",
+        "field_name": "file_opened",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 40544,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921989863,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-003",
+        "entity_type": "node",
+        "entity_id": "proc-cmd-1",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 40745,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921990064,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-004",
+        "entity_type": "node",
+        "entity_id": "proc-cmd-1",
+        "source_type": "process_list",
+        "field_name": "parent_process",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 40946,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921990265,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-005",
+        "entity_type": "node",
+        "entity_id": "proc-dump",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 41148,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921990467,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-006",
+        "entity_type": "node",
+        "entity_id": "proc-dump",
+        "source_type": "process_list",
+        "field_name": "command_line",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 41349,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921990669,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-007",
+        "entity_type": "node",
+        "entity_id": "cred-lsass",
+        "source_type": "process_list",
+        "field_name": "lsass_access_granted",
+        "source_index": 0,
+        "fact_index": 6
+      }
+    },
+    {
+      "timestamp_ms": 41551,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921990870,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-008",
+        "entity_type": "edge",
+        "entity_id": "lateral-1",
+        "source_type": "auth_log",
+        "field_name": "remote_desktop_session",
+        "source_index": 1,
+        "fact_index": 7
+      }
+    },
+    {
+      "timestamp_ms": 41752,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921991071,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-009",
+        "entity_type": "edge",
+        "entity_id": "lateral-2",
+        "source_type": "auth_log",
+        "field_name": "remote_desktop_session",
+        "source_index": 2,
+        "fact_index": 8
+      }
+    },
+    {
+      "timestamp_ms": 41953,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921991272,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-010",
+        "entity_type": "edge",
+        "entity_id": "lateral-3",
+        "source_type": "netflow",
+        "field_name": "smb_lateral_traffic",
+        "source_index": 0,
+        "fact_index": 9
+      }
+    },
+    {
+      "timestamp_ms": 42154,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921991473,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-011",
+        "entity_type": "node",
+        "entity_id": "staging",
+        "source_type": "process_list",
+        "field_name": "file_copy_operation",
+        "source_index": 1,
+        "fact_index": 10
+      }
+    },
+    {
+      "timestamp_ms": 42356,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921991675,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-012",
+        "entity_type": "node",
+        "entity_id": "compress",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 2,
+        "fact_index": 11
+      }
+    },
+    {
+      "timestamp_ms": 42557,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921991876,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-013",
+        "entity_type": "node",
+        "entity_id": "compress",
+        "source_type": "process_list",
+        "field_name": "command_line",
+        "source_index": 0,
+        "fact_index": 12
+      }
+    },
+    {
+      "timestamp_ms": 42758,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921992077,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-014",
+        "entity_type": "edge",
+        "entity_id": "exfil-conn",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 1,
+        "fact_index": 13
+      }
+    },
+    {
+      "timestamp_ms": 42960,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921992279,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-015",
+        "entity_type": "edge",
+        "entity_id": "exfil-ip",
+        "source_type": "netflow",
+        "field_name": "remote_ip_reputation",
+        "source_index": 2,
+        "fact_index": 14
+      }
+    },
+    {
+      "timestamp_ms": 43161,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774921992480,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-016",
+        "entity_type": "node",
+        "entity_id": "user-exec01",
+        "source_type": "auth_log",
+        "field_name": "logon_account",
+        "source_index": 0,
+        "fact_index": 15
+      }
+    },
+    {
+      "timestamp_ms": 43362,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "SC-010",
+        "status": "analyzing",
+        "timestamp_ms": 1774921992681
+      }
+    },
+    {
+      "timestamp_ms": 56443,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774922005761,
+        "scenario_id": "SC-010",
+        "agent_role": "architect",
+        "fact_ids": [
+          "sc010-fact-001",
+          "sc010-fact-002",
+          "sc010-fact-003",
+          "sc010-fact-004",
+          "sc010-fact-005",
+          "sc010-fact-006",
+          "sc010-fact-007",
+          "sc010-fact-008",
+          "sc010-fact-009",
+          "sc010-fact-010",
+          "sc010-fact-011",
+          "sc010-fact-012",
+          "sc010-fact-013",
+          "sc010-fact-014",
+          "sc010-fact-015",
+          "sc010-fact-016"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 56743,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774922006062,
+        "scenario_id": "SC-010",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "sc010-fact-001",
+          "sc010-fact-002",
+          "sc010-fact-003",
+          "sc010-fact-004",
+          "sc010-fact-005",
+          "sc010-fact-006",
+          "sc010-fact-007",
+          "sc010-fact-008",
+          "sc010-fact-009",
+          "sc010-fact-010",
+          "sc010-fact-011",
+          "sc010-fact-012",
+          "sc010-fact-013",
+          "sc010-fact-016"
+        ],
+        "coverage_ratio": 0.875
+      }
+    },
+    {
+      "timestamp_ms": 57043,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1774922006363,
+        "scenario_id": "SC-010",
+        "architect_confidence": 1.0,
+        "skeptic_confidence": 0.4357142857142857,
+        "delta": 0.5642857142857143
+      }
+    },
+    {
+      "timestamp_ms": 57344,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1774922006663,
+        "scenario_id": "SC-010",
+        "architect_assertion_count": 4,
+        "skeptic_assertion_count": 4,
+        "verdict_outcome": "threat_confirmed",
+        "verdict_confidence": 1.0,
+        "expected_verdict": "THREAT_CONFIRMED",
+        "is_correct": true
+      }
+    },
+    {
+      "timestamp_ms": 57545,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1774922006864,
+        "scenario_id": "SC-010",
+        "outcome": "threat_confirmed",
+        "confidence": 1.0,
+        "correct": true
+      }
+    },
+    {
+      "timestamp_ms": 57746,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1774922007066,
+        "scenarios_completed": 4,
+        "scenarios_correct": 2,
+        "running_accuracy": 0.5
+      }
+    },
+    {
+      "timestamp_ms": 57848,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1774922007167,
+        "scenario_id": "SC-010",
+        "duration_ms": 13078
+      }
+    },
+    {
+      "timestamp_ms": 60848,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1774922010167,
+        "scenario_id": "SC-016",
+        "scenario_name": "C2 Beaconing with Lateral Movement",
+        "expected_verdict": "THREAT_CONFIRMED",
+        "fact_count": 15,
+        "source_types": [
+          "netflow",
+          "syslog"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 61049,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922010369,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-001",
+        "entity_type": "edge",
+        "entity_id": "beacon-1",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 61251,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922010570,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-002",
+        "entity_type": "edge",
+        "entity_id": "beacon-2",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 61453,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922010772,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-003",
+        "entity_type": "edge",
+        "entity_id": "beacon-3",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 61654,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922010974,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-004",
+        "entity_type": "edge",
+        "entity_id": "beacon-4",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 61856,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922011175,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-005",
+        "entity_type": "edge",
+        "entity_id": "beacon-5",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 62057,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922011376,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-006",
+        "entity_type": "edge",
+        "entity_id": "lateral-flow-1",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 62259,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922011578,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-007",
+        "entity_type": "edge",
+        "entity_id": "lateral-flow-2",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 0,
+        "fact_index": 6
+      }
+    },
+    {
+      "timestamp_ms": 62461,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922011780,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-008",
+        "entity_type": "edge",
+        "entity_id": "data-upload",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 1,
+        "fact_index": 7
+      }
+    },
+    {
+      "timestamp_ms": 62662,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922011982,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-009",
+        "entity_type": "edge",
+        "entity_id": "beacon-pattern",
+        "source_type": "netflow",
+        "field_name": "beacon_interval",
+        "source_index": 2,
+        "fact_index": 8
+      }
+    },
+    {
+      "timestamp_ms": 62864,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922012183,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-010",
+        "entity_type": "node",
+        "entity_id": "ssh-lateral-1",
+        "source_type": "syslog",
+        "field_name": "event_type",
+        "source_index": 0,
+        "fact_index": 9
+      }
+    },
+    {
+      "timestamp_ms": 63065,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922012384,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-011",
+        "entity_type": "node",
+        "entity_id": "ssh-lateral-1",
+        "source_type": "syslog",
+        "field_name": "source_ip",
+        "source_index": 1,
+        "fact_index": 10
+      }
+    },
+    {
+      "timestamp_ms": 63266,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922012585,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-012",
+        "entity_type": "node",
+        "entity_id": "sudo-shadow",
+        "source_type": "syslog",
+        "field_name": "event_type",
+        "source_index": 2,
+        "fact_index": 11
+      }
+    },
+    {
+      "timestamp_ms": 63468,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922012787,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-013",
+        "entity_type": "node",
+        "entity_id": "sudo-shadow",
+        "source_type": "syslog",
+        "field_name": "command",
+        "source_index": 0,
+        "fact_index": 12
+      }
+    },
+    {
+      "timestamp_ms": 63670,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922012989,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-014",
+        "entity_type": "node",
+        "entity_id": "sudo-tar",
+        "source_type": "syslog",
+        "field_name": "event_type",
+        "source_index": 1,
+        "fact_index": 13
+      }
+    },
+    {
+      "timestamp_ms": 63871,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1774922013190,
+        "scenario_id": "SC-016",
+        "fact_id": "sc016-fact-015",
+        "entity_type": "node",
+        "entity_id": "sudo-tar",
+        "source_type": "syslog",
+        "field_name": "command",
+        "source_index": 2,
+        "fact_index": 14
+      }
+    },
+    {
+      "timestamp_ms": 64078,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "SC-016",
+        "status": "analyzing",
+        "timestamp_ms": 1774922013396
+      }
+    },
+    {
+      "timestamp_ms": 78609,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774922027928,
+        "scenario_id": "SC-016",
+        "agent_role": "architect",
+        "fact_ids": [
+          "sc016-fact-001",
+          "sc016-fact-002",
+          "sc016-fact-003",
+          "sc016-fact-004",
+          "sc016-fact-005",
+          "sc016-fact-006",
+          "sc016-fact-007",
+          "sc016-fact-008",
+          "sc016-fact-009",
+          "sc016-fact-010",
+          "sc016-fact-011",
+          "sc016-fact-012",
+          "sc016-fact-013",
+          "sc016-fact-014",
+          "sc016-fact-015"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 78910,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1774922028229,
+        "scenario_id": "SC-016",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "sc016-fact-001",
+          "sc016-fact-002",
+          "sc016-fact-003",
+          "sc016-fact-004",
+          "sc016-fact-005",
+          "sc016-fact-006",
+          "sc016-fact-007",
+          "sc016-fact-008",
+          "sc016-fact-009",
+          "sc016-fact-010",
+          "sc016-fact-011",
+          "sc016-fact-012",
+          "sc016-fact-013",
+          "sc016-fact-014",
+          "sc016-fact-015"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 79210,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1774922028529,
+        "scenario_id": "SC-016",
+        "architect_confidence": 1.0,
+        "skeptic_confidence": 0.39,
+        "delta": 0.61
+      }
+    },
+    {
+      "timestamp_ms": 79510,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1774922028829,
+        "scenario_id": "SC-016",
+        "architect_assertion_count": 4,
+        "skeptic_assertion_count": 4,
+        "verdict_outcome": "threat_confirmed",
+        "verdict_confidence": 1.0,
+        "expected_verdict": "THREAT_CONFIRMED",
+        "is_correct": true
+      }
+    },
+    {
+      "timestamp_ms": 79711,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1774922029031,
+        "scenario_id": "SC-016",
+        "outcome": "threat_confirmed",
+        "confidence": 1.0,
+        "correct": true
+      }
+    },
+    {
+      "timestamp_ms": 79913,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1774922029232,
+        "scenarios_completed": 5,
+        "scenarios_correct": 3,
+        "running_accuracy": 0.6
+      }
+    },
+    {
+      "timestamp_ms": 80015,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1774922029334,
+        "scenario_id": "SC-016",
+        "duration_ms": 14530
+      }
+    }
+  ]
+}

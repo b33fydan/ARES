@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARES-VISION :: Adversarial Reasoning Engine System</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#e0f4ff;font-family:'Courier New',monospace;overflow:hidden}
+canvas{display:block;position:fixed;top:0;left:0;z-index:0}
+#hud{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10}
+
+#scenario-label{position:absolute;top:16px;left:20px;opacity:0;transition:opacity .6s}
+#scenario-label .sid{font-size:18px;font-weight:bold;color:#00f0ff;text-shadow:0 0 10px #00f0ff44;letter-spacing:1px}
+#scenario-label .name{opacity:.65;font-size:12px;margin-top:2px}
+#scenario-label .meta{opacity:.4;font-size:10px;margin-top:1px;letter-spacing:.5px}
+
+#accuracy{position:absolute;top:16px;right:20px;text-align:right;opacity:0;transition:opacity .6s}
+#accuracy .frac{font-size:13px;opacity:.55;letter-spacing:.5px}
+#accuracy .pct{font-size:26px;font-weight:bold;letter-spacing:1px;text-shadow:0 0 12px currentColor}
+
+#confidence-panel{position:absolute;bottom:80px;right:20px;width:260px;opacity:0;transition:opacity .5s}
+.conf-row{display:flex;align-items:center;margin-bottom:5px}
+.conf-label{width:72px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px}
+.conf-track{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.conf-fill{height:100%;border-radius:2px;transition:width .4s ease;width:0%}
+.conf-fill.arch{background:#00f0ff;box-shadow:0 0 8px #00f0ff66}
+.conf-fill.skep{background:#ff00aa;box-shadow:0 0 8px #ff00aa66}
+.conf-val{width:42px;text-align:right;font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+#delta-row{font-size:10px;text-align:right;opacity:.45;margin-top:2px;letter-spacing:.5px}
+#round-info{font-size:10px;text-align:right;opacity:.5;margin-top:4px}
+
+#verdict-area{position:absolute;bottom:80px;left:20px;opacity:0;transition:opacity .5s}
+#verdict-text{font-size:16px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 15px currentColor}
+#verdict-sub{font-size:11px;opacity:.6;margin-top:2px;letter-spacing:.5px}
+#verdict-miss{display:inline-block;width:6px;height:6px;border-radius:50%;background:#ff3300;margin-left:6px;vertical-align:middle;opacity:0;transition:opacity .4s}
+
+#analyzing{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:13px;letter-spacing:4px;color:#00f0ff;opacity:0;transition:opacity .5s;text-shadow:0 0 15px #00f0ff44}
+@keyframes pulse-a{0%,100%{opacity:.3}50%{opacity:.8}}
+#analyzing.active{opacity:1;animation:pulse-a 2s ease-in-out infinite}
+
+#history-panel{position:absolute;top:50px;right:20px;width:220px;max-height:calc(100vh - 180px);
+  overflow-y:auto;pointer-events:auto;opacity:0;transition:opacity .5s}
+#history-panel::-webkit-scrollbar{width:3px}
+#history-panel::-webkit-scrollbar-track{background:transparent}
+#history-panel::-webkit-scrollbar-thumb{background:#ffffff15;border-radius:2px}
+.hist-entry{padding:6px 8px;margin-bottom:3px;border-left:2px solid transparent;
+  cursor:pointer;transition:background .2s;border-radius:0 3px 3px 0;font-size:9px;opacity:.7}
+.hist-entry:hover{background:rgba(255,255,255,.04);opacity:1}
+.hist-entry.active{opacity:1;background:rgba(255,255,255,.06)}
+.hist-id{font-weight:bold;letter-spacing:.5px;margin-bottom:2px}
+.hist-verdict{font-size:8px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.hist-bars{display:flex;gap:4px;align-items:center}
+.hist-bar{height:3px;border-radius:1px;transition:width .3s}
+.hist-bar.ha{background:#00f0ff}
+.hist-bar.hs{background:#ff00aa}
+.hist-miss{width:5px;height:5px;border-radius:50%;background:#ff3300;display:none;margin-left:4px;flex-shrink:0}
+
+#transport{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:8px;pointer-events:auto;
+  background:rgba(10,10,20,.7);border:1px solid #ffffff10;border-radius:4px;
+  padding:4px 12px;opacity:0;transition:opacity .5s}
+#transport.visible{opacity:1}
+.tbtn{background:none;border:1px solid #ffffff20;color:#e0f4ff;
+  font-family:'Courier New',monospace;font-size:10px;padding:3px 8px;
+  cursor:pointer;border-radius:2px;transition:border-color .2s,color .2s;letter-spacing:.5px}
+.tbtn:hover{border-color:#00f0ff;color:#00f0ff}
+.tbtn.active{border-color:#00f0ff;color:#00f0ff}
+#timeline{width:200px;height:3px;background:#ffffff10;border-radius:2px;cursor:pointer;position:relative}
+#timeline-fill{height:100%;background:#00f0ff55;border-radius:2px;width:0%;pointer-events:none}
+#timeline-head{position:absolute;top:-3px;width:9px;height:9px;background:#00f0ff;
+  border-radius:50%;left:0%;transform:translateX(-50%);pointer-events:none;box-shadow:0 0 6px #00f0ff66}
+#time-label{font-size:9px;opacity:.4;min-width:36px;text-align:center}
+#evt-count{font-size:9px;opacity:.3;min-width:40px;text-align:right}
+
+#status{position:absolute;bottom:10px;left:20px;font-size:9px;opacity:.35}
+#status.connected{color:#00ff66}
+#status.waiting{color:#ffaa00}
+</style>
+</head>
+<body>
+<div id="hud">
+  <div id="scenario-label"><div class="sid"></div><div class="name"></div><div class="meta"></div></div>
+  <div id="accuracy"><div class="frac"></div><div class="pct"></div></div>
+  <div id="history-panel"></div>
+  <div id="confidence-panel">
+    <div class="conf-row"><span class="conf-label" style="color:#00f0ff">Architect</span><div class="conf-track"><div class="conf-fill arch"></div></div><span class="conf-val" id="arch-val">--</span></div>
+    <div class="conf-row"><span class="conf-label" style="color:#ff00aa">Skeptic</span><div class="conf-track"><div class="conf-fill skep"></div></div><span class="conf-val" id="skep-val">--</span></div>
+    <div id="delta-row"></div><div id="round-info"></div>
+  </div>
+  <div id="verdict-area"><span id="verdict-text"></span><span id="verdict-miss"></span><div id="verdict-sub"></div></div>
+  <div id="analyzing">ANALYZING...</div>
+  <div id="transport">
+    <button class="tbtn" id="btn-rewind" title="Rewind">&#9198;</button>
+    <button class="tbtn" id="btn-prev" title="Prev">&#9664;</button>
+    <button class="tbtn active" id="btn-play" title="Play/Pause">&#9654;</button>
+    <button class="tbtn" id="btn-next" title="Next">&#9654;&#9654;</button>
+    <div id="timeline"><div id="timeline-fill"></div><div id="timeline-head"></div></div>
+    <span id="time-label">0:00</span><span id="evt-count">0 evts</span>
+    <button class="tbtn" id="btn-export" title="Export session JSON">SAVE</button>
+    <label class="tbtn" id="btn-load" title="Load session JSON">LOAD<input type="file" accept=".json" style="display:none" id="file-input"></label>
+  </div>
+  <div id="status" class="waiting">Waiting for ARES...</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// =========================================================================
+// ARES-VISION v5 — Casberry-Inspired Particle Physics
+// Dense field, proximity connections, mouse forces, force-based layout
+// =========================================================================
+const params = new URLSearchParams(location.search);
+const WS_URL = params.get('ws') || 'ws://localhost:8765';
+const DEMO_MODE = params.get('demo') === 'true';
+const FIXTURE = params.get('fixture');
+const SESSION_URL = params.get('session');  // exported session JSON (zero API cost replay)
+
+// =========================================================================
+// PHYSICS CONFIG — tunable constants
+// =========================================================================
+const PHY = {
+  AMBIENT_COUNT: 120,         // ambient particles (always present, drifting)
+  FACT_HALO: 8,               // extra particles spawned per fact ingested
+  CITE_BURST: 15,             // extra particles spawned per cited fact
+  MAX_PARTICLES: 2500,        // hard cap for performance
+  CONNECT_DIST: 1.8,          // max distance for proximity lines
+  CONNECT_MAX: 600,           // max connection lines drawn per frame
+  MOUSE_RADIUS: 3.5,          // cursor influence radius
+  MOUSE_FORCE: 0.012,         // cursor push strength
+  DAMPING: 0.97,              // velocity damping per frame
+  CLUSTER_PULL: 0.0008,       // attraction toward entity cluster centers
+  JITTER: 0.0015,             // random walk per frame
+  VERDICT_BLAST: 0.06,        // radial force on verdict pulse
+  RETURN_FORCE: 0.0003,       // gentle pull back toward origin when drifting far
+};
+
+// =========================================================================
+// COLORS
+// =========================================================================
+const ENTITY_COLORS = {PROCESS:0x00f0ff,NETWORK:0xff00aa,FILE:0xffaa00,USER:0x00ff66,AUTH:0x00ff66,DEFAULT:0x4488aa};
+const AGENT_HEX = {architect:0x00f0ff,skeptic:0xff00aa};
+const VERDICT_HEX = {threat_confirmed:0xff3300,threat_dismissed:0x00ff66,inconclusive:0xffaa00};
+const VERDICT_CSS = {threat_confirmed:'#ff3300',threat_dismissed:'#00ff66',inconclusive:'#ffaa00'};
+const VERDICT_LABEL = {threat_confirmed:'THREAT CONFIRMED',threat_dismissed:'THREAT DISMISSED',inconclusive:'INCONCLUSIVE'};
+const CLUSTER_CENTER = {PROCESS:[-4,0,0],NETWORK:[4,0,0],FILE:[0,0,-4],USER:[0,0,4],AUTH:[1.5,0,4],DEFAULT:[0,1.5,0]};
+const DIM_ALPHA = 0.12;
+const BRIGHT_ALPHA = 0.85;
+
+function entityGroup(raw){
+  const t=(raw||'').toUpperCase();
+  if(t.includes('PROCESS')||t==='EDGE'||t.includes('EXEC'))return'PROCESS';
+  if(t.includes('NETWORK')||t.includes('NET')||t.includes('CONN')||t.includes('FLOW')||t.includes('DNS'))return'NETWORK';
+  if(t.includes('FILE')||t.includes('WRITE')||t.includes('READ')||t.includes('PATH'))return'FILE';
+  if(t.includes('USER')||t.includes('AUTH')||t.includes('LOGIN')||t.includes('LOGON')||t.includes('CRED'))return'USER';
+  return'DEFAULT';
+}
+
+// =========================================================================
+// THREE.JS SETUP
+// =========================================================================
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x030308);
+const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 300);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+document.body.prepend(renderer.domElement);
+scene.add(new THREE.AmbientLight(0x101820,0.15));
+
+// Subtle grid
+const grid = new THREE.GridHelper(40,40,0x0c0c14,0x080810);
+grid.material.transparent=true; grid.material.opacity=0.07; grid.position.y=-3;
+scene.add(grid);
+
+// Glow texture
+const glowTex=(()=>{const s=64,c=document.createElement('canvas');c.width=c.height=s;
+  const ctx=c.getContext('2d'),g=ctx.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+  g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(0.1,'rgba(255,255,255,0.8)');
+  g.addColorStop(0.3,'rgba(255,255,255,0.25)');g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,s,s);const tex=new THREE.CanvasTexture(c);tex.needsUpdate=true;return tex;})();
+
+// =========================================================================
+// PARTICLE FIELD — single giant BufferGeometry for ALL particles
+// =========================================================================
+const P = {
+  count: 0,
+  max: PHY.MAX_PARTICLES,
+  // Buffers
+  positions: null,   // Float32Array(max*3)
+  velocities: null,  // Float32Array(max*3)
+  colors: null,      // Float32Array(max*3)
+  alphas: null,      // Float32Array(max)
+  sizes: null,       // Float32Array(max)
+  // Per-particle metadata
+  meta: [],          // [{group, factId, cited, citedBy, targetAlpha, flash, home}]
+  // Three.js objects
+  geometry: null,
+  material: null,
+  points: null,
+
+  init() {
+    this.positions = new Float32Array(this.max * 3);
+    this.velocities = new Float32Array(this.max * 3);
+    this.colors = new Float32Array(this.max * 3);
+    this.alphas = new Float32Array(this.max);
+    this.sizes = new Float32Array(this.max);
+    this.meta = new Array(this.max);
+    for (let i = 0; i < this.max; i++) this.meta[i] = null;
+
+    this.geometry = new THREE.BufferGeometry();
+    this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
+    this.geometry.setAttribute('color', new THREE.BufferAttribute(this.colors, 3));
+    this.geometry.setAttribute('size', new THREE.BufferAttribute(this.sizes, 1));
+    // We'll use a custom approach for per-particle alpha via color brightness
+    this.material = new THREE.PointsMaterial({
+      map: glowTex, size: 0.3, transparent: true, opacity: 1.0,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+      vertexColors: true, sizeAttenuation: true,
+    });
+    this.points = new THREE.Points(this.geometry, this.material);
+    scene.add(this.points);
+  },
+
+  // Add a particle, return its index
+  add(x, y, z, hex, alpha, size, meta) {
+    if (this.count >= this.max) return -1;
+    const i = this.count++;
+    const c3 = new THREE.Color(hex);
+    this.positions[i*3]=x; this.positions[i*3+1]=y; this.positions[i*3+2]=z;
+    this.velocities[i*3]=0; this.velocities[i*3+1]=0; this.velocities[i*3+2]=0;
+    this.colors[i*3]=c3.r*alpha; this.colors[i*3+1]=c3.g*alpha; this.colors[i*3+2]=c3.b*alpha;
+    this.alphas[i]=alpha; this.sizes[i]=size;
+    this.meta[i] = meta || {group:'DEFAULT',factId:null,cited:false,citedBy:new Set(),targetAlpha:alpha,flash:0,home:[x,y,z]};
+    this.geometry.attributes.position.needsUpdate = true;
+    this.geometry.attributes.color.needsUpdate = true;
+    this.geometry.attributes.size.needsUpdate = true;
+    this.geometry.setDrawRange(0, this.count);
+    return i;
+  },
+
+  // Recolor a particle
+  recolor(i, hex, alpha) {
+    if (i < 0 || i >= this.count) return;
+    const c3 = new THREE.Color(hex);
+    this.alphas[i] = alpha;
+    this.colors[i*3]=c3.r*alpha; this.colors[i*3+1]=c3.g*alpha; this.colors[i*3+2]=c3.b*alpha;
+  },
+
+  clear() {
+    this.count = 0;
+    for (let i = 0; i < this.max; i++) this.meta[i] = null;
+    this.geometry.setDrawRange(0, 0);
+  },
+};
+P.init();
+
+// =========================================================================
+// PROXIMITY CONNECTION LINES — dynamic, redrawn each frame
+// =========================================================================
+const Connections = {
+  maxLines: PHY.CONNECT_MAX,
+  geometry: null,
+  material: null,
+  lineSegments: null,
+  posBuffer: null,
+  colBuffer: null,
+
+  init() {
+    this.posBuffer = new Float32Array(this.maxLines * 6); // 2 vertices per line × 3 components
+    this.colBuffer = new Float32Array(this.maxLines * 6);
+    this.geometry = new THREE.BufferGeometry();
+    this.geometry.setAttribute('position', new THREE.BufferAttribute(this.posBuffer, 3));
+    this.geometry.setAttribute('color', new THREE.BufferAttribute(this.colBuffer, 3));
+    this.material = new THREE.LineBasicMaterial({
+      transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending,
+      depthWrite: false, vertexColors: true,
+    });
+    this.lineSegments = new THREE.LineSegments(this.geometry, this.material);
+    scene.add(this.lineSegments);
+  },
+
+  update() {
+    const n = P.count;
+    const dist2 = PHY.CONNECT_DIST * PHY.CONNECT_DIST;
+    let lineCount = 0;
+    const pos = P.positions;
+    const cols = P.colors;
+
+    // Only check cited/bright particles for connections (performance)
+    const candidates = [];
+    for (let i = 0; i < n; i++) {
+      if (P.alphas[i] > 0.2) candidates.push(i);
+    }
+
+    for (let a = 0; a < candidates.length && lineCount < this.maxLines; a++) {
+      const i = candidates[a];
+      const ix = pos[i*3], iy = pos[i*3+1], iz = pos[i*3+2];
+      for (let b = a + 1; b < candidates.length && lineCount < this.maxLines; b++) {
+        const j = candidates[b];
+        const dx = pos[j*3]-ix, dy = pos[j*3+1]-iy, dz = pos[j*3+2]-iz;
+        const d2 = dx*dx + dy*dy + dz*dz;
+        if (d2 < dist2 && d2 > 0.01) {
+          const off = lineCount * 6;
+          this.posBuffer[off]=ix; this.posBuffer[off+1]=iy; this.posBuffer[off+2]=iz;
+          this.posBuffer[off+3]=pos[j*3]; this.posBuffer[off+4]=pos[j*3+1]; this.posBuffer[off+5]=pos[j*3+2];
+          // Color = average of the two particles, dimmed by distance
+          const fade = 1.0 - Math.sqrt(d2) / PHY.CONNECT_DIST;
+          const f = fade * 0.5;
+          this.colBuffer[off]=(cols[i*3]+cols[j*3])*f; this.colBuffer[off+1]=(cols[i*3+1]+cols[j*3+1])*f; this.colBuffer[off+2]=(cols[i*3+2]+cols[j*3+2])*f;
+          this.colBuffer[off+3]=this.colBuffer[off]; this.colBuffer[off+4]=this.colBuffer[off+1]; this.colBuffer[off+5]=this.colBuffer[off+2];
+          lineCount++;
+        }
+      }
+    }
+    this.geometry.setDrawRange(0, lineCount * 2);
+    this.geometry.attributes.position.needsUpdate = true;
+    this.geometry.attributes.color.needsUpdate = true;
+  },
+};
+Connections.init();
+
+// =========================================================================
+// MOUSE INTERACTION — raycaster to 3D plane, push/pull particles
+// =========================================================================
+const mouse3D = new THREE.Vector3(0, 999, 0); // off-screen by default
+const mouseNDC = new THREE.Vector2(0, 0);
+const raycaster = new THREE.Raycaster();
+const mousePlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0); // Y=0 plane
+let mouseActive = false;
+
+renderer.domElement.addEventListener('mousemove', e => {
+  mouseNDC.x = (e.clientX / innerWidth) * 2 - 1;
+  mouseNDC.y = -(e.clientY / innerHeight) * 2 + 1;
+  mouseActive = true;
+  // Project to 3D plane
+  raycaster.setFromCamera(mouseNDC, camera);
+  const target = new THREE.Vector3();
+  raycaster.ray.intersectPlane(mousePlane, target);
+  if (target) mouse3D.copy(target);
+});
+renderer.domElement.addEventListener('mouseleave', () => { mouseActive = false; });
+
+// =========================================================================
+// FACT REGISTRY — maps fact_ids to particle index ranges
+// =========================================================================
+const factRegistry = new Map(); // factId -> {group, indices:[], cited, citedBy}
+let clusterCounts = {};
+let ambientStart = 0, ambientEnd = 0;
+
+function spawnAmbientField() {
+  const n = PHY.AMBIENT_COUNT;
+  ambientStart = P.count;
+  for (let i = 0; i < n; i++) {
+    const x = (Math.random()-0.5)*12;
+    const y = (Math.random()-0.5)*4;
+    const z = (Math.random()-0.5)*12;
+    const hex = [0x00f0ff,0xff00aa,0xffaa00,0x00ff66][Math.floor(Math.random()*4)];
+    P.add(x, y, z, hex, 0.04 + Math.random()*0.04, 2 + Math.random()*2,
+      {group:'AMBIENT',factId:null,cited:false,citedBy:new Set(),targetAlpha:0.05,flash:0,home:[x,y,z]});
+  }
+  ambientEnd = P.count;
+}
+
+function factClusterPos(group, idx) {
+  const cc = CLUSTER_CENTER[group] || CLUSTER_CENTER.DEFAULT;
+  const golden = Math.PI*(3-Math.sqrt(5));
+  const y = 1-(idx/16)*2;
+  const rad = Math.sqrt(Math.max(0,1-y*y));
+  const ang = golden*idx;
+  const spread = 1.3+Math.sqrt(idx)*0.2;
+  return [
+    cc[0]+Math.cos(ang)*rad*spread+(Math.random()-0.5)*0.3,
+    cc[1]+y*spread*0.5+(Math.random()-0.5)*0.2,
+    cc[2]+Math.sin(ang)*rad*spread+(Math.random()-0.5)*0.3
+  ];
+}
+
+// =========================================================================
+// STATE
+// =========================================================================
+let clock = 0, paused = false, verdictFlash = null;
+let currentRound = 0, maxRounds = 0, scenarioActive = false;
+
+// =========================================================================
+// CAMERA ORBIT
+// =========================================================================
+let drag=false,pm={x:0,y:0},theta=Math.PI*0.25,phi=0.52,dist=14;
+function camUpdate(){camera.position.set(dist*Math.cos(phi)*Math.sin(theta),dist*Math.sin(phi),dist*Math.cos(phi)*Math.cos(theta));camera.lookAt(0,0,0);}
+renderer.domElement.addEventListener('mousedown',e=>{if(e.button===0){drag=true;pm={x:e.clientX,y:e.clientY};}});
+addEventListener('mouseup',()=>drag=false);
+addEventListener('mousemove',e=>{if(!drag)return;theta-=(e.clientX-pm.x)*0.005;phi=Math.max(0.05,Math.min(1.4,phi+(e.clientY-pm.y)*0.005));pm={x:e.clientX,y:e.clientY};});
+renderer.domElement.addEventListener('wheel',e=>{dist=Math.max(5,Math.min(35,dist+e.deltaY*0.015));},{passive:true});
+let td0=0;
+renderer.domElement.addEventListener('touchstart',e=>{if(e.touches.length===1){drag=true;pm={x:e.touches[0].clientX,y:e.touches[0].clientY};}if(e.touches.length===2){td0=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}},{passive:true});
+renderer.domElement.addEventListener('touchmove',e=>{if(e.touches.length===1&&drag){theta-=(e.touches[0].clientX-pm.x)*0.005;phi=Math.max(0.05,Math.min(1.4,phi+(e.touches[0].clientY-pm.y)*0.005));pm={x:e.touches[0].clientX,y:e.touches[0].clientY};}if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);dist=Math.max(5,Math.min(35,dist-(d-td0)*0.03));td0=d;}},{passive:true});
+renderer.domElement.addEventListener('touchend',()=>drag=false);
+addEventListener('keydown',e=>{
+  if(e.code==='Space'){if(Playback.mode==='replaying')Playback.togglePlay();else paused=!paused;e.preventDefault();}
+  if(e.code==='KeyR'){theta=Math.PI*0.25;phi=0.52;dist=14;}
+  if(e.code==='KeyF'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+  if(e.code==='ArrowLeft')Playback.prevScenario();
+  if(e.code==='ArrowRight')Playback.nextScenario();
+});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+
+// =========================================================================
+// HUD REFS
+// =========================================================================
+const el=id=>document.getElementById(id);
+const $label=el('scenario-label'),$sid=$label.querySelector('.sid'),$sname=$label.querySelector('.name'),$meta=$label.querySelector('.meta');
+const $accuracy=el('accuracy'),$accPct=$accuracy.querySelector('.pct'),$accFrac=$accuracy.querySelector('.frac');
+const $confPanel=el('confidence-panel'),$archFill=document.querySelector('.conf-fill.arch'),$skepFill=document.querySelector('.conf-fill.skep');
+const $archVal=el('arch-val'),$skepVal=el('skep-val'),$delta=el('delta-row'),$roundInfo=el('round-info');
+const $verdArea=el('verdict-area'),$verdText=el('verdict-text'),$verdMiss=el('verdict-miss'),$verdSub=el('verdict-sub');
+const $status=el('status'),$analyzing=el('analyzing');
+const $transport=el('transport'),$btnPlay=el('btn-play'),$timeLabel=el('time-label'),$evtCount=el('evt-count');
+const $timelineFill=el('timeline-fill'),$timelineHead=el('timeline-head');
+
+// =========================================================================
+// RECORDER + PLAYBACK + HISTORY (same architecture as v4)
+// =========================================================================
+const Recorder={buffer:[],scenarios:[],_cur:null,
+  record(d){const e={wallTime:performance.now(),data:{...d}};this.buffer.push(e);
+    if(d.event_type==='scenario_start')this._cur={startIdx:this.buffer.length-1,endIdx:null,id:d.scenario_id,name:d.scenario_name||'',facts:d.fact_count||0,verdict:null,correct:null,arch:0,skep:0,confidence:0};
+    if(d.event_type==='confidence_update'&&this._cur){this._cur.arch=d.architect_confidence;this._cur.skep=d.skeptic_confidence;}
+    if(d.event_type==='verdict_rendered'&&this._cur){this._cur.verdict=d.outcome;this._cur.correct=d.correct;this._cur.confidence=d.confidence;}
+    if(d.event_type==='scenario_end'&&this._cur){this._cur.endIdx=this.buffer.length-1;this.scenarios.push({...this._cur});this._cur=null;}},
+  get length(){return this.buffer.length;},
+  get duration(){if(this.buffer.length<2)return 0;return this.buffer[this.buffer.length-1].wallTime-this.buffer[0].wallTime;},
+  getScenarioByIndex(i){return this.scenarios.find(s=>i>=s.startIdx&&(s.endIdx===null||i<=s.endIdx));},
+  findScenarioStart(i){if(i<0||i>=this.scenarios.length)return 0;return this.scenarios[i].startIdx;},
+  clear(){this.buffer=[];this.scenarios=[];this._cur=null;}
+};
+
+const Playback={mode:'live',cursor:0,playing:false,speed:1.0,_timer:null,
+  startReplay(from){this.mode='replaying';this.cursor=from||0;this.playing=true;this._next();},
+  pause(){this.playing=false;if(this._timer){clearTimeout(this._timer);this._timer=null;}},
+  resume(){if(this.mode==='replaying'){this.playing=true;this._next();}},
+  togglePlay(){if(this.playing)this.pause();else this.resume();},
+  seekTo(idx){this.pause();this.cursor=Math.max(0,Math.min(idx,Recorder.length-1));replayTo(this.cursor);},
+  _next(){if(!this.playing||this.cursor>=Recorder.length){this.playing=false;updateTransport();return;}
+    const e=Recorder.buffer[this.cursor];handleEvent(e.data);this.cursor++;updateTransport();
+    if(this.cursor>=Recorder.length){this.playing=false;updateTransport();return;}
+    const nx=Recorder.buffer[this.cursor];const delay=(nx.wallTime-e.wallTime)/this.speed;
+    this._timer=setTimeout(()=>this._next(),Math.max(1,delay));},
+  rewindToStart(){this.pause();this.mode='replaying';this.cursor=0;clearAll();History.clearActive();updateTransport();},
+  prevScenario(){const c=Recorder.getScenarioByIndex(this.cursor);const ci=c?Recorder.scenarios.indexOf(c):Recorder.scenarios.length;this.seekTo(Recorder.findScenarioStart(Math.max(0,ci-1)));},
+  nextScenario(){const c=Recorder.getScenarioByIndex(this.cursor);const ci=c?Recorder.scenarios.indexOf(c):-1;this.seekTo(Recorder.findScenarioStart(Math.min(Recorder.scenarios.length-1,ci+1)));},
+};
+function replayTo(idx){let s=0;for(let i=idx;i>=0;i--){if(Recorder.buffer[i].data.event_type==='scenario_start'){s=i;break;}}clearAll();for(let i=s;i<=idx;i++)handleEvent(Recorder.buffer[i].data);updateTransport();}
+
+const History={entries:[],
+  add(sc){const $p=el('history-panel');$p.style.opacity='1';const vc=VERDICT_CSS[sc.verdict]||'#888';const vl=VERDICT_LABEL[sc.verdict]||sc.verdict||'?';
+    const d=document.createElement('div');d.className='hist-entry';d.style.borderLeftColor=vc;d.dataset.idx=Recorder.scenarios.length-1;
+    d.innerHTML=`<div class="hist-id">${sc.id}</div><div class="hist-verdict" style="color:${vc}">${vl}</div><div class="hist-bars"><div class="hist-bar ha" style="width:${Math.round((sc.arch||0)*100)}px"></div><div class="hist-bar hs" style="width:${Math.round((sc.skep||0)*100)}px"></div><div class="hist-miss" style="display:${sc.correct?'none':'block'}"></div></div>`;
+    d.addEventListener('click',()=>{const i=parseInt(d.dataset.idx);Playback.seekTo(Recorder.findScenarioStart(i));Playback.startReplay(Recorder.findScenarioStart(i));History.setActive(i);});
+    $p.appendChild(d);this.entries.push(d);$p.scrollTop=$p.scrollHeight;},
+  setActive(i){this.entries.forEach((e,j)=>e.classList.toggle('active',j===i));},
+  clearActive(){this.entries.forEach(e=>e.classList.remove('active'));},
+};
+
+function updateTransport(){const len=Recorder.length;$evtCount.textContent=len+' evts';
+  $btnPlay.innerHTML=Playback.playing?'&#9646;&#9646;':'&#9654;';$btnPlay.classList.toggle('active',Playback.playing);
+  if(len>0){const pct=(Playback.cursor/len)*100;$timelineFill.style.width=pct+'%';$timelineHead.style.left=pct+'%';
+    const dur=Recorder.duration/1000;const cur=len>1?((Recorder.buffer[Math.min(Playback.cursor,len-1)].wallTime-Recorder.buffer[0].wallTime)/1000):0;
+    $timeLabel.textContent=fmtT(cur)+'/'+fmtT(dur);}}
+function fmtT(s){return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');}
+el('btn-rewind').addEventListener('click',()=>Playback.rewindToStart());
+el('btn-prev').addEventListener('click',()=>Playback.prevScenario());
+el('btn-play').addEventListener('click',()=>{if(Playback.mode==='live'&&Recorder.length>0)Playback.startReplay(0);else Playback.togglePlay();updateTransport();});
+el('btn-next').addEventListener('click',()=>Playback.nextScenario());
+el('timeline').addEventListener('click',e=>{const r=el('timeline').getBoundingClientRect();const pct=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));Playback.seekTo(Math.floor(pct*Recorder.length));});
+
+// =========================================================================
+// SCENE CLEAR
+// =========================================================================
+function clearAll(){
+  P.clear(); factRegistry.clear(); clusterCounts={};
+  verdictFlash=null; currentRound=0; maxRounds=0; scenarioActive=false;
+  $verdArea.style.opacity='0';$verdMiss.style.opacity='0';$confPanel.style.opacity='0';
+  $archFill.style.width='0%';$skepFill.style.width='0%';$archVal.textContent='--';$skepVal.textContent='--';
+  $delta.textContent='';$roundInfo.textContent='';$analyzing.className='';
+  spawnAmbientField();
+}
+
+// =========================================================================
+// EVENT DISPATCH
+// =========================================================================
+function handleEvent(d){
+  switch(d.event_type){
+    case 'scenario_start':evStart(d);break;case 'fact_ingested':evFact(d);break;
+    case 'fact_cited':evCited(d);break;case 'confidence_update':evConf(d);break;
+    case 'debate_summary':break;case 'verdict_rendered':evVerdict(d);break;
+    case 'accuracy_milestone':evAccuracy(d);break;case 'scenario_end':evEnd(d);break;
+    case 'round_start':evRoundStart(d);break;case 'round_confidence':evRoundConf(d);break;
+    case 'debate_evolution':break;case 'assertion_formed':evAssertion(d);break;
+    case 'analysis_status':evAnalysisStatus(d);break;
+    case 'miscalibration_check':break;case 'claim_audit':break;
+  }
+}
+
+function evStart(d){
+  // Keep ambient, clear facts
+  factRegistry.clear(); clusterCounts={};
+  verdictFlash=null; currentRound=0; maxRounds=0; scenarioActive=true;
+  // Reset fact particles (keep ambient)
+  P.count = ambientEnd;
+  P.geometry.setDrawRange(0, P.count);
+  $sid.textContent=d.scenario_id;$sname.textContent=d.scenario_name||'';$meta.textContent=(d.fact_count||0)+' facts';
+  $label.style.opacity='1';$analyzing.className='';
+  $verdArea.style.opacity='0';$verdMiss.style.opacity='0';$confPanel.style.opacity='0';
+  $archFill.style.width='0%';$skepFill.style.width='0%';$archVal.textContent='--';$skepVal.textContent='--';
+  $delta.textContent='';$roundInfo.textContent='';
+}
+
+function evAnalysisStatus(d){$analyzing.className=d.status==='analyzing'?'active':'';}
+
+function evFact(d){
+  const grp=entityGroup(d.entity_type);
+  if(!clusterCounts[grp])clusterCounts[grp]=0;
+  const idx=clusterCounts[grp]++;
+  const home=factClusterPos(grp,idx);
+  const baseHex=ENTITY_COLORS[grp]||ENTITY_COLORS.DEFAULT;
+  const indices=[];
+  // Core particle (the fact itself)
+  const ci=P.add(home[0],home[1],home[2],baseHex,DIM_ALPHA,3,{group:grp,factId:d.fact_id,cited:false,citedBy:new Set(),targetAlpha:DIM_ALPHA,flash:clock,home});
+  if(ci>=0)indices.push(ci);
+  // Halo particles
+  for(let h=0;h<PHY.FACT_HALO;h++){
+    const ox=home[0]+(Math.random()-0.5)*0.8;
+    const oy=home[1]+(Math.random()-0.5)*0.5;
+    const oz=home[2]+(Math.random()-0.5)*0.8;
+    const hi=P.add(ox,oy,oz,baseHex,DIM_ALPHA*0.5,1.5+Math.random()*2,{group:grp,factId:d.fact_id,cited:false,citedBy:new Set(),targetAlpha:DIM_ALPHA*0.5,flash:clock,home});
+    if(hi>=0)indices.push(hi);
+  }
+  factRegistry.set(d.fact_id,{group:grp,indices,cited:false,citedBy:new Set()});
+}
+
+function evCited(d){
+  $analyzing.className='';
+  const role=d.agent_role;const aHex=AGENT_HEX[role]||0xffffff;
+  (d.fact_ids||[]).forEach(fid=>{
+    const reg=factRegistry.get(fid);if(!reg)return;
+    reg.citedBy.add(role); reg.cited=true;
+    let pHex=aHex;
+    if(reg.citedBy.has('architect')&&reg.citedBy.has('skeptic'))pHex=0xeeeeff;
+    // Brighten existing particles
+    reg.indices.forEach(i=>{
+      P.recolor(i,pHex,BRIGHT_ALPHA);
+      P.sizes[i]*=1.5;
+      P.meta[i].targetAlpha=BRIGHT_ALPHA;
+      P.meta[i].cited=true;
+      P.meta[i].flash=clock;
+    });
+    // Burst: spawn extra particles around this fact
+    const home=P.meta[reg.indices[0]]?.home||[0,0,0];
+    for(let b=0;b<PHY.CITE_BURST;b++){
+      const bx=home[0]+(Math.random()-0.5)*1.0;
+      const by=home[1]+(Math.random()-0.5)*0.6;
+      const bz=home[2]+(Math.random()-0.5)*1.0;
+      const bi=P.add(bx,by,bz,pHex,BRIGHT_ALPHA*0.7,2+Math.random()*3,{group:reg.group,factId:fid,cited:true,citedBy:new Set([role]),targetAlpha:BRIGHT_ALPHA*0.6,flash:clock,home});
+      if(bi>=0){reg.indices.push(bi);
+        // Give burst particles outward velocity
+        P.velocities[bi*3]=(bx-home[0])*0.03;P.velocities[bi*3+1]=(by-home[1])*0.03;P.velocities[bi*3+2]=(bz-home[2])*0.03;
+      }
+    }
+    P.geometry.attributes.color.needsUpdate=true;
+    P.geometry.attributes.size.needsUpdate=true;
+  });
+}
+
+function evConf(d){$confPanel.style.opacity='1';$archFill.style.width=(d.architect_confidence*100)+'%';$skepFill.style.width=(d.skeptic_confidence*100)+'%';$archVal.textContent=d.architect_confidence.toFixed(4);$skepVal.textContent=d.skeptic_confidence.toFixed(4);const dt=d.delta!=null?d.delta:(d.architect_confidence-d.skeptic_confidence);$delta.textContent='DELTA  '+(dt>=0?'+':'')+dt.toFixed(2);}
+function evAssertion(d){(d.cited_fact_ids||[]).forEach(fid=>{const reg=factRegistry.get(fid);if(reg)reg.indices.forEach(i=>{if(P.meta[i])P.meta[i].flash=clock;});});}
+function evVerdict(d){
+  const vc=VERDICT_CSS[d.outcome]||'#fff',vh=VERDICT_HEX[d.outcome]||0xffffff;
+  $verdArea.style.opacity='1';$verdText.textContent=VERDICT_LABEL[d.outcome]||d.outcome;$verdText.style.color=vc;
+  $verdSub.textContent='conf: '+d.confidence.toFixed(2);if(!d.correct){$verdMiss.style.opacity='1';$verdSub.textContent+='  MISS';}
+  verdictFlash={color:new THREE.Color(vh),start:clock,dur:1.5};
+  // Apply radial blast force to all particles
+  for(let i=0;i<P.count;i++){
+    const dx=P.positions[i*3],dy=P.positions[i*3+1],dz=P.positions[i*3+2];
+    const len=Math.sqrt(dx*dx+dy*dy+dz*dz)||1;
+    P.velocities[i*3]+=(dx/len)*PHY.VERDICT_BLAST;
+    P.velocities[i*3+1]+=(dy/len)*PHY.VERDICT_BLAST;
+    P.velocities[i*3+2]+=(dz/len)*PHY.VERDICT_BLAST;
+  }
+}
+function evAccuracy(d){$accuracy.style.opacity='1';const p=(d.running_accuracy*100).toFixed(1);$accPct.textContent=p+'%';$accFrac.textContent=d.scenarios_correct+'/'+d.scenarios_completed;$accPct.style.color=d.running_accuracy>=0.85?'#00ff66':d.running_accuracy>=0.70?'#ffaa00':'#ff3300';}
+function evEnd(d){scenarioActive=false;const sc=Recorder.scenarios[Recorder.scenarios.length-1];if(sc)History.add(sc);
+  setTimeout(()=>{$label.style.opacity='0.15';$verdArea.style.opacity='0';$confPanel.style.opacity='0';
+    // Dim all fact particles back, keep ambient
+    for(let i=ambientEnd;i<P.count;i++){if(P.meta[i])P.meta[i].targetAlpha=0.02;}
+  },2000);
+}
+function evRoundStart(d){currentRound=d.round_number;maxRounds=d.max_rounds;$roundInfo.textContent='Round '+d.round_number+'/'+d.max_rounds;}
+function evRoundConf(d){currentRound=d.round_number;const dt=d.architect_confidence-d.skeptic_confidence;$confPanel.style.opacity='1';$archFill.style.width=(d.architect_confidence*100)+'%';$skepFill.style.width=(d.skeptic_confidence*100)+'%';$archVal.textContent=d.architect_confidence.toFixed(4);$skepVal.textContent=d.skeptic_confidence.toFixed(4);$delta.textContent='DELTA  '+(dt>=0?'+':'')+dt.toFixed(2);$roundInfo.textContent='Round '+d.round_number+'/'+maxRounds;
+  // Commitment bias: dim architect-cited
+  const rf=d.round_number/Math.max(1,maxRounds);
+  factRegistry.forEach(reg=>{if(!reg.cited)return;
+    if(reg.citedBy.has('architect')&&!reg.citedBy.has('skeptic')){const dim=1.0-rf*0.5;reg.indices.forEach(i=>{if(P.meta[i]){P.meta[i].targetAlpha=BRIGHT_ALPHA*dim;}});}});
+}
+
+// =========================================================================
+// PHYSICS LOOP — the heart of v5
+// =========================================================================
+function physicsStep(){
+  const pos=P.positions, vel=P.velocities, n=P.count;
+
+  for(let i=0;i<n;i++){
+    const m=P.meta[i]; if(!m)continue;
+    const ix=i*3, iy=i*3+1, iz=i*3+2;
+
+    // --- Mouse force (repulsion) ---
+    if(mouseActive){
+      const dx=pos[ix]-mouse3D.x, dz=pos[iz]-mouse3D.z;
+      const dy=pos[iy]-mouse3D.y;
+      const d2=dx*dx+dy*dy+dz*dz;
+      const r2=PHY.MOUSE_RADIUS*PHY.MOUSE_RADIUS;
+      if(d2<r2&&d2>0.01){
+        const force=PHY.MOUSE_FORCE*(1-d2/r2);
+        const len=Math.sqrt(d2);
+        vel[ix]+=dx/len*force; vel[iy]+=dy/len*force; vel[iz]+=dz/len*force;
+      }
+    }
+
+    // --- Cluster attraction (cited particles pull toward home) ---
+    if(m.home){
+      const hx=m.home[0]-pos[ix], hy=m.home[1]-pos[iy], hz=m.home[2]-pos[iz];
+      const pull = m.cited ? PHY.CLUSTER_PULL*2 : PHY.CLUSTER_PULL;
+      vel[ix]+=hx*pull; vel[iy]+=hy*pull; vel[iz]+=hz*pull;
+    }
+
+    // --- Return force (prevent drifting to infinity) ---
+    const distFromOrigin = Math.sqrt(pos[ix]*pos[ix]+pos[iy]*pos[iy]+pos[iz]*pos[iz]);
+    if(distFromOrigin>10){
+      const rf=PHY.RETURN_FORCE*(distFromOrigin-10);
+      vel[ix]-=pos[ix]/distFromOrigin*rf;
+      vel[iy]-=pos[iy]/distFromOrigin*rf;
+      vel[iz]-=pos[iz]/distFromOrigin*rf;
+    }
+
+    // --- Random jitter ---
+    vel[ix]+=(Math.random()-0.5)*PHY.JITTER;
+    vel[iy]+=(Math.random()-0.5)*PHY.JITTER*0.5;
+    vel[iz]+=(Math.random()-0.5)*PHY.JITTER;
+
+    // --- Damping ---
+    vel[ix]*=PHY.DAMPING; vel[iy]*=PHY.DAMPING; vel[iz]*=PHY.DAMPING;
+
+    // --- Integrate ---
+    pos[ix]+=vel[ix]; pos[iy]+=vel[iy]; pos[iz]+=vel[iz];
+
+    // --- Alpha lerp toward target ---
+    const curA=P.alphas[i];
+    const tgtA=m.targetAlpha;
+    if(Math.abs(curA-tgtA)>0.001){
+      const newA=curA+(tgtA-curA)*0.04;
+      P.alphas[i]=newA;
+      // Flash boost
+      const flashAge=clock-m.flash;
+      const flashBoost=Math.exp(-flashAge*3)*0.5;
+      const finalA=Math.min(1,newA+flashBoost);
+      // Update color brightness
+      const hex=m.cited?
+        (m.citedBy.has('architect')&&m.citedBy.has('skeptic')?0xeeeeff:AGENT_HEX[m.citedBy.values().next().value]||ENTITY_COLORS[m.group]||0x4488aa)
+        :ENTITY_COLORS[m.group]||0x4488aa;
+      const c3=new THREE.Color(hex);
+      P.colors[ix]=c3.r*finalA;P.colors[iy]=c3.g*finalA;P.colors[iz]=c3.b*finalA;
+    }
+
+    // --- Verdict flash color override ---
+    if(verdictFlash){
+      const va=clock-verdictFlash.start;
+      if(va<verdictFlash.dur){
+        const vi=Math.exp(-va*2.5);
+        const vc=verdictFlash.color;
+        P.colors[ix]+=(vc.r-P.colors[ix])*vi*0.3;
+        P.colors[iy]+=(vc.g-P.colors[iy])*vi*0.3;
+        P.colors[iz]+=(vc.b-P.colors[iz])*vi*0.3;
+      }
+    }
+  }
+
+  // Clear verdict flash
+  if(verdictFlash&&(clock-verdictFlash.start)>verdictFlash.dur+0.5)verdictFlash=null;
+
+  P.geometry.attributes.position.needsUpdate=true;
+  P.geometry.attributes.color.needsUpdate=true;
+}
+
+// =========================================================================
+// RENDER LOOP
+// =========================================================================
+function animate(){
+  requestAnimationFrame(animate);
+  if(paused&&Playback.mode!=='replaying')return;
+  clock+=0.016;
+  camUpdate();
+  physicsStep();
+  Connections.update();
+  renderer.render(scene,camera);
+}
+spawnAmbientField();
+animate();
+
+// =========================================================================
+// LIVE INGESTION
+// =========================================================================
+function ingestEvent(data){Recorder.record(data);if(Playback.mode==='live')handleEvent(data);$transport.classList.add('visible');updateTransport();}
+
+// =========================================================================
+// WEBSOCKET
+// =========================================================================
+let ws=null,reconn=null;
+function connectWS(){if(DEMO_MODE||FIXTURE)return;
+  try{ws=new WebSocket(WS_URL);
+    ws.onopen=()=>{$status.textContent='Connected to ARES';$status.className='connected';if(reconn){clearInterval(reconn);reconn=null;}};
+    ws.onmessage=e=>{try{ingestEvent(JSON.parse(e.data));}catch(err){console.warn('Parse:',err);}};
+    ws.onclose=()=>{$status.textContent='Waiting for ARES...';$status.className='waiting';ws=null;if(!reconn)reconn=setInterval(connectWS,2000);};
+    ws.onerror=()=>ws.close();
+  }catch(e){$status.textContent='Waiting for ARES...';$status.className='waiting';if(!reconn)reconn=setInterval(connectWS,2000);}}
+
+// =========================================================================
+// FIXTURE
+// =========================================================================
+function loadFixture(path){fetch(path).then(r=>r.json()).then(evts=>{$status.textContent='Playing fixture';$status.className='connected';const t0=evts.length?evts[0].timestamp_ms:0;evts.forEach(e=>setTimeout(()=>ingestEvent(e),e.timestamp_ms-t0));}).catch(()=>{$status.textContent='Fixture failed';$status.className='waiting';});}
+
+// =========================================================================
+// DEMO MODE
+// =========================================================================
+function runDemo(){
+  $status.textContent='Demo mode';$status.className='connected';
+  const ents=['PROCESS','NETWORK','FILE','USER','PROCESS','NETWORK','FILE'];
+  const srcs=['process_list','auth_log','syslog','netflow'];
+  const scenarios=[
+    {id:'SC-001',name:'Credential Dumping Campaign',facts:6,verd:'threat_confirmed',a:0.94,s:0.22,ok:true},
+    {id:'SC-005',name:'Authorized Maintenance Window',facts:8,verd:'threat_dismissed',a:0.12,s:0.91,ok:true},
+    {id:'SC-011',name:'Cloud Backup Ambiguity',facts:12,verd:'inconclusive',a:0.58,s:0.53,ok:true},
+    {id:'SC-010',name:'Multi-Vector Kill Chain',facts:16,verd:'threat_confirmed',a:0.98,s:0.31,ok:true},
+    {id:'SC-016',name:'Mixed Signal Lateral Move',facts:7,verd:'threat_confirmed',a:0.73,s:0.48,ok:false},
+    {id:'MT-001',name:'Debate: Architect Retreat',facts:10,verd:'inconclusive',a:0.55,s:0.62,ok:false,rounds:[{a:0.88,s:0.70},{a:0.65,s:0.72},{a:0.55,s:0.70}]},
+  ];
+  let t=400,completed=0,correct=0;
+  function sched(sc){const mt=!!sc.rounds;
+    setTimeout(()=>ingestEvent({event_type:'scenario_start',timestamp_ms:0,scenario_id:sc.id,scenario_name:sc.name,expected_verdict:sc.verd.toUpperCase(),fact_count:sc.facts,source_types:srcs.slice(0,3)}),t);t+=350;
+    for(let i=0;i<sc.facts;i++){const fi=i;setTimeout(()=>ingestEvent({event_type:'fact_ingested',timestamp_ms:0,scenario_id:sc.id,fact_id:sc.id+'-f'+fi,entity_type:ents[fi%ents.length],entity_id:'e'+fi,source_type:srcs[fi%srcs.length],field_name:'f'+fi,source_index:fi%3,fact_index:fi}),t+fi*180);}
+    t+=sc.facts*180+400;
+    if(mt){sc.rounds.forEach((r,ri)=>{setTimeout(()=>ingestEvent({event_type:'round_start',timestamp_ms:0,scenario_id:sc.id,round_number:ri+1,max_rounds:sc.rounds.length}),t);t+=150;
+      if(ri===0){const af=Array.from({length:Math.ceil(sc.facts*0.7)},(_,i)=>sc.id+'-f'+i);const sf=Array.from({length:Math.ceil(sc.facts*0.3)},(_,i)=>sc.id+'-f'+(sc.facts-1-i));
+        setTimeout(()=>ingestEvent({event_type:'fact_cited',timestamp_ms:0,scenario_id:sc.id,agent_role:'architect',fact_ids:af,coverage_ratio:0.7}),t);t+=250;
+        setTimeout(()=>ingestEvent({event_type:'fact_cited',timestamp_ms:0,scenario_id:sc.id,agent_role:'skeptic',fact_ids:sf,coverage_ratio:0.3}),t);t+=250;}
+      setTimeout(()=>ingestEvent({event_type:'round_confidence',timestamp_ms:0,scenario_id:sc.id,round_number:ri+1,architect_confidence:r.a,skeptic_confidence:r.s,architect_new_facts:ri===0?sc.facts:0,skeptic_new_facts:ri===0?sc.facts:0,architect_assertions:3,skeptic_assertions:2}),t);t+=500;});
+    }else{const af=Array.from({length:Math.ceil(sc.facts*0.75)},(_,i)=>sc.id+'-f'+i);const sf=Array.from({length:Math.ceil(sc.facts*0.4)},(_,i)=>sc.id+'-f'+(sc.facts-1-i));
+      setTimeout(()=>ingestEvent({event_type:'fact_cited',timestamp_ms:0,scenario_id:sc.id,agent_role:'architect',fact_ids:af,coverage_ratio:0.75}),t);t+=400;
+      setTimeout(()=>ingestEvent({event_type:'fact_cited',timestamp_ms:0,scenario_id:sc.id,agent_role:'skeptic',fact_ids:sf,coverage_ratio:0.4}),t);t+=400;}
+    setTimeout(()=>ingestEvent({event_type:'confidence_update',timestamp_ms:0,scenario_id:sc.id,architect_confidence:sc.a,skeptic_confidence:sc.s,delta:sc.a-sc.s}),t);t+=350;
+    setTimeout(()=>ingestEvent({event_type:'verdict_rendered',timestamp_ms:0,scenario_id:sc.id,outcome:sc.verd,confidence:Math.max(sc.a,sc.s),correct:sc.ok}),t);t+=250;
+    completed++;if(sc.ok)correct++;const cc=correct,co=completed;
+    setTimeout(()=>ingestEvent({event_type:'accuracy_milestone',timestamp_ms:0,scenarios_completed:co,scenarios_correct:cc,running_accuracy:cc/co}),t);t+=100;
+    setTimeout(()=>ingestEvent({event_type:'scenario_end',timestamp_ms:0,scenario_id:sc.id,duration_ms:3000}),t);t+=2500;}
+  scenarios.forEach(s=>sched(s));
+}
+
+// =========================================================================
+// SESSION EXPORT — download recorded events as JSON
+// =========================================================================
+function exportSession() {
+  if (Recorder.length === 0) { alert('No events to export'); return; }
+  const session = {
+    ares_version: 'v5',
+    captured_at: new Date().toISOString(),
+    total_events: Recorder.length,
+    scenario_count: Recorder.scenarios.length,
+    scenario_ids: Recorder.scenarios.map(s => s.id),
+    duration_ms: Math.round(Recorder.duration),
+    events: Recorder.buffer.map((e, i) => ({
+      timestamp_ms: i === 0 ? 0 : Math.round(e.wallTime - Recorder.buffer[0].wallTime),
+      event: e.data,
+    })),
+  };
+  const blob = new Blob([JSON.stringify(session, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ares-session-' + new Date().toISOString().slice(0,19).replace(/[:T]/g,'-') + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// =========================================================================
+// SESSION LOAD — replay from exported JSON (zero API cost)
+// =========================================================================
+function loadSession(source) {
+  const process = (data) => {
+    $status.textContent = 'Playing session (' + (data.scenario_count || '?') + ' scenarios)';
+    $status.className = 'connected';
+    $transport.classList.add('visible');
+    const events = data.events || [];
+    if (events.length === 0) return;
+    const t0 = events[0].timestamp_ms || 0;
+    events.forEach(entry => {
+      const delay = (entry.timestamp_ms || 0) - t0;
+      setTimeout(() => ingestEvent(entry.event), Math.max(0, delay));
+    });
+  };
+
+  if (typeof source === 'string') {
+    // URL or path
+    fetch(source).then(r => r.json()).then(process)
+      .catch(e => { $status.textContent = 'Session load failed'; $status.className = 'waiting'; console.error(e); });
+  } else {
+    // File object
+    const reader = new FileReader();
+    reader.onload = () => { try { process(JSON.parse(reader.result)); } catch(e) { console.error(e); } };
+    reader.readAsText(source);
+  }
+}
+
+el('btn-export').addEventListener('click', exportSession);
+el('file-input').addEventListener('change', e => { if (e.target.files[0]) loadSession(e.target.files[0]); });
+
+// =========================================================================
+// INIT
+// =========================================================================
+// Default: auto-load showcase.json if no params (website deployment mode)
+const AUTO_SESSION = !SESSION_URL && !DEMO_MODE && !FIXTURE && !params.get('ws') ? 'showcase.json' : null;
+if (SESSION_URL) loadSession(SESSION_URL);
+else if (AUTO_SESSION) loadSession(AUTO_SESSION);
+else if (DEMO_MODE) runDemo();
+else if (FIXTURE) loadFixture(FIXTURE);
+else connectWS();
+</script>
+</body>
+</html>
