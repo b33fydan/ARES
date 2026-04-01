@@ -19,6 +19,7 @@ class SourceType(Enum):
     DNS_LOG = "dns_log"
     AUTH_LOG = "auth_log"
     GRAPH_COMPUTATION = "graph_computation"
+    PENTEST_TOOL = "pentest_tool"
     MANUAL = "manual"
     UNKNOWN = "unknown"
 

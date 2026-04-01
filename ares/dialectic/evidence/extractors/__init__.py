@@ -10,6 +10,7 @@ from .protocol import (
     ExtractionResult,
     ExtractorProtocol,
 )
+from .pentagi import PentAGIExtractor
 from .windows import WindowsEventExtractor
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     "ExtractionStats",
     "ExtractionResult",
     "ExtractorProtocol",
+    "PentAGIExtractor",
     "WindowsEventExtractor",
 ]

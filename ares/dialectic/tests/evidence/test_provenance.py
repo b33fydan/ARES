@@ -19,6 +19,7 @@ class TestSourceType:
             "DNS_LOG",
             "AUTH_LOG",
             "GRAPH_COMPUTATION",
+            "PENTEST_TOOL",
             "MANUAL",
             "UNKNOWN",
         }
