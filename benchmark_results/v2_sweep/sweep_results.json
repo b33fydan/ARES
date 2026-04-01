@@ -1,0 +1,60 @@
+{
+  "run_id": "e72271ef1a02",
+  "timestamp": "2026-04-01T20:40:57.416019+00:00",
+  "v1_baseline": {
+    "sc_correct": 20,
+    "pt_correct": 0,
+    "combined_correct": 20,
+    "total": 33
+  },
+  "thresholds": [
+    {
+      "threshold": 0.2,
+      "sc_correct": 22,
+      "sc_total": 33,
+      "pt_correct": 0,
+      "pt_total": 0,
+      "combined_correct": 22,
+      "combined_total": 33,
+      "regressions": 1,
+      "improvements": 3,
+      "regression_details": [
+        {
+          "scenario_id": "SC-009",
+          "expected": "THREAT_DISMISSED",
+          "v1": "THREAT_DISMISSED",
+          "v2": "INCONCLUSIVE",
+          "arch": 0.8500000000000001,
+          "skep": 0.8615384615384616
+        }
+      ],
+      "improvement_details": [
+        {
+          "scenario_id": "SC-010",
+          "expected": "THREAT_CONFIRMED",
+          "v1": "INCONCLUSIVE",
+          "v2": "THREAT_CONFIRMED",
+          "arch": 0.6944444444444445,
+          "skep": 0.43333333333333335
+        },
+        {
+          "scenario_id": "SC-013",
+          "expected": "THREAT_CONFIRMED",
+          "v1": "INCONCLUSIVE",
+          "v2": "THREAT_CONFIRMED",
+          "arch": 0.6999999999999998,
+          "skep": 0.22999999999999998
+        },
+        {
+          "scenario_id": "SC-033",
+          "expected": "THREAT_DISMISSED",
+          "v1": "INCONCLUSIVE",
+          "v2": "THREAT_DISMISSED",
+          "arch": 0.1,
+          "skep": 0.6400000000000001
+        }
+      ]
+    }
+  ],
+  "winner_threshold": null
+}
