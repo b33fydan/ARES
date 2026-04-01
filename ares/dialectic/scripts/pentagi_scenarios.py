@@ -499,11 +499,12 @@ def build_pt005_critical_cves_unpatched() -> BenchmarkScenario:
         mitre_attack_ids=("T1190", "T1595"),
         mitre_tactic="Initial Access",
         difficulty_tier=4,
-        expected_verdict="THREAT_CONFIRMED",
-        expected_winner="ARCHITECT",
+        expected_verdict="INCONCLUSIVE",
+        expected_winner="BALANCED",
         fact_count=fact_count,
         notes="Tier 4 mixed signals — critical vulns confirmed by scanner but zero exploitation; "
-              "Architect argues imminent threat from known CVEs, Skeptic argues no actual compromise",
+              "under closed-world assumption, vulnerability != compromise; "
+              "patched from THREAT_CONFIRMED after Session 040 baseline (same logic as SC-011/SC-017)",
     )
 
     return BenchmarkScenario(metadata=metadata, packet=packet)

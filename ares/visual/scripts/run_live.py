@@ -6,9 +6,11 @@ ARES think as it thinks — not a replay.
 
 Usage:
     python -m ares.visual.scripts.run_live --scenario SC-010
+    python -m ares.visual.scripts.run_live --scenario PT-001
     python -m ares.visual.scripts.run_live --mode showcase --speed 0.5
+    python -m ares.visual.scripts.run_live --mode pentagi
     python -m ares.visual.scripts.run_live --mode full
-    python -m ares.visual.scripts.run_live --scenarios SC-002,SC-010,SC-018
+    python -m ares.visual.scripts.run_live --scenarios PT-001,PT-003,PT-005
     python -m ares.visual.scripts.run_live --scenario SC-010 --max-cost 0.10
 """
 
@@ -27,6 +29,9 @@ logger = logging.getLogger("ares.visual.live")
 # Showcase scenario IDs — curated for visual impact
 SHOWCASE_IDS = ("SC-001", "SC-005", "SC-010", "SC-016", "SC-018", "SC-027")
 
+# PentAGI scenario IDs — pentest evidence through dialectical debate
+PENTAGI_IDS = ("PT-001", "PT-002", "PT-003", "PT-004", "PT-005", "PT-006")
+
 # Rough cost estimate per scenario (Claude Sonnet, ~2 calls per scenario)
 ESTIMATED_COST_PER_SCENARIO = 0.035
 
@@ -44,8 +49,8 @@ def build_parser() -> argparse.ArgumentParser:
         help="Comma-separated scenario IDs (e.g. SC-002,SC-010,SC-018)",
     )
     parser.add_argument(
-        "--mode", choices=["showcase", "full"],
-        help="showcase = 6 curated scenarios, full = all 33",
+        "--mode", choices=["showcase", "pentagi", "full"],
+        help="showcase = 6 curated SC scenarios, pentagi = 6 PT scenarios, full = all 39",
     )
     parser.add_argument(
         "--speed", type=float, default=1.0,
@@ -74,6 +79,8 @@ def _resolve_scenarios(args) -> List[str]:
         return [s.strip().upper() for s in args.scenarios.split(",")]
     if args.mode == "showcase":
         return list(SHOWCASE_IDS)
+    if args.mode == "pentagi":
+        return list(PENTAGI_IDS)
     if args.mode == "full":
         return []  # empty = all
     # Default to showcase
@@ -85,9 +92,9 @@ async def _run(args) -> None:
     import websockets
     from ares.visual.live_emitter import LiveAnalysisEmitter
 
-    # --- Load corpus ---
-    from ares.dialectic.scripts.scenario_corpus_v2 import get_full_corpus_v2
-    corpus = get_full_corpus_v2()
+    # --- Load corpus (SC + PT scenarios) ---
+    from ares.dialectic.scripts.pentagi_scenarios import get_pentagi_corpus
+    corpus = get_pentagi_corpus()
     by_id = {s.metadata.scenario_id: s for s in corpus}
 
     requested_ids = _resolve_scenarios(args)

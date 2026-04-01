@@ -135,7 +135,7 @@ class TestPT005CriticalCVEs:
 
     def test_expected_verdict(self):
         s = build_pt005_critical_cves_unpatched()
-        assert s.metadata.expected_verdict == "THREAT_CONFIRMED"
+        assert s.metadata.expected_verdict == "INCONCLUSIVE"
 
     def test_tier_4_mixed_signals(self):
         s = build_pt005_critical_cves_unpatched()
