@@ -1,0 +1,416 @@
+{
+  "timestamp": "2026-04-05T22:23:37.832502+00:00",
+  "strategy": "llm_v5",
+  "v4_v1_baseline": {
+    "sc_correct": 20,
+    "pt_correct": 0,
+    "combined_correct": 20,
+    "total": 33
+  },
+  "v5_v1": {
+    "sc_correct": 27,
+    "pt_correct": 6,
+    "combined_correct": 33,
+    "total": 39
+  },
+  "v5_v2_delta030": {
+    "sc_correct": 28,
+    "pt_correct": 4,
+    "combined_correct": 32,
+    "total": 39,
+    "regressions": 3,
+    "improvements": 2
+  },
+  "per_scenario": [
+    {
+      "scenario_id": "SC-001",
+      "expected": "INCONCLUSIVE",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.82,
+      "skeptic_confidence": 0.41000000000000003,
+      "correct": false,
+      "duration_ms": 7449,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-002",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.88,
+      "skeptic_confidence": 0.3,
+      "correct": true,
+      "duration_ms": 5767,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-003",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.92,
+      "skeptic_confidence": 0.3,
+      "correct": true,
+      "duration_ms": 7353,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-004",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.88,
+      "skeptic_confidence": 0.3,
+      "correct": true,
+      "duration_ms": 8138,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-005",
+      "expected": "INCONCLUSIVE",
+      "verdict": "inconclusive",
+      "architect_confidence": 0.7222222222222222,
+      "skeptic_confidence": 0.8363636363636363,
+      "correct": true,
+      "duration_ms": 11664,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-006",
+      "expected": "INCONCLUSIVE",
+      "verdict": "inconclusive",
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.8750000000000001,
+      "correct": true,
+      "duration_ms": 7368,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-007",
+      "expected": "INCONCLUSIVE",
+      "verdict": "inconclusive",
+      "architect_confidence": 0.6,
+      "skeptic_confidence": 0.6,
+      "correct": true,
+      "duration_ms": 6967,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-008",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.15,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 9989,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-009",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.35,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 8545,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-010",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 1.0,
+      "skeptic_confidence": 0.30000000000000004,
+      "correct": true,
+      "duration_ms": 11637,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-011",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.45,
+      "skeptic_confidence": 0.8,
+      "correct": true,
+      "duration_ms": 5880,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-012",
+      "expected": "INCONCLUSIVE",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.4333333333333333,
+      "correct": false,
+      "duration_ms": 10672,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-013",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 1.0,
+      "skeptic_confidence": 0.4714285714285714,
+      "correct": true,
+      "duration_ms": 14042,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-014",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.9,
+      "skeptic_confidence": 0.2833333333333333,
+      "correct": true,
+      "duration_ms": 10456,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-015",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.15,
+      "skeptic_confidence": 1.0,
+      "correct": true,
+      "duration_ms": 13821,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-016",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 1.0,
+      "skeptic_confidence": 0.33666666666666667,
+      "correct": true,
+      "duration_ms": 14545,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-017",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.35,
+      "skeptic_confidence": 0.8,
+      "correct": true,
+      "duration_ms": 11043,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-018",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.25,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 10025,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-019",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 1.0,
+      "skeptic_confidence": 0.22142857142857142,
+      "correct": true,
+      "duration_ms": 7911,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-020",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.87,
+      "skeptic_confidence": 0.3,
+      "correct": true,
+      "duration_ms": 7494,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-021",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.25,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 7046,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-022",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.35,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 9405,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-023",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.35,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 8485,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-024",
+      "expected": "INCONCLUSIVE",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.4000000000000001,
+      "skeptic_confidence": 0.8,
+      "correct": false,
+      "duration_ms": 8585,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-025",
+      "expected": "INCONCLUSIVE",
+      "verdict": "inconclusive",
+      "architect_confidence": 0.62,
+      "skeptic_confidence": 0.7,
+      "correct": true,
+      "duration_ms": 10047,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-026",
+      "expected": "INCONCLUSIVE",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.6,
+      "correct": false,
+      "duration_ms": 9086,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-027",
+      "expected": "INCONCLUSIVE",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.4,
+      "correct": false,
+      "duration_ms": 8997,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-028",
+      "expected": "INCONCLUSIVE",
+      "verdict": "inconclusive",
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.6,
+      "correct": true,
+      "duration_ms": 5959,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-029",
+      "expected": "INCONCLUSIVE",
+      "verdict": "inconclusive",
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.8,
+      "correct": true,
+      "duration_ms": 7341,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-030",
+      "expected": "INCONCLUSIVE",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.7200000000000001,
+      "skeptic_confidence": 0.6,
+      "correct": false,
+      "duration_ms": 8073,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-031",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.4,
+      "correct": true,
+      "duration_ms": 8059,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-032",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.75,
+      "skeptic_confidence": 0.4,
+      "correct": true,
+      "duration_ms": 7334,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "SC-033",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.25,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 8920,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "PT-001",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.92,
+      "skeptic_confidence": 0.3,
+      "correct": true,
+      "duration_ms": 10660,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "PT-002",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.3499999999999999,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 10777,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "PT-003",
+      "expected": "INCONCLUSIVE",
+      "verdict": "inconclusive",
+      "architect_confidence": 0.5,
+      "skeptic_confidence": 0.8,
+      "correct": true,
+      "duration_ms": 18863,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "PT-004",
+      "expected": "THREAT_CONFIRMED",
+      "verdict": "threat_confirmed",
+      "architect_confidence": 0.9000000000000001,
+      "skeptic_confidence": 0.4,
+      "correct": true,
+      "duration_ms": 9991,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "PT-005",
+      "expected": "INCONCLUSIVE",
+      "verdict": "inconclusive",
+      "architect_confidence": 0.55,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 14361,
+      "cost_usd": null
+    },
+    {
+      "scenario_id": "PT-006",
+      "expected": "THREAT_DISMISSED",
+      "verdict": "threat_dismissed",
+      "architect_confidence": 0.35,
+      "skeptic_confidence": 0.9,
+      "correct": true,
+      "duration_ms": 13010,
+      "cost_usd": null
+    }
+  ]
+}
