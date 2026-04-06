@@ -79,6 +79,60 @@ canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 #status{position:absolute;bottom:10px;left:20px;font-size:9px;opacity:.35}
 #status.connected{color:#00ff66}
 #status.waiting{color:#ffaa00}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  #scenario-label .sid{font-size:14px}
+  #scenario-label .name{font-size:11px}
+  #scenario-label .meta{font-size:9px}
+  #stage-info{font-size:9px;top:52px}
+
+  #accuracy .pct{font-size:20px}
+  #accuracy .frac{font-size:11px}
+
+  #confidence-panel{width:180px;bottom:64px;right:10px}
+  .conf-label{width:52px;font-size:8px;letter-spacing:1px}
+  .conf-val{width:36px;font-size:9px}
+  #delta-row{font-size:8px}
+
+  #verdict-area{bottom:64px;left:10px}
+  #verdict-text{font-size:13px;letter-spacing:1.5px}
+  #verdict-sub{font-size:9px}
+
+  #history-panel{width:160px;top:42px;max-height:calc(100vh - 140px)}
+  .hist-entry{padding:5px 6px;font-size:8px}
+  .hist-id{font-size:9px}
+  .hist-verdict{font-size:7px}
+
+  #transport{gap:4px;padding:4px 8px}
+  .tbtn{font-size:9px;padding:6px 10px;min-width:32px;min-height:32px;
+    display:flex;align-items:center;justify-content:center}
+  #timeline{width:100px;height:6px}
+  #timeline-head{width:14px;height:14px;top:-4px}
+  #time-label{font-size:8px;min-width:28px}
+  #evt-count{display:none}
+  #btn-export{display:none}
+  #btn-load{display:none}
+
+  #analyzing{font-size:11px;letter-spacing:3px}
+  #status{font-size:8px;bottom:6px;left:10px}
+}
+
+@media (max-width: 480px) {
+  #scenario-label{top:8px;left:10px}
+  #scenario-label .sid{font-size:12px}
+  #accuracy{top:8px;right:10px}
+  #accuracy .pct{font-size:16px}
+
+  #confidence-panel{width:150px;bottom:56px;right:8px}
+  .conf-label{width:40px;font-size:7px}
+
+  #history-panel{display:none}
+
+  #transport{gap:3px;padding:3px 6px}
+  .tbtn{padding:6px 8px;font-size:8px}
+  #timeline{width:70px}
+}
 </style>
 </head>
 <body>
@@ -121,15 +175,16 @@ const FIXTURE = params.get('fixture');
 const SESSION_URL = params.get('session');  // exported session JSON (zero API cost replay)
 
 // =========================================================================
-// PHYSICS CONFIG — tunable constants
+// PHYSICS CONFIG — tunable constants, with mobile performance tier
 // =========================================================================
+const IS_MOBILE = /Android|iPhone|iPad|iPod|webOS/i.test(navigator.userAgent) || window.innerWidth < 768;
 const PHY = {
-  AMBIENT_COUNT: 120,         // ambient particles (always present, drifting)
-  FACT_HALO: 8,               // extra particles spawned per fact ingested
-  CITE_BURST: 15,             // extra particles spawned per cited fact
-  MAX_PARTICLES: 2500,        // hard cap for performance
-  CONNECT_DIST: 1.8,          // max distance for proximity lines
-  CONNECT_MAX: 600,           // max connection lines drawn per frame
+  AMBIENT_COUNT: IS_MOBILE ? 40 : 120,
+  FACT_HALO: IS_MOBILE ? 3 : 8,
+  CITE_BURST: IS_MOBILE ? 5 : 15,
+  MAX_PARTICLES: IS_MOBILE ? 800 : 2500,
+  CONNECT_DIST: IS_MOBILE ? 1.4 : 1.8,
+  CONNECT_MAX: IS_MOBILE ? 150 : 600,
   MOUSE_RADIUS: 3.5,          // cursor influence radius
   MOUSE_FORCE: 0.012,         // cursor push strength
   DAMPING: 0.97,              // velocity damping per frame
@@ -222,7 +277,7 @@ scene.background = new THREE.Color(0x030308);
 const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 300);
 const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setPixelRatio(Math.min(devicePixelRatio, IS_MOBILE ? 1.5 : 2));
 document.body.prepend(renderer.domElement);
 scene.add(new THREE.AmbientLight(0x101820,0.15));
 
