@@ -67,3 +67,6 @@ Thumbs.db
 .env
 .env.local
 *.env
+
+# Tribunal session transcripts (private deliberation)
+docs/tribunal/
