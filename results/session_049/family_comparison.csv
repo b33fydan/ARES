@@ -1,0 +1,6 @@
+family,n,full_accuracy,ablated_accuracy,delta_pp
+severity,3,1.0000,0.6667,-33.33
+authority,3,0.6667,0.6667,+0.00
+temporal,2,1.0000,0.5000,-50.00
+causal,3,1.0000,1.0000,+0.00
+narrative,4,0.7500,0.5000,-25.00

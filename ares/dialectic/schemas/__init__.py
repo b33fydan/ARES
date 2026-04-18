@@ -11,5 +11,9 @@ from __future__ import annotations
 from ares.dialectic.schemas.framing_benchmark_result import (
     FramingBenchmarkResult,
 )
+from ares.dialectic.schemas.framing_benchmark_result_v2 import (
+    FramingBenchmarkResultV2,
+    to_v2,
+)
 
-__all__ = ["FramingBenchmarkResult"]
+__all__ = ["FramingBenchmarkResult", "FramingBenchmarkResultV2", "to_v2"]
