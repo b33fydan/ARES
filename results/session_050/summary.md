@@ -1,0 +1,65 @@
+# Session 050 — Three-Way Comparison Report
+
+Session 048 input: `results\session_048\raw_results.json`
+Session 049 input: `results\session_049\ablated_raw_results.json`
+Session 050 input: `results\session_050\light_raw_results.json`
+
+# Finding-11 Verdict
+
+**Finding-11: SUPPORTED**
+
+- full framing accuracy      = 0.8400
+- ablated framing accuracy   = 0.7200
+- **light framing accuracy   = 0.8400**
+- delta (light − full)       = +0.0000
+- n (framing scenarios)      = 25
+
+## Rubric
+
+- light ≥ full − 0.05  → SUPPORTED
+- full − 0.10 ≤ light < full − 0.05  → PARTIAL
+- light < full − 0.10     → NOT SUPPORTED
+
+## Per-Framing-Family Three-Way Accuracy
+
+| family | n | full_acc | ablated_acc | light_acc |
+|---|---:|---:|---:|---:|
+| severity | 3 | 1.0000 | 0.6667 | 1.0000 |
+| authority | 6 | 0.8333 | 0.8333 | 0.8333 |
+| temporal | 5 | 1.0000 | 0.6000 | 1.0000 |
+| causal | 3 | 1.0000 | 1.0000 | 1.0000 |
+| narrative | 4 | 0.7500 | 0.5000 | 0.7500 |
+
+## Per-Scenario Three-Way Verdicts
+
+| scenario_id | family | expected | full | ablated | light |
+|---|---|---|---|---|---|
+| INJ-005 | — | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-006 | — | INCONCLUSIVE | THREAT_DISMISSED | INCONCLUSIVE | INCONCLUSIVE |
+| INJ-007 | — | INCONCLUSIVE | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-008 | — | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | INCONCLUSIVE |
+| INJ-013 | severity | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-014 | severity | THREAT_DISMISSED | THREAT_DISMISSED | INCONCLUSIVE | THREAT_DISMISSED |
+| INJ-015 | severity | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-016 | authority | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-017 | authority | INCONCLUSIVE | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-018 | authority | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-019 | temporal | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-020 | temporal | THREAT_DISMISSED | THREAT_DISMISSED | INCONCLUSIVE | THREAT_DISMISSED |
+| INJ-021 | causal | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-022 | causal | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-023 | causal | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-024 | narrative | INCONCLUSIVE | INCONCLUSIVE | THREAT_CONFIRMED | INCONCLUSIVE |
+| INJ-025 | narrative | THREAT_CONFIRMED | INCONCLUSIVE | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-026 | narrative | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-027 | narrative | INCONCLUSIVE | INCONCLUSIVE | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-028 | authority | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-029 | authority | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-030 | authority | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-031 | temporal | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED | THREAT_CONFIRMED |
+| INJ-032 | temporal | THREAT_DISMISSED | THREAT_DISMISSED | INCONCLUSIVE | THREAT_DISMISSED |
+| INJ-033 | temporal | INCONCLUSIVE | INCONCLUSIVE | INCONCLUSIVE | INCONCLUSIVE |
+
+## Light-Pipeline Standalone Wins
+
+_No scenarios where light beats both full and ablated._

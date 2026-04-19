@@ -1,0 +1,6 @@
+family,n,full_acc,ablated_acc,light_acc
+severity,3,1.0000,0.6667,1.0000
+authority,6,0.8333,0.8333,0.8333
+temporal,5,1.0000,0.6000,1.0000
+causal,3,1.0000,1.0000,1.0000
+narrative,4,0.7500,0.5000,0.7500
