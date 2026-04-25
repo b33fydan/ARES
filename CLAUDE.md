@@ -1,17 +1,28 @@
-# CLAUDE.md — ARES Phase 6 (post-Session 051)
+# CLAUDE.md — ARES Phase 6 (post-Session 053)
+
+**Last updated:** 2026-04-25
+**Test count floor (passing):** 3,388
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
 Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 
 ## Where We Are
-- Paper 1 published: "Structured Dialectical Debate Degrades LLM Accuracy in Cybersecurity Threat Analysis"
-- Paper 2 in drafting: figures + docx skeleton landed Session 051; prose is the next strategy window.
+- Paper 1 published: "The Problem Is Inside the Black Box: Asymmetric Calibration Failure in Multi-Agent LLM Debate" (canonical PDF, 11 pages, see `docs/paper_1/CANONICAL.md`)
+- Paper 2 v1.1 drafted: integrated prose + 5 figures + compiled references in a single 598 KB docx (Session 052)
 - Debate chapter is CLOSED. Single-turn is production. Multi-turn stays in the lab.
 - Current accuracy on threat-analysis baseline: 84.6% across 39 scenarios (33 SC + 6 PT)
-- Test count: **3,578 passing, zero regressions across 51 sessions**
 - Phase 5 (Sessions 045–046): COMPLETE — injection resilience + Oracle Firewall + hot-swap
 - Phase 6 (Sessions 047–051): COMPLETE — corpus expansion, full-corpus live benchmark, ablation, Light Skeptic
+- Sessions 052–053: documentation reconciliation — Paper 2 v1.1 build pipeline, Paper 1 canonical decision, CLAUDE.md self-validation
+
+## Canonical Artifacts
+- **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
+- **Paper 1 reconciliation notes:** `docs/paper_1/CANONICAL.md`
+- **Paper 2 v1.1 draft:** `docs/paper_2/PAPER2_DRAFT_v1_1.docx`
+- **Paper 2 source markdown:** `docs/paper_2/source/PAPER2_DRAFT_v1_1_source.md`
+- **Paper 2 references:** `docs/paper_2/references.bib`
+- **Phase 6 plan:** `docs/PHASE6_INJECTION_ARENA.md`
 
 ## Phase 5 Results (Sessions 045–046)
 - 12 adversarial scenarios (DIRECT / FRAMING / PROPAGATION)
@@ -43,7 +54,6 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
   - Per-family: severity -33.33 pp, temporal -50.00 pp, narrative -25.00 pp, authority/causal ±0
   - 6 scenarios flipped; INJ-014 and INJ-020 (THREAT_DISMISSED) collapse to INCONCLUSIVE without Skeptic
 - Authority expansion (INJ-028..030): all 3 correct; family n=6 accuracy = 0.833 (up from n=3 0.667)
-- Tests: +244 (total 3,182)
 
 ### Session 050 — Light Skeptic + three-way benchmark + temporal expansion
 - **Finding 11: SUPPORTED.** Deterministic Light Skeptic (pure Python, zero LLM calls) matches full-LLM Skeptic on framing accuracy:
@@ -51,12 +61,25 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
   - Tie or match on every family. Authority tied at 0.833 (n=6). Temporal n=5 at 100%.
   - All three live acceptance gates pass: INJ-014 / INJ-020 reach THREAT_DISMISSED under light pipeline; INJ-006 stays INCONCLUSIVE.
 - Temporal expansion (INJ-031..033) → registry_v3 = 33 scenarios
-- Tests: +255 (total 3,437)
 
 ### Session 051 — Paper 2 figures + docx skeleton + number_check
 - Documentation-only: 0 `ares/` changes, 0 LLM runs
 - 5 figures (300 DPI), 13-section docx skeleton, 18-claim number_check (all PASS)
-- Tests: +31 (total **3,578**)
+
+## Sessions 052–053 — Documentation Reconciliation
+
+### Session 052 — Paper 2 v1.1 prose integration + references compilation
+- `build_v1_1.py` integrates prose from `docs/paper_2/source/PAPER2_DRAFT_v1_1_source.md` into the v1 skeleton structure
+- `build_references.py` compiles `docs/paper_2/references.bib` into the docx (ACM/AISec author-year)
+- `number_check.py` extended with per-family three-way cells + prose-body substring checks (55/55 PASS)
+- Source markdown placed at `docs/paper_2/source/` with 61 em-dashes scrubbed to commas
+- Final: `PAPER2_DRAFT_v1_1.docx` (598 KB, 13 sections, 9 subsections, 5 figures), 55 new tests
+
+### Session 053 — Paper 1 canonical reconciliation + CLAUDE.md freshness
+- Paper 1 canonical decision: PDF is source of truth (`docs/paper_1/CANONICAL.md`)
+- Title reconciliation: working title in CLAUDE.md was a paraphrase; canonical title is the long form on the PDF cover
+- `gmys-casiano-2026` bib entry updated with canonical title and pointer to `CANONICAL.md`
+- `tests/test_claude_md_freshness.py` makes CLAUDE.md self-validating: declared floor must be ≤ actual collected count, declared canonical paths must exist, last-updated must be a parseable ISO date
 
 ## Architecture Constraints (NON-NEGOTIABLE)
 - Frozen dataclasses everywhere. No mutable state.
@@ -65,6 +88,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Squash merge to main only after zero regressions confirmed.
 - The OracleJudge is deterministic Python — NO LLM calls in the Oracle. Ever.
 - EvidencePacket is the unit of truth. SHA256-verified. Immutable.
+- CLAUDE.md is self-validating ground truth: declared test floor and canonical paths are checked by `tests/test_claude_md_freshness.py`. Update floor and paths in this file rather than embedding them inline in session prompts.
 
 ## Key Code Locations
 
@@ -106,10 +130,14 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - `ares/dialectic/scripts/analysis/ablation_comparison_report.py`
 - `ares/dialectic/scripts/analysis/three_way_comparison_report.py`
 
-### Prompts & paper
+### Paper tooling (Sessions 051–053)
 - v5 prompts: `ares/dialectic/agents/strategies/prompts_v5.py`
-- Phase 6 plan: `docs/PHASE6_INJECTION_ARENA.md`
-- Paper 2 figures + skeleton + number_check: `docs/paper_2/`
+- Paper 1 generator: `generate_paper.py` (kept for reproducibility; PDF is canonical)
+- Paper 2 figures: `docs/paper_2/figures/make_figures.py`
+- Paper 2 v1 skeleton builder: `docs/paper_2/build_skeleton.py`
+- Paper 2 v1.1 prose integrator: `docs/paper_2/build_v1_1.py`
+- Paper 2 references compiler: `docs/paper_2/build_references.py`
+- Paper 2 number-check: `docs/paper_2/number_check.py` (caption + prose-body modes)
 
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
@@ -130,5 +158,5 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 11. Deterministic Light Skeptic matches full-LLM Skeptic on framing (delta 0.00 across 25 scenarios) — **SUPPORTED**
 
 ## Branch
-`main` — sessions 045–051 all squash-merged and pushed to `origin/main`.
-Local-only branches `session-048..051` retained as historical refs (no upstream); safe to delete.
+`main` — sessions 045–053 all squash-merged and pushed to `origin/main`.
+Local-only branches `session-048..053` retained as historical refs (no upstream); safe to delete.
