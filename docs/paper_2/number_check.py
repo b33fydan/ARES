@@ -1,13 +1,13 @@
-"""Paper 2 number-check: cross-validate caption claims against source CSVs.
+"""Paper 2 number-check: cross-validate claims against source CSVs.
 
 Every numerical claim that appears in a Paper 2 figure caption
-(``make_figures.py`` docstrings) or in the skeleton's caption stubs
-must be traceable to a specific CSV or summary file under ``results/``.
-This script enumerates every such claim, resolves it against the source
-data, and emits a pass/fail report. The script exits with a non-zero
-status if any claim fails.
+(``make_figures.py`` docstrings), in the skeleton's caption stubs, or
+in the v1.1 prose body must be traceable to a specific CSV or summary
+file under ``results/``. This script enumerates every such claim,
+resolves it against the source data, and emits a pass/fail report.
+The script exits with a non-zero status if any claim fails.
 
-The claim table is the single source of truth — new figures add new
+The claim table is the single source of truth, new figures add new
 rows; removed figures strike rows. Every row includes:
 
     * a short label (used in the report)
@@ -15,12 +15,19 @@ rows; removed figures strike rows. Every row includes:
     * the source file + extraction instructions (function reference)
     * the tolerance (relative or absolute)
 
+When ``--docx`` is provided, the script also walks the prose body of
+the supplied docx and verifies that every value listed in
+``prose_substring_claims()`` appears in the prose text.
+
 Callers can also pass a broken fixture via ``--override-claims``
 to exercise the failure path during testing.
 
 CLI:
     python -m docs.paper_2.number_check
     python -m docs.paper_2.number_check --results-root results/
+    python -m docs.paper_2.number_check \\
+        --docx docs/paper_2/PAPER2_DRAFT_v1_1.docx \\
+        --out-report docs/paper_2/number_check_v1_1_report.md
 """
 
 from __future__ import annotations
@@ -300,6 +307,129 @@ def default_claims() -> tuple[Claim, ...]:
             resolver=lambda root: _resolve_s050_finding_11_ablated(root),
             tolerance=1e-3,
         ),
+        # === Per-family three-way cells (Section 7.3 of v1.1 prose) ===
+        Claim(
+            label="Session 050 severity n",
+            expected=3,
+            resolver=lambda root: _resolve_s050_family_n(root, "severity"),
+            tolerance=0,
+        ),
+        Claim(
+            label="Session 050 causal n",
+            expected=3,
+            resolver=lambda root: _resolve_s050_family_n(root, "causal"),
+            tolerance=0,
+        ),
+        Claim(
+            label="Session 050 narrative n",
+            expected=4,
+            resolver=lambda root: _resolve_s050_family_n(root, "narrative"),
+            tolerance=0,
+        ),
+        Claim(
+            label="Session 050 severity full accuracy",
+            expected=1.0,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "severity", "full",
+            ),
+            tolerance=1e-4,
+        ),
+        Claim(
+            label="Session 050 severity light accuracy",
+            expected=1.0,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "severity", "light",
+            ),
+            tolerance=1e-4,
+        ),
+        Claim(
+            label="Session 050 severity ablated accuracy",
+            expected=0.6667,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "severity", "ablated",
+            ),
+            tolerance=1e-3,
+        ),
+        Claim(
+            label="Session 050 authority full accuracy",
+            expected=0.8333,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "authority", "full",
+            ),
+            tolerance=1e-3,
+        ),
+        Claim(
+            label="Session 050 authority light accuracy",
+            expected=0.8333,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "authority", "light",
+            ),
+            tolerance=1e-3,
+        ),
+        Claim(
+            label="Session 050 authority ablated accuracy",
+            expected=0.8333,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "authority", "ablated",
+            ),
+            tolerance=1e-3,
+        ),
+        Claim(
+            label="Session 050 temporal ablated accuracy",
+            expected=0.6,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "temporal", "ablated",
+            ),
+            tolerance=1e-3,
+        ),
+        Claim(
+            label="Session 050 causal full accuracy",
+            expected=1.0,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "causal", "full",
+            ),
+            tolerance=1e-4,
+        ),
+        Claim(
+            label="Session 050 causal light accuracy",
+            expected=1.0,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "causal", "light",
+            ),
+            tolerance=1e-4,
+        ),
+        Claim(
+            label="Session 050 causal ablated accuracy",
+            expected=1.0,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "causal", "ablated",
+            ),
+            tolerance=1e-4,
+        ),
+        Claim(
+            label="Session 050 narrative full accuracy",
+            expected=0.75,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "narrative", "full",
+            ),
+            tolerance=1e-4,
+        ),
+        Claim(
+            label="Session 050 narrative light accuracy",
+            expected=0.75,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "narrative", "light",
+            ),
+            tolerance=1e-4,
+        ),
+        Claim(
+            label="Session 050 narrative ablated accuracy",
+            expected=0.5,
+            resolver=lambda root: _resolve_s050_family_accuracy(
+                root, "narrative", "ablated",
+            ),
+            tolerance=1e-4,
+        ),
     )
 
 
@@ -375,13 +505,78 @@ def write_report(report: str, out_path: Path) -> Path:
 
 
 # =============================================================================
+# Prose-body substring checks (used when --docx is provided)
+# =============================================================================
+
+
+def prose_substring_claims() -> tuple[str, ...]:
+    """Substrings that the v1.1 docx body must contain verbatim.
+
+    Each entry is a substring that, if missing from the prose, indicates
+    the v1.1 build has lost a numerical claim relative to the source
+    artifacts. Counts and INJ-IDs are checked here because they appear
+    only in body prose, not in the figure captions.
+    """
+    return (
+        # Corpus split. The prose enumerates the 27 = 4+19+4 split as
+        # individual category phrases; we check those rather than the
+        # arithmetic gloss. Bare "19" and "25" appear many times in the
+        # body and are tracked as sanity floor.
+        "27",          # total scenarios
+        "19",          # framing for ablation
+        "25",          # framing for three-way
+        "4 direct",    # direct category sentence
+        "19 framing",  # framing category sentence
+        "4 propagation",  # propagation category sentence
+        # Firewall detection (Findings 7 & 8).
+        "0 of 19",     # framing detection
+        "4 of 4",      # direct detection
+        "3 of 4",      # propagation detection
+        # Headline accuracies.
+        "0.7895",      # Session 048 framing accuracy
+        "0.8400",      # Session 050 full / light
+        "0.7200",      # Session 050 ablated
+        "21/25",       # full and light count form
+        "18/25",       # ablated count form
+        # INJ identifiers referenced in Findings 9, 10, 11.
+        "INJ-006", "INJ-008", "INJ-014", "INJ-020",
+        "INJ-024", "INJ-025", "INJ-027",
+    )
+
+
+def extract_docx_text(docx_path: Path) -> str:
+    """Concatenate every paragraph of a docx into one searchable string."""
+    from docx import Document  # local import to keep CSV-only mode dep-free
+    doc = Document(str(docx_path))
+    return "\n".join(p.text for p in doc.paragraphs)
+
+
+def check_prose_substrings(
+    docx_text: str,
+    substrings: Iterable[str],
+) -> tuple[CheckResult, ...]:
+    """Return one CheckResult per substring (passed iff present in text)."""
+    out: list[CheckResult] = []
+    for sub in substrings:
+        present = sub in docx_text
+        out.append(CheckResult(
+            label=f"prose contains '{sub}'",
+            expected=1.0,
+            actual=1.0 if present else 0.0,
+            tolerance=0.0,
+            passed=present,
+        ))
+    return tuple(out)
+
+
+# =============================================================================
 # CLI
 # =============================================================================
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Paper 2 caption number-check validator",
+        description="Paper 2 number-check validator (caption + prose body).",
     )
     parser.add_argument(
         "--results-root", type=Path, default=Path("results"),
@@ -392,6 +587,13 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=Path("docs/paper_2/number_check_report.md"),
         help="Destination for the markdown report",
     )
+    parser.add_argument(
+        "--docx", type=Path, default=None,
+        help=(
+            "Optional: validate the prose body of this docx (typically "
+            "PAPER2_DRAFT_v1_1.docx) against prose_substring_claims()."
+        ),
+    )
     return parser
 
 
@@ -399,7 +601,16 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
     parser = build_arg_parser()
     args = parser.parse_args(None if argv is None else list(argv))
 
-    results = run_checks(default_claims(), args.results_root)
+    results: tuple[CheckResult, ...] = run_checks(
+        default_claims(), args.results_root,
+    )
+
+    if args.docx is not None:
+        docx_text = extract_docx_text(args.docx.resolve())
+        results = results + check_prose_substrings(
+            docx_text, prose_substring_claims(),
+        )
+
     report = render_report(results)
     write_report(report, args.out_report)
 
@@ -408,7 +619,7 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
     print(f"[NUMBER-CHECK] {passed}/{total} claims validated")
     print(f"[NUMBER-CHECK] report: {args.out_report}")
     if passed < total:
-        print("[NUMBER-CHECK] FAIL — see report for details", file=sys.stderr)
+        print("[NUMBER-CHECK] FAIL, see report for details", file=sys.stderr)
         return 1
     return 0
 
