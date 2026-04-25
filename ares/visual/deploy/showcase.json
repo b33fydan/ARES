@@ -1,0 +1,2499 @@
+{
+  "ares_version": "v6",
+  "prompt_version": "v5",
+  "captured_at": "2026-04-06T20:08:24Z",
+  "scenario_count": 6,
+  "scenario_ids": [
+    "PT-001",
+    "PT-002",
+    "PT-006",
+    "SC-002",
+    "SC-008",
+    "SC-010"
+  ],
+  "total_events": 168,
+  "duration_ms": 115593,
+  "accuracy": "6/6",
+  "events": [
+    {
+      "timestamp_ms": 0,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1775505988999,
+        "scenario_id": "PT-001",
+        "scenario_name": "SQL Injection to Root Shell",
+        "expected_verdict": "THREAT_CONFIRMED",
+        "fact_count": 33,
+        "source_types": [
+          "pentest_tool"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 200,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505989201,
+        "scenario_id": "PT-001",
+        "fact_id": "msf-pt001-exploit-access_level",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "access_level",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 400,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505989401,
+        "scenario_id": "PT-001",
+        "fact_id": "msf-pt001-exploit-event_type",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 601,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505989601,
+        "scenario_id": "PT-001",
+        "fact_id": "msf-pt001-exploit-exploited",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "exploited",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 801,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505989802,
+        "scenario_id": "PT-001",
+        "fact_id": "msf-pt001-exploit-module",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "exploit_module",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 1001,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505990002,
+        "scenario_id": "PT-001",
+        "fact_id": "msf-pt001-exploit-payload",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "payload",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 1201,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505990202,
+        "scenario_id": "PT-001",
+        "fact_id": "msf-pt001-exploit-session_type",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "session_type",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 1401,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505990402,
+        "scenario_id": "PT-001",
+        "fact_id": "msf-pt001-exploit-target",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 0,
+        "fact_index": 6
+      }
+    },
+    {
+      "timestamp_ms": 1602,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505990602,
+        "scenario_id": "PT-001",
+        "fact_id": "msf-pt001-exploit-tool",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 1,
+        "fact_index": 7
+      }
+    },
+    {
+      "timestamp_ms": 1802,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505990803,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-event_type",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 2,
+        "fact_index": 8
+      }
+    },
+    {
+      "timestamp_ms": 2002,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505991003,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-os",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100",
+        "source_type": "pentest_tool",
+        "field_name": "os_detection",
+        "source_index": 0,
+        "fact_index": 9
+      }
+    },
+    {
+      "timestamp_ms": 2203,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505991204,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-parameters",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100",
+        "source_type": "pentest_tool",
+        "field_name": "parameters",
+        "source_index": 1,
+        "fact_index": 10
+      }
+    },
+    {
+      "timestamp_ms": 2403,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505991404,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-22-port",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:22",
+        "source_type": "pentest_tool",
+        "field_name": "port",
+        "source_index": 2,
+        "fact_index": 11
+      }
+    },
+    {
+      "timestamp_ms": 2604,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505991605,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-22-service",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:22",
+        "source_type": "pentest_tool",
+        "field_name": "service_name",
+        "source_index": 0,
+        "fact_index": 12
+      }
+    },
+    {
+      "timestamp_ms": 2805,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505991805,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-22-version",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:22",
+        "source_type": "pentest_tool",
+        "field_name": "service_version",
+        "source_index": 1,
+        "fact_index": 13
+      }
+    },
+    {
+      "timestamp_ms": 3005,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505992006,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-3306-port",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "port",
+        "source_index": 2,
+        "fact_index": 14
+      }
+    },
+    {
+      "timestamp_ms": 3205,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505992206,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-3306-service",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "service_name",
+        "source_index": 0,
+        "fact_index": 15
+      }
+    },
+    {
+      "timestamp_ms": 3405,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505992406,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-3306-version",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:3306",
+        "source_type": "pentest_tool",
+        "field_name": "service_version",
+        "source_index": 1,
+        "fact_index": 16
+      }
+    },
+    {
+      "timestamp_ms": 3606,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505992606,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-80-port",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:80",
+        "source_type": "pentest_tool",
+        "field_name": "port",
+        "source_index": 2,
+        "fact_index": 17
+      }
+    },
+    {
+      "timestamp_ms": 3806,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505992806,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-80-service",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:80",
+        "source_type": "pentest_tool",
+        "field_name": "service_name",
+        "source_index": 0,
+        "fact_index": 18
+      }
+    },
+    {
+      "timestamp_ms": 4006,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505993007,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-80-version",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:80",
+        "source_type": "pentest_tool",
+        "field_name": "service_version",
+        "source_index": 1,
+        "fact_index": 19
+      }
+    },
+    {
+      "timestamp_ms": 4206,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505993207,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-8080-port",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:8080",
+        "source_type": "pentest_tool",
+        "field_name": "port",
+        "source_index": 2,
+        "fact_index": 20
+      }
+    },
+    {
+      "timestamp_ms": 4406,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505993407,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-8080-service",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:8080",
+        "source_type": "pentest_tool",
+        "field_name": "service_name",
+        "source_index": 0,
+        "fact_index": 21
+      }
+    },
+    {
+      "timestamp_ms": 4608,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505993608,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-port-8080-version",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.100:8080",
+        "source_type": "pentest_tool",
+        "field_name": "service_version",
+        "source_index": 1,
+        "fact_index": 22
+      }
+    },
+    {
+      "timestamp_ms": 4808,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505993809,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-target",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 2,
+        "fact_index": 23
+      }
+    },
+    {
+      "timestamp_ms": 5009,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505994009,
+        "scenario_id": "PT-001",
+        "fact_id": "nmap-pt001-recon-tool",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.100",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 0,
+        "fact_index": 24
+      }
+    },
+    {
+      "timestamp_ms": 5209,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505994210,
+        "scenario_id": "PT-001",
+        "fact_id": "sqlmap-pt001-sqli-databases",
+        "entity_type": "node",
+        "entity_id": "target:http://10.20.30.100:8080/api/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "databases_found",
+        "source_index": 1,
+        "fact_index": 25
+      }
+    },
+    {
+      "timestamp_ms": 5409,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505994410,
+        "scenario_id": "PT-001",
+        "fact_id": "sqlmap-pt001-sqli-dbms",
+        "entity_type": "node",
+        "entity_id": "target:http://10.20.30.100:8080/api/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "dbms",
+        "source_index": 2,
+        "fact_index": 26
+      }
+    },
+    {
+      "timestamp_ms": 5610,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505994610,
+        "scenario_id": "PT-001",
+        "fact_id": "sqlmap-pt001-sqli-event_type",
+        "entity_type": "node",
+        "entity_id": "target:http://10.20.30.100:8080/api/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 0,
+        "fact_index": 27
+      }
+    },
+    {
+      "timestamp_ms": 5810,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505994811,
+        "scenario_id": "PT-001",
+        "fact_id": "sqlmap-pt001-sqli-injection_type",
+        "entity_type": "node",
+        "entity_id": "target:http://10.20.30.100:8080/api/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "injection_type",
+        "source_index": 1,
+        "fact_index": 28
+      }
+    },
+    {
+      "timestamp_ms": 6011,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505995011,
+        "scenario_id": "PT-001",
+        "fact_id": "sqlmap-pt001-sqli-parameter",
+        "entity_type": "node",
+        "entity_id": "target:http://10.20.30.100:8080/api/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "vulnerable_parameter",
+        "source_index": 2,
+        "fact_index": 29
+      }
+    },
+    {
+      "timestamp_ms": 6211,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505995211,
+        "scenario_id": "PT-001",
+        "fact_id": "sqlmap-pt001-sqli-target",
+        "entity_type": "node",
+        "entity_id": "target:http://10.20.30.100:8080/api/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 0,
+        "fact_index": 30
+      }
+    },
+    {
+      "timestamp_ms": 6411,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505995412,
+        "scenario_id": "PT-001",
+        "fact_id": "sqlmap-pt001-sqli-tool",
+        "entity_type": "node",
+        "entity_id": "target:http://10.20.30.100:8080/api/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 1,
+        "fact_index": 31
+      }
+    },
+    {
+      "timestamp_ms": 6611,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775505995612,
+        "scenario_id": "PT-001",
+        "fact_id": "sqlmap-pt001-sqli-vulnerable",
+        "entity_type": "node",
+        "entity_id": "target:http://10.20.30.100:8080/api/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "vulnerable",
+        "source_index": 2,
+        "fact_index": 32
+      }
+    },
+    {
+      "timestamp_ms": 6812,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "PT-001",
+        "status": "analyzing",
+        "timestamp_ms": 1775505995813
+      }
+    },
+    {
+      "timestamp_ms": 17235,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506006235,
+        "scenario_id": "PT-001",
+        "agent_role": "architect",
+        "fact_ids": [
+          "msf-pt001-exploit-access_level",
+          "msf-pt001-exploit-event_type",
+          "msf-pt001-exploit-exploited",
+          "msf-pt001-exploit-module",
+          "msf-pt001-exploit-payload",
+          "msf-pt001-exploit-session_type",
+          "msf-pt001-exploit-target",
+          "msf-pt001-exploit-tool",
+          "nmap-pt001-recon-event_type",
+          "nmap-pt001-recon-os",
+          "nmap-pt001-recon-parameters",
+          "nmap-pt001-recon-port-22-port",
+          "nmap-pt001-recon-port-22-service",
+          "nmap-pt001-recon-port-22-version",
+          "nmap-pt001-recon-port-3306-port",
+          "nmap-pt001-recon-port-3306-service",
+          "nmap-pt001-recon-port-3306-version",
+          "nmap-pt001-recon-port-80-port",
+          "nmap-pt001-recon-port-80-service",
+          "nmap-pt001-recon-port-80-version",
+          "nmap-pt001-recon-port-8080-port",
+          "nmap-pt001-recon-port-8080-service",
+          "nmap-pt001-recon-port-8080-version",
+          "nmap-pt001-recon-target",
+          "nmap-pt001-recon-tool",
+          "sqlmap-pt001-sqli-databases",
+          "sqlmap-pt001-sqli-dbms",
+          "sqlmap-pt001-sqli-event_type",
+          "sqlmap-pt001-sqli-injection_type",
+          "sqlmap-pt001-sqli-parameter",
+          "sqlmap-pt001-sqli-target",
+          "sqlmap-pt001-sqli-tool",
+          "sqlmap-pt001-sqli-vulnerable"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 17536,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506006537,
+        "scenario_id": "PT-001",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "msf-pt001-exploit-access_level",
+          "msf-pt001-exploit-exploited",
+          "msf-pt001-exploit-tool",
+          "nmap-pt001-recon-tool",
+          "sqlmap-pt001-sqli-tool"
+        ],
+        "coverage_ratio": 0.15151515151515152
+      }
+    },
+    {
+      "timestamp_ms": 17838,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1775506006839,
+        "scenario_id": "PT-001",
+        "architect_confidence": 0.92,
+        "skeptic_confidence": 0.4,
+        "delta": 0.52
+      }
+    },
+    {
+      "timestamp_ms": 18140,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1775506007140,
+        "scenario_id": "PT-001",
+        "architect_assertion_count": 1,
+        "skeptic_assertion_count": 1,
+        "verdict_outcome": "threat_confirmed",
+        "verdict_confidence": 0.92,
+        "expected_verdict": "THREAT_CONFIRMED",
+        "is_correct": true
+      }
+    },
+    {
+      "timestamp_ms": 18340,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1775506007340,
+        "scenario_id": "PT-001",
+        "outcome": "threat_confirmed",
+        "confidence": 0.92,
+        "correct": true
+      }
+    },
+    {
+      "timestamp_ms": 18540,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1775506007540,
+        "scenarios_completed": 1,
+        "scenarios_correct": 1,
+        "running_accuracy": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 18641,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1775506007642,
+        "scenario_id": "PT-001",
+        "duration_ms": 10421
+      }
+    },
+    {
+      "timestamp_ms": 21642,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1775506010643,
+        "scenario_id": "PT-002",
+        "scenario_name": "Hardened Target \u2014 Clean Assessment",
+        "expected_verdict": "THREAT_DISMISSED",
+        "fact_count": 24,
+        "source_types": [
+          "pentest_tool"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 21842,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506010843,
+        "scenario_id": "PT-002",
+        "fact_id": "gobuster-pt002-dirscan-event_type",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 22042,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506011043,
+        "scenario_id": "PT-002",
+        "fact_id": "gobuster-pt002-dirscan-path-0-path",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "discovered_path",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 22242,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506011243,
+        "scenario_id": "PT-002",
+        "fact_id": "gobuster-pt002-dirscan-path-0-status",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "http_status",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 22443,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506011443,
+        "scenario_id": "PT-002",
+        "fact_id": "gobuster-pt002-dirscan-path-1-path",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "discovered_path",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 22643,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506011644,
+        "scenario_id": "PT-002",
+        "fact_id": "gobuster-pt002-dirscan-path-1-status",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "http_status",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 22844,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506011844,
+        "scenario_id": "PT-002",
+        "fact_id": "gobuster-pt002-dirscan-path_count",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "discovered_path_count",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 23044,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506012045,
+        "scenario_id": "PT-002",
+        "fact_id": "gobuster-pt002-dirscan-target",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 0,
+        "fact_index": 6
+      }
+    },
+    {
+      "timestamp_ms": 23245,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506012245,
+        "scenario_id": "PT-002",
+        "fact_id": "gobuster-pt002-dirscan-tool",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 1,
+        "fact_index": 7
+      }
+    },
+    {
+      "timestamp_ms": 23445,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506012446,
+        "scenario_id": "PT-002",
+        "fact_id": "nmap-pt002-recon-event_type",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 2,
+        "fact_index": 8
+      }
+    },
+    {
+      "timestamp_ms": 23646,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506012646,
+        "scenario_id": "PT-002",
+        "fact_id": "nmap-pt002-recon-os",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "os_detection",
+        "source_index": 0,
+        "fact_index": 9
+      }
+    },
+    {
+      "timestamp_ms": 23846,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506012847,
+        "scenario_id": "PT-002",
+        "fact_id": "nmap-pt002-recon-parameters",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "parameters",
+        "source_index": 1,
+        "fact_index": 10
+      }
+    },
+    {
+      "timestamp_ms": 24047,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506013047,
+        "scenario_id": "PT-002",
+        "fact_id": "nmap-pt002-recon-port-443-port",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.200:443",
+        "source_type": "pentest_tool",
+        "field_name": "port",
+        "source_index": 2,
+        "fact_index": 11
+      }
+    },
+    {
+      "timestamp_ms": 24247,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506013247,
+        "scenario_id": "PT-002",
+        "fact_id": "nmap-pt002-recon-port-443-service",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.200:443",
+        "source_type": "pentest_tool",
+        "field_name": "service_name",
+        "source_index": 0,
+        "fact_index": 12
+      }
+    },
+    {
+      "timestamp_ms": 24447,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506013448,
+        "scenario_id": "PT-002",
+        "fact_id": "nmap-pt002-recon-port-443-version",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.200:443",
+        "source_type": "pentest_tool",
+        "field_name": "service_version",
+        "source_index": 1,
+        "fact_index": 13
+      }
+    },
+    {
+      "timestamp_ms": 24648,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506013648,
+        "scenario_id": "PT-002",
+        "fact_id": "nmap-pt002-recon-target",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 2,
+        "fact_index": 14
+      }
+    },
+    {
+      "timestamp_ms": 24848,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506013849,
+        "scenario_id": "PT-002",
+        "fact_id": "nmap-pt002-recon-tool",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 0,
+        "fact_index": 15
+      }
+    },
+    {
+      "timestamp_ms": 25048,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506014049,
+        "scenario_id": "PT-002",
+        "fact_id": "nuclei-pt002-vulnscan-event_type",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 1,
+        "fact_index": 16
+      }
+    },
+    {
+      "timestamp_ms": 25248,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506014249,
+        "scenario_id": "PT-002",
+        "fact_id": "nuclei-pt002-vulnscan-finding_count",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "finding_count",
+        "source_index": 2,
+        "fact_index": 17
+      }
+    },
+    {
+      "timestamp_ms": 25449,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506014449,
+        "scenario_id": "PT-002",
+        "fact_id": "nuclei-pt002-vulnscan-target",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 0,
+        "fact_index": 18
+      }
+    },
+    {
+      "timestamp_ms": 25649,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506014649,
+        "scenario_id": "PT-002",
+        "fact_id": "nuclei-pt002-vulnscan-tool",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 1,
+        "fact_index": 19
+      }
+    },
+    {
+      "timestamp_ms": 25849,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506014849,
+        "scenario_id": "PT-002",
+        "fact_id": "sqlmap-pt002-sqli-check-event_type",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200/api/search?q=test",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 2,
+        "fact_index": 20
+      }
+    },
+    {
+      "timestamp_ms": 26049,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506015050,
+        "scenario_id": "PT-002",
+        "fact_id": "sqlmap-pt002-sqli-check-target",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200/api/search?q=test",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 0,
+        "fact_index": 21
+      }
+    },
+    {
+      "timestamp_ms": 26250,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506015251,
+        "scenario_id": "PT-002",
+        "fact_id": "sqlmap-pt002-sqli-check-tool",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200/api/search?q=test",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 1,
+        "fact_index": 22
+      }
+    },
+    {
+      "timestamp_ms": 26451,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506015451,
+        "scenario_id": "PT-002",
+        "fact_id": "sqlmap-pt002-sqli-check-vulnerable",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.200/api/search?q=test",
+        "source_type": "pentest_tool",
+        "field_name": "vulnerable",
+        "source_index": 2,
+        "fact_index": 23
+      }
+    },
+    {
+      "timestamp_ms": 26651,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "PT-002",
+        "status": "analyzing",
+        "timestamp_ms": 1775506015652
+      }
+    },
+    {
+      "timestamp_ms": 40126,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506029127,
+        "scenario_id": "PT-002",
+        "agent_role": "architect",
+        "fact_ids": [
+          "gobuster-pt002-dirscan-event_type",
+          "gobuster-pt002-dirscan-path-0-path",
+          "gobuster-pt002-dirscan-path-0-status",
+          "gobuster-pt002-dirscan-path-1-path",
+          "gobuster-pt002-dirscan-path-1-status",
+          "gobuster-pt002-dirscan-path_count",
+          "gobuster-pt002-dirscan-target",
+          "gobuster-pt002-dirscan-tool",
+          "nmap-pt002-recon-event_type",
+          "nmap-pt002-recon-os",
+          "nmap-pt002-recon-parameters",
+          "nmap-pt002-recon-port-443-port",
+          "nmap-pt002-recon-port-443-service",
+          "nmap-pt002-recon-port-443-version",
+          "nmap-pt002-recon-target",
+          "nmap-pt002-recon-tool",
+          "nuclei-pt002-vulnscan-event_type",
+          "nuclei-pt002-vulnscan-finding_count",
+          "nuclei-pt002-vulnscan-target",
+          "nuclei-pt002-vulnscan-tool",
+          "sqlmap-pt002-sqli-check-event_type",
+          "sqlmap-pt002-sqli-check-target",
+          "sqlmap-pt002-sqli-check-tool",
+          "sqlmap-pt002-sqli-check-vulnerable"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 40427,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506029428,
+        "scenario_id": "PT-002",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "gobuster-pt002-dirscan-path-0-status",
+          "gobuster-pt002-dirscan-path-1-status",
+          "nuclei-pt002-vulnscan-finding_count",
+          "sqlmap-pt002-sqli-check-vulnerable"
+        ],
+        "coverage_ratio": 0.16666666666666666
+      }
+    },
+    {
+      "timestamp_ms": 40729,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1775506029729,
+        "scenario_id": "PT-002",
+        "architect_confidence": 0.3499999999999999,
+        "skeptic_confidence": 0.8,
+        "delta": -0.4500000000000001
+      }
+    },
+    {
+      "timestamp_ms": 41030,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1775506030030,
+        "scenario_id": "PT-002",
+        "architect_assertion_count": 1,
+        "skeptic_assertion_count": 1,
+        "verdict_outcome": "threat_dismissed",
+        "verdict_confidence": 0.8,
+        "expected_verdict": "THREAT_DISMISSED",
+        "is_correct": true
+      }
+    },
+    {
+      "timestamp_ms": 41230,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1775506030230,
+        "scenario_id": "PT-002",
+        "outcome": "threat_dismissed",
+        "confidence": 0.8,
+        "correct": true
+      }
+    },
+    {
+      "timestamp_ms": 41430,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1775506030431,
+        "scenarios_completed": 2,
+        "scenarios_correct": 2,
+        "running_accuracy": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 41532,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1775506030532,
+        "scenario_id": "PT-002",
+        "duration_ms": 13468
+      }
+    },
+    {
+      "timestamp_ms": 44532,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1775506033533,
+        "scenario_id": "PT-006",
+        "scenario_name": "Failed Exploitation \u2014 Patched Target",
+        "expected_verdict": "THREAT_DISMISSED",
+        "fact_count": 27,
+        "source_types": [
+          "pentest_tool"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 44733,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506033733,
+        "scenario_id": "PT-006",
+        "fact_id": "msf-pt006-exploit-fail-event_type",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250:3306",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 44933,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506033934,
+        "scenario_id": "PT-006",
+        "fact_id": "msf-pt006-exploit-fail-exploited",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250:3306",
+        "source_type": "pentest_tool",
+        "field_name": "exploited",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 45133,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506034134,
+        "scenario_id": "PT-006",
+        "fact_id": "msf-pt006-exploit-fail-module",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250:3306",
+        "source_type": "pentest_tool",
+        "field_name": "exploit_module",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 45334,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506034335,
+        "scenario_id": "PT-006",
+        "fact_id": "msf-pt006-exploit-fail-target",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250:3306",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 45535,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506034535,
+        "scenario_id": "PT-006",
+        "fact_id": "msf-pt006-exploit-fail-tool",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250:3306",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 45736,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506034736,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-event_type",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 45936,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506034936,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-os",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250",
+        "source_type": "pentest_tool",
+        "field_name": "os_detection",
+        "source_index": 0,
+        "fact_index": 6
+      }
+    },
+    {
+      "timestamp_ms": 46136,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506035137,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-parameters",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250",
+        "source_type": "pentest_tool",
+        "field_name": "parameters",
+        "source_index": 1,
+        "fact_index": 7
+      }
+    },
+    {
+      "timestamp_ms": 46337,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506035337,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-port-22-port",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.250:22",
+        "source_type": "pentest_tool",
+        "field_name": "port",
+        "source_index": 2,
+        "fact_index": 8
+      }
+    },
+    {
+      "timestamp_ms": 46537,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506035537,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-port-22-service",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.250:22",
+        "source_type": "pentest_tool",
+        "field_name": "service_name",
+        "source_index": 0,
+        "fact_index": 9
+      }
+    },
+    {
+      "timestamp_ms": 46737,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506035738,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-port-22-version",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.250:22",
+        "source_type": "pentest_tool",
+        "field_name": "service_version",
+        "source_index": 1,
+        "fact_index": 10
+      }
+    },
+    {
+      "timestamp_ms": 46938,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506035938,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-port-3306-port",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.250:3306",
+        "source_type": "pentest_tool",
+        "field_name": "port",
+        "source_index": 2,
+        "fact_index": 11
+      }
+    },
+    {
+      "timestamp_ms": 47138,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506036138,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-port-3306-service",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.250:3306",
+        "source_type": "pentest_tool",
+        "field_name": "service_name",
+        "source_index": 0,
+        "fact_index": 12
+      }
+    },
+    {
+      "timestamp_ms": 47338,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506036339,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-port-3306-version",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.250:3306",
+        "source_type": "pentest_tool",
+        "field_name": "service_version",
+        "source_index": 1,
+        "fact_index": 13
+      }
+    },
+    {
+      "timestamp_ms": 47539,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506036540,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-port-443-port",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.250:443",
+        "source_type": "pentest_tool",
+        "field_name": "port",
+        "source_index": 2,
+        "fact_index": 14
+      }
+    },
+    {
+      "timestamp_ms": 47739,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506036740,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-port-443-service",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.250:443",
+        "source_type": "pentest_tool",
+        "field_name": "service_name",
+        "source_index": 0,
+        "fact_index": 15
+      }
+    },
+    {
+      "timestamp_ms": 47940,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506036940,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-port-443-version",
+        "entity_type": "node",
+        "entity_id": "service:10.20.30.250:443",
+        "source_type": "pentest_tool",
+        "field_name": "service_version",
+        "source_index": 1,
+        "fact_index": 16
+      }
+    },
+    {
+      "timestamp_ms": 48140,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506037141,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-target",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 2,
+        "fact_index": 17
+      }
+    },
+    {
+      "timestamp_ms": 48341,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506037341,
+        "scenario_id": "PT-006",
+        "fact_id": "nmap-pt006-recon-tool",
+        "entity_type": "node",
+        "entity_id": "target:10.20.30.250",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 0,
+        "fact_index": 18
+      }
+    },
+    {
+      "timestamp_ms": 48541,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506037541,
+        "scenario_id": "PT-006",
+        "fact_id": "nuclei-pt006-vulnscan-event_type",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.250",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 1,
+        "fact_index": 19
+      }
+    },
+    {
+      "timestamp_ms": 48741,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506037741,
+        "scenario_id": "PT-006",
+        "fact_id": "nuclei-pt006-vulnscan-finding_count",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.250",
+        "source_type": "pentest_tool",
+        "field_name": "finding_count",
+        "source_index": 2,
+        "fact_index": 20
+      }
+    },
+    {
+      "timestamp_ms": 48941,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506037942,
+        "scenario_id": "PT-006",
+        "fact_id": "nuclei-pt006-vulnscan-target",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.250",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 0,
+        "fact_index": 21
+      }
+    },
+    {
+      "timestamp_ms": 49141,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506038142,
+        "scenario_id": "PT-006",
+        "fact_id": "nuclei-pt006-vulnscan-tool",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.250",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 1,
+        "fact_index": 22
+      }
+    },
+    {
+      "timestamp_ms": 49341,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506038342,
+        "scenario_id": "PT-006",
+        "fact_id": "sqlmap-pt006-sqli-check-event_type",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.250/api/v2/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "event_type",
+        "source_index": 2,
+        "fact_index": 23
+      }
+    },
+    {
+      "timestamp_ms": 49542,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506038542,
+        "scenario_id": "PT-006",
+        "fact_id": "sqlmap-pt006-sqli-check-target",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.250/api/v2/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "target",
+        "source_index": 0,
+        "fact_index": 24
+      }
+    },
+    {
+      "timestamp_ms": 49742,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506038742,
+        "scenario_id": "PT-006",
+        "fact_id": "sqlmap-pt006-sqli-check-tool",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.250/api/v2/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "tool",
+        "source_index": 1,
+        "fact_index": 25
+      }
+    },
+    {
+      "timestamp_ms": 49942,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506038942,
+        "scenario_id": "PT-006",
+        "fact_id": "sqlmap-pt006-sqli-check-vulnerable",
+        "entity_type": "node",
+        "entity_id": "target:https://10.20.30.250/api/v2/users?id=1",
+        "source_type": "pentest_tool",
+        "field_name": "vulnerable",
+        "source_index": 2,
+        "fact_index": 26
+      }
+    },
+    {
+      "timestamp_ms": 50142,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "PT-006",
+        "status": "analyzing",
+        "timestamp_ms": 1775506039142
+      }
+    },
+    {
+      "timestamp_ms": 61318,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506050318,
+        "scenario_id": "PT-006",
+        "agent_role": "architect",
+        "fact_ids": [
+          "msf-pt006-exploit-fail-event_type",
+          "msf-pt006-exploit-fail-exploited",
+          "msf-pt006-exploit-fail-module",
+          "msf-pt006-exploit-fail-target",
+          "msf-pt006-exploit-fail-tool",
+          "nmap-pt006-recon-event_type",
+          "nmap-pt006-recon-os",
+          "nmap-pt006-recon-parameters",
+          "nmap-pt006-recon-port-22-port",
+          "nmap-pt006-recon-port-22-service",
+          "nmap-pt006-recon-port-22-version",
+          "nmap-pt006-recon-port-3306-port",
+          "nmap-pt006-recon-port-3306-service",
+          "nmap-pt006-recon-port-3306-version",
+          "nmap-pt006-recon-port-443-port",
+          "nmap-pt006-recon-port-443-service",
+          "nmap-pt006-recon-port-443-version",
+          "nmap-pt006-recon-target",
+          "nmap-pt006-recon-tool",
+          "nuclei-pt006-vulnscan-event_type",
+          "nuclei-pt006-vulnscan-finding_count",
+          "nuclei-pt006-vulnscan-target",
+          "nuclei-pt006-vulnscan-tool",
+          "sqlmap-pt006-sqli-check-event_type",
+          "sqlmap-pt006-sqli-check-target",
+          "sqlmap-pt006-sqli-check-tool",
+          "sqlmap-pt006-sqli-check-vulnerable"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 61619,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506050620,
+        "scenario_id": "PT-006",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "msf-pt006-exploit-fail-event_type",
+          "msf-pt006-exploit-fail-exploited",
+          "nmap-pt006-recon-event_type",
+          "nuclei-pt006-vulnscan-event_type",
+          "nuclei-pt006-vulnscan-finding_count",
+          "sqlmap-pt006-sqli-check-event_type",
+          "sqlmap-pt006-sqli-check-vulnerable"
+        ],
+        "coverage_ratio": 0.25925925925925924
+      }
+    },
+    {
+      "timestamp_ms": 61921,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1775506050921,
+        "scenario_id": "PT-006",
+        "architect_confidence": 0.35,
+        "skeptic_confidence": 0.8,
+        "delta": -0.45000000000000007
+      }
+    },
+    {
+      "timestamp_ms": 62222,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1775506051223,
+        "scenario_id": "PT-006",
+        "architect_assertion_count": 1,
+        "skeptic_assertion_count": 1,
+        "verdict_outcome": "threat_dismissed",
+        "verdict_confidence": 0.8,
+        "expected_verdict": "THREAT_DISMISSED",
+        "is_correct": true
+      }
+    },
+    {
+      "timestamp_ms": 62422,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1775506051423,
+        "scenario_id": "PT-006",
+        "outcome": "threat_dismissed",
+        "confidence": 0.8,
+        "correct": true
+      }
+    },
+    {
+      "timestamp_ms": 62623,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1775506051624,
+        "scenarios_completed": 3,
+        "scenarios_correct": 3,
+        "running_accuracy": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 62725,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1775506051725,
+        "scenario_id": "PT-006",
+        "duration_ms": 11171
+      }
+    },
+    {
+      "timestamp_ms": 65725,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1775506054726,
+        "scenario_id": "SC-002",
+        "scenario_name": "Suspicious Process Chain",
+        "expected_verdict": "THREAT_CONFIRMED",
+        "fact_count": 6,
+        "source_types": [
+          "process_list"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 65925,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506054926,
+        "scenario_id": "SC-002",
+        "fact_id": "sc002-fact-001",
+        "entity_type": "node",
+        "entity_id": "proc-excel",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 66126,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506055126,
+        "scenario_id": "SC-002",
+        "fact_id": "sc002-fact-002",
+        "entity_type": "node",
+        "entity_id": "proc-excel",
+        "source_type": "process_list",
+        "field_name": "executable_user",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 66326,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506055326,
+        "scenario_id": "SC-002",
+        "fact_id": "sc002-fact-003",
+        "entity_type": "node",
+        "entity_id": "proc-cmd",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 66527,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506055527,
+        "scenario_id": "SC-002",
+        "fact_id": "sc002-fact-004",
+        "entity_type": "node",
+        "entity_id": "proc-cmd",
+        "source_type": "process_list",
+        "field_name": "parent_process",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 66727,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506055727,
+        "scenario_id": "SC-002",
+        "fact_id": "sc002-fact-005",
+        "entity_type": "node",
+        "entity_id": "proc-ps",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 66928,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506055928,
+        "scenario_id": "SC-002",
+        "fact_id": "sc002-fact-006",
+        "entity_type": "node",
+        "entity_id": "proc-ps",
+        "source_type": "process_list",
+        "field_name": "command_line",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 67128,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "SC-002",
+        "status": "analyzing",
+        "timestamp_ms": 1775506056128
+      }
+    },
+    {
+      "timestamp_ms": 73432,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506062432,
+        "scenario_id": "SC-002",
+        "agent_role": "architect",
+        "fact_ids": [
+          "sc002-fact-001",
+          "sc002-fact-002",
+          "sc002-fact-003",
+          "sc002-fact-004",
+          "sc002-fact-005",
+          "sc002-fact-006"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 73733,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506062734,
+        "scenario_id": "SC-002",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "sc002-fact-001",
+          "sc002-fact-002",
+          "sc002-fact-004",
+          "sc002-fact-005",
+          "sc002-fact-006"
+        ],
+        "coverage_ratio": 0.8333333333333334
+      }
+    },
+    {
+      "timestamp_ms": 74035,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1775506063035,
+        "scenario_id": "SC-002",
+        "architect_confidence": 0.82,
+        "skeptic_confidence": 0.3,
+        "delta": 0.52
+      }
+    },
+    {
+      "timestamp_ms": 74336,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1775506063337,
+        "scenario_id": "SC-002",
+        "architect_assertion_count": 1,
+        "skeptic_assertion_count": 1,
+        "verdict_outcome": "threat_confirmed",
+        "verdict_confidence": 0.82,
+        "expected_verdict": "THREAT_CONFIRMED",
+        "is_correct": true
+      }
+    },
+    {
+      "timestamp_ms": 74537,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1775506063537,
+        "scenario_id": "SC-002",
+        "outcome": "threat_confirmed",
+        "confidence": 0.82,
+        "correct": true
+      }
+    },
+    {
+      "timestamp_ms": 74737,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1775506063737,
+        "scenarios_completed": 4,
+        "scenarios_correct": 4,
+        "running_accuracy": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 74839,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1775506063839,
+        "scenario_id": "SC-002",
+        "duration_ms": 6297
+      }
+    },
+    {
+      "timestamp_ms": 77839,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1775506066840,
+        "scenario_id": "SC-008",
+        "scenario_name": "Benign Activity Mimicking Malware",
+        "expected_verdict": "THREAT_DISMISSED",
+        "fact_count": 8,
+        "source_types": [
+          "process_list"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 78039,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506067040,
+        "scenario_id": "SC-008",
+        "fact_id": "sc008-fact-001",
+        "entity_type": "node",
+        "entity_id": "proc-defender",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 78239,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506067240,
+        "scenario_id": "SC-008",
+        "fact_id": "sc008-fact-002",
+        "entity_type": "node",
+        "entity_id": "proc-defender",
+        "source_type": "process_list",
+        "field_name": "lsass_access_granted",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 78440,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506067440,
+        "scenario_id": "SC-008",
+        "fact_id": "sc008-fact-003",
+        "entity_type": "node",
+        "entity_id": "proc-ps-update",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 78640,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506067641,
+        "scenario_id": "SC-008",
+        "fact_id": "sc008-fact-004",
+        "entity_type": "node",
+        "entity_id": "proc-ps-update",
+        "source_type": "process_list",
+        "field_name": "command_line",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 78840,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506067841,
+        "scenario_id": "SC-008",
+        "fact_id": "sc008-fact-005",
+        "entity_type": "node",
+        "entity_id": "schtask-mod",
+        "source_type": "process_list",
+        "field_name": "scheduled_task_modified",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 79040,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506068041,
+        "scenario_id": "SC-008",
+        "fact_id": "sc008-fact-006",
+        "entity_type": "node",
+        "entity_id": "file-sig",
+        "source_type": "process_list",
+        "field_name": "file_signature_status",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 79240,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506068241,
+        "scenario_id": "SC-008",
+        "fact_id": "sc008-fact-007",
+        "entity_type": "node",
+        "entity_id": "temp-file",
+        "source_type": "process_list",
+        "field_name": "file_created",
+        "source_index": 0,
+        "fact_index": 6
+      }
+    },
+    {
+      "timestamp_ms": 79441,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506068442,
+        "scenario_id": "SC-008",
+        "fact_id": "sc008-fact-008",
+        "entity_type": "node",
+        "entity_id": "defender-service",
+        "source_type": "process_list",
+        "field_name": "service_status",
+        "source_index": 1,
+        "fact_index": 7
+      }
+    },
+    {
+      "timestamp_ms": 79641,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "SC-008",
+        "status": "analyzing",
+        "timestamp_ms": 1775506068642
+      }
+    },
+    {
+      "timestamp_ms": 88991,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506077992,
+        "scenario_id": "SC-008",
+        "agent_role": "architect",
+        "fact_ids": [
+          "sc008-fact-001",
+          "sc008-fact-002",
+          "sc008-fact-003",
+          "sc008-fact-004",
+          "sc008-fact-005",
+          "sc008-fact-006",
+          "sc008-fact-007",
+          "sc008-fact-008"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 89293,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506078293,
+        "scenario_id": "SC-008",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "sc008-fact-001",
+          "sc008-fact-002",
+          "sc008-fact-003",
+          "sc008-fact-004",
+          "sc008-fact-005",
+          "sc008-fact-006",
+          "sc008-fact-007",
+          "sc008-fact-008"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 89595,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1775506078595,
+        "scenario_id": "SC-008",
+        "architect_confidence": 0.15,
+        "skeptic_confidence": 0.9,
+        "delta": -0.75
+      }
+    },
+    {
+      "timestamp_ms": 89896,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1775506078896,
+        "scenario_id": "SC-008",
+        "architect_assertion_count": 1,
+        "skeptic_assertion_count": 1,
+        "verdict_outcome": "threat_dismissed",
+        "verdict_confidence": 0.9,
+        "expected_verdict": "THREAT_DISMISSED",
+        "is_correct": true
+      }
+    },
+    {
+      "timestamp_ms": 90096,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1775506079096,
+        "scenario_id": "SC-008",
+        "outcome": "threat_dismissed",
+        "confidence": 0.9,
+        "correct": true
+      }
+    },
+    {
+      "timestamp_ms": 90296,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1775506079296,
+        "scenarios_completed": 5,
+        "scenarios_correct": 5,
+        "running_accuracy": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 90397,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1775506079398,
+        "scenario_id": "SC-008",
+        "duration_ms": 9342
+      }
+    },
+    {
+      "timestamp_ms": 93398,
+      "event": {
+        "event_type": "scenario_start",
+        "timestamp_ms": 1775506082399,
+        "scenario_id": "SC-010",
+        "scenario_name": "Multi-Vector Campaign",
+        "expected_verdict": "THREAT_CONFIRMED",
+        "fact_count": 16,
+        "source_types": [
+          "auth_log",
+          "netflow",
+          "process_list"
+        ]
+      }
+    },
+    {
+      "timestamp_ms": 93599,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506082599,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-001",
+        "entity_type": "node",
+        "entity_id": "proc-word",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 0,
+        "fact_index": 0
+      }
+    },
+    {
+      "timestamp_ms": 93800,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506082800,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-002",
+        "entity_type": "node",
+        "entity_id": "proc-word",
+        "source_type": "process_list",
+        "field_name": "file_opened",
+        "source_index": 1,
+        "fact_index": 1
+      }
+    },
+    {
+      "timestamp_ms": 94000,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506083001,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-003",
+        "entity_type": "node",
+        "entity_id": "proc-cmd-1",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 2,
+        "fact_index": 2
+      }
+    },
+    {
+      "timestamp_ms": 94201,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506083202,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-004",
+        "entity_type": "node",
+        "entity_id": "proc-cmd-1",
+        "source_type": "process_list",
+        "field_name": "parent_process",
+        "source_index": 0,
+        "fact_index": 3
+      }
+    },
+    {
+      "timestamp_ms": 94401,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506083402,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-005",
+        "entity_type": "node",
+        "entity_id": "proc-dump",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 1,
+        "fact_index": 4
+      }
+    },
+    {
+      "timestamp_ms": 94601,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506083602,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-006",
+        "entity_type": "node",
+        "entity_id": "proc-dump",
+        "source_type": "process_list",
+        "field_name": "command_line",
+        "source_index": 2,
+        "fact_index": 5
+      }
+    },
+    {
+      "timestamp_ms": 94802,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506083803,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-007",
+        "entity_type": "node",
+        "entity_id": "cred-lsass",
+        "source_type": "process_list",
+        "field_name": "lsass_access_granted",
+        "source_index": 0,
+        "fact_index": 6
+      }
+    },
+    {
+      "timestamp_ms": 95003,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506084003,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-008",
+        "entity_type": "edge",
+        "entity_id": "lateral-1",
+        "source_type": "auth_log",
+        "field_name": "remote_desktop_session",
+        "source_index": 1,
+        "fact_index": 7
+      }
+    },
+    {
+      "timestamp_ms": 95203,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506084203,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-009",
+        "entity_type": "edge",
+        "entity_id": "lateral-2",
+        "source_type": "auth_log",
+        "field_name": "remote_desktop_session",
+        "source_index": 2,
+        "fact_index": 8
+      }
+    },
+    {
+      "timestamp_ms": 95403,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506084404,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-010",
+        "entity_type": "edge",
+        "entity_id": "lateral-3",
+        "source_type": "netflow",
+        "field_name": "smb_lateral_traffic",
+        "source_index": 0,
+        "fact_index": 9
+      }
+    },
+    {
+      "timestamp_ms": 95604,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506084604,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-011",
+        "entity_type": "node",
+        "entity_id": "staging",
+        "source_type": "process_list",
+        "field_name": "file_copy_operation",
+        "source_index": 1,
+        "fact_index": 10
+      }
+    },
+    {
+      "timestamp_ms": 95804,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506084805,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-012",
+        "entity_type": "node",
+        "entity_id": "compress",
+        "source_type": "process_list",
+        "field_name": "process_name",
+        "source_index": 2,
+        "fact_index": 11
+      }
+    },
+    {
+      "timestamp_ms": 96005,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506085005,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-013",
+        "entity_type": "node",
+        "entity_id": "compress",
+        "source_type": "process_list",
+        "field_name": "command_line",
+        "source_index": 0,
+        "fact_index": 12
+      }
+    },
+    {
+      "timestamp_ms": 96205,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506085205,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-014",
+        "entity_type": "edge",
+        "entity_id": "exfil-conn",
+        "source_type": "netflow",
+        "field_name": "network_connection",
+        "source_index": 1,
+        "fact_index": 13
+      }
+    },
+    {
+      "timestamp_ms": 96405,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506085405,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-015",
+        "entity_type": "edge",
+        "entity_id": "exfil-ip",
+        "source_type": "netflow",
+        "field_name": "remote_ip_reputation",
+        "source_index": 2,
+        "fact_index": 14
+      }
+    },
+    {
+      "timestamp_ms": 96606,
+      "event": {
+        "event_type": "fact_ingested",
+        "timestamp_ms": 1775506085606,
+        "scenario_id": "SC-010",
+        "fact_id": "sc010-fact-016",
+        "entity_type": "node",
+        "entity_id": "user-exec01",
+        "source_type": "auth_log",
+        "field_name": "logon_account",
+        "source_index": 0,
+        "fact_index": 15
+      }
+    },
+    {
+      "timestamp_ms": 96806,
+      "event": {
+        "event_type": "analysis_status",
+        "scenario_id": "SC-010",
+        "status": "analyzing",
+        "timestamp_ms": 1775506085806
+      }
+    },
+    {
+      "timestamp_ms": 114189,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506103190,
+        "scenario_id": "SC-010",
+        "agent_role": "architect",
+        "fact_ids": [
+          "sc010-fact-001",
+          "sc010-fact-002",
+          "sc010-fact-003",
+          "sc010-fact-004",
+          "sc010-fact-005",
+          "sc010-fact-006",
+          "sc010-fact-007",
+          "sc010-fact-008",
+          "sc010-fact-009",
+          "sc010-fact-010",
+          "sc010-fact-011",
+          "sc010-fact-012",
+          "sc010-fact-013",
+          "sc010-fact-014",
+          "sc010-fact-015",
+          "sc010-fact-016"
+        ],
+        "coverage_ratio": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 114491,
+      "event": {
+        "event_type": "fact_cited",
+        "timestamp_ms": 1775506103491,
+        "scenario_id": "SC-010",
+        "agent_role": "skeptic",
+        "fact_ids": [
+          "sc010-fact-002",
+          "sc010-fact-003",
+          "sc010-fact-004",
+          "sc010-fact-005",
+          "sc010-fact-006",
+          "sc010-fact-007",
+          "sc010-fact-008",
+          "sc010-fact-009",
+          "sc010-fact-010",
+          "sc010-fact-011",
+          "sc010-fact-012",
+          "sc010-fact-013",
+          "sc010-fact-016"
+        ],
+        "coverage_ratio": 0.8125
+      }
+    },
+    {
+      "timestamp_ms": 114793,
+      "event": {
+        "event_type": "confidence_update",
+        "timestamp_ms": 1775506103793,
+        "scenario_id": "SC-010",
+        "architect_confidence": 1.0,
+        "skeptic_confidence": 0.43846153846153846,
+        "delta": 0.5615384615384615
+      }
+    },
+    {
+      "timestamp_ms": 115094,
+      "event": {
+        "event_type": "debate_summary",
+        "timestamp_ms": 1775506104095,
+        "scenario_id": "SC-010",
+        "architect_assertion_count": 5,
+        "skeptic_assertion_count": 6,
+        "verdict_outcome": "threat_confirmed",
+        "verdict_confidence": 1.0,
+        "expected_verdict": "THREAT_CONFIRMED",
+        "is_correct": true
+      }
+    },
+    {
+      "timestamp_ms": 115294,
+      "event": {
+        "event_type": "verdict_rendered",
+        "timestamp_ms": 1775506104295,
+        "scenario_id": "SC-010",
+        "outcome": "threat_confirmed",
+        "confidence": 1.0,
+        "correct": true
+      }
+    },
+    {
+      "timestamp_ms": 115494,
+      "event": {
+        "event_type": "accuracy_milestone",
+        "timestamp_ms": 1775506104495,
+        "scenarios_completed": 6,
+        "scenarios_correct": 6,
+        "running_accuracy": 1.0
+      }
+    },
+    {
+      "timestamp_ms": 115596,
+      "event": {
+        "event_type": "scenario_end",
+        "timestamp_ms": 1775506104596,
+        "scenario_id": "SC-010",
+        "duration_ms": 17389
+      }
+    }
+  ]
+}
