@@ -17,6 +17,11 @@ canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 
 #stage-info{position:absolute;top:62px;left:20px;opacity:0;transition:opacity .6s;font-size:10px;letter-spacing:1px}
 
+#narration{position:absolute;top:0;left:0;right:0;text-align:center;padding:10px 60px;
+  font-size:11px;letter-spacing:0.8px;opacity:0;transition:opacity .8s;
+  color:#c0d8ee;text-shadow:0 0 8px #00000088;pointer-events:none;
+  background:linear-gradient(180deg,rgba(3,3,8,0.6) 0%,transparent 100%)}
+
 #accuracy{position:absolute;top:16px;right:20px;text-align:right;opacity:0;transition:opacity .6s}
 #accuracy .frac{font-size:13px;opacity:.55;letter-spacing:.5px}
 #accuracy .pct{font-size:26px;font-weight:bold;letter-spacing:1px;text-shadow:0 0 12px currentColor}
@@ -86,6 +91,7 @@ canvas{display:block;position:fixed;top:0;left:0;z-index:0}
   #scenario-label .name{font-size:11px}
   #scenario-label .meta{font-size:9px}
   #stage-info{font-size:9px;top:52px}
+  #narration{font-size:9px;padding:6px 20px}
 
   #accuracy .pct{font-size:20px}
   #accuracy .frac{font-size:11px}
@@ -137,6 +143,7 @@ canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 </head>
 <body>
 <div id="hud">
+  <div id="narration"></div>
   <div id="scenario-label"><div class="sid"></div><div class="name"></div><div class="meta"></div></div>
   <div id="stage-info"></div>
   <div id="accuracy"><div class="frac"></div><div class="pct"></div></div>
@@ -203,8 +210,8 @@ const VERDICT_HEX = {threat_confirmed:0xff3300,threat_dismissed:0x00ff66,inconcl
 const VERDICT_CSS = {threat_confirmed:'#ff3300',threat_dismissed:'#00ff66',inconclusive:'#ffaa00'};
 const VERDICT_LABEL = {threat_confirmed:'THREAT CONFIRMED',threat_dismissed:'THREAT DISMISSED',inconclusive:'INCONCLUSIVE'};
 const CLUSTER_CENTER = {PROCESS:[-4,0,0],NETWORK:[4,0,0],FILE:[0,0,-4],USER:[0,0,4],AUTH:[1.5,0,4],DEFAULT:[0,1.5,0]};
-const DIM_ALPHA = 0.12;
-const BRIGHT_ALPHA = 0.85;
+const DIM_ALPHA = 0.20;
+const BRIGHT_ALPHA = 1.0;
 
 // =========================================================================
 // KILL CHAIN STAGE CLASSIFICATION (v6 NEW)
@@ -279,7 +286,7 @@ const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(innerWidth,innerHeight);
 renderer.setPixelRatio(Math.min(devicePixelRatio, IS_MOBILE ? 1.5 : 2));
 document.body.prepend(renderer.domElement);
-scene.add(new THREE.AmbientLight(0x101820,0.15));
+scene.add(new THREE.AmbientLight(0x101820,0.22));
 
 // Subtle grid
 const grid = new THREE.GridHelper(40,40,0x0c0c14,0x080810);
@@ -327,7 +334,7 @@ const P = {
     this.geometry.setAttribute('size', new THREE.BufferAttribute(this.sizes, 1));
     // We'll use a custom approach for per-particle alpha via color brightness
     this.material = new THREE.PointsMaterial({
-      map: glowTex, size: 0.3, transparent: true, opacity: 1.0,
+      map: glowTex, size: 0.48, transparent: true, opacity: 1.0,
       blending: THREE.AdditiveBlending, depthWrite: false,
       vertexColors: true, sizeAttenuation: true,
     });
@@ -386,7 +393,7 @@ const Connections = {
     this.geometry.setAttribute('position', new THREE.BufferAttribute(this.posBuffer, 3));
     this.geometry.setAttribute('color', new THREE.BufferAttribute(this.colBuffer, 3));
     this.material = new THREE.LineBasicMaterial({
-      transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending,
+      transparent: true, opacity: 0.50, blending: THREE.AdditiveBlending,
       depthWrite: false, vertexColors: true,
     });
     this.lineSegments = new THREE.LineSegments(this.geometry, this.material);
@@ -421,7 +428,7 @@ const Connections = {
           this.posBuffer[off+3]=pos[j*3]; this.posBuffer[off+4]=pos[j*3+1]; this.posBuffer[off+5]=pos[j*3+2];
           // Color = average of the two particles, dimmed by distance
           const fade = 1.0 - Math.sqrt(d2) / PHY.CONNECT_DIST;
-          const f = fade * 0.5;
+          const f = fade * 1.0;
           this.colBuffer[off]=(cols[i*3]+cols[j*3])*f; this.colBuffer[off+1]=(cols[i*3+1]+cols[j*3+1])*f; this.colBuffer[off+2]=(cols[i*3+2]+cols[j*3+2])*f;
           this.colBuffer[off+3]=this.colBuffer[off]; this.colBuffer[off+4]=this.colBuffer[off+1]; this.colBuffer[off+5]=this.colBuffer[off+2];
           lineCount++;
@@ -453,8 +460,8 @@ const Connections = {
           this.posBuffer[off+3]=pos[ti*3]; this.posBuffer[off+4]=pos[ti*3+1]; this.posBuffer[off+5]=pos[ti*3+2];
           const fromColor = new THREE.Color(STAGE_COLORS[STAGE_ORDER[si]]);
           const toColor = new THREE.Color(STAGE_COLORS[STAGE_ORDER[si+1]]);
-          this.colBuffer[off]=fromColor.r*0.3; this.colBuffer[off+1]=fromColor.g*0.3; this.colBuffer[off+2]=fromColor.b*0.3;
-          this.colBuffer[off+3]=toColor.r*0.3; this.colBuffer[off+4]=toColor.g*0.3; this.colBuffer[off+5]=toColor.b*0.3;
+          this.colBuffer[off]=fromColor.r*0.77; this.colBuffer[off+1]=fromColor.g*0.77; this.colBuffer[off+2]=fromColor.b*0.77;
+          this.colBuffer[off+3]=toColor.r*0.77; this.colBuffer[off+4]=toColor.g*0.77; this.colBuffer[off+5]=toColor.b*0.77;
           lineCount++;
         }
       }
@@ -503,7 +510,7 @@ function spawnAmbientField() {
     const y = (Math.random()-0.5)*4;
     const z = (Math.random()-0.5)*12;
     const hex = [0x00f0ff,0xff00aa,0xffaa00,0x00ff66][Math.floor(Math.random()*4)];
-    P.add(x, y, z, hex, 0.04 + Math.random()*0.04, 2 + Math.random()*2,
+    P.add(x, y, z, hex, 0.07 + Math.random()*0.07, 2.3 + Math.random()*2.3,
       {group:'AMBIENT',factId:null,cited:false,citedBy:new Set(),targetAlpha:0.05,flash:0,home:[x,y,z],stage:null});
   }
   ambientEnd = P.count;
@@ -580,8 +587,8 @@ addEventListener('mouseup',()=>drag=false);
 addEventListener('mousemove',e=>{if(!drag)return;theta-=(e.clientX-pm.x)*0.005;phi=Math.max(0.05,Math.min(1.4,phi+(e.clientY-pm.y)*0.005));pm={x:e.clientX,y:e.clientY};});
 renderer.domElement.addEventListener('wheel',e=>{dist=Math.max(5,Math.min(35,dist+e.deltaY*0.015));},{passive:true});
 let td0=0;
-renderer.domElement.addEventListener('touchstart',e=>{if(e.touches.length===1){drag=true;pm={x:e.touches[0].clientX,y:e.touches[0].clientY};}if(e.touches.length===2){td0=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}},{passive:true});
-renderer.domElement.addEventListener('touchmove',e=>{if(e.touches.length===1&&drag){theta-=(e.touches[0].clientX-pm.x)*0.005;phi=Math.max(0.05,Math.min(1.4,phi+(e.touches[0].clientY-pm.y)*0.005));pm={x:e.touches[0].clientX,y:e.touches[0].clientY};}if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);dist=Math.max(5,Math.min(35,dist-(d-td0)*0.03));td0=d;}},{passive:true});
+renderer.domElement.addEventListener('touchstart',e=>{if(e.touches.length===1){drag=true;pm={x:e.touches[0].clientX,y:e.touches[0].clientY};}if(e.touches.length===2){e.preventDefault();td0=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}},{passive:false});
+renderer.domElement.addEventListener('touchmove',e=>{if(e.touches.length===1&&drag){theta-=(e.touches[0].clientX-pm.x)*0.005;phi=Math.max(0.05,Math.min(1.4,phi+(e.touches[0].clientY-pm.y)*0.005));pm={x:e.touches[0].clientX,y:e.touches[0].clientY};}if(e.touches.length===2){e.preventDefault();const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);dist=Math.max(3,Math.min(40,dist-(d-td0)*0.06));td0=d;}},{passive:false});
 renderer.domElement.addEventListener('touchend',()=>drag=false);
 addEventListener('keydown',e=>{
   if(e.code==='Space'){if(Playback.mode==='replaying')Playback.togglePlay();else paused=!paused;e.preventDefault();}
@@ -598,6 +605,14 @@ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updat
 const el=id=>document.getElementById(id);
 const $label=el('scenario-label'),$sid=$label.querySelector('.sid'),$sname=$label.querySelector('.name'),$meta=$label.querySelector('.meta');
 const $stageInfo=el('stage-info');
+const $narration=el('narration');
+
+function narrate(text,durationMs){
+  $narration.textContent=text;$narration.style.opacity='1';
+  clearTimeout(narrate._timer);
+  narrate._timer=setTimeout(()=>{$narration.style.opacity='0';},durationMs||4000);
+}
+narrate._timer=null;
 const $accuracy=el('accuracy'),$accPct=$accuracy.querySelector('.pct'),$accFrac=$accuracy.querySelector('.frac');
 const $confPanel=el('confidence-panel'),$archFill=document.querySelector('.conf-fill.arch'),$skepFill=document.querySelector('.conf-fill.skep');
 const $archVal=el('arch-val'),$skepVal=el('skep-val'),$delta=el('delta-row'),$roundInfo=el('round-info');
@@ -702,6 +717,8 @@ function evStart(d){
   P.count = ambientEnd;
   P.geometry.setDrawRange(0, P.count);
   $sid.textContent=d.scenario_id;$sname.textContent=d.scenario_name||'';$meta.textContent=(d.fact_count||0)+' facts';
+  if(killChainMode) narrate('Loading pentest evidence \u2014 '+d.scenario_name,5000);
+  else narrate('Loading security telemetry \u2014 '+d.scenario_name,5000);
   $label.style.opacity='1';$analyzing.className='';
   $verdArea.style.opacity='0';$verdMiss.style.opacity='0';$confPanel.style.opacity='0';
   $archFill.style.width='0%';$skepFill.style.width='0%';$archVal.textContent='--';$skepVal.textContent='--';
@@ -719,7 +736,9 @@ function evStart(d){
   }
 }
 
-function evAnalysisStatus(d){$analyzing.className=d.status==='analyzing'?'active':'';}
+function evAnalysisStatus(d){$analyzing.className=d.status==='analyzing'?'active':'';
+  if(d.status==='analyzing') narrate('Architect and Skeptic are debating the evidence...',8000);
+}
 
 function evFact(d){
   let grp, home, baseHex, stage = null;
@@ -740,7 +759,7 @@ function evFact(d){
   }
 
   const indices = [];
-  const ci = P.add(home[0], home[1], home[2], baseHex, DIM_ALPHA, 3,
+  const ci = P.add(home[0], home[1], home[2], baseHex, DIM_ALPHA, 4.8,
     {group: grp, factId: d.fact_id, cited: false, citedBy: new Set(),
      targetAlpha: DIM_ALPHA, flash: clock, home, stage});
   if (ci >= 0) indices.push(ci);
@@ -750,7 +769,7 @@ function evFact(d){
     const ox = home[0] + (Math.random()-0.5)*0.8;
     const oy = home[1] + (Math.random()-0.5)*0.5;
     const oz = home[2] + (Math.random()-0.5)*0.8;
-    const hi = P.add(ox, oy, oz, baseHex, DIM_ALPHA*0.5, 1.5+Math.random()*2,
+    const hi = P.add(ox, oy, oz, baseHex, DIM_ALPHA*0.5, 2.4+Math.random()*3.2,
       {group: grp, factId: d.fact_id, cited: false, citedBy: new Set(),
        targetAlpha: DIM_ALPHA*0.5, flash: clock, home, stage});
     if (hi >= 0) indices.push(hi);
@@ -759,6 +778,9 @@ function evFact(d){
 }
 
 function evCited(d){
+  const count=(d.fact_ids||[]).length;
+  if(d.agent_role==='architect') narrate('Architect cites '+count+' facts building the threat hypothesis',4000);
+  else if(d.agent_role==='skeptic') narrate('Skeptic challenges with '+count+' facts for the defense',4000);
   $analyzing.className='';
   const role=d.agent_role;const aHex=AGENT_HEX[role]||0xffffff;
   (d.fact_ids||[]).forEach(fid=>{
@@ -782,7 +804,7 @@ function evCited(d){
       const bx=home[0]+(Math.random()-0.5)*1.0;
       const by=home[1]+(Math.random()-0.5)*0.6;
       const bz=home[2]+(Math.random()-0.5)*1.0;
-      const bi=P.add(bx,by,bz,pHex,BRIGHT_ALPHA*0.7,2+Math.random()*3,{group:reg.group,factId:fid,cited:true,citedBy:new Set([role]),targetAlpha:BRIGHT_ALPHA*0.6,flash:clock,home,stage:stg});
+      const bi=P.add(bx,by,bz,pHex,BRIGHT_ALPHA*0.7,3.2+Math.random()*4.8,{group:reg.group,factId:fid,cited:true,citedBy:new Set([role]),targetAlpha:BRIGHT_ALPHA*0.6,flash:clock,home,stage:stg});
       if(bi>=0){reg.indices.push(bi);
         // Give burst particles outward velocity
         P.velocities[bi*3]=(bx-home[0])*0.03;P.velocities[bi*3+1]=(by-home[1])*0.03;P.velocities[bi*3+2]=(bz-home[2])*0.03;
@@ -793,13 +815,19 @@ function evCited(d){
   });
 }
 
-function evConf(d){$confPanel.style.opacity='1';$archFill.style.width=(d.architect_confidence*100)+'%';$skepFill.style.width=(d.skeptic_confidence*100)+'%';$archVal.textContent=d.architect_confidence.toFixed(4);$skepVal.textContent=d.skeptic_confidence.toFixed(4);const dt=d.delta!=null?d.delta:(d.architect_confidence-d.skeptic_confidence);$delta.textContent='DELTA  '+(dt>=0?'+':'')+dt.toFixed(2);}
+function evConf(d){$confPanel.style.opacity='1';$archFill.style.width=(d.architect_confidence*100)+'%';$skepFill.style.width=(d.skeptic_confidence*100)+'%';$archVal.textContent=d.architect_confidence.toFixed(4);$skepVal.textContent=d.skeptic_confidence.toFixed(4);const dt=d.delta!=null?d.delta:(d.architect_confidence-d.skeptic_confidence);$delta.textContent='DELTA  '+(dt>=0?'+':'')+dt.toFixed(2);
+  if(d.architect_confidence>0.75&&dt>0.3) narrate('Architect holds strong \u2014 high confidence threat assessment',3500);
+  else if(d.skeptic_confidence>0.75&&dt<-0.3) narrate('Skeptic dominates \u2014 benign explanation is compelling',3500);
+  else if(Math.abs(dt)<0.15) narrate('Deadlocked \u2014 neither side has a decisive edge',3500);
+}
 function evAssertion(d){(d.cited_fact_ids||[]).forEach(fid=>{const reg=factRegistry.get(fid);if(reg)reg.indices.forEach(i=>{if(P.meta[i])P.meta[i].flash=clock;});});}
 function evVerdict(d){
   const vc=VERDICT_CSS[d.outcome]||'#fff',vh=VERDICT_HEX[d.outcome]||0xffffff;
   $verdArea.style.opacity='1';$verdText.textContent=VERDICT_LABEL[d.outcome]||d.outcome;$verdText.style.color=vc;
   $verdSub.textContent='conf: '+d.confidence.toFixed(2);if(!d.correct){$verdMiss.style.opacity='1';$verdSub.textContent+='  MISS';}
   verdictFlash={color:new THREE.Color(vh),start:clock,dur:1.5};
+  const vn={threat_confirmed:'Threat confirmed \u2014 the evidence chain holds',threat_dismissed:'Threat dismissed \u2014 defenses held or benign activity confirmed',inconclusive:'Inconclusive \u2014 insufficient evidence for either side'};
+  narrate((vn[d.outcome]||'Oracle has rendered judgment')+(d.correct?'':' \u2014 MISS'),5000);
   // Apply radial blast force to all particles
   for(let i=0;i<P.count;i++){
     const dx=P.positions[i*3],dy=P.positions[i*3+1],dz=P.positions[i*3+2];
@@ -1078,7 +1106,13 @@ el('file-input').addEventListener('change', e => { if (e.target.files[0]) loadSe
 if (SESSION_URL) loadSession(SESSION_URL);
 else if (DEMO_MODE) runDemo();
 else if (FIXTURE) loadFixture(FIXTURE);
-else connectWS();
+else {
+  // Auto-load showcase.json if it exists alongside this HTML (static deploy)
+  fetch('showcase.json', {method:'HEAD'}).then(r => {
+    if (r.ok) loadSession('showcase.json');
+    else connectWS();
+  }).catch(() => connectWS());
+}
 </script>
 </body>
 </html>
