@@ -1,7 +1,7 @@
 # CLAUDE.md — ARES Phase 6 (post-Session 053)
 
 **Last updated:** 2026-04-25
-**Test count floor (passing):** 3,388
+**Test count floor (passing):** 3,398
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -14,7 +14,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Current accuracy on threat-analysis baseline: 84.6% across 39 scenarios (33 SC + 6 PT)
 - Phase 5 (Sessions 045–046): COMPLETE — injection resilience + Oracle Firewall + hot-swap
 - Phase 6 (Sessions 047–051): COMPLETE — corpus expansion, full-corpus live benchmark, ablation, Light Skeptic
-- Sessions 052–053: documentation reconciliation — Paper 2 v1.1 build pipeline, Paper 1 canonical decision, CLAUDE.md self-validation
+- Sessions 052–054: documentation reconciliation — Paper 2 v1.1 build pipeline, Paper 1 canonical decision, CLAUDE.md self-validation, citation audit + hallucination detection (`sabet-2025` flagged HALLUCINATED)
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -80,6 +80,14 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Title reconciliation: working title in CLAUDE.md was a paraphrase; canonical title is the long form on the PDF cover
 - `gmys-casiano-2026` bib entry updated with canonical title and pointer to `CANONICAL.md`
 - `tests/test_claude_md_freshness.py` makes CLAUDE.md self-validating: declared floor must be ≤ actual collected count, declared canonical paths must exist, last-updated must be a parseable ISO date
+
+### Session 054 — Citation audit + hallucination detection
+- Full enumeration of every citation in `PAPER2_DRAFT_v1_1.docx` (parenthetical + narrative forms, 6 total)
+- 5/6 cite keys VERIFIED against authoritative sources; `sabet-2025` flagged HALLUCINATED (no paper by Sabet matches the cited claim across multiple search phrasings)
+- Audit report: `docs/paper_2/citation_audit_report.md`
+- Sabet remediation prep with 3 candidate v1.2 prose alternatives: `docs/paper_2/sabet_remediation_findings.md`
+- Meta-finding footnote candidate (the hallucination is itself an instance of the semantic-framing failure class the paper describes): `docs/paper_2/meta_finding_footnote_candidate.md`
+- `tests/paper_2/test_citation_existence.py`: 12 always-on structural tests + 3 env-gated network tests (ARES_RUN_NETWORK_TESTS); does NOT catch real-but-unrelated-paper substitution (semantic verification is future work)
 
 ## Architecture Constraints (NON-NEGOTIABLE)
 - Frozen dataclasses everywhere. No mutable state.
