@@ -7,16 +7,32 @@
 
 ## Summary
 
+**Status as of Session 055 remediation:**
+
 | Status | Count | Cite keys |
 |---|---:|---|
 | VERIFIED | 5 | `berdoz-rugli-wattenhofer-2026`, `gmys-casiano-2026`, `hossain-2025`, `lee-2024`, `owasp-2025` |
 | MISMATCH | 0 | — |
-| HALLUCINATED | 1 | `sabet-2025` |
+| HALLUCINATED | 0 | — *(was 1: `sabet-2025`, remediated Session 055 — see Remediation History below)* |
 | UNRESOLVED | 0 | — |
 
-**Total citations found in v1.1 prose:** 6
-**Total bib entries:** 6
+**Total citations in v1.1 prose:** 5 *(was 6 prior to Session 055)*
+**Total bib entries:** 5 *(was 6; `sabet-2025` removed from `references.bib`)*
 **1-to-1 cite-key ↔ bib-entry mapping:** confirmed
+
+## Remediation History
+
+**Session 055 (2026-04-25)** — Applied B2 from
+`docs/paper_2/sabet_remediation_findings.md` to v1.1 source markdown.
+The fabricated `(Sabet et al., 2025)` citation and the surrounding
+70-90% numerical claim were replaced with a directional statement
+that requires no citation. The `sabet-2025` entry was removed from
+`references.bib` (replaced with a comment block recording the
+removal). The v1.1 docx was rebuilt and recompiled; `Sabet` no
+longer appears anywhere in the rendered prose or References section.
+The HALLUCINATED finding documented in this audit's original Section
+6 entry is preserved below as a historical record of the bug and
+the audit signal that surfaced it.
 
 ## Methodology
 

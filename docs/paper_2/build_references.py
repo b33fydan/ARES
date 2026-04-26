@@ -272,23 +272,43 @@ def compile_references(
 # =============================================================================
 
 
-# Match ``(Author[, ...] (et al.)?, YYYY)`` with one optional pre-author
-# qualifier word (Berdoz, Rugli, and Wattenhofer style).
-_CITATION_RE = re.compile(
+# Two cite forms are recognized.
+#
+# Parenthetical: ``(Author[, ...] [et al.], YYYY)`` — supports up to
+# three authors joined by commas and "and" (Berdoz, Rugli, and
+# Wattenhofer style).
+_PAREN_CITATION_RE = re.compile(
     r"\(([A-Z][A-Za-z\-]+(?:,\s+[A-Za-z\-]+(?:,\s+and\s+[A-Za-z\-]+)?)?"
     r"(?:\s+et\s+al\.)?)\s*,\s*(\d{4})\)"
+)
+# Narrative: ``Author[ et al.] (YYYY)`` and ``Author1 and Author2 (YYYY)``
+# — author name precedes the year, year alone is parenthesized. This
+# form was missing from the original implementation, which is why
+# Hossain et al. (2025) and Lee et al. (2024) silently dropped from
+# Session 052's coverage check (surfaced by Session 054 audit, patched
+# in Session 055).
+_NARRATIVE_CITATION_RE = re.compile(
+    r"\b([A-Z][A-Za-z\-]+"
+    r"(?:\s+et\s+al\.)?"
+    r"(?:\s+and\s+[A-Z][A-Za-z\-]+)?"
+    r")\s*\((\d{4})\)"
 )
 
 
 def extract_citations(prose: str) -> tuple[tuple[str, str], ...]:
-    """Return the unique ``(author_token, year)`` citations found in prose."""
+    """Return the unique ``(author_token, year)`` citations found in prose.
+
+    Catches both parenthetical ``(Author, YYYY)`` and narrative
+    ``Author et al. (YYYY)`` forms. Order-preserving deduplication.
+    """
     seen: set[tuple[str, str]] = set()
     out: list[tuple[str, str]] = []
-    for m in _CITATION_RE.finditer(prose):
-        key = (m.group(1).strip(), m.group(2))
-        if key not in seen:
-            seen.add(key)
-            out.append(key)
+    for regex in (_PAREN_CITATION_RE, _NARRATIVE_CITATION_RE):
+        for m in regex.finditer(prose):
+            key = (m.group(1).strip(), m.group(2))
+            if key not in seen:
+                seen.add(key)
+                out.append(key)
     return tuple(out)
 
 

@@ -1,7 +1,7 @@
 # CLAUDE.md — ARES Phase 6 (post-Session 053)
 
 **Last updated:** 2026-04-25
-**Test count floor (passing):** 3,398
+**Test count floor (passing):** 3,404
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -14,7 +14,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Current accuracy on threat-analysis baseline: 84.6% across 39 scenarios (33 SC + 6 PT)
 - Phase 5 (Sessions 045–046): COMPLETE — injection resilience + Oracle Firewall + hot-swap
 - Phase 6 (Sessions 047–051): COMPLETE — corpus expansion, full-corpus live benchmark, ablation, Light Skeptic
-- Sessions 052–054: documentation reconciliation — Paper 2 v1.1 build pipeline, Paper 1 canonical decision, CLAUDE.md self-validation, citation audit + hallucination detection (`sabet-2025` flagged HALLUCINATED)
+- Sessions 052–055: documentation reconciliation — Paper 2 v1.1 build pipeline, Paper 1 canonical decision, CLAUDE.md self-validation, citation audit + hallucination detection, Sabet remediation applied to v1.1 prose
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -88,6 +88,13 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Sabet remediation prep with 3 candidate v1.2 prose alternatives: `docs/paper_2/sabet_remediation_findings.md`
 - Meta-finding footnote candidate (the hallucination is itself an instance of the semantic-framing failure class the paper describes): `docs/paper_2/meta_finding_footnote_candidate.md`
 - `tests/paper_2/test_citation_existence.py`: 12 always-on structural tests + 3 env-gated network tests (ARES_RUN_NETWORK_TESTS); does NOT catch real-but-unrelated-paper substitution (semantic verification is future work)
+
+### Session 055 — Sabet remediation + extract_citations helper patch
+- B2 from `sabet_remediation_findings.md` applied to v1.1 source markdown: the (Sabet et al., 2025) sentence and 70-90% numerical claim replaced with a directional statement requiring no citation; `sabet-2025` removed from `references.bib`; v1.1 docx rebuilt; `Sabet` no longer appears anywhere in rendered prose or References section
+- `build_references.extract_citations` extended to handle narrative form `Author et al. (YYYY)` (was paren-only; this is the bug that let Hossain and Lee silently drop from Session 052's coverage check)
+- Regression test `test_extract_finds_all_v1_1_source_cite_keys` locks the helper contract: every cite key in the v1.1 source must round-trip through extract_citations + citation_to_bibkey to a known key
+- Citation audit report extended with Remediation History section (the original HALLUCINATED finding preserved as the audit signal that surfaced the bug)
+- 5 / 5 cite keys VERIFIED post-remediation; zero PLACEHOLDER entries in `references.bib`
 
 ## Architecture Constraints (NON-NEGOTIABLE)
 - Frozen dataclasses everywhere. No mutable state.

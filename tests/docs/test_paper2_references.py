@@ -26,7 +26,6 @@ EXPECTED_KEYS = (
     "hossain-2025",
     "lee-2024",
     "owasp-2025",
-    "sabet-2025",
 )
 
 
@@ -39,7 +38,7 @@ class TestBibParser:
     def test_real_bib_parses(self):
         from docs.paper_2.build_references import parse_bib_file
         entries = parse_bib_file(BIB_PATH)
-        assert len(entries) == 6
+        assert len(entries) == 5
 
     def test_all_expected_keys_present(self):
         from docs.paper_2.build_references import parse_bib_file
@@ -131,6 +130,39 @@ class TestCitations:
         text = "(Smith, 2024) ... (Smith, 2024) ..."
         cites = extract_citations(text)
         assert len(cites) == 1
+
+    def test_extract_handles_narrative_form(self):
+        """Session 055 patch: narrative cites like 'Hossain et al. (2025)'
+        were silently dropped pre-patch. Locks the contract."""
+        from docs.paper_2.build_references import extract_citations
+        cites = extract_citations("Hossain et al. (2025) propose a guard.")
+        assert ("Hossain et al.", "2025") in cites
+
+    def test_extract_handles_narrative_two_authors(self):
+        from docs.paper_2.build_references import extract_citations
+        cites = extract_citations("Lee and Tiwari (2024) demonstrate X.")
+        assert ("Lee and Tiwari", "2024") in cites
+
+    def test_extract_finds_all_v1_1_source_cite_keys(self):
+        """Regression: extract_citations must locate every expected cite
+        key in the v1.1 source markdown, not just the parenthetical
+        ones. Pre-Session-055, this assertion would have failed because
+        Hossain and Lee narrative cites were dropped."""
+        from docs.paper_2.build_references import (
+            citation_to_bibkey,
+            extract_citations,
+        )
+        SOURCE_MD = (
+            REPO_ROOT
+            / "docs/paper_2/source/PAPER2_DRAFT_v1_1_source.md"
+        )
+        prose = SOURCE_MD.read_text(encoding="utf-8")
+        keys = {citation_to_bibkey(c) for c in extract_citations(prose)}
+        for expected in EXPECTED_KEYS:
+            assert expected in keys, (
+                f"extract_citations dropped {expected!r}; the cite "
+                f"appears in v1.1 source but the helper did not surface it"
+            )
 
     def test_citation_to_bibkey_simple(self):
         from docs.paper_2.build_references import citation_to_bibkey

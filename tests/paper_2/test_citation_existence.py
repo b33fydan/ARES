@@ -53,7 +53,12 @@ network_only = pytest.mark.skipif(
 # Acknowledged PLACEHOLDER entries: bib keys that are intentionally
 # without a stable identifier pending human resolution. Surface in the
 # audit report rather than failing the structural tests.
-ACKNOWLEDGED_PLACEHOLDERS: frozenset[str] = frozenset({"sabet-2025"})
+#
+# Empty as of Session 055: sabet-2025 was the only acknowledged
+# placeholder and it was removed from references.bib after B2
+# remediation in v1.1 source. The frozenset stays in place so future
+# placeholders can be added with the same exception semantics.
+ACKNOWLEDGED_PLACEHOLDERS: frozenset[str] = frozenset()
 
 
 # ============================================================================
@@ -181,7 +186,7 @@ class TestEnumerateCitations:
         cites = enumerate_citations(text)
         assert len([c for c in cites if c == ("Smith", "2024")]) == 1
 
-    def test_finds_all_six_in_v1_1_docx(self, docx_text):
+    def test_finds_all_five_in_v1_1_docx(self, docx_text):
         cites = enumerate_citations(docx_text)
         # Convert to keys to dedup author-spelling variants.
         from docs.paper_2.build_references import citation_to_bibkey
@@ -192,9 +197,18 @@ class TestEnumerateCitations:
             "hossain-2025",
             "lee-2024",
             "owasp-2025",
-            "sabet-2025",
         }
         assert expected.issubset(keys), f"Missing: {expected - keys}"
+
+    def test_sabet_no_longer_present_in_v1_1_docx(self, docx_text):
+        """Regression: Sabet citation was removed in Session 055."""
+        cites = enumerate_citations(docx_text)
+        from docs.paper_2.build_references import citation_to_bibkey
+        keys = {citation_to_bibkey(c) for c in cites}
+        assert "sabet-2025" not in keys, (
+            "sabet-2025 was remediated in Session 055 and must not "
+            "reappear in v1.1 prose"
+        )
 
 
 # ============================================================================
@@ -247,28 +261,25 @@ class TestStructuralInvariants:
                 bad.append((entry.key, url))
         assert not bad, f"Malformed URLs: {bad}"
 
-    def test_six_expected_cite_keys_present_in_bib(self, bib_keys):
+    def test_five_expected_cite_keys_present_in_bib(self, bib_keys):
         expected = {
             "gmys-casiano-2026",
             "berdoz-rugli-wattenhofer-2026",
             "hossain-2025",
             "lee-2024",
             "owasp-2025",
-            "sabet-2025",
         }
         missing = expected - bib_keys
         assert not missing, f"Missing bib entries: {missing}"
 
-    def test_sabet_entry_flagged_as_placeholder(self, bib_entries):
-        """Hallucination-flag preservation: the Sabet note must
-        explicitly call out PLACEHOLDER status so future audits can
-        distinguish 'known unresolved' from 'newly discovered missing'.
-        """
-        sabet = next(e for e in bib_entries if e.key == "sabet-2025")
-        note = sabet.get("note", "").upper()
-        assert "PLACEHOLDER" in note, (
-            "sabet-2025 must keep the PLACEHOLDER marker in its note "
-            "until a real source is identified"
+    def test_sabet_entry_no_longer_in_bib(self, bib_keys):
+        """Regression: sabet-2025 was removed from references.bib in
+        Session 055 after B2 remediation. The entry must not reappear
+        without a corresponding prose citation."""
+        assert "sabet-2025" not in bib_keys, (
+            "sabet-2025 was removed Session 055; if reintroduced, the "
+            "audit + remediation history in citation_audit_report.md "
+            "and sabet_remediation_findings.md must be updated first"
         )
 
     def test_audit_report_exists_and_lists_status_table(self):
