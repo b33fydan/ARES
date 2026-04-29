@@ -276,9 +276,19 @@ def run_light_guarded_cycle(
         firewall_verdict = _make_clean_firewall_verdict()
 
     used_sanitized = False
-    if not firewall_verdict.passed and firewall_verdict.sanitized_output is not None:
+    if not firewall_verdict.passed:
+        # Require sanitized fallback or fail closed: never propagate the
+        # original tainted message to the Light Skeptic and OracleJudge.
+        sanitized = firewall_verdict.sanitized_output
+        if sanitized is None:
+            raise CycleError(
+                "Firewall failed-closed: output rejected "
+                "and no sanitized fallback available",
+                phase=Phase.THESIS,
+                cycle_id=cycle_id,
+            )
         architect_message = _build_sanitized_message(
-            architect_message, firewall_verdict.sanitized_output,
+            architect_message, sanitized,
         )
         used_sanitized = True
 

@@ -275,3 +275,53 @@ class TestEndToEndRuleBased:
         )
         with pytest.raises(ValueError, match="frozen"):
             run_ablated_cycle(packet=unfrozen, include_narration=False)
+
+
+# =============================================================================
+# Fail-closed contract
+# =============================================================================
+
+
+class TestFirewallFailClosed:
+    """Ablated cycle must never propagate a tainted message to OracleJudge.
+
+    The FirewallVerdict invariant prevents the bad shape at the producer
+    side, but per Codex's belt-and-suspenders argument the consumer-side
+    raise is asserted locally for audit clarity.
+    """
+
+    def test_failed_verdict_with_none_sanitized_raises(self):
+        from datetime import datetime
+        from unittest.mock import MagicMock
+
+        from ares.dialectic.coordinator.firewall import (
+            FirewallVerdict,
+            FirewallViolation,
+            OracleFirewall,
+        )
+        from ares.dialectic.coordinator.orchestrator import CycleError
+
+        scenario = get_scenario_by_id("SC-001")
+
+        spoofed = MagicMock(spec=FirewallVerdict)
+        spoofed.passed = False
+        spoofed.violations = (
+            FirewallViolation(
+                violation_type="INSTRUCTION_INJECTION",
+                evidence="ignore previous instructions",
+                severity=1.0,
+            ),
+        )
+        spoofed.taint_score = 0.9
+        spoofed.sanitized_output = None
+        spoofed.timestamp = datetime.utcnow()
+
+        fw = MagicMock(spec=OracleFirewall)
+        fw.validate.return_value = spoofed
+
+        with pytest.raises(CycleError, match="Firewall failed-closed"):
+            run_ablated_cycle(
+                packet=scenario.packet,
+                firewall=fw,
+                include_narration=False,
+            )

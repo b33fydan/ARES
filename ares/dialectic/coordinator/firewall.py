@@ -51,6 +51,12 @@ class FirewallVerdict:
         taint_score: 0.0 = clean, 1.0 = fully tainted.
         sanitized_output: Cleaned interpretations if tainted, None if passed clean.
         timestamp: When the validation was performed.
+
+    Invariant:
+        passed=False implies sanitized_output is not None. Downstream cycle
+        runners rely on this to fail-closed without re-checking; constructing
+        a fail verdict with no sanitized fallback would let a tainted message
+        propagate to the Skeptic.
     """
 
     passed: bool
@@ -58,6 +64,13 @@ class FirewallVerdict:
     taint_score: float
     sanitized_output: Optional[Tuple[str, ...]]
     timestamp: datetime
+
+    def __post_init__(self) -> None:
+        if not self.passed and self.sanitized_output is None:
+            raise ValueError(
+                "FirewallVerdict invariant violated: "
+                "passed=False requires sanitized_output to be non-None"
+            )
 
 
 # ---------------------------------------------------------------------------

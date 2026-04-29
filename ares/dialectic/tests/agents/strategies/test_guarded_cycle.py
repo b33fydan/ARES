@@ -607,6 +607,89 @@ class TestFirewallFailureNoHotSwap:
 
 
 # =============================================================================
+# 3a. Fail-closed contract (2 tests)
+# =============================================================================
+
+
+class TestFirewallFailClosed:
+    """The cycle must NEVER let a tainted message through to the Skeptic.
+
+    The FirewallVerdict invariant (passed=False => sanitized_output is not None)
+    makes the bad state impossible to construct via the real firewall. These
+    tests bypass the invariant via MagicMock to prove the consumer-side
+    fail-closed defense in run_guarded_cycle still triggers if a future
+    producer regression ever emits the bad shape.
+    """
+
+    @staticmethod
+    def _spoof_verdict(passed: bool, sanitized_output) -> MagicMock:
+        """Build a FirewallVerdict-shaped MagicMock that bypasses __post_init__."""
+        v = MagicMock(spec=FirewallVerdict)
+        v.passed = passed
+        v.violations = (
+            FirewallViolation(
+                violation_type="INSTRUCTION_INJECTION",
+                evidence="ignore previous instructions",
+                severity=1.0,
+            ),
+        )
+        v.taint_score = 0.9
+        v.sanitized_output = sanitized_output
+        v.timestamp = datetime.utcnow()
+        return v
+
+    def test_no_hot_swap_with_none_sanitized_raises_cycle_error(
+        self, frozen_packet: EvidencePacket,
+    ) -> None:
+        """No-hot-swap branch must raise CycleError, not propagate tainted message."""
+        fw = MagicMock(spec=OracleFirewall)
+        fw.validate.return_value = self._spoof_verdict(
+            passed=False, sanitized_output=None,
+        )
+
+        with pytest.raises(CycleError, match="Firewall failed-closed"):
+            run_guarded_cycle(
+                frozen_packet,
+                threat_analyzer=_make_mock_threat_analyzer(),
+                firewall=fw,
+                enable_hot_swap=False,
+            )
+
+    def test_hot_swap_failure_with_none_sanitized_raises_cycle_error(
+        self, frozen_packet: EvidencePacket,
+    ) -> None:
+        """Hot-swap branch must raise CycleError when swap also fails with no fallback."""
+        fw = MagicMock(spec=OracleFirewall)
+        # First call: initial firewall fails with a sanitized fallback (well-formed).
+        # Second call: hot-swap output also fails AND has no sanitized fallback.
+        fw.validate.side_effect = [
+            FirewallVerdict(
+                passed=False,
+                violations=(
+                    FirewallViolation(
+                        violation_type="INSTRUCTION_INJECTION",
+                        evidence="ignore previous instructions",
+                        severity=1.0,
+                    ),
+                ),
+                taint_score=0.9,
+                sanitized_output=("[REDACTED]",),
+                timestamp=datetime.utcnow(),
+            ),
+            self._spoof_verdict(passed=False, sanitized_output=None),
+        ]
+
+        with pytest.raises(CycleError, match="Firewall failed-closed"):
+            run_guarded_cycle(
+                frozen_packet,
+                threat_analyzer=_make_mock_threat_analyzer(),
+                firewall=fw,
+                enable_hot_swap=True,
+                hot_swap_factory=_make_hot_swap_factory(),
+            )
+
+
+# =============================================================================
 # 4. Edge cases (5 tests)
 # =============================================================================
 

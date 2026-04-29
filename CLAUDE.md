@@ -1,6 +1,6 @@
-# CLAUDE.md — ARES Phase 6 (post-Session 053)
+# CLAUDE.md — ARES Phase 6 (post-Session 056)
 
-**Last updated:** 2026-04-25
+**Last updated:** 2026-04-29
 **Test count floor (passing):** 3,404
 
 ## Identity
@@ -15,6 +15,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Phase 5 (Sessions 045–046): COMPLETE — injection resilience + Oracle Firewall + hot-swap
 - Phase 6 (Sessions 047–051): COMPLETE — corpus expansion, full-corpus live benchmark, ablation, Light Skeptic
 - Sessions 052–055: documentation reconciliation — Paper 2 v1.1 build pipeline, Paper 1 canonical decision, CLAUDE.md self-validation, citation audit + hallucination detection, Sabet remediation applied to v1.1 prose
+- Session 056: pre-publish hardening — firewall fail-closed contract enforced at producer (FirewallVerdict invariant) and at all three cycle consumers (`run_guarded_cycle`, `run_ablated_cycle`, `run_light_guarded_cycle`)
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -95,6 +96,13 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Regression test `test_extract_finds_all_v1_1_source_cite_keys` locks the helper contract: every cite key in the v1.1 source must round-trip through extract_citations + citation_to_bibkey to a known key
 - Citation audit report extended with Remediation History section (the original HALLUCINATED finding preserved as the audit signal that surfaced the bug)
 - 5 / 5 cite keys VERIFIED post-remediation; zero PLACEHOLDER entries in `references.bib`
+
+## Session 056 — Pre-publish hardening (firewall fail-closed)
+- Origin: external review (Cursor + Codex) flagged the silent fallthrough in `guarded_cycle.py:278-285` as a structural fail-open. Path was unreachable in current code due to an implicit cross-file invariant, but had no tests, no assertion, and no docstring contract.
+- Producer-side fix: `FirewallVerdict.__post_init__` enforces the invariant `passed=False ⇒ sanitized_output is not None`. Constructing the bad shape now raises `ValueError`. Bad shape is impossible to instantiate via the dataclass.
+- Consumer-side fix: all three cycle runners (`run_guarded_cycle`, `run_ablated_cycle`, `run_light_guarded_cycle`) now raise `CycleError` locally if they ever receive a fail verdict without a sanitized fallback. Defense in depth per Codex's "belt-and-suspenders" pushback — keeps the security property auditable per file rather than chasing the invariant across modules.
+- 8 new tests across 4 files: `TestFirewallVerdictInvariant` (4) in `test_firewall.py`, `TestFirewallFailClosed` (2) in `test_guarded_cycle.py`, `TestFirewallFailClosed` (1 each) in `test_ablated_cycle.py` and `test_light_guarded_cycle.py`. The cycle tests use `MagicMock(spec=FirewallVerdict)` to bypass `__post_init__` and prove the consumer-side raise still fires if a future producer regression ever emits the bad shape.
+- No behavior change for any reachable input. Floor 3,404 unchanged; actual collected count 3,404 → 3,412. Zero regressions.
 
 ## Architecture Constraints (NON-NEGOTIABLE)
 - Frozen dataclasses everywhere. No mutable state.

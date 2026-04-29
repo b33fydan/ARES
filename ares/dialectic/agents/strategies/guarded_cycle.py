@@ -276,20 +276,38 @@ def run_guarded_cycle(
                 # Hot-swap passed -- use its output
                 architect_message = swap_message
             else:
-                # Hot-swap also failed -- fall through to sanitized
+                # Hot-swap also failed. Require sanitized output to fall back
+                # to; otherwise fail closed rather than propagate the original
+                # tainted message to the Skeptic. The FirewallVerdict invariant
+                # makes this branch unreachable in practice, but enforcing it
+                # at the use site keeps the contract local and survives any
+                # future producer change.
                 sanitized = hot_swap_firewall_verdict.sanitized_output
-                if sanitized is not None:
-                    architect_message = _build_sanitized_message(
-                        swap_message, sanitized,
+                if sanitized is None:
+                    raise CycleError(
+                        "Firewall failed-closed: hot-swap output rejected "
+                        "and no sanitized fallback available",
+                        phase=Phase.THESIS,
+                        cycle_id=cycle_id,
                     )
-                    used_sanitized = True
-        else:
-            # No hot-swap -- use sanitized output directly
-            sanitized = firewall_verdict.sanitized_output
-            if sanitized is not None:
                 architect_message = _build_sanitized_message(
-                    architect_message, sanitized,
+                    swap_message, sanitized,
                 )
+                used_sanitized = True
+        else:
+            # No hot-swap -- require sanitized output to use directly.
+            # Fail closed if absent (same contract as the hot-swap branch).
+            sanitized = firewall_verdict.sanitized_output
+            if sanitized is None:
+                raise CycleError(
+                    "Firewall failed-closed: output rejected "
+                    "and no sanitized fallback available",
+                    phase=Phase.THESIS,
+                    cycle_id=cycle_id,
+                )
+            architect_message = _build_sanitized_message(
+                architect_message, sanitized,
+            )
             used_sanitized = True
 
     # --- Create Skeptic with injected strategy ---
