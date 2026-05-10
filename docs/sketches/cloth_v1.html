@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARES-VISION · Cloth Sketch v1</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: rgb(0, 5, 10);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  canvas {
+    display: block;
+    cursor: crosshair;
+  }
+  .hud {
+    position: fixed;
+    top: 14px;
+    left: 16px;
+    color: rgba(0, 255, 150, 0.55);
+    font-size: 11px;
+    line-height: 1.55;
+    pointer-events: none;
+    user-select: none;
+  }
+  .hud .title {
+    color: rgba(0, 255, 150, 0.92);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .hud .dim {
+    color: rgba(0, 255, 150, 0.32);
+  }
+  .stats {
+    position: fixed;
+    bottom: 14px;
+    left: 16px;
+    color: rgba(0, 255, 150, 0.32);
+    font-size: 10px;
+    pointer-events: none;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hud">
+  <div class="title">ARES-VISION · cloth sketch v1</div>
+  <div>left-drag to pull · right-click to cut · <span class="dim">R to reset · P to pulse</span></div>
+</div>
+<div class="stats" id="stats"></div>
+<script>
+(() => {
+  'use strict';
+
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  const statsEl = document.getElementById('stats');
+
+  // Physics constants — faithful to the pygame source
+  const COLS = 50;
+  const ROWS = 30;
+  const SPACING = 20;          // grid spacing & rest length
+  const GRAVITY = 0.4;
+  const DAMPING = 0.99;
+  const VEL_CLAMP = 20;
+  const TEAR_DIST = 100;
+  const RELAXATION_PASSES = 6;
+  const DRAG_RADIUS = 30;
+  const CUT_RADIUS = 15;
+  const NET_COLOR = 'rgb(0, 255, 150)';
+  const BG_COLOR = 'rgb(0, 5, 10)';
+
+  // particles: flat arrays for speed.
+  // For each particle i: x[i], y[i], px[i], py[i], pinned[i] (0/1)
+  let x, y, px, py, pinned;
+  let count = 0;
+
+  // sticks: a[k], b[k], active[k]
+  let sa, sb, sactive;
+  let stickCount = 0;
+
+  const mouse = { x: 0, y: 0, left: false, right: false, in: false };
+
+  function build() {
+    count = COLS * ROWS;
+    x = new Float32Array(count);
+    y = new Float32Array(count);
+    px = new Float32Array(count);
+    py = new Float32Array(count);
+    pinned = new Uint8Array(count);
+
+    const offX = (canvas.width - (COLS - 1) * SPACING) / 2;
+    const offY = Math.max(80, canvas.height * 0.15);
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        const i = row * COLS + col;
+        x[i] = offX + col * SPACING;
+        y[i] = offY + row * SPACING;
+        px[i] = x[i];
+        py[i] = y[i];
+        pinned[i] = row === 0 ? 1 : 0;
+      }
+    }
+
+    // sticks
+    const horiz = ROWS * (COLS - 1);
+    const vert = (ROWS - 1) * COLS;
+    stickCount = horiz + vert;
+    sa = new Int32Array(stickCount);
+    sb = new Int32Array(stickCount);
+    sactive = new Uint8Array(stickCount);
+
+    let k = 0;
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS - 1; col++) {
+        sa[k] = row * COLS + col;
+        sb[k] = row * COLS + col + 1;
+        sactive[k] = 1;
+        k++;
+      }
+    }
+    for (let row = 0; row < ROWS - 1; row++) {
+      for (let col = 0; col < COLS; col++) {
+        sa[k] = row * COLS + col;
+        sb[k] = (row + 1) * COLS + col;
+        sactive[k] = 1;
+        k++;
+      }
+    }
+  }
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    build();
+  }
+
+  // Optional: a "pulse" — apply an outward impulse from a point.
+  // Standalone toy version of what an ARES detection event would look like.
+  function pulse(cx, cy, radius = 220, strength = 8) {
+    const r2 = radius * radius;
+    for (let i = 0; i < count; i++) {
+      if (pinned[i]) continue;
+      const dx = x[i] - cx;
+      const dy = y[i] - cy;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < r2 && d2 > 0.01) {
+        const d = Math.sqrt(d2);
+        const falloff = 1 - d / radius;
+        const nx = dx / d, ny = dy / d;
+        px[i] -= nx * strength * falloff;
+        py[i] -= ny * strength * falloff;
+      }
+    }
+  }
+
+  function step() {
+    // Verlet integration
+    for (let i = 0; i < count; i++) {
+      if (pinned[i]) continue;
+
+      // Mouse drag — snap nearby particles to cursor
+      if (mouse.left && mouse.in) {
+        const dx = x[i] - mouse.x;
+        const dy = y[i] - mouse.y;
+        if (dx * dx + dy * dy < DRAG_RADIUS * DRAG_RADIUS) {
+          x[i] = mouse.x;
+          y[i] = mouse.y;
+        }
+      }
+
+      let vx = (x[i] - px[i]) * DAMPING;
+      let vy = (y[i] - py[i]) * DAMPING;
+      if (vx > VEL_CLAMP) vx = VEL_CLAMP; else if (vx < -VEL_CLAMP) vx = -VEL_CLAMP;
+      if (vy > VEL_CLAMP) vy = VEL_CLAMP; else if (vy < -VEL_CLAMP) vy = -VEL_CLAMP;
+
+      px[i] = x[i];
+      py[i] = y[i];
+      x[i] += vx;
+      y[i] += vy + GRAVITY;
+    }
+
+    // Constraint relaxation
+    for (let pass = 0; pass < RELAXATION_PASSES; pass++) {
+      for (let k = 0; k < stickCount; k++) {
+        if (!sactive[k]) continue;
+        const ia = sa[k], ib = sb[k];
+        const dx = x[ib] - x[ia];
+        const dy = y[ib] - y[ia];
+        const d = Math.hypot(dx, dy) || 0.0001;
+
+        if (d > TEAR_DIST) { sactive[k] = 0; continue; }
+        if (mouse.right && mouse.in) {
+          const mx = (x[ia] + x[ib]) * 0.5;
+          const my = (y[ia] + y[ib]) * 0.5;
+          if (Math.hypot(mx - mouse.x, my - mouse.y) < CUT_RADIUS) {
+            sactive[k] = 0;
+            continue;
+          }
+        }
+
+        const f = (SPACING - d) / d * 0.5;
+        if (!pinned[ia]) { x[ia] -= dx * f; y[ia] -= dy * f; }
+        if (!pinned[ib]) { x[ib] += dx * f; y[ib] += dy * f; }
+      }
+    }
+  }
+
+  function draw() {
+    ctx.fillStyle = BG_COLOR;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = NET_COLOR;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    let active = 0;
+    for (let k = 0; k < stickCount; k++) {
+      if (!sactive[k]) continue;
+      const ia = sa[k], ib = sb[k];
+      ctx.moveTo(x[ia], y[ia]);
+      ctx.lineTo(x[ib], y[ib]);
+      active++;
+    }
+    ctx.stroke();
+    return active;
+  }
+
+  let lastFpsTime = performance.now();
+  let frames = 0;
+  let fps = 0;
+
+  function loop() {
+    step();
+    const active = draw();
+    frames++;
+    const now = performance.now();
+    if (now - lastFpsTime >= 500) {
+      fps = Math.round(frames * 1000 / (now - lastFpsTime));
+      frames = 0;
+      lastFpsTime = now;
+      statsEl.textContent =
+        `${count} nodes · ${active}/${stickCount} links · ${fps} fps`;
+    }
+    requestAnimationFrame(loop);
+  }
+
+  // Events
+  window.addEventListener('resize', resize);
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+  canvas.addEventListener('mousemove', e => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+    mouse.in = true;
+  });
+  canvas.addEventListener('mouseleave', () => { mouse.in = false; });
+  canvas.addEventListener('mouseenter', () => { mouse.in = true; });
+  canvas.addEventListener('mousedown', e => {
+    if (e.button === 0) mouse.left = true;
+    if (e.button === 2) mouse.right = true;
+  });
+  window.addEventListener('mouseup', e => {
+    if (e.button === 0) mouse.left = false;
+    if (e.button === 2) mouse.right = false;
+  });
+  window.addEventListener('keydown', e => {
+    if (e.key === 'r' || e.key === 'R') build();
+    if (e.key === 'p' || e.key === 'P') {
+      pulse(
+        mouse.in ? mouse.x : canvas.width / 2,
+        mouse.in ? mouse.y : canvas.height / 2
+      );
+    }
+  });
+
+  // Touch (basic — left-drag only)
+  canvas.addEventListener('touchstart', e => {
+    if (e.touches.length > 0) {
+      const r = canvas.getBoundingClientRect();
+      mouse.x = e.touches[0].clientX - r.left;
+      mouse.y = e.touches[0].clientY - r.top;
+      mouse.in = true;
+      mouse.left = true;
+    }
+    e.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener('touchmove', e => {
+    if (e.touches.length > 0) {
+      const r = canvas.getBoundingClientRect();
+      mouse.x = e.touches[0].clientX - r.left;
+      mouse.y = e.touches[0].clientY - r.top;
+    }
+    e.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener('touchend', e => {
+    mouse.left = false;
+    e.preventDefault();
+  }, { passive: false });
+
+  resize();
+  loop();
+})();
+</script>
+</body>
+</html>

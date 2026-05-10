@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARES-VISION · Chamber Sketch v2 (3D)</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: rgb(0, 5, 10);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  canvas { display: block; }
+  .hud {
+    position: fixed;
+    top: 14px;
+    left: 16px;
+    color: rgba(0, 255, 150, 0.55);
+    font-size: 11px;
+    line-height: 1.55;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  }
+  .hud .title {
+    color: rgba(0, 255, 150, 0.92);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .hud .dim {
+    color: rgba(0, 255, 150, 0.32);
+  }
+  .stats {
+    position: fixed;
+    bottom: 14px;
+    left: 16px;
+    color: rgba(0, 255, 150, 0.32);
+    font-size: 10px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+<div class="hud">
+  <div class="title">ARES-VISION · chamber sketch v2 (3D)</div>
+  <div>1 detect · 2 attack · 3 tear · drag rotate · scroll zoom · <span class="dim">A auto-rotate · R reset</span></div>
+</div>
+<div class="stats" id="stats"></div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ---------- Layout & physics ----------
+const CUBE_SIZE = 500;
+const GRID = 20;                              // particles per wall side
+const SPACING = CUBE_SIZE / (GRID - 1);
+const HALF = CUBE_SIZE / 2;
+
+const RELAXATION_PASSES = 6;
+const DAMPING = 0.94;
+const RESTORE_K = 0.025;
+const VEL_CLAMP = SPACING * 1.5;
+const TEAR_DIST = SPACING * 5.5;
+
+const NET_COLOR = 0x00ff96;
+const TEST_COLOR = 0x8ce6ff;
+const BG_COLOR = 0x000508;
+
+// ---------- Three.js scene ----------
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(BG_COLOR);
+
+const camera = new THREE.PerspectiveCamera(
+  45, window.innerWidth / window.innerHeight, 1, 5000
+);
+camera.position.set(900, 600, 900);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.enablePan = false;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.4;
+controls.minDistance = 400;
+controls.maxDistance = 2500;
+
+// ---------- Particle / stick storage (SoA) ----------
+const PARTICLES_PER_WALL = GRID * GRID;
+const TOTAL_PARTICLES = PARTICLES_PER_WALL * 6;
+
+const x = new Float32Array(TOTAL_PARTICLES);
+const y = new Float32Array(TOTAL_PARTICLES);
+const z = new Float32Array(TOTAL_PARTICLES);
+const px = new Float32Array(TOTAL_PARTICLES);
+const py = new Float32Array(TOTAL_PARTICLES);
+const pz = new Float32Array(TOTAL_PARTICLES);
+const rx = new Float32Array(TOTAL_PARTICLES);
+const ry = new Float32Array(TOTAL_PARTICLES);
+const rz = new Float32Array(TOTAL_PARTICLES);
+const pinned = new Uint8Array(TOTAL_PARTICLES);
+
+const STICKS_PER_WALL = 2 * GRID * (GRID - 1);
+const TOTAL_STICKS = STICKS_PER_WALL * 6;
+const sa = new Int32Array(TOTAL_STICKS);
+const sb = new Int32Array(TOTAL_STICKS);
+const sactive = new Uint8Array(TOTAL_STICKS);
+
+// ---------- Wall definitions ----------
+// Each wall is a flat membrane lying on one face of the cube,
+// pinned at its outer border, free to billow in the middle.
+const wallDefs = [
+  { name: '+y top',    u: 'x', v: 'z', n: 'y', sign: +1 },
+  { name: '-y bottom', u: 'x', v: 'z', n: 'y', sign: -1 },
+  { name: '+x right',  u: 'y', v: 'z', n: 'x', sign: +1 },
+  { name: '-x left',   u: 'y', v: 'z', n: 'x', sign: -1 },
+  { name: '+z front',  u: 'x', v: 'y', n: 'z', sign: +1 },
+  { name: '-z back',   u: 'x', v: 'y', n: 'z', sign: -1 },
+];
+
+const wallMeshes = [];
+
+function isPinnedEdge(i, j) {
+  return i === 0 || i === GRID - 1 || j === 0 || j === GRID - 1;
+}
+
+function buildWalls() {
+  for (const wm of wallMeshes) {
+    scene.remove(wm.line);
+    wm.line.geometry.dispose();
+    wm.line.material.dispose();
+  }
+  wallMeshes.length = 0;
+
+  let pi = 0;
+  let si = 0;
+
+  for (let w = 0; w < 6; w++) {
+    const def = wallDefs[w];
+    const startIdx = pi;
+
+    for (let j = 0; j < GRID; j++) {
+      for (let i = 0; i < GRID; i++) {
+        const uVal = -HALF + i * SPACING;
+        const vVal = -HALF + j * SPACING;
+        const nVal = HALF * def.sign;
+
+        const wx = (def.u === 'x' ? uVal : (def.v === 'x' ? vVal : nVal));
+        const wy = (def.u === 'y' ? uVal : (def.v === 'y' ? vVal : nVal));
+        const wz = (def.u === 'z' ? uVal : (def.v === 'z' ? vVal : nVal));
+
+        x[pi] = wx; y[pi] = wy; z[pi] = wz;
+        px[pi] = wx; py[pi] = wy; pz[pi] = wz;
+        rx[pi] = wx; ry[pi] = wy; rz[pi] = wz;
+        pinned[pi] = isPinnedEdge(i, j) ? 1 : 0;
+        pi++;
+      }
+    }
+
+    for (let j = 0; j < GRID; j++) {
+      for (let i = 0; i < GRID; i++) {
+        const idx = startIdx + j * GRID + i;
+        if (i < GRID - 1) {
+          sa[si] = idx; sb[si] = idx + 1; sactive[si] = 1; si++;
+        }
+        if (j < GRID - 1) {
+          sa[si] = idx; sb[si] = idx + GRID; sactive[si] = 1; si++;
+        }
+      }
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(STICKS_PER_WALL * 6);
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const material = new THREE.LineBasicMaterial({
+      color: NET_COLOR,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+
+    const line = new THREE.LineSegments(geometry, material);
+    line.frustumCulled = false;
+    scene.add(line);
+
+    wallMeshes.push({
+      def,
+      line,
+      stickStart: w * STICKS_PER_WALL,
+      particleStart: startIdx,
+    });
+  }
+}
+
+// ---------- Tests in chamber ----------
+const tests = [];
+const testMeshes = [];
+
+function buildTests() {
+  for (const m of testMeshes) {
+    scene.remove(m.core);
+    scene.remove(m.halo);
+    m.core.geometry.dispose();
+    m.core.material.dispose();
+    m.halo.geometry.dispose();
+    m.halo.material.dispose();
+  }
+  testMeshes.length = 0;
+  tests.length = 0;
+
+  tests.push({ x: 0, y: 0, z: 0, glow: 0 });
+  const r = HALF * 0.45;
+  const offsets = [
+    [+r * 0.6, +r * 0.4, +r * 0.6],
+    [-r * 0.6, +r * 0.4, -r * 0.6],
+    [+r * 0.6, -r * 0.4, -r * 0.6],
+    [-r * 0.6, -r * 0.4, +r * 0.6],
+  ];
+  for (const o of offsets) {
+    tests.push({ x: o[0], y: o[1], z: o[2], glow: 0 });
+  }
+
+  for (const t of tests) {
+    const coreGeom = new THREE.SphereGeometry(6, 16, 16);
+    const coreMat = new THREE.MeshBasicMaterial({
+      color: TEST_COLOR,
+      transparent: true,
+      opacity: 0.95,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const core = new THREE.Mesh(coreGeom, coreMat);
+    core.position.set(t.x, t.y, t.z);
+    scene.add(core);
+
+    const haloGeom = new THREE.SphereGeometry(20, 16, 16);
+    const haloMat = new THREE.MeshBasicMaterial({
+      color: TEST_COLOR,
+      transparent: true,
+      opacity: 0,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const halo = new THREE.Mesh(haloGeom, haloMat);
+    halo.position.set(t.x, t.y, t.z);
+    scene.add(halo);
+
+    testMeshes.push({ core, halo });
+  }
+}
+
+function build() {
+  buildWalls();
+  buildTests();
+}
+
+build();
+
+// ---------- Physics & events ----------
+function pulseAt(sx, sy, sz, opts = {}) {
+  const intensity = opts.intensity ?? 1;
+  const radius = opts.radius ?? (HALF * 1.6);
+  const r2 = radius * radius;
+  const dir = opts.direction || null;
+  const dirWeight = opts.directionWeight ?? 0.7;
+
+  for (let i = 0; i < TOTAL_PARTICLES; i++) {
+    if (pinned[i]) continue;
+    const dx0 = x[i] - sx;
+    const dy0 = y[i] - sy;
+    const dz0 = z[i] - sz;
+    const d2 = dx0 * dx0 + dy0 * dy0 + dz0 * dz0;
+    if (d2 > r2 || d2 < 0.01) continue;
+    const d = Math.sqrt(d2);
+    const falloff = Math.pow(1 - d / radius, 1.5);
+    let fx, fy, fz;
+    if (dir) {
+      const radX = dx0 / d, radY = dy0 / d, radZ = dz0 / d;
+      fx = radX * (1 - dirWeight) + dir.x * dirWeight;
+      fy = radY * (1 - dirWeight) + dir.y * dirWeight;
+      fz = radZ * (1 - dirWeight) + dir.z * dirWeight;
+    } else {
+      fx = dx0 / d;
+      fy = dy0 / d;
+      fz = dz0 / d;
+    }
+    const force = intensity * 8 * falloff;
+    px[i] -= fx * force;
+    py[i] -= fy * force;
+    pz[i] -= fz * force;
+  }
+}
+
+const wallDirs = [
+  { x:  0, y: +1, z:  0 },
+  { x:  0, y: -1, z:  0 },
+  { x: +1, y:  0, z:  0 },
+  { x: -1, y:  0, z:  0 },
+  { x:  0, y:  0, z: +1 },
+  { x:  0, y:  0, z: -1 },
+];
+
+function pickRandomTest() {
+  return tests[Math.floor(Math.random() * tests.length)];
+}
+
+function pickRandomWallDir() {
+  return wallDirs[Math.floor(Math.random() * wallDirs.length)];
+}
+
+function fireDetect() {
+  const t = pickRandomTest();
+  t.glow = 1;
+  pulseAt(t.x, t.y, t.z, { intensity: 1, radius: HALF * 1.5 });
+}
+
+function fireAttack() {
+  const t = pickRandomTest();
+  t.glow = 1.3;
+  pulseAt(t.x, t.y, t.z, {
+    intensity: 2.5,
+    radius: HALF * 2.0,
+    direction: pickRandomWallDir(),
+    directionWeight: 0.85,
+  });
+}
+
+function fireTear() {
+  const t = pickRandomTest();
+  t.glow = 1.6;
+  pulseAt(t.x, t.y, t.z, {
+    intensity: 5.5,
+    radius: HALF * 2.5,
+    direction: pickRandomWallDir(),
+    directionWeight: 0.9,
+  });
+}
+
+let nextAutoPulse = 0;
+
+function step(now) {
+  if (now > nextAutoPulse) {
+    const t = pickRandomTest();
+    t.glow = Math.max(t.glow, 0.3);
+    pulseAt(t.x, t.y, t.z, { intensity: 0.3, radius: HALF * 1.2 });
+    nextAutoPulse = now + 2000 + Math.random() * 3000;
+  }
+
+  for (let i = 0; i < TOTAL_PARTICLES; i++) {
+    if (pinned[i]) continue;
+    let vx = (x[i] - px[i]) * DAMPING;
+    let vy = (y[i] - py[i]) * DAMPING;
+    let vz = (z[i] - pz[i]) * DAMPING;
+    vx += (rx[i] - x[i]) * RESTORE_K;
+    vy += (ry[i] - y[i]) * RESTORE_K;
+    vz += (rz[i] - z[i]) * RESTORE_K;
+    if (vx > VEL_CLAMP) vx = VEL_CLAMP; else if (vx < -VEL_CLAMP) vx = -VEL_CLAMP;
+    if (vy > VEL_CLAMP) vy = VEL_CLAMP; else if (vy < -VEL_CLAMP) vy = -VEL_CLAMP;
+    if (vz > VEL_CLAMP) vz = VEL_CLAMP; else if (vz < -VEL_CLAMP) vz = -VEL_CLAMP;
+    px[i] = x[i]; py[i] = y[i]; pz[i] = z[i];
+    x[i] += vx; y[i] += vy; z[i] += vz;
+  }
+
+  for (let pass = 0; pass < RELAXATION_PASSES; pass++) {
+    for (let k = 0; k < TOTAL_STICKS; k++) {
+      if (!sactive[k]) continue;
+      const ia = sa[k], ib = sb[k];
+      const dx = x[ib] - x[ia];
+      const dy = y[ib] - y[ia];
+      const dz = z[ib] - z[ia];
+      const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 0.0001;
+      if (d > TEAR_DIST) { sactive[k] = 0; continue; }
+      const f = (SPACING - d) / d * 0.5;
+      if (!pinned[ia]) { x[ia] -= dx * f; y[ia] -= dy * f; z[ia] -= dz * f; }
+      if (!pinned[ib]) { x[ib] += dx * f; y[ib] += dy * f; z[ib] += dz * f; }
+    }
+  }
+}
+
+function updateGeometry() {
+  let totalActive = 0;
+  for (let w = 0; w < 6; w++) {
+    const wm = wallMeshes[w];
+    const positions = wm.line.geometry.attributes.position.array;
+    let ptr = 0;
+    const stickStart = w * STICKS_PER_WALL;
+    const stickEnd = stickStart + STICKS_PER_WALL;
+    for (let k = stickStart; k < stickEnd; k++) {
+      if (!sactive[k]) {
+        positions[ptr++] = 0; positions[ptr++] = 0; positions[ptr++] = 0;
+        positions[ptr++] = 0; positions[ptr++] = 0; positions[ptr++] = 0;
+        continue;
+      }
+      const ia = sa[k], ib = sb[k];
+      positions[ptr++] = x[ia]; positions[ptr++] = y[ia]; positions[ptr++] = z[ia];
+      positions[ptr++] = x[ib]; positions[ptr++] = y[ib]; positions[ptr++] = z[ib];
+      totalActive++;
+    }
+    wm.line.geometry.attributes.position.needsUpdate = true;
+  }
+  return totalActive;
+}
+
+function updateTests() {
+  for (let i = 0; i < tests.length; i++) {
+    const t = tests[i];
+    const m = testMeshes[i];
+    const scale = 1 + t.glow * 1.2;
+    m.core.scale.setScalar(scale);
+    m.halo.scale.setScalar(0.5 + t.glow * 2.5);
+    m.halo.material.opacity = t.glow * 0.4;
+    m.core.material.opacity = 0.5 + t.glow * 0.5;
+    t.glow *= 0.93;
+  }
+}
+
+// ---------- Loop ----------
+const statsEl = document.getElementById('stats');
+let lastFpsTime = performance.now();
+let frames = 0;
+let fps = 0;
+
+function animate(now) {
+  step(now);
+  const active = updateGeometry();
+  updateTests();
+  controls.update();
+  renderer.render(scene, camera);
+  frames++;
+  if (now - lastFpsTime >= 500) {
+    fps = Math.round(frames * 1000 / (now - lastFpsTime));
+    frames = 0;
+    lastFpsTime = now;
+    statsEl.textContent =
+      `${TOTAL_PARTICLES} nodes · ${active}/${TOTAL_STICKS} links · ${tests.length} tests · ${fps} fps`;
+  }
+  requestAnimationFrame(animate);
+}
+
+requestAnimationFrame(animate);
+
+// ---------- Events ----------
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+window.addEventListener('keydown', e => {
+  if (e.key === '1') fireDetect();
+  if (e.key === '2') fireAttack();
+  if (e.key === '3') fireTear();
+  if (e.key === 'r' || e.key === 'R') build();
+  if (e.key === 'a' || e.key === 'A') controls.autoRotate = !controls.autoRotate;
+});
+
+renderer.domElement.addEventListener('dblclick', () => {
+  fireDetect();
+});
+</script>
+</body>
+</html>
