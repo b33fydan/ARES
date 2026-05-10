@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 057, Step 1)
+# CLAUDE.md — ARES Phase 7 (post-Session 058)
 
 **Last updated:** 2026-05-07
-**Test count floor (passing):** 3,464
+**Test count floor (passing):** 3,540
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -17,6 +17,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Sessions 052–055: documentation reconciliation — Paper 2 v1.1 build pipeline, Paper 1 canonical decision, CLAUDE.md self-validation, citation audit + hallucination detection, Sabet remediation applied to v1.1 prose
 - Session 056: pre-publish hardening — firewall fail-closed contract enforced at producer (FirewallVerdict invariant) and at all three cycle consumers (`run_guarded_cycle`, `run_ablated_cycle`, `run_light_guarded_cycle`)
 - Session 057 / Step 1: Phase 7 opens — skeleton-equivalence audit on `injection_registry_v3` (33 scenarios). 0 natural skeleton-equivalent groups. Decision: **mutator path forced**. Pre-registered in `docs/paper_3/skeleton_audit_v1.json`.
+- Session 058: paired-scenario mutator (v1) + orthogonality audit + verbatim anchor test for `light_skeptic.py:185`. Mutator path operational. Orthogonality decision: **FAIL** — synonym conservative/aggressive collide on 14/33; severity intensifier/decreaser applicability-gap fail (31/33 and 20/33). Framing operators clean. v1 is reproducibility-locked; revision goes to v2 in a future session. Anchor test in place.
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -105,6 +106,15 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - 8 new tests across 4 files: `TestFirewallVerdictInvariant` (4) in `test_firewall.py`, `TestFirewallFailClosed` (2) in `test_guarded_cycle.py`, `TestFirewallFailClosed` (1 each) in `test_ablated_cycle.py` and `test_light_guarded_cycle.py`. The cycle tests use `MagicMock(spec=FirewallVerdict)` to bypass `__post_init__` and prove the consumer-side raise still fires if a future producer regression ever emits the bad shape.
 - No behavior change for any reachable input. Floor 3,404 unchanged; actual collected count 3,404 → 3,412. Zero regressions.
 
+## Session 058 — Paired-scenario mutator + orthogonality audit + anchor test
+- Origin: Session 057 audit forced the mutator path (0 natural skeleton-equivalent groups in registry_v3). Session 058 builds the synthetic-mutation primitive that makes paired-prose measurement possible, plus the orthogonality audit that catches operator-collapse failure modes.
+- `paired_scenario_mutator.py` registers six v1 operators across three families (synonym / severity / framing). `MutatedScenarioPair.__post_init__` enforces skeleton invariance as a typed property: skeleton-hash equality, byte-identical (fact_id, field, entity_id, source_type, timestamp) tuples per Fact, ≥1 differing value_hash, and a hard `SkeletonInvariantError` on any violation. No-op pairs are rejected at the type boundary, not silently absorbed.
+- `operator_orthogonality.py` runs the audit on registry_v3 and emits `docs/paper_3/operator_orthogonality_v1.json`. Decision is immutable per `OrthogonalityReport.__post_init__` (failed_pairs and failed_operators_by_gap must agree with thresholds and the matrix; decision must agree with both).
+- Live audit result: **FAIL**. Synonym conservative ↔ aggressive collide on 14/33 (threshold ≤2). Severity intensifier no-op on 31/33; decreaser on 20/33 (threshold ≤10). Framing prefix/suffix universal (gap=0). Mechanism: synonym operators share lexicon/selection order and only differ on count budget — they collapse on facts with ≤3 lexicon hits. Severity tables target hedge language; the corpus prose uses softening framing instead. Per the v1 reproducibility lock, operators were NOT revised to chase a PASS — the FAIL is the data, and v2 redesign will land in a future session.
+- Verbatim anchor test (`tests/agents/test_light_skeptic_anchor.py`): asserts the `_ = architect_output` line is present, on its expected line number (185), and is an executable statement, not a comment. Three tests, all passing. Anchor protects the Paper 3 kill-criterion against silent refactors.
+- Brief stated `light_skeptic.py:184`; verified actual statement is line 185 (line 184 is its explanatory comment). EXPECTED_LINE_NUMBER set to 185 in the test as the deliberate ADR moment.
+- 76 new tests across 3 files. Floor raised 3,464 → 3,540; actual collected count 3,464 → 3,540. Zero regressions. New files only — zero edits to existing `ares/` code outside this CLAUDE.md.
+
 ## Session 057 / Step 1 — Skeleton-equivalence audit (Phase 7 opens)
 - Origin: 2026-05-05 direction lock. Phase 7 / Paper 3 candidate is "Evidence Authority Isolation" — measure whether attacker-controlled prose can change verdicts/confidence/cited-facts when the structured evidence skeleton is held constant. Honeyfile lane occupied by Mantis (arXiv 2410.20911) and CHeaT (USENIX 2025); structural-defense lane occupied by ASPO and OpenClaw. Uncharted lane is influence-leakage measurement.
 - Step 1 brief: SESSION_057_CC_PROMPT.md called for replay-mode harness against `results/session_048/` and `results/session_050/`. Verified at the start of the session that those artifacts contain only summarized per-scenario verdict rows — no per-layer Architect/Skeptic/Light/Oracle traces. Replay harness is therefore not viable from existing data; scope was narrowed to the audit step alone, with the build/measurement decision deferred to Session 058.
@@ -160,7 +170,11 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 
 ### Non-interference harness (Phase 7)
 - Skeleton audit script: `ares/dialectic/scripts/non_interference/skeleton_audit.py` (Session 057 / Step 1)
-- Audit manifest: `docs/paper_3/skeleton_audit_v1.json`
+- Skeleton audit manifest: `docs/paper_3/skeleton_audit_v1.json`
+- Paired-scenario mutator: `ares/dialectic/scripts/non_interference/paired_scenario_mutator.py` — `MutationOperator`, `MutatedScenarioPair`, `PairedScenarioMutator`, `SkeletonInvariantError`, `OPERATORS_V1` (Session 058)
+- Operator orthogonality audit: `ares/dialectic/scripts/non_interference/operator_orthogonality.py` — `OrthogonalityReport`, CLI (Session 058)
+- Orthogonality manifest: `docs/paper_3/operator_orthogonality_v1.json`
+- Anchor test: `ares/dialectic/tests/agents/test_light_skeptic_anchor.py` — verbatim guard on `light_skeptic.py:185` (Session 058)
 
 ### Analysis reports
 - `ares/dialectic/scripts/analysis/framing_strategy_report.py`
