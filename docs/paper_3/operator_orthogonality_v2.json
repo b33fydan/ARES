@@ -1,0 +1,49 @@
+{
+  "applicability_gap": {
+    "framing_prefix_v1": 0,
+    "framing_suffix_v1": 0,
+    "severity_decreaser_v2": 24,
+    "severity_intensifier_v2": 13,
+    "synonym_substitution_aggressive_v2": 12,
+    "synonym_substitution_conservative_v2": 1
+  },
+  "audit_version": "v2",
+  "decision": "FAIL",
+  "decision_threshold": {
+    "max_acceptable_applicability_gap": 10,
+    "max_acceptable_collision_count": 2
+  },
+  "failed_operators_by_gap": [
+    "severity_decreaser_v2",
+    "severity_intensifier_v2",
+    "synonym_substitution_aggressive_v2"
+  ],
+  "failed_pairs": [],
+  "n_scenarios": 33,
+  "operators": [
+    "synonym_substitution_conservative_v2",
+    "synonym_substitution_aggressive_v2",
+    "severity_intensifier_v2",
+    "severity_decreaser_v2",
+    "framing_prefix_v1",
+    "framing_suffix_v1"
+  ],
+  "pairwise_collision_matrix": {
+    "framing_prefix_v1__framing_suffix_v1": 0,
+    "framing_prefix_v1__severity_decreaser_v2": 0,
+    "framing_prefix_v1__severity_intensifier_v2": 0,
+    "framing_prefix_v1__synonym_substitution_aggressive_v2": 0,
+    "framing_prefix_v1__synonym_substitution_conservative_v2": 0,
+    "framing_suffix_v1__severity_decreaser_v2": 0,
+    "framing_suffix_v1__severity_intensifier_v2": 0,
+    "framing_suffix_v1__synonym_substitution_aggressive_v2": 0,
+    "framing_suffix_v1__synonym_substitution_conservative_v2": 0,
+    "severity_decreaser_v2__severity_intensifier_v2": 0,
+    "severity_decreaser_v2__synonym_substitution_aggressive_v2": 0,
+    "severity_decreaser_v2__synonym_substitution_conservative_v2": 0,
+    "severity_intensifier_v2__synonym_substitution_aggressive_v2": 0,
+    "severity_intensifier_v2__synonym_substitution_conservative_v2": 0,
+    "synonym_substitution_aggressive_v2__synonym_substitution_conservative_v2": 0
+  },
+  "registry_label": "injection_registry_v3"
+}

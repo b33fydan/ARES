@@ -188,6 +188,7 @@ def audit_scenarios(
     mutator: PairedScenarioMutator | None = None,
     max_acceptable_collision_count: int = MAX_ACCEPTABLE_COLLISION_COUNT,
     max_acceptable_applicability_gap: int = MAX_ACCEPTABLE_APPLICABILITY_GAP,
+    audit_version: str = "v1",
 ) -> OrthogonalityReport:
     """Run the orthogonality audit.
 
@@ -200,6 +201,8 @@ def audit_scenarios(
             pairwise collisions.
         max_acceptable_applicability_gap: Pre-registered threshold for
             per-operator no-op count.
+        audit_version: Recorded in the report. Default ``"v1"``
+            preserves bit-identical output for the original audit.
 
     Returns:
         Frozen :class:`OrthogonalityReport`.
@@ -255,7 +258,7 @@ def audit_scenarios(
     decision = "PASS" if not failed_pairs and not failed_ops else "FAIL"
 
     return OrthogonalityReport(
-        audit_version="v1",
+        audit_version=audit_version,
         registry_label=registry_label,
         n_scenarios=n_scenarios,
         operators=op_names,
@@ -286,7 +289,8 @@ def write_report(report: OrthogonalityReport, output_path: Path) -> Path:
 
 def _format_summary(report: OrthogonalityReport) -> str:
     lines = [
-        f"Operator orthogonality audit (v1) on {report.registry_label}",
+        f"Operator orthogonality audit ({report.audit_version}) on "
+        f"{report.registry_label}",
         f"  n_scenarios: {report.n_scenarios}",
         f"  operators ({len(report.operators)}):",
     ]
@@ -312,11 +316,36 @@ def _format_summary(report: OrthogonalityReport) -> str:
     return "\n".join(lines)
 
 
+_OPERATOR_SET_CHOICES: tuple[str, ...] = ("v1", "v2")
+
+
+def _resolve_mutator(operator_set: str) -> PairedScenarioMutator:
+    """Build a PairedScenarioMutator for the requested operator set.
+
+    Default is ``"v1"``; that path constructs the same mutator the
+    Session 058 audit used and produces bit-identical output.
+    """
+    if operator_set == "v1":
+        return PairedScenarioMutator(operators=OPERATORS_V1)
+    if operator_set == "v2":
+        # Lazy import keeps v1 audit path independent of v2 module.
+        from ares.dialectic.scripts.non_interference.paired_scenario_mutator_v2 import (
+            OPERATORS_V2,
+        )
+        return PairedScenarioMutator(operators=OPERATORS_V2)
+    raise ValueError(
+        f"unknown operator_set {operator_set!r}; "
+        f"choose one of {_OPERATOR_SET_CHOICES}"
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Phase 7 / Session 058 — operator orthogonality audit on "
-            "injection_registry_v3 with the v1 PairedScenarioMutator."
+            "Phase 7 — operator orthogonality audit on "
+            "injection_registry_v3. Default operator set is the "
+            "Session 058 v1 PairedScenarioMutator; pass "
+            "--operator-set v2 to audit the Session 058.5 v2 roster."
         ),
     )
     parser.add_argument(
@@ -335,14 +364,26 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=MAX_ACCEPTABLE_APPLICABILITY_GAP,
     )
+    parser.add_argument(
+        "--operator-set",
+        choices=_OPERATOR_SET_CHOICES,
+        default="v1",
+        help=(
+            "Which operator roster to audit. Defaults to v1 for "
+            "bit-identical reproduction of the Session 058 audit."
+        ),
+    )
     args = parser.parse_args(argv)
 
     registry = build_registry_v3()
+    mutator = _resolve_mutator(args.operator_set)
     report = audit_scenarios(
         registry.all_scenarios(),
         registry_label="injection_registry_v3",
+        mutator=mutator,
         max_acceptable_collision_count=args.collision_threshold,
         max_acceptable_applicability_gap=args.gap_threshold,
+        audit_version=args.operator_set,
     )
     written = write_report(report, args.output)
 

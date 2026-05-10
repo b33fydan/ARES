@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 058)
+# CLAUDE.md — ARES Phase 7 (post-Session 058.5)
 
 **Last updated:** 2026-05-07
-**Test count floor (passing):** 3,540
+**Test count floor (passing):** 3,576
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -18,6 +18,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Session 056: pre-publish hardening — firewall fail-closed contract enforced at producer (FirewallVerdict invariant) and at all three cycle consumers (`run_guarded_cycle`, `run_ablated_cycle`, `run_light_guarded_cycle`)
 - Session 057 / Step 1: Phase 7 opens — skeleton-equivalence audit on `injection_registry_v3` (33 scenarios). 0 natural skeleton-equivalent groups. Decision: **mutator path forced**. Pre-registered in `docs/paper_3/skeleton_audit_v1.json`.
 - Session 058: paired-scenario mutator (v1) + orthogonality audit + verbatim anchor test for `light_skeptic.py:185`. Mutator path operational. Orthogonality decision: **FAIL** — synonym conservative/aggressive collide on 14/33; severity intensifier/decreaser applicability-gap fail (31/33 and 20/33). Framing operators clean. v1 is reproducibility-locked; revision goes to v2 in a future session. Anchor test in place.
+- Session 058.5: pre-registered v2 operator redesign. Disjoint conservative/aggressive lexicons; severity tables expanded with normalization-axis entries. Framing operators imported from v1 by-identity. v2 audit decision: **FAIL** but a different FAIL from v1 — collision pair count dropped 14 → 0 (lexicon disjointness fix worked perfectly); intensifier gap dropped 31 → 13 (normalization-axis bite succeeded but still 3 over the ≤10 threshold). Decreaser regressed (20 → 24) and aggressive synonym regressed (8 → 12) — both diagnosable corpus-shape findings, see Session 058.5 entry below. Per the brief, no third iteration this session.
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -115,6 +116,19 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Brief stated `light_skeptic.py:184`; verified actual statement is line 185 (line 184 is its explanatory comment). EXPECTED_LINE_NUMBER set to 185 in the test as the deliberate ADR moment.
 - 76 new tests across 3 files. Floor raised 3,464 → 3,540; actual collected count 3,464 → 3,540. Zero regressions. New files only — zero edits to existing `ares/` code outside this CLAUDE.md.
 
+## Session 058.5 — Mutator v2 (pre-registered design correction)
+- Origin: Session 058 audit FAIL on two specific design failure modes (synonym shared-lexicon coupling; severity register mismatch). 058.5 builds operator set v2 with two pre-registered design corrections; v1 module untouched on the reproducibility-locked record.
+- `paired_scenario_mutator_v2.py` is a new module that imports `MutationOperator`, `PairedScenarioMutator`, `SkeletonInvariantError`, plus the framing operators `framing_prefix_v1` and `framing_suffix_v1` directly by-identity from v1. Four new operators land in v2: `synonym_substitution_conservative_v2` (general-English lexicon, e.g., system → platform, account → profile), `synonym_substitution_aggressive_v2` (cybersec-domain lexicon, e.g., compromise → breach, exfiltrate → extract), `severity_intensifier_v2` and `severity_decreaser_v2` (hedge axis preserved from v1 + normalization-axis entries that target attack-disguising language: standard → anomalous, approved → questionable, scheduled → unscheduled).
+- Lexicon disjointness is enforced as a typed property: `set(CONSERVATIVE_LEXICON_V2.keys()).isdisjoint(set(AGGRESSIVE_LEXICON_V2.keys()))` and the equivalent value-set check are unit tests, not contracts. They passed on first run.
+- `operator_orthogonality.py` gained a `--operator-set v1|v2` flag (the only edit to existing `ares/` code allowed by the brief). Default is `v1` and produces bit-identical output to the Session 058 audit JSON — verified via `git diff` on the regenerated v1 file showing zero divergence.
+- Live v2 audit on registry_v3: **FAIL but a different FAIL from v1.**
+  - Collision pair count: v1=14 → v2=**0**. Lexicon disjointness fix worked perfectly. THE pre-registered correction for the synonym failure mode succeeded.
+  - Severity intensifier gap: v1=31 → v2=**13**. Normalization-axis bite succeeded; intensifier now applies to the framing-class scenarios it was a no-op on in v1. Still 3 over the ≤10 threshold but 18 closer.
+  - Severity decreaser gap: v1=20 → v2=**24** (regressed). Diagnosis: the corpus contains *baseline*-normalized framing language (standard, approved, scheduled). v2 intensifier flips those to inverted forms; v2 decreaser is built to flip *inverted* forms back, but those rarely appear in baseline corpus state. Intensifier and decreaser are asymmetric against this corpus shape.
+  - Aggressive synonym gap: v1=8 → v2=**12** (regressed). Diagnosis: corpus prose uses technical shibboleths (procdump, lsass, beacon) rather than generic cybersec vocabulary (compromise, exfiltrate, lateral). The brief's pre-registered example pairs miss the corpus's actual register.
+  - Conservative synonym gap: v1=8 → v2=**1** (improved). Framing operators unchanged at 0/0.
+- 36 new tests in `test_paired_scenario_mutator_v2.py`. Floor raised 3,540 → 3,576; actual collected count 3,540 → 3,576. Zero regressions. New file (mutator v2) plus single-flag edit to orthogonality CLI (default preserves v1 output bit-identically; no v1 module changes).
+
 ## Session 057 / Step 1 — Skeleton-equivalence audit (Phase 7 opens)
 - Origin: 2026-05-05 direction lock. Phase 7 / Paper 3 candidate is "Evidence Authority Isolation" — measure whether attacker-controlled prose can change verdicts/confidence/cited-facts when the structured evidence skeleton is held constant. Honeyfile lane occupied by Mantis (arXiv 2410.20911) and CHeaT (USENIX 2025); structural-defense lane occupied by ASPO and OpenClaw. Uncharted lane is influence-leakage measurement.
 - Step 1 brief: SESSION_057_CC_PROMPT.md called for replay-mode harness against `results/session_048/` and `results/session_050/`. Verified at the start of the session that those artifacts contain only summarized per-scenario verdict rows — no per-layer Architect/Skeptic/Light/Oracle traces. Replay harness is therefore not viable from existing data; scope was narrowed to the audit step alone, with the build/measurement decision deferred to Session 058.
@@ -172,8 +186,10 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Skeleton audit script: `ares/dialectic/scripts/non_interference/skeleton_audit.py` (Session 057 / Step 1)
 - Skeleton audit manifest: `docs/paper_3/skeleton_audit_v1.json`
 - Paired-scenario mutator: `ares/dialectic/scripts/non_interference/paired_scenario_mutator.py` — `MutationOperator`, `MutatedScenarioPair`, `PairedScenarioMutator`, `SkeletonInvariantError`, `OPERATORS_V1` (Session 058)
-- Operator orthogonality audit: `ares/dialectic/scripts/non_interference/operator_orthogonality.py` — `OrthogonalityReport`, CLI (Session 058)
-- Orthogonality manifest: `docs/paper_3/operator_orthogonality_v1.json`
+- Paired-scenario mutator v2: `ares/dialectic/scripts/non_interference/paired_scenario_mutator_v2.py` — `OPERATORS_V2`, `get_v2_operator_set`, four new operators with disjoint lexicons + register-expanded severity tables (Session 058.5)
+- Operator orthogonality audit: `ares/dialectic/scripts/non_interference/operator_orthogonality.py` — `OrthogonalityReport`, CLI with `--operator-set v1|v2` flag (Session 058 + 058.5 flag addition)
+- Orthogonality manifest v1: `docs/paper_3/operator_orthogonality_v1.json` (FAIL)
+- Orthogonality manifest v2: `docs/paper_3/operator_orthogonality_v2.json` (FAIL — different failure mode)
 - Anchor test: `ares/dialectic/tests/agents/test_light_skeptic_anchor.py` — verbatim guard on `light_skeptic.py:185` (Session 058)
 
 ### Analysis reports
