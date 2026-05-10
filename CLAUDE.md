@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 6 (post-Session 056)
+# CLAUDE.md — ARES Phase 7 (post-Session 057, Step 1)
 
-**Last updated:** 2026-04-29
-**Test count floor (passing):** 3,404
+**Last updated:** 2026-05-07
+**Test count floor (passing):** 3,464
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -16,6 +16,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Phase 6 (Sessions 047–051): COMPLETE — corpus expansion, full-corpus live benchmark, ablation, Light Skeptic
 - Sessions 052–055: documentation reconciliation — Paper 2 v1.1 build pipeline, Paper 1 canonical decision, CLAUDE.md self-validation, citation audit + hallucination detection, Sabet remediation applied to v1.1 prose
 - Session 056: pre-publish hardening — firewall fail-closed contract enforced at producer (FirewallVerdict invariant) and at all three cycle consumers (`run_guarded_cycle`, `run_ablated_cycle`, `run_light_guarded_cycle`)
+- Session 057 / Step 1: Phase 7 opens — skeleton-equivalence audit on `injection_registry_v3` (33 scenarios). 0 natural skeleton-equivalent groups. Decision: **mutator path forced**. Pre-registered in `docs/paper_3/skeleton_audit_v1.json`.
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -104,6 +105,14 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - 8 new tests across 4 files: `TestFirewallVerdictInvariant` (4) in `test_firewall.py`, `TestFirewallFailClosed` (2) in `test_guarded_cycle.py`, `TestFirewallFailClosed` (1 each) in `test_ablated_cycle.py` and `test_light_guarded_cycle.py`. The cycle tests use `MagicMock(spec=FirewallVerdict)` to bypass `__post_init__` and prove the consumer-side raise still fires if a future producer regression ever emits the bad shape.
 - No behavior change for any reachable input. Floor 3,404 unchanged; actual collected count 3,404 → 3,412. Zero regressions.
 
+## Session 057 / Step 1 — Skeleton-equivalence audit (Phase 7 opens)
+- Origin: 2026-05-05 direction lock. Phase 7 / Paper 3 candidate is "Evidence Authority Isolation" — measure whether attacker-controlled prose can change verdicts/confidence/cited-facts when the structured evidence skeleton is held constant. Honeyfile lane occupied by Mantis (arXiv 2410.20911) and CHeaT (USENIX 2025); structural-defense lane occupied by ASPO and OpenClaw. Uncharted lane is influence-leakage measurement.
+- Step 1 brief: SESSION_057_CC_PROMPT.md called for replay-mode harness against `results/session_048/` and `results/session_050/`. Verified at the start of the session that those artifacts contain only summarized per-scenario verdict rows — no per-layer Architect/Skeptic/Light/Oracle traces. Replay harness is therefore not viable from existing data; scope was narrowed to the audit step alone, with the build/measurement decision deferred to Session 058.
+- Audit result on `injection_registry_v3` (33 scenarios): **0 natural skeleton-equivalent groups.** Every scenario has a unique `(fact_id, field, entity_id, source_type)` tuple set. Pre-registered decision rule `n_groups_size_ge_2 ≥ 5 → harness_path` evaluates to **`mutator_path`**.
+- Implication for Session 058: `paired_scenario_mutator.py` is on the critical path. Skeleton-preserving mutation (synonym substitution / framing prefix-suffix) is the only way to produce skeleton-equivalent variants from this corpus. Decision is recorded in the audit JSON and is immutable per `SkeletonAuditReport.__post_init__`.
+- 52 new tests across 2 files: `TestSkeletonHashValueBlind` / `TestSkeletonHashTimestampBlind` / `TestSkeletonHashTypeSensitive` / `TestSkeletonHashStructure` / `TestSkeletonHashCardinality` / `TestSkeletonTimestamps` / `TestGroup*` / `TestMakeGroupId` / `TestAllUnique` (28) in `test_skeleton_equivalence.py`; `TestAuditOnSynthetic` / `TestDecisionRule` / `TestReportInvariants` / `TestWriteReport` / `TestLiveRegistryAudit` / `TestCli` / `TestModuleSurface` (24) in `test_skeleton_audit.py`.
+- New files only — zero edits to existing `ares/` code. Floor raised 3,404 → 3,464; actual collected count 3,412 → 3,464. Zero regressions.
+
 ## Architecture Constraints (NON-NEGOTIABLE)
 - Frozen dataclasses everywhere. No mutable state.
 - New files only. Never modify existing files unless explicitly stated.
@@ -131,6 +140,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - `ares/dialectic/schemas/framing_benchmark_result_v2.py` (ablation, Session 049)
 - `ares/dialectic/schemas/framing_benchmark_result_v3.py` (three-way, Session 050)
 - `ares/dialectic/schemas/light_skeptic_judgment.py`
+- `ares/dialectic/schemas/skeleton_equivalence.py` (Phase 7 / Session 057, skeleton hash + group)
 
 ### Corpora & registries
 - Categories A/B/C (12 scenarios): `ares/dialectic/scripts/injection_corpus.py`
@@ -147,6 +157,10 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - `ares/dialectic/scripts/run_full_corpus_benchmark.py` (Session 048, 27-scenario)
 - `ares/dialectic/scripts/run_ablation_benchmark.py` (Session 049)
 - `ares/dialectic/scripts/run_three_way_benchmark.py` (Session 050)
+
+### Non-interference harness (Phase 7)
+- Skeleton audit script: `ares/dialectic/scripts/non_interference/skeleton_audit.py` (Session 057 / Step 1)
+- Audit manifest: `docs/paper_3/skeleton_audit_v1.json`
 
 ### Analysis reports
 - `ares/dialectic/scripts/analysis/framing_strategy_report.py`
