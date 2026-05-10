@@ -1,0 +1,1169 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "mcp-excalidraw-server",
+  "elements": [
+    {
+      "id": "title",
+      "type": "text",
+      "x": 80,
+      "y": 40,
+      "width": 1400,
+      "height": 50,
+      "strokeColor": "#1e1e1e",
+      "text": "How ARES Works",
+      "fontSize": 36,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:13:18.395Z",
+      "updatedAt": "2026-05-02T18:13:18.395Z",
+      "version": 1
+    },
+    {
+      "id": "subtitle",
+      "type": "text",
+      "x": 80,
+      "y": 95,
+      "width": 1400,
+      "height": 28,
+      "strokeColor": "#868e96",
+      "text": "Single-turn pipeline  ·  schema  ·  violations",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:13:18.395Z",
+      "updatedAt": "2026-05-02T18:13:18.396Z",
+      "version": 1
+    },
+    {
+      "id": "s1-header",
+      "type": "text",
+      "x": 80,
+      "y": 150,
+      "width": 700,
+      "height": 32,
+      "strokeColor": "#1971c2",
+      "text": "1  ·  The Core Pipeline",
+      "fontSize": 22,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:13:18.396Z",
+      "updatedAt": "2026-05-02T18:13:18.396Z",
+      "version": 1
+    },
+    {
+      "id": "evidence",
+      "type": "ellipse",
+      "x": 80,
+      "y": 220,
+      "width": 170,
+      "height": 100,
+      "backgroundColor": "transparent",
+      "strokeColor": "#0c8599",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "📦 Evidence\nPacket\nSHA256-sealed"
+      },
+      "fontSize": 15,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:13:18.396Z",
+      "updatedAt": "2026-05-02T18:19:12.473Z",
+      "version": 2
+    },
+    {
+      "id": "architect",
+      "type": "rectangle",
+      "x": 320,
+      "y": 220,
+      "width": 170,
+      "height": 100,
+      "backgroundColor": "transparent",
+      "strokeColor": "#1971c2",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "🏗️ Architect\nLLM analyst"
+      },
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:13:18.396Z",
+      "updatedAt": "2026-05-02T18:19:10.513Z",
+      "version": 2
+    },
+    {
+      "id": "firewall",
+      "type": "diamond",
+      "x": 540,
+      "y": 195,
+      "width": 210,
+      "height": 150,
+      "backgroundColor": "transparent",
+      "strokeColor": "#e03131",
+      "strokeWidth": 4,
+      "roughness": 1,
+      "label": {
+        "text": "🛡️ Firewall\nno-LLM gate"
+      },
+      "fontSize": 14,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:13:18.396Z",
+      "updatedAt": "2026-05-02T18:19:09.322Z",
+      "version": 2
+    },
+    {
+      "id": "skeptic",
+      "type": "rectangle",
+      "x": 820,
+      "y": 220,
+      "width": 170,
+      "height": 100,
+      "backgroundColor": "transparent",
+      "strokeColor": "#9c36b5",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "🤔 Skeptic\nLLM doubter"
+      },
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:13:18.396Z",
+      "updatedAt": "2026-05-02T18:19:11.281Z",
+      "version": 2
+    },
+    {
+      "id": "oracle",
+      "type": "rectangle",
+      "x": 1060,
+      "y": 220,
+      "width": 170,
+      "height": 100,
+      "backgroundColor": "transparent",
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "roughness": 1,
+      "label": {
+        "text": "⚖️ Oracle\nLLM judge"
+      },
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:13:18.396Z",
+      "updatedAt": "2026-05-02T18:19:11.660Z",
+      "version": 2
+    },
+    {
+      "id": "verdict",
+      "type": "rectangle",
+      "x": 1300,
+      "y": 220,
+      "width": 170,
+      "height": 100,
+      "backgroundColor": "transparent",
+      "strokeColor": "#e8590c",
+      "strokeWidth": 3,
+      "roughness": 1,
+      "label": {
+        "text": "✅ Verdict\n(frozen)"
+      },
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:13:18.396Z",
+      "updatedAt": "2026-05-02T18:19:12.055Z",
+      "version": 2
+    },
+    {
+      "id": "moontupidqihv5urj1",
+      "type": "arrow",
+      "x": 258,
+      "y": 270,
+      "strokeColor": "#475569",
+      "strokeWidth": 2,
+      "label": {
+        "text": "reads"
+      },
+      "fontSize": 12,
+      "fontFamily": 5,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          54,
+          0
+        ]
+      ],
+      "start": {
+        "id": "evidence"
+      },
+      "end": {
+        "id": "architect"
+      },
+      "createdAt": "2026-05-02T18:13:18.397Z",
+      "updatedAt": "2026-05-02T18:13:18.397Z",
+      "version": 1
+    },
+    {
+      "id": "moontupiv7ypx1oo6dc",
+      "type": "arrow",
+      "x": 498,
+      "y": 270,
+      "strokeColor": "#475569",
+      "strokeWidth": 2,
+      "label": {
+        "text": "submits"
+      },
+      "fontSize": 12,
+      "fontFamily": 5,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          34,
+          0
+        ]
+      ],
+      "start": {
+        "id": "architect"
+      },
+      "end": {
+        "id": "firewall"
+      },
+      "createdAt": "2026-05-02T18:13:18.397Z",
+      "updatedAt": "2026-05-02T18:13:18.397Z",
+      "version": 1
+    },
+    {
+      "id": "moontupi2vd20sxzep2",
+      "type": "arrow",
+      "x": 758,
+      "y": 270,
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "label": {
+        "text": "if clean"
+      },
+      "fontSize": 12,
+      "fontFamily": 5,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          54,
+          0
+        ]
+      ],
+      "start": {
+        "id": "firewall"
+      },
+      "end": {
+        "id": "skeptic"
+      },
+      "createdAt": "2026-05-02T18:13:18.397Z",
+      "updatedAt": "2026-05-02T18:13:18.397Z",
+      "version": 1
+    },
+    {
+      "id": "moontupis6oes9rquxj",
+      "type": "arrow",
+      "x": 998,
+      "y": 270,
+      "strokeColor": "#475569",
+      "strokeWidth": 2,
+      "label": {
+        "text": "challenges"
+      },
+      "fontSize": 12,
+      "fontFamily": 5,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          54,
+          0
+        ]
+      ],
+      "start": {
+        "id": "skeptic"
+      },
+      "end": {
+        "id": "oracle"
+      },
+      "createdAt": "2026-05-02T18:13:18.397Z",
+      "updatedAt": "2026-05-02T18:13:18.397Z",
+      "version": 1
+    },
+    {
+      "id": "moontupi5lb6np3p09v",
+      "type": "arrow",
+      "x": 1238,
+      "y": 270,
+      "strokeColor": "#475569",
+      "strokeWidth": 2,
+      "label": {
+        "text": "decides"
+      },
+      "fontSize": 12,
+      "fontFamily": 5,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          54,
+          0
+        ]
+      ],
+      "start": {
+        "id": "oracle"
+      },
+      "end": {
+        "id": "verdict"
+      },
+      "createdAt": "2026-05-02T18:13:18.397Z",
+      "updatedAt": "2026-05-02T18:13:18.397Z",
+      "version": 1
+    },
+    {
+      "id": "moontupi9mzjqgpxpvd",
+      "type": "arrow",
+      "x": 645,
+      "y": 360,
+      "strokeColor": "#e03131",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -50,
+          60
+        ],
+        [
+          -260,
+          60
+        ],
+        [
+          -240,
+          -40
+        ]
+      ],
+      "endArrowhead": "arrow",
+      "createdAt": "2026-05-02T18:13:18.397Z",
+      "updatedAt": "2026-05-02T18:13:18.397Z",
+      "version": 1
+    },
+    {
+      "id": "hotswap-label",
+      "type": "text",
+      "x": 380,
+      "y": 425,
+      "width": 360,
+      "height": 22,
+      "strokeColor": "#e03131",
+      "text": "if tainted: hot-swap fresh Architect",
+      "fontSize": 13,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:13:18.397Z",
+      "updatedAt": "2026-05-02T18:19:10.135Z",
+      "version": 2
+    },
+    {
+      "id": "frozen-note",
+      "type": "text",
+      "x": 80,
+      "y": 450,
+      "width": 1400,
+      "height": 22,
+      "strokeColor": "#868e96",
+      "text": "All outputs are frozen dataclasses  ·  once written, never mutated  ·  EvidencePacket is the unit of truth",
+      "fontSize": 14,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:13:18.397Z",
+      "updatedAt": "2026-05-02T18:13:18.397Z",
+      "version": 1
+    },
+    {
+      "id": "s2-header",
+      "type": "text",
+      "x": 80,
+      "y": 510,
+      "width": 900,
+      "height": 32,
+      "strokeColor": "#0c8599",
+      "text": "2  ·  A Schema Up Close: FirewallVerdict",
+      "fontSize": 22,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "schema-box",
+      "type": "rectangle",
+      "x": 80,
+      "y": 580,
+      "width": 560,
+      "height": 300,
+      "backgroundColor": "transparent",
+      "strokeColor": "#0c8599",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "schema-decorator",
+      "type": "text",
+      "x": 110,
+      "y": 600,
+      "width": 500,
+      "height": 22,
+      "strokeColor": "#2f9e44",
+      "text": "@dataclass(frozen=True)",
+      "fontSize": 14,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "schema-classname",
+      "type": "text",
+      "x": 110,
+      "y": 628,
+      "width": 500,
+      "height": 22,
+      "strokeColor": "#1971c2",
+      "text": "class FirewallVerdict:",
+      "fontSize": 14,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "schema-divider",
+      "type": "line",
+      "x": 110,
+      "y": 660,
+      "width": 500,
+      "height": 0,
+      "strokeColor": "#cbd5e1",
+      "strokeWidth": 1,
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          500,
+          0
+        ]
+      ],
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "field-1",
+      "type": "text",
+      "x": 130,
+      "y": 680,
+      "width": 460,
+      "height": 22,
+      "strokeColor": "#475569",
+      "text": "🔒  passed: bool",
+      "fontSize": 14,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "field-2",
+      "type": "text",
+      "x": 130,
+      "y": 712,
+      "width": 460,
+      "height": 22,
+      "strokeColor": "#475569",
+      "text": "🔒  sanitized_output: str | None",
+      "fontSize": 14,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "field-3",
+      "type": "text",
+      "x": 130,
+      "y": 744,
+      "width": 460,
+      "height": 22,
+      "strokeColor": "#475569",
+      "text": "🔒  violations: list[Violation]",
+      "fontSize": 14,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "field-4",
+      "type": "text",
+      "x": 130,
+      "y": 776,
+      "width": 460,
+      "height": 22,
+      "strokeColor": "#475569",
+      "text": "🔒  reason: str",
+      "fontSize": 14,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "schema-footer",
+      "type": "text",
+      "x": 110,
+      "y": 825,
+      "width": 500,
+      "height": 22,
+      "strokeColor": "#868e96",
+      "text": "All fields immutable. Constructor enforces invariants.",
+      "fontSize": 13,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "inv-box",
+      "type": "rectangle",
+      "x": 700,
+      "y": 580,
+      "width": 420,
+      "height": 170,
+      "backgroundColor": "transparent",
+      "strokeColor": "#e8590c",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "inv-title",
+      "type": "text",
+      "x": 720,
+      "y": 600,
+      "width": 380,
+      "height": 28,
+      "strokeColor": "#e8590c",
+      "text": "🚨  Producer Invariant",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "inv-line1",
+      "type": "text",
+      "x": 720,
+      "y": 642,
+      "width": 380,
+      "height": 22,
+      "strokeColor": "#1e1e1e",
+      "text": "passed = False",
+      "fontSize": 14,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "inv-line2",
+      "type": "text",
+      "x": 720,
+      "y": 670,
+      "width": 380,
+      "height": 22,
+      "strokeColor": "#1e1e1e",
+      "text": "  ⇒  sanitized_output is not None",
+      "fontSize": 14,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "inv-line3",
+      "type": "text",
+      "x": 720,
+      "y": 710,
+      "width": 380,
+      "height": 22,
+      "strokeColor": "#868e96",
+      "text": "Enforced in __post_init__",
+      "fontSize": 13,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "inv-caption",
+      "type": "text",
+      "x": 700,
+      "y": 770,
+      "width": 420,
+      "height": 100,
+      "strokeColor": "#475569",
+      "text": "If a producer ever returns 'fail' without\na sanitized fallback, the dataclass refuses\nto be constructed. The contract IS the code.",
+      "fontSize": 14,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "schema-takeaway",
+      "type": "text",
+      "x": 80,
+      "y": 905,
+      "width": 1400,
+      "height": 22,
+      "strokeColor": "#1971c2",
+      "text": "→  Every agent speaks this shape. If they don't, the next agent literally cannot read them.",
+      "fontSize": 15,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:14:13.671Z",
+      "updatedAt": "2026-05-02T18:14:13.671Z",
+      "version": 1
+    },
+    {
+      "id": "s3-header",
+      "type": "text",
+      "x": 80,
+      "y": 970,
+      "width": 1400,
+      "height": 32,
+      "strokeColor": "#e03131",
+      "text": "3  ·  What the Firewall Catches: 4 Violation Types",
+      "fontSize": 22,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v1-box",
+      "type": "rectangle",
+      "x": 80,
+      "y": 1030,
+      "width": 320,
+      "height": 200,
+      "backgroundColor": "transparent",
+      "strokeColor": "#e03131",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v1-title",
+      "type": "text",
+      "x": 100,
+      "y": 1050,
+      "width": 280,
+      "height": 28,
+      "strokeColor": "#e03131",
+      "text": "❌  Malformed shape",
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v1-divider",
+      "type": "line",
+      "x": 100,
+      "y": 1085,
+      "width": 280,
+      "height": 0,
+      "strokeColor": "#cbd5e1",
+      "strokeWidth": 1,
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          280,
+          0
+        ]
+      ],
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v1-code1",
+      "type": "text",
+      "x": 100,
+      "y": 1100,
+      "width": 280,
+      "height": 22,
+      "strokeColor": "#1e1e1e",
+      "text": "verdict: \"high\"",
+      "fontSize": 13,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v1-code2",
+      "type": "text",
+      "x": 100,
+      "y": 1128,
+      "width": 280,
+      "height": 22,
+      "strokeColor": "#868e96",
+      "text": "# expected enum value",
+      "fontSize": 13,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v1-caption",
+      "type": "text",
+      "x": 100,
+      "y": 1175,
+      "width": 280,
+      "height": 40,
+      "strokeColor": "#475569",
+      "text": "Type doesn't match the\nschema declaration.",
+      "fontSize": 13,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v2-box",
+      "type": "rectangle",
+      "x": 430,
+      "y": 1030,
+      "width": 320,
+      "height": 200,
+      "backgroundColor": "transparent",
+      "strokeColor": "#e03131",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v2-title",
+      "type": "text",
+      "x": 450,
+      "y": 1050,
+      "width": 280,
+      "height": 28,
+      "strokeColor": "#e03131",
+      "text": "❌  Contradiction",
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v2-divider",
+      "type": "line",
+      "x": 450,
+      "y": 1085,
+      "width": 280,
+      "height": 0,
+      "strokeColor": "#cbd5e1",
+      "strokeWidth": 1,
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          280,
+          0
+        ]
+      ],
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v2-code1",
+      "type": "text",
+      "x": 450,
+      "y": 1100,
+      "width": 280,
+      "height": 22,
+      "strokeColor": "#1e1e1e",
+      "text": "verdict: CRITICAL",
+      "fontSize": 13,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v2-code2",
+      "type": "text",
+      "x": 450,
+      "y": 1128,
+      "width": 280,
+      "height": 22,
+      "strokeColor": "#1e1e1e",
+      "text": "confidence: 0.10",
+      "fontSize": 13,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.948Z",
+      "version": 1
+    },
+    {
+      "id": "v2-caption",
+      "type": "text",
+      "x": 450,
+      "y": 1175,
+      "width": 280,
+      "height": 40,
+      "strokeColor": "#475569",
+      "text": "Fields disagree with\neach other.",
+      "fontSize": 13,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:15:11.948Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v3-box",
+      "type": "rectangle",
+      "x": 780,
+      "y": 1030,
+      "width": 320,
+      "height": 200,
+      "backgroundColor": "transparent",
+      "strokeColor": "#e03131",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v3-title",
+      "type": "text",
+      "x": 800,
+      "y": 1050,
+      "width": 280,
+      "height": 28,
+      "strokeColor": "#e03131",
+      "text": "❌  Phantom citation",
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v3-divider",
+      "type": "line",
+      "x": 800,
+      "y": 1085,
+      "width": 280,
+      "height": 0,
+      "strokeColor": "#cbd5e1",
+      "strokeWidth": 1,
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          280,
+          0
+        ]
+      ],
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v3-code1",
+      "type": "text",
+      "x": 800,
+      "y": 1100,
+      "width": 280,
+      "height": 22,
+      "strokeColor": "#1e1e1e",
+      "text": "cites: \"log_4.txt\"",
+      "fontSize": 13,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v3-code2",
+      "type": "text",
+      "x": 800,
+      "y": 1128,
+      "width": 280,
+      "height": 22,
+      "strokeColor": "#868e96",
+      "text": "# not in evidence",
+      "fontSize": 13,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v3-caption",
+      "type": "text",
+      "x": 800,
+      "y": 1175,
+      "width": 280,
+      "height": 40,
+      "strokeColor": "#475569",
+      "text": "References evidence that\nisn't in the packet.",
+      "fontSize": 13,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v4-box",
+      "type": "rectangle",
+      "x": 1130,
+      "y": 1030,
+      "width": 320,
+      "height": 200,
+      "backgroundColor": "transparent",
+      "strokeColor": "#e03131",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v4-title",
+      "type": "text",
+      "x": 1150,
+      "y": 1050,
+      "width": 280,
+      "height": 28,
+      "strokeColor": "#e03131",
+      "text": "❌  Invariant break",
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v4-divider",
+      "type": "line",
+      "x": 1150,
+      "y": 1085,
+      "width": 280,
+      "height": 0,
+      "strokeColor": "#cbd5e1",
+      "strokeWidth": 1,
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          280,
+          0
+        ]
+      ],
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v4-code1",
+      "type": "text",
+      "x": 1150,
+      "y": 1100,
+      "width": 280,
+      "height": 22,
+      "strokeColor": "#1e1e1e",
+      "text": "passed: False",
+      "fontSize": 13,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v4-code2",
+      "type": "text",
+      "x": 1150,
+      "y": 1128,
+      "width": 280,
+      "height": 22,
+      "strokeColor": "#1e1e1e",
+      "text": "sanitized_output: None",
+      "fontSize": 13,
+      "fontFamily": 3,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "v4-caption",
+      "type": "text",
+      "x": 1150,
+      "y": 1175,
+      "width": 280,
+      "height": 40,
+      "strokeColor": "#475569",
+      "text": "ValueError at construction.\nCannot exist.",
+      "fontSize": 13,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "reject-bar",
+      "type": "line",
+      "x": 80,
+      "y": 1255,
+      "width": 1370,
+      "height": 0,
+      "strokeColor": "#e03131",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          1370,
+          0
+        ]
+      ],
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "reject-bar-label",
+      "type": "text",
+      "x": 80,
+      "y": 1265,
+      "width": 1400,
+      "height": 24,
+      "strokeColor": "#e03131",
+      "text": "↑  All four caught deterministically at the firewall checkpoint  ·  zero LLM calls  ·  zero ambiguity",
+      "fontSize": 14,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "footer-divider",
+      "type": "line",
+      "x": 80,
+      "y": 1325,
+      "width": 1370,
+      "height": 0,
+      "strokeColor": "#cbd5e1",
+      "strokeWidth": 1,
+      "strokeStyle": "dotted",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          1370,
+          0
+        ]
+      ],
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "punchline-1",
+      "type": "text",
+      "x": 80,
+      "y": 1350,
+      "width": 1400,
+      "height": 36,
+      "strokeColor": "#e8590c",
+      "text": "💡  But here's the catch: schema catches structure (100%) — not semantic framing (0%).",
+      "fontSize": 22,
+      "fontFamily": 2,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    },
+    {
+      "id": "punchline-2",
+      "type": "text",
+      "x": 80,
+      "y": 1395,
+      "width": 1400,
+      "height": 28,
+      "strokeColor": "#e8590c",
+      "text": "A perfectly-shaped, grammatically valid lie walks right past. That's Finding 7  —  the heart of Paper 2.",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "createdAt": "2026-05-02T18:15:11.949Z",
+      "updatedAt": "2026-05-02T18:15:11.949Z",
+      "version": 1
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridSize": null
+  }
+}
