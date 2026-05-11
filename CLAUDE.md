@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 058.5)
+# CLAUDE.md — ARES Phase 7 (post-Session 059)
 
-**Last updated:** 2026-05-07
-**Test count floor (passing):** 3,576
+**Last updated:** 2026-05-10
+**Test count floor (passing):** 3,637
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -19,6 +19,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Session 057 / Step 1: Phase 7 opens — skeleton-equivalence audit on `injection_registry_v3` (33 scenarios). 0 natural skeleton-equivalent groups. Decision: **mutator path forced**. Pre-registered in `docs/paper_3/skeleton_audit_v1.json`.
 - Session 058: paired-scenario mutator (v1) + orthogonality audit + verbatim anchor test for `light_skeptic.py:185`. Mutator path operational. Orthogonality decision: **FAIL** — synonym conservative/aggressive collide on 14/33; severity intensifier/decreaser applicability-gap fail (31/33 and 20/33). Framing operators clean. v1 is reproducibility-locked; revision goes to v2 in a future session. Anchor test in place.
 - Session 058.5: pre-registered v2 operator redesign. Disjoint conservative/aggressive lexicons; severity tables expanded with normalization-axis entries. Framing operators imported from v1 by-identity. v2 audit decision: **FAIL** but a different FAIL from v1 — collision pair count dropped 14 → 0 (lexicon disjointness fix worked perfectly); intensifier gap dropped 31 → 13 (normalization-axis bite succeeded but still 3 over the ≤10 threshold). Decreaser regressed (20 → 24) and aggressive synonym regressed (8 → 12) — both diagnosable corpus-shape findings, see Session 058.5 entry below. Per the brief, no third iteration this session.
+- Session 059: first live InfluenceLeakage measurement. Dual-reading verdict: **narrow (Light Skeptic only): ALIVE**, **broad (Light + Oracle + Final): DEAD**. Light Skeptic itself never leaked across 2 sampled light pairs; the broad-reading kill fired at Oracle's `supporting_fact_ids` (Architect citation passthrough — a sibling architectural finding not anticipated by the brief). Run 2 cost: $1.95 / 134 cycles / wall ~30min. Both readings disclosed transparently per discipline (no retcon).
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -129,6 +130,19 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
   - Conservative synonym gap: v1=8 → v2=**1** (improved). Framing operators unchanged at 0/0.
 - 36 new tests in `test_paired_scenario_mutator_v2.py`. Floor raised 3,540 → 3,576; actual collected count 3,540 → 3,576. Zero regressions. New file (mutator v2) plus single-flag edit to orthogonality CLI (default preserves v1 output bit-identically; no v1 module changes).
 
+## Session 059 — InfluenceLeakage first measurement (dual-reading verdict)
+- New package `ares/dialectic/measurement/` with `InfluenceLeakage` schema (4-bit frozen dataclass, locked weights 0.40/0.20/0.20/0.20, confidence-drift threshold |Δ|>0.10), `leakage_runner.py` (pair iteration, cost tracking via shared `LLMCallLogger`, halt logic, dual-criterion kill predicates), `leakage_report.py` (markdown renderer with discipline-enforced forbidden-phrase guard), `scripts/run_session_059.py` (CLI: `--dry-run`, `--preflight-only`, `--confirm-live`, `--cost-ceiling` refuses to raise above $20).
+- Locked operator subset for measurement (Option A from 058.5 strategic call): `framing_prefix_v1`, `framing_suffix_v1`, `synonym_substitution_conservative_v2` — the three v2 operators with applicability gap ≤1 and zero pairwise collisions.
+- Drafting-error resolution mid-session: the brief had internal tension between "Light Skeptic's InfluenceLeakage 4-bit vector" (narrow framing) and "deterministic path (OracleJudge + Light Skeptic)" (broad framing in the CC prompt). Initial implementation aggregated kill_fires across ALL layers including Architect, which fired on cycle 6 of run 1. Resolved per web Claude's framing: **no retcon** of either reading; both are computed per pair and reported transparently. `PairLeakageRecord.kill_fires_narrow` (Light Skeptic only) and `kill_fires_brief_broad` (Light + Oracle + Final Verdict; excludes Architect) are the two pre-registered readings.
+- Halt-scope fix: deterministic-path kill flips a `deterministic_active` flag and breaks the operator loop only. The LLM path keeps running under its own cost share. `halt_reason` stays `HALT_COMPLETED` unless cost or anchor halts.
+- Live measurement on `injection_registry_v3` (run 2, run_id `20260510-193950-f401a8`, 134 cycles, $1.9512, wall ~30min, anchor green throughout):
+  - **Narrow verdict: FALSE** (Light Skeptic byte-stable across 2 sampled light pairs). `Paper 3 claim status (narrow / Light Skeptic only): ALIVE`.
+  - **Broad verdict: TRUE** (1/2 light pairs leaked at Oracle layer via `supporting_fact_ids` Architect passthrough). `Paper 3 claim status (brief_broad / Light + Oracle + Final): DEAD`.
+  - LLM path: 98 of 99 pairs completed (one operator no-op on one scenario). Architect first-diverging on 39 pairs (40%), Skeptic LLM on 34 (35%), no divergence on 25 (26%). Verdict label drift 16–27% per operator.
+- Architectural finding (not anticipated by the brief): Oracle's `Verdict.supporting_fact_ids` is a passthrough of `architect_message.get_all_fact_ids()` (`oracle.py:88-98`). When the Architect cites a different fact set under attacker prose mutation, the Oracle's *decision* (outcome + confidence) is preserved deterministically, but the Oracle's *explanation surface* inherits the Architect's drift. This is a sibling-isolation problem worth a Paper 3 methodology section.
+- Run 1 (run_id `20260510-184611-8e6e6d`, 6 cycles, $0.0863, halted on initial implementation's any-layer kill firing on Architect drift) is preserved verbatim on disk as the audit trail; the dual readings recompute correctly on those traces.
+- 61 new tests across 2 files: `test_influence_leakage.py` (41 — locked-constants assertions, frozen invariants, 4-bit semantics, weighted scalar boundary tests, helper extractors) and `test_leakage_runner.py` (24 — per-pair leakage, dual kill readings, cost circuit-breaker, scoped halt, anchor-test guard, JSONL round-trip, SHA256). Floor raised 3,576 → 3,637; actual collected count 3,637. Zero regressions. New files only — zero edits to existing `ares/` code outside the measurement package.
+
 ## Session 057 / Step 1 — Skeleton-equivalence audit (Phase 7 opens)
 - Origin: 2026-05-05 direction lock. Phase 7 / Paper 3 candidate is "Evidence Authority Isolation" — measure whether attacker-controlled prose can change verdicts/confidence/cited-facts when the structured evidence skeleton is held constant. Honeyfile lane occupied by Mantis (arXiv 2410.20911) and CHeaT (USENIX 2025); structural-defense lane occupied by ASPO and OpenClaw. Uncharted lane is influence-leakage measurement.
 - Step 1 brief: SESSION_057_CC_PROMPT.md called for replay-mode harness against `results/session_048/` and `results/session_050/`. Verified at the start of the session that those artifacts contain only summarized per-scenario verdict rows — no per-layer Architect/Skeptic/Light/Oracle traces. Replay harness is therefore not viable from existing data; scope was narrowed to the audit step alone, with the build/measurement decision deferred to Session 058.
@@ -191,6 +205,14 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Orthogonality manifest v1: `docs/paper_3/operator_orthogonality_v1.json` (FAIL)
 - Orthogonality manifest v2: `docs/paper_3/operator_orthogonality_v2.json` (FAIL — different failure mode)
 - Anchor test: `ares/dialectic/tests/agents/test_light_skeptic_anchor.py` — verbatim guard on `light_skeptic.py:185` (Session 058)
+
+### Measurement (Phase 7 / Session 059)
+- InfluenceLeakage schema: `ares/dialectic/measurement/influence_leakage.py` — 4-bit frozen dataclass, locked weights, kill threshold, drift threshold, layer enum, helper extractors
+- Measurement runner: `ares/dialectic/measurement/leakage_runner.py` — `RunnerConfig`, `RunSummary`, `PairLeakageRecord` (with `kill_fires_narrow` / `kill_fires_brief_broad` predicates), `CycleTrace`, `run_preflight`, `run_full_measurement`, `anchor_test_passes`
+- Measurement report: `ares/dialectic/measurement/leakage_report.py` — dual-verdict markdown renderer
+- CLI: `scripts/run_session_059.py` — `--dry-run`, `--preflight-only`, `--confirm-live`, `--cost-ceiling` (capped at $20)
+- Leakage manifests (run 2): `LEAKAGE_REPORT_20260510-193950-f401a8.md`, `data/paper_3/leakage_runs/20260510-193950-f401a8/`
+- Leakage manifests (run 1, preserved as audit trail): `LEAKAGE_REPORT_20260510-184611-8e6e6d.md`, `data/paper_3/leakage_runs/20260510-184611-8e6e6d/`
 
 ### Analysis reports
 - `ares/dialectic/scripts/analysis/framing_strategy_report.py`
