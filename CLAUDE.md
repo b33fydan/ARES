@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 059)
+# CLAUDE.md — ARES Phase 7 (post-Session 060)
 
 **Last updated:** 2026-05-10
-**Test count floor (passing):** 3,637
+**Test count floor (passing):** 3,647
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -20,6 +20,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Session 058: paired-scenario mutator (v1) + orthogonality audit + verbatim anchor test for `light_skeptic.py:185`. Mutator path operational. Orthogonality decision: **FAIL** — synonym conservative/aggressive collide on 14/33; severity intensifier/decreaser applicability-gap fail (31/33 and 20/33). Framing operators clean. v1 is reproducibility-locked; revision goes to v2 in a future session. Anchor test in place.
 - Session 058.5: pre-registered v2 operator redesign. Disjoint conservative/aggressive lexicons; severity tables expanded with normalization-axis entries. Framing operators imported from v1 by-identity. v2 audit decision: **FAIL** but a different FAIL from v1 — collision pair count dropped 14 → 0 (lexicon disjointness fix worked perfectly); intensifier gap dropped 31 → 13 (normalization-axis bite succeeded but still 3 over the ≤10 threshold). Decreaser regressed (20 → 24) and aggressive synonym regressed (8 → 12) — both diagnosable corpus-shape findings, see Session 058.5 entry below. Per the brief, no third iteration this session.
 - Session 059: first live InfluenceLeakage measurement. Dual-reading verdict: **narrow (Light Skeptic only): ALIVE**, **broad (Light + Oracle + Final): DEAD**. Light Skeptic itself never leaked across 2 sampled light pairs; the broad-reading kill fired at Oracle's `supporting_fact_ids` (Architect citation passthrough — a sibling architectural finding not anticipated by the brief). Run 2 cost: $1.95 / 134 cycles / wall ~30min. Both readings disclosed transparently per discipline (no retcon).
+- Session 060: narrow-reading characterization extends Paper 3's narrow N from 2 to 98 on the deterministic / light path. **100.00% narrow stability rate** (98/98 pairs, zero narrow fires across all three v2 operators). Total empirical N across runs: 101 light pairs, zero narrow fires. Cost $1.19, wall ~16 min. Characterization mode (no halt on narrow fire); halt scope explicitly authorized in the brief for this run only.
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -143,6 +144,19 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Run 1 (run_id `20260510-184611-8e6e6d`, 6 cycles, $0.0863, halted on initial implementation's any-layer kill firing on Architect drift) is preserved verbatim on disk as the audit trail; the dual readings recompute correctly on those traces.
 - 61 new tests across 2 files: `test_influence_leakage.py` (41 — locked-constants assertions, frozen invariants, 4-bit semantics, weighted scalar boundary tests, helper extractors) and `test_leakage_runner.py` (24 — per-pair leakage, dual kill readings, cost circuit-breaker, scoped halt, anchor-test guard, JSONL round-trip, SHA256). Floor raised 3,576 → 3,637; actual collected count 3,637. Zero regressions. New files only — zero edits to existing `ares/` code outside the measurement package.
 
+## Session 060 — Narrow-reading characterization extension
+- Origin: Session 059 narrow verdict (`Paper 3 narrow claim: ALIVE`) rested on only N=2 light pairs because the dual-criterion halt logic stopped further light cycles after the brief-broad kill fired. Strategically the headline claim deserved a stronger empirical bound. Session 060 brief explicitly authorized characterization mode: no halt on narrow fire, light path only, cost ceiling $5 (vs. $20 in 059).
+- New module `ares/dialectic/measurement/narrow_characterization_runner.py` reuses Session 059 primitives (`_run_one_cycle`, `_compute_pair_leakage`, `anchor_test_passes`, `CycleTrace`, `PairLeakageRecord`) without modifying them. `NarrowCharacterizationConfig` locks the $5 ceiling and light-only pipeline. `NarrowDriftRecord` captures per-pair drift detail for any narrow fires.
+- New module `ares/dialectic/measurement/narrow_extended_report.py` renders the six-section rate-based markdown report (metadata / narrow stability rate / per-operator breakdown / per-pair drift table / Session 059 cross-reference / Paper 3 narrow-claim status line). Forbidden-phrase guard preserved.
+- CLI: `scripts/run_session_060.py` with `--dry-run`, `--preflight-only`, `--confirm-live`, `--cost-ceiling` capped at $5.
+- Live run on `injection_registry_v3` (run_id `20260510-224622-154556`, 131 cycles, $1.1862, wall ~16 min, anchor green throughout, `halt_reason: completed`):
+  - **Narrow stability rate: 98 / 98 = 100.00%**
+  - Per-operator: `framing_prefix_v1` 33/33, `framing_suffix_v1` 33/33, `synonym_substitution_conservative_v2` 32/32 (1 no-op consistent with Session 058.5 audit).
+  - Zero narrow fires across the full corpus. The Light Skeptic is empirically byte-stable under all three pre-registered v2 operators.
+- Total empirical N for Paper 3's narrow claim across the chain: Session 059 run 1 (N=1) + Session 059 run 2 (N=2) + Session 060 (N=98) = **101 light pairs, zero narrow fires**. Paper 3 narrow-claim status: `HOLDS at 98/98 pairs (100.00%)`.
+- The broad-reading verdict from Session 059 (`Paper 3 claim status (brief_broad / Light + Oracle + Final): DEAD`) is unchanged by Session 060. The Oracle citation-surface passthrough remains the documented sibling architectural finding for Paper 3's methodology section.
+- 10 new tests in `test_narrow_characterization_runner.py` (pre-registered config locks, no-halt-on-narrow-fire across 33×3, light-path-only invariant, cost circuit-breaker, anchor guard, per-operator stats, JSONL persistence). Floor raised 3,637 → 3,647. Zero regressions. New files only — zero edits to existing `ares/` code outside the new modules.
+
 ## Session 057 / Step 1 — Skeleton-equivalence audit (Phase 7 opens)
 - Origin: 2026-05-05 direction lock. Phase 7 / Paper 3 candidate is "Evidence Authority Isolation" — measure whether attacker-controlled prose can change verdicts/confidence/cited-facts when the structured evidence skeleton is held constant. Honeyfile lane occupied by Mantis (arXiv 2410.20911) and CHeaT (USENIX 2025); structural-defense lane occupied by ASPO and OpenClaw. Uncharted lane is influence-leakage measurement.
 - Step 1 brief: SESSION_057_CC_PROMPT.md called for replay-mode harness against `results/session_048/` and `results/session_050/`. Verified at the start of the session that those artifacts contain only summarized per-scenario verdict rows — no per-layer Architect/Skeptic/Light/Oracle traces. Replay harness is therefore not viable from existing data; scope was narrowed to the audit step alone, with the build/measurement decision deferred to Session 058.
@@ -213,6 +227,12 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - CLI: `scripts/run_session_059.py` — `--dry-run`, `--preflight-only`, `--confirm-live`, `--cost-ceiling` (capped at $20)
 - Leakage manifests (run 2): `LEAKAGE_REPORT_20260510-193950-f401a8.md`, `data/paper_3/leakage_runs/20260510-193950-f401a8/`
 - Leakage manifests (run 1, preserved as audit trail): `LEAKAGE_REPORT_20260510-184611-8e6e6d.md`, `data/paper_3/leakage_runs/20260510-184611-8e6e6d/`
+
+### Narrow characterization (Phase 7 / Session 060)
+- Narrow characterization runner: `ares/dialectic/measurement/narrow_characterization_runner.py` — `NarrowCharacterizationConfig`, `NarrowDriftRecord`, `NarrowExtendedSummary`, `run_preflight`, `run_narrow_characterization`. Cost ceiling locked at $5; light path only; no halt on narrow fire.
+- Narrow report: `ares/dialectic/measurement/narrow_extended_report.py` — six-section rate-based markdown renderer with forbidden-phrase guard.
+- CLI: `scripts/run_session_060.py` — `--dry-run`, `--preflight-only`, `--confirm-live`, `--cost-ceiling` capped at $5.
+- Narrow-extended manifest: `LEAKAGE_REPORT_20260510-224622-154556_narrow_extended.md`, `data/paper_3/leakage_runs/20260510-224622-154556/`
 
 ### Analysis reports
 - `ares/dialectic/scripts/analysis/framing_strategy_report.py`
