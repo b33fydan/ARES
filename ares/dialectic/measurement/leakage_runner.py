@@ -1032,6 +1032,9 @@ def run_full_measurement(
 # Public API
 # ---------------------------------------------------------------------------
 
+#: Public alias for the private helper so consumers do not couple to the
+#: underscore name.  data_loader.py imports this name.
+compute_pair_leakage = _compute_pair_leakage
 
 __all__ = [
     "CycleTrace",
@@ -1049,6 +1052,7 @@ __all__ = [
     "RunSummary",
     "RunnerConfig",
     "anchor_test_passes",
+    "compute_pair_leakage",
     "run_full_measurement",
     "run_preflight",
 ]

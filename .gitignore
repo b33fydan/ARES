@@ -70,3 +70,6 @@ Thumbs.db
 
 # Tribunal session transcripts (private deliberation)
 docs/tribunal/
+
+# Brainstorming session artifacts (local-only)
+.superpowers/

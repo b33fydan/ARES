@@ -1,7 +1,7 @@
 # CLAUDE.md — ARES Phase 7 (post-Session 060)
 
-**Last updated:** 2026-05-10
-**Test count floor (passing):** 3,647
+**Last updated:** 2026-05-13
+**Test count floor (passing):** 3,673
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -21,6 +21,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Session 058.5: pre-registered v2 operator redesign. Disjoint conservative/aggressive lexicons; severity tables expanded with normalization-axis entries. Framing operators imported from v1 by-identity. v2 audit decision: **FAIL** but a different FAIL from v1 — collision pair count dropped 14 → 0 (lexicon disjointness fix worked perfectly); intensifier gap dropped 31 → 13 (normalization-axis bite succeeded but still 3 over the ≤10 threshold). Decreaser regressed (20 → 24) and aggressive synonym regressed (8 → 12) — both diagnosable corpus-shape findings, see Session 058.5 entry below. Per the brief, no third iteration this session.
 - Session 059: first live InfluenceLeakage measurement. Dual-reading verdict: **narrow (Light Skeptic only): ALIVE**, **broad (Light + Oracle + Final): DEAD**. Light Skeptic itself never leaked across 2 sampled light pairs; the broad-reading kill fired at Oracle's `supporting_fact_ids` (Architect citation passthrough — a sibling architectural finding not anticipated by the brief). Run 2 cost: $1.95 / 134 cycles / wall ~30min. Both readings disclosed transparently per discipline (no retcon).
 - Session 060: narrow-reading characterization extends Paper 3's narrow N from 2 to 98 on the deterministic / light path. **100.00% narrow stability rate** (98/98 pairs, zero narrow fires across all three v2 operators). Total empirical N across runs: 101 light pairs, zero narrow fires. Cost $1.19, wall ~16 min. Characterization mode (no halt on narrow fire); halt scope explicitly authorized in the brief for this run only.
+- Session 061: 3D Pinscreen replay viewer — Python pipeline (DataLoader / PinMapper / TimelineBuilder) ships pre-baked `pinscreen-timeline.json` from Session 059 traces; 98 pins (97 held / 1 drifted at INJ-001 framing_suffix_v1 Oracle layer, matching the documented citation-passthrough finding). Phase 1 of 2; JS renderer in skyframe-main is Phase 2 (see plan).
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -233,6 +234,13 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Narrow report: `ares/dialectic/measurement/narrow_extended_report.py` — six-section rate-based markdown renderer with forbidden-phrase guard.
 - CLI: `scripts/run_session_060.py` — `--dry-run`, `--preflight-only`, `--confirm-live`, `--cost-ceiling` capped at $5.
 - Narrow-extended manifest: `LEAKAGE_REPORT_20260510-224622-154556_narrow_extended.md`, `data/paper_3/leakage_runs/20260510-224622-154556/`
+
+### Visualization (Phase 7 / Session 061)
+- 3D pinscreen pipeline: `ares/dialectic/visualization/` — `DataLoader`, `PinMapper`, `TimelineBuilder`
+- CLI: `python -m ares.dialectic.visualization.build_timeline --traces <path> --output <path>`
+- Generated artifact: `docs/marketing/pinscreen-timeline.json` (98 pins from Session 059)
+- Design spec: `docs/superpowers/specs/2026-05-13-replay-viewer-pinscreen-3d-design.md`
+- Implementation plan: `docs/superpowers/plans/2026-05-13-replay-viewer-pinscreen-3d.md`
 
 ### Analysis reports
 - `ares/dialectic/scripts/analysis/framing_strategy_report.py`
