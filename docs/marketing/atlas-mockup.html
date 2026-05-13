@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ARES Confidence Atlas (mockup)</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --subtle: #64748b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+    header {
+      padding: 26px 28px 16px;
+      border-bottom: 1px solid #1a1a1a;
+      text-align: center;
+    }
+    header .tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: 8px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 500;
+    }
+    header .subtitle {
+      margin: 8px auto 0;
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 600px;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      padding: 24px 28px;
+      gap: 22px;
+      max-width: 50vw;
+      width: 100%;
+      margin: 0 auto;
+    }
+    @media (max-width: 1100px) {
+      main { max-width: 92vw; }
+    }
+    .panel {
+      background: #050505;
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 14px 20px 10px;
+      border-bottom: 1px solid #141414;
+    }
+    .panel-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+    .panel-title {
+      margin: 2px 0 0;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+    .panel-subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .panel-canvas {
+      width: 100%;
+      position: relative;
+      cursor: grab;
+    }
+    .panel-canvas:active { cursor: grabbing; }
+    .panel-canvas.tall { height: 620px; }
+    .panel-canvas.standard { height: 420px; }
+    .panel-legend {
+      padding: 10px 20px 12px;
+      border-top: 1px solid #141414;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 10px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      display: inline-block;
+    }
+    .stats {
+      position: absolute;
+      top: 10px; right: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.7;
+      letter-spacing: 0.3px;
+      text-align: right;
+      pointer-events: none;
+      mix-blend-mode: difference;
+    }
+    .stats .value { color: var(--text); }
+    .stats .drift { color: #ef4444; }
+    .axis-label {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--subtle);
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    footer {
+      padding: 18px 28px 24px;
+      color: var(--subtle);
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+      text-align: center;
+      border-top: 1px solid #1a1a1a;
+    }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <span class="tag">ARES Confidence Atlas &middot; mockup</span>
+    <h1>The Atlas</h1>
+    <p class="subtitle">Four luminous coordinate spaces, one Session 059 dataset. Drag any panel to orbit. Drift cycle (INJ-001 framing_suffix_v1) appears in each panel as the red signature.</p>
+  </header>
+
+  <main>
+
+    <!-- ════════════════════════════════════════════════
+         PANEL 1 — THE LABYRINTH
+    ═══════════════════════════════════════════════════ -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-tag">Panel 1 &middot; chamber chain</span>
+        <h2 class="panel-title">The Labyrinth</h2>
+        <p class="panel-subtitle">98 cycles drop breadcrumbs through the six agent chambers. The drifted cycle deviates at the Oracle layer (red, off-cluster). Auto-replays.</p>
+      </div>
+      <div id="panel1-canvas" class="panel-canvas tall">
+        <div class="stats">
+          cycles: <span class="value" id="stat-cycles">0/98</span><br>
+          held: <span class="value" id="stat-held">0</span><br>
+          drifted: <span class="drift" id="stat-drift">0</span>
+        </div>
+      </div>
+      <div class="panel-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#06b6d4"></span>Input</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Architect (LLM)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>Firewall</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Skeptic (LLM)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#10b981;box-shadow:0 0 4px #10b981"></span>Oracle (Python)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>Verdict</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ef4444;box-shadow:0 0 4px #ef4444"></span>Drift moment</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════
+         PANEL 2 — CONFIDENCE TRAJECTORIES
+    ═══════════════════════════════════════════════════ -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-tag">Panel 2 &middot; 3D scatter</span>
+        <h2 class="panel-title">Confidence Trajectories</h2>
+        <p class="panel-subtitle">Architect &times; Skeptic &times; Oracle confidence. Held cycles cluster tightly; the drifted cycle trails off-axis.</p>
+      </div>
+      <div id="panel2-canvas" class="panel-canvas standard">
+        <div class="axis-label" style="left:14px;bottom:14px">X &middot; Architect</div>
+        <div class="axis-label" style="left:14px;top:14px">Y &middot; Skeptic</div>
+        <div class="axis-label" style="right:14px;bottom:14px">Z &middot; Oracle</div>
+      </div>
+      <div class="panel-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#cbd5e1;box-shadow:0 0 4px #fff"></span>97 held &middot; cluster</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ef4444;box-shadow:0 0 6px #ef4444"></span>1 drifted &middot; trail off-axis</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════
+         PANEL 3 — CITATION DRIFT FIELD
+    ═══════════════════════════════════════════════════ -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-tag">Panel 3 &middot; point cloud</span>
+        <h2 class="panel-title">Citation Drift Field</h2>
+        <p class="panel-subtitle">Each fact_id reference is a point, colored by which agent cited it. Convergent citations cluster; Oracle passthrough fans out toward Architect as a bird-flight.</p>
+      </div>
+      <div id="panel3-canvas" class="panel-canvas standard">
+        <div class="axis-label" style="left:14px;bottom:14px">embedding space (abstract)</div>
+      </div>
+      <div class="panel-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Architect citations</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span>Skeptic citations</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span>Oracle citations</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ef4444;box-shadow:0 0 4px #ef4444"></span>Drifted Oracle citation</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════
+         PANEL 4 — ADVERSARIAL PRESSURE
+    ═══════════════════════════════════════════════════ -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-tag">Panel 4 &middot; phase space</span>
+        <h2 class="panel-title">Adversarial Pressure</h2>
+        <p class="panel-subtitle">Attack-strength &times; resilience, stratified by operator. Three v2 operators cluster in distinct planes; drift events are visible outliers.</p>
+      </div>
+      <div id="panel4-canvas" class="panel-canvas standard">
+        <div class="axis-label" style="left:14px;bottom:14px">X &middot; Attack strength</div>
+        <div class="axis-label" style="left:14px;top:14px">Y &middot; Resilience</div>
+        <div class="axis-label" style="right:14px;bottom:14px">Z &middot; Operator</div>
+      </div>
+      <div class="panel-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#06b6d4"></span>framing_prefix_v1</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>framing_suffix_v1</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#fbbf24"></span>synonym_conservative_v2</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ef4444;box-shadow:0 0 4px #ef4444"></span>Drift outlier</span>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    Drag any panel to orbit &middot; scroll to zoom &middot; panels 2-4 auto-rotate slowly &middot; Labyrinth auto-replays breadcrumbs
+  </footer>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // ════════════════════════════════════════════════════════════════
+    // Shared utilities
+    // ════════════════════════════════════════════════════════════════
+
+    function mulberry32(seed) {
+      let s = seed >>> 0;
+      return function() {
+        s = (s + 0x6D2B79F5) >>> 0;
+        let t = s;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function gaussianNoise(rng) {
+      const u1 = rng(), u2 = rng();
+      return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+    }
+
+    function createPanel(containerId, opts = {}) {
+      const container = document.getElementById(containerId);
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x040408);
+      scene.fog = new THREE.Fog(0x040408, opts.fogNear ?? 60, opts.fogFar ?? 220);
+
+      const camera = new THREE.PerspectiveCamera(
+        opts.fov ?? 35,
+        container.clientWidth / container.clientHeight,
+        0.1, 500
+      );
+      camera.position.set(...(opts.cameraPos ?? [35, 18, 50]));
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      container.appendChild(renderer.domElement);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.rotateSpeed = 0.7;
+      controls.panSpeed = 0.6;
+      controls.minDistance = opts.minDist ?? 20;
+      controls.maxDistance = opts.maxDist ?? 220;
+      controls.target.set(0, 0, 0);
+      if (opts.autoRotate !== false) {
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = opts.autoRotateSpeed ?? 0.4;
+      }
+
+      // ── Smooth zoom override ──────────────────────────────────────
+      // OrbitControls' built-in wheel handler reads raw deltaY values,
+      // which can be 100+ per wheel notch on Windows. Replace with a
+      // step-based handler that ignores deltaY magnitude and lerps the
+      // camera distance toward a target each frame.
+      controls.enableZoom = false;
+      let zoomTarget = camera.position.distanceTo(controls.target);
+      renderer.domElement.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const dir = Math.sign(e.deltaY);
+        const factor = dir > 0 ? 1.06 : 0.94;
+        zoomTarget = Math.max(
+          controls.minDistance,
+          Math.min(controls.maxDistance, zoomTarget * factor)
+        );
+      }, { passive: false });
+      const originalUpdate = controls.update.bind(controls);
+      controls.update = function() {
+        const currentDist = camera.position.distanceTo(controls.target);
+        if (Math.abs(currentDist - zoomTarget) > 0.01) {
+          const newDist = currentDist + (zoomTarget - currentDist) * 0.12;
+          const dirVec = camera.position.clone().sub(controls.target).normalize();
+          camera.position.copy(controls.target).add(dirVec.multiplyScalar(newDist));
+        }
+        return originalUpdate();
+      };
+      // ──────────────────────────────────────────────────────────────
+
+      scene.add(new THREE.AmbientLight(0xffffff, opts.ambient ?? 0.4));
+      const key = new THREE.DirectionalLight(0xffffff, opts.keyLight ?? 0.5);
+      key.position.set(30, 50, 30);
+      scene.add(key);
+
+      window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
+
+      return { scene, camera, renderer, controls, container };
+    }
+
+    function addBoundingCube(scene, size, hex) {
+      const edges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(new THREE.BoxGeometry(size, size, size)),
+        new THREE.LineBasicMaterial({ color: hex, transparent: true, opacity: 0.1 })
+      );
+      scene.add(edges);
+    }
+    function addAxisCross(scene, length, hex) {
+      const mat = new THREE.LineBasicMaterial({ color: hex, transparent: true, opacity: 0.18 });
+      const pts = [[-length,0,0,length,0,0],[0,-length,0,0,length,0],[0,0,-length,0,0,length]];
+      for (const [x1,y1,z1,x2,y2,z2] of pts) {
+        const g = new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(x1,y1,z1), new THREE.Vector3(x2,y2,z2)
+        ]);
+        scene.add(new THREE.Line(g, mat));
+      }
+    }
+    function makeGlowPoint(color, radius = 0.3, emissiveStrength = 0.9) {
+      const c = new THREE.Color(color);
+      const mat = new THREE.MeshStandardMaterial({
+        color: c, emissive: c, emissiveIntensity: emissiveStrength,
+        transparent: true, opacity: 0.85, depthWrite: false,
+      });
+      return new THREE.Mesh(new THREE.SphereGeometry(radius, 10, 10), mat);
+    }
+    function makeLabelSprite(text, hexColor) {
+      const cnv = document.createElement('canvas');
+      cnv.width = 384; cnv.height = 64;
+      const ctx = cnv.getContext('2d');
+      ctx.font = '500 32px "JetBrains Mono", monospace';
+      ctx.fillStyle = hexColor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, cnv.width / 2, cnv.height / 2);
+      const tex = new THREE.CanvasTexture(cnv);
+      tex.minFilter = THREE.LinearFilter;
+      const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false });
+      const sprite = new THREE.Sprite(mat);
+      sprite.scale.set(15, 2.5, 1);
+      return sprite;
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // PANEL 1 — LABYRINTH
+    // ════════════════════════════════════════════════════════════════
+    {
+      const CHAMBERS = [
+        { name: 'INPUT',     y:  25, color: 0x06b6d4 },
+        { name: 'ARCHITECT', y:  15, color: 0xf59e0b },
+        { name: 'FIREWALL',  y:   5, color: 0x22c55e },
+        { name: 'SKEPTIC',   y:  -5, color: 0xf59e0b },
+        { name: 'ORACLE',    y: -15, color: 0x10b981 },
+        { name: 'VERDICT',   y: -25, color: 0xa78bfa },
+      ];
+      const CHAMBER_W = 28, CHAMBER_H = 4, CHAMBER_D = 28;
+      const RED_DRIFT = new THREE.Color(0xef4444);
+      const NUM_CYCLES = 98;
+      const DRIFTED_INDEX = 1;
+      const CYCLE_STAGGER_MS = 240;
+      const CRUMB_STAGGER_MS = 180;
+      const TOTAL_RUNTIME_MS = NUM_CYCLES * CYCLE_STAGGER_MS + CHAMBERS.length * CRUMB_STAGGER_MS + 5000;
+
+      const { scene, camera, renderer, controls } = createPanel('panel1-canvas', {
+        fov: 38, cameraPos: [50, 0, 75], autoRotate: true, autoRotateSpeed: 0.25,
+        minDist: 35, maxDist: 200,
+      });
+
+      const rng = mulberry32(20260513);
+      const cycles = [];
+      for (let i = 0; i < NUM_CYCLES; i++) {
+        const isDrifted = (i === DRIFTED_INDEX);
+        const cycleSpawnMs = i * CYCLE_STAGGER_MS;
+        const crumbs = CHAMBERS.map((ch, chIdx) => {
+          let x = (rng() - 0.5) * (CHAMBER_W - 4);
+          let y = ch.y + (rng() - 0.5) * (CHAMBER_H - 1);
+          let z = (rng() - 0.5) * (CHAMBER_D - 4);
+          let color = new THREE.Color(ch.color);
+          let isDrift = false;
+          if (isDrifted && ch.name === 'ORACLE') {
+            x = 11 + rng() * 2;
+            z = 11 + rng() * 2;
+            color = RED_DRIFT.clone();
+            isDrift = true;
+          }
+          return {
+            chamberIdx: chIdx, x, y, z, color,
+            activationMs: cycleSpawnMs + chIdx * CRUMB_STAGGER_MS,
+            isDrift,
+          };
+        });
+        cycles.push({ index: i, isDrifted, crumbs });
+      }
+
+      function hexFromColor(num) { return '#' + num.toString(16).padStart(6, '0'); }
+
+      for (const ch of CHAMBERS) {
+        const boxMat = new THREE.MeshStandardMaterial({
+          color: ch.color, metalness: 0.1, roughness: 0.9, transparent: true, opacity: 0.04,
+        });
+        const box = new THREE.Mesh(new THREE.BoxGeometry(CHAMBER_W, CHAMBER_H, CHAMBER_D), boxMat);
+        box.position.y = ch.y;
+        scene.add(box);
+        const edges = new THREE.LineSegments(
+          new THREE.EdgesGeometry(new THREE.BoxGeometry(CHAMBER_W, CHAMBER_H, CHAMBER_D)),
+          new THREE.LineBasicMaterial({ color: ch.color, transparent: true, opacity: 0.35 })
+        );
+        edges.position.y = ch.y;
+        scene.add(edges);
+        const sprite = makeLabelSprite(ch.name, hexFromColor(ch.color));
+        sprite.position.set(-CHAMBER_W / 2 - 10, ch.y, 0);
+        scene.add(sprite);
+      }
+
+      // Connection lines between chambers
+      for (let i = 0; i < CHAMBERS.length - 1; i++) {
+        const yA = CHAMBERS[i].y - CHAMBER_H / 2;
+        const yB = CHAMBERS[i + 1].y + CHAMBER_H / 2;
+        const geom = new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(0, yA, 0), new THREE.Vector3(0, yB, 0),
+        ]);
+        scene.add(new THREE.Line(
+          geom, new THREE.LineBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.4 })
+        ));
+      }
+
+      const crumbGeom = new THREE.SphereGeometry(0.3, 10, 10);
+      const driftCrumbGeom = new THREE.SphereGeometry(0.5, 14, 14);
+      const allCrumbMeshes = [];
+
+      cycles.forEach(cycle => {
+        const trailGeom = new THREE.BufferGeometry();
+        const trailPositions = new Float32Array(CHAMBERS.length * 3);
+        trailGeom.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
+        const trail = new THREE.Line(
+          trailGeom,
+          new THREE.LineBasicMaterial({
+            color: cycle.isDrifted ? 0xff5566 : 0x506070,
+            transparent: true,
+            opacity: cycle.isDrifted ? 0.55 : 0.12,
+          })
+        );
+        scene.add(trail);
+
+        cycle.crumbs.forEach((cr, crIdx) => {
+          const mat = new THREE.MeshStandardMaterial({
+            color: cr.color, emissive: cr.color,
+            emissiveIntensity: cr.isDrift ? 1.6 : 0.7,
+            metalness: 0, roughness: 0.6,
+            transparent: true, opacity: 0, depthWrite: false,
+          });
+          const geom = cr.isDrift ? driftCrumbGeom : crumbGeom;
+          const sphere = new THREE.Mesh(geom, mat);
+          sphere.position.set(cr.x, cr.y, cr.z);
+          scene.add(sphere);
+          allCrumbMeshes.push({ mesh: sphere, mat, spec: cr, cycleIsDrifted: cycle.isDrifted, trailPositions, trail, crIdx });
+        });
+      });
+
+      const statCycles = document.getElementById('stat-cycles');
+      const statHeld = document.getElementById('stat-held');
+      const statDrift = document.getElementById('stat-drift');
+
+      let startTime = performance.now();
+
+      function tickLabyrinth() {
+        let t = performance.now() - startTime;
+        // Auto-loop the replay
+        if (t > TOTAL_RUNTIME_MS) {
+          startTime = performance.now();
+          t = 0;
+        }
+
+        let lastActiveCycle = -1;
+        let heldCount = 0;
+        let driftCount = 0;
+
+        allCrumbMeshes.forEach(({ mesh, mat, spec, cycleIsDrifted, trail, trailPositions, crIdx }) => {
+          const dt = t - spec.activationMs;
+          if (dt < 0) {
+            mat.opacity = 0;
+          } else if (dt < 220) {
+            const k = dt / 220;
+            mat.opacity = k;
+            mat.emissiveIntensity = (cycleIsDrifted && spec.isDrift ? 1.6 : 0.7) * (1 + (1 - k) * 1.5);
+          } else {
+            mat.opacity = cycleIsDrifted ? 0.85 : 0.55;
+            mat.emissiveIntensity = cycleIsDrifted && spec.isDrift ? 1.4 : 0.5;
+            trailPositions[crIdx * 3 + 0] = spec.x;
+            trailPositions[crIdx * 3 + 1] = spec.y;
+            trailPositions[crIdx * 3 + 2] = spec.z;
+            trail.geometry.attributes.position.needsUpdate = true;
+          }
+        });
+
+        cycles.forEach((c, i) => {
+          if (t > i * CYCLE_STAGGER_MS + CHAMBERS.length * CRUMB_STAGGER_MS) {
+            lastActiveCycle = i;
+            if (c.isDrifted) driftCount++;
+            else heldCount++;
+          }
+        });
+
+        statCycles.textContent = `${lastActiveCycle + 1}/98`;
+        statHeld.textContent = heldCount;
+        statDrift.textContent = driftCount;
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        tickLabyrinth();
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // PANEL 2 — CONFIDENCE TRAJECTORIES
+    // ════════════════════════════════════════════════════════════════
+    {
+      const { scene, camera, renderer, controls } = createPanel('panel2-canvas', {
+        cameraPos: [35, 12, 38], autoRotate: true, autoRotateSpeed: 0.5,
+      });
+      addBoundingCube(scene, 30, 0xffffff);
+      addAxisCross(scene, 15, 0x88aacc);
+
+      const cx = (0.92 - 0.5) * 30;
+      const cy = (0.32 - 0.5) * 30;
+      const cz = (0.93 - 0.5) * 30;
+      const rng = mulberry32(20260513);
+
+      for (let i = 0; i < 97; i++) {
+        const point = makeGlowPoint(0xcbd5e1, 0.28, 0.5);
+        point.position.set(
+          cx + gaussianNoise(rng) * 1.4,
+          cy + gaussianNoise(rng) * 1.4,
+          cz + gaussianNoise(rng) * 1.4
+        );
+        scene.add(point);
+      }
+
+      const dx = (0.50 - 0.5) * 30;
+      const dy = (0.55 - 0.5) * 30;
+      const dz = (0.45 - 0.5) * 30;
+      const drift = makeGlowPoint(0xef4444, 0.55, 1.4);
+      drift.position.set(dx, dy, dz);
+      scene.add(drift);
+
+      const trailGeom = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(cx, cy, cz), new THREE.Vector3(dx, dy, dz),
+      ]);
+      scene.add(new THREE.Line(
+        trailGeom,
+        new THREE.LineBasicMaterial({ color: 0xff6677, transparent: true, opacity: 0.6 })
+      ));
+
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // PANEL 3 — CITATION DRIFT FIELD
+    // ════════════════════════════════════════════════════════════════
+    {
+      const { scene, camera, renderer, controls } = createPanel('panel3-canvas', {
+        cameraPos: [30, 10, 30], autoRotate: true, autoRotateSpeed: 0.45,
+      });
+      addBoundingCube(scene, 30, 0xffffff);
+
+      const rng = mulberry32(20260514);
+      const clusters = [
+        { name: 'arch',    center: new THREE.Vector3(-7, -2,  3), color: 0xf59e0b },
+        { name: 'skeptic', center: new THREE.Vector3( 4,  4,  0), color: 0xec4899 },
+        { name: 'oracle',  center: new THREE.Vector3( 0, -3, -5), color: 0x10b981 },
+      ];
+      const pointsPerCluster = 100;
+      const spread = 1.7;
+
+      for (const cluster of clusters) {
+        for (let i = 0; i < pointsPerCluster; i++) {
+          const p = makeGlowPoint(cluster.color, 0.17, 0.55);
+          p.position.set(
+            cluster.center.x + gaussianNoise(rng) * spread,
+            cluster.center.y + gaussianNoise(rng) * spread,
+            cluster.center.z + gaussianNoise(rng) * spread
+          );
+          scene.add(p);
+        }
+      }
+
+      // Drift bird-flight: 5 red points from Oracle cluster toward Architect cluster
+      const driftStart = clusters[2].center.clone();
+      const driftEnd = clusters[0].center.clone();
+      for (let i = 0; i < 5; i++) {
+        const t = 0.25 + i * 0.15;
+        const pos = driftStart.clone().lerp(driftEnd, t);
+        pos.x += gaussianNoise(rng) * 0.5;
+        pos.y += gaussianNoise(rng) * 0.5;
+        pos.z += gaussianNoise(rng) * 0.5;
+        const p = makeGlowPoint(0xef4444, 0.32, 1.4);
+        p.position.copy(pos);
+        scene.add(p);
+      }
+      const trailGeom = new THREE.BufferGeometry().setFromPoints([
+        driftStart, driftStart.clone().lerp(driftEnd, 0.95)
+      ]);
+      scene.add(new THREE.Line(
+        trailGeom,
+        new THREE.LineBasicMaterial({ color: 0xff5566, transparent: true, opacity: 0.4 })
+      ));
+
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // PANEL 4 — ADVERSARIAL PRESSURE
+    // ════════════════════════════════════════════════════════════════
+    {
+      const { scene, camera, renderer, controls } = createPanel('panel4-canvas', {
+        cameraPos: [35, 18, 38], autoRotate: true, autoRotateSpeed: 0.4,
+      });
+      addBoundingCube(scene, 30, 0xffffff);
+
+      const rng = mulberry32(20260515);
+      const operators = [
+        { name: 'framing_prefix_v1',         z: -10, color: 0x06b6d4 },
+        { name: 'framing_suffix_v1',         z:   0, color: 0xa78bfa },
+        { name: 'synonym_conservative_v2',   z:  10, color: 0xfbbf24 },
+      ];
+
+      for (const op of operators) {
+        const planeGeom = new THREE.PlaneGeometry(28, 28);
+        const plane = new THREE.Mesh(
+          planeGeom,
+          new THREE.MeshBasicMaterial({ color: op.color, transparent: true, opacity: 0.03, side: THREE.DoubleSide })
+        );
+        plane.rotation.y = Math.PI / 2;
+        plane.position.z = op.z;
+        scene.add(plane);
+
+        const edges = new THREE.LineSegments(
+          new THREE.EdgesGeometry(planeGeom),
+          new THREE.LineBasicMaterial({ color: op.color, transparent: true, opacity: 0.15 })
+        );
+        edges.rotation.y = Math.PI / 2;
+        edges.position.z = op.z;
+        scene.add(edges);
+      }
+
+      const cyclesPerOp = 33;
+      for (const op of operators) {
+        for (let i = 0; i < cyclesPerOp; i++) {
+          const px = -12 + (i / (cyclesPerOp - 1)) * 24 + gaussianNoise(rng) * 0.5;
+          const py = 10 + gaussianNoise(rng) * 1.2;
+          const pz = op.z + gaussianNoise(rng) * 0.8;
+          const point = makeGlowPoint(op.color, 0.21, 0.55);
+          point.position.set(px, py, pz);
+          scene.add(point);
+        }
+      }
+
+      const driftPoint = makeGlowPoint(0xef4444, 0.5, 1.6);
+      driftPoint.position.set(2, -8, 0);
+      scene.add(driftPoint);
+
+      const dropGeom = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(2, 10, 0), new THREE.Vector3(2, -8, 0),
+      ]);
+      scene.add(new THREE.Line(
+        dropGeom,
+        new THREE.LineBasicMaterial({ color: 0xef4444, transparent: true, opacity: 0.4 })
+      ));
+
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // No explicit reduced-motion handling for Panel 1's replay loop in combined mockup;
+      // production will gate it.
+    }
+  </script>
+</body>
+</html>
