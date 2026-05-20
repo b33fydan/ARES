@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 062)
+# CLAUDE.md — ARES Phase 7 (post-Session 063)
 
-**Last updated:** 2026-05-19
-**Test count floor (passing):** 3,733
+**Last updated:** 2026-05-20
+**Test count floor (passing):** 3,737
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -23,6 +23,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Session 060: narrow-reading characterization extends Paper 3's narrow N from 2 to 98 on the deterministic / light path. **100.00% narrow stability rate** (98/98 pairs, zero narrow fires across all three v2 operators). Total empirical N across runs: 101 light pairs, zero narrow fires. Cost $1.19, wall ~16 min. Characterization mode (no halt on narrow fire); halt scope explicitly authorized in the brief for this run only.
 - Session 061: 3D Pinscreen replay viewer for Phase 7 — Python pipeline (DataLoader / PinMapper / TimelineBuilder + CLI) emits `docs/marketing/pinscreen-timeline.json` from Session 059 traces (98 pins; 97 held / 1 drifted at INJ-001 framing_suffix_v1 Oracle layer, matching the documented citation-passthrough finding). Standalone Three.js page at `skyframe-main/assets/ares/pinscreen.html` consumes the JSON; deployed live via Netlify. Both pipeline and renderer shipped this session.
 - Session 062: Prism Labyrinth (Panel 1) renderer — production page at `skyframe-main/assets/ares/prism.html`, faithful port of the 2026-05-13 mockup against Session 059 data (98 cycles, 97 held / 1 drifted). Autoplay-first replay with scrubber takeover; full-kit interactivity (scrubber + operator dial + play/pause + click-to-focus). Drift surfaces at the **Architect** chamber per data (`first_diverging_layer="Architect"` for INJ-001 framing_suffix_v1); the mockup hardcoded Oracle as a storytelling shortcut, but the renderer is data-driven per spec § 4. ARES side adds one JSON contract test (8 tests). The 2026-05-14 sphere-chain attempt remains parked as a dated learning artifact.
+- Session 063: Prism Panel 2 (Confidence Trajectories) renderer — second view in the existing `prism.html` under a tab strip with Panel 1. Each cycle becomes one primitive in (architect, skeptic, oracle) confidence space: arrow when confidence moved (~75/98 pairs), sphere when it held (~23/98). The single broad-leakage cycle sits at the held cluster as a glowing red sphere because Session 059's leakage was citation-surface drift, not confidence drift. Shared timeline via `window.PrismState` event bus; per-frame publish drives Panel 2's reveal in lockstep with Panel 1's autoplay. 4 new ARES JSON contract tests (floor 3,733 → 3,737); 3 new JS files + 2 modifications on skyframe-main. Panel 1 behavior unchanged.
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -169,6 +170,14 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - The parked sphere-chain attempt is preserved at `docs/marketing/prism-2026-05-14-sphere-chain.html` per [[mockup-preservation]] discipline. The Phase A pipeline emits a renderer-agnostic JSON, so the parked artifact still loads if opened.
 - Floor raised 3,725 → 3,733; ARES side adds 1 new test file (8 tests). No edits to existing ARES code outside `CLAUDE.md`. Zero regressions.
 
+## Session 063 — Prism Panel 2 (Confidence Trajectories) renderer
+- Origin: Panel 1 shipped Session 062 with autoplay-first replay + scrubber + operator dial. The validated mockup at `docs/marketing/prism-mockup.html` lines 573-619 showed Panel 2 as a static autorotating scatter of confidence points; Session 063 landed the production version as per-pair primitives in (architect, skeptic, oracle) confidence space, under a tab strip in the existing `prism.html`.
+- Architecture: Approach C — freeze `prism.js`, add three new sibling JS files on skyframe-main (`prism-state.js` event bus, `prism-tabs.js` tab UI, `prism-panel2.js` scene + primitives + reveal). Surgical edits to `prism.js`: 7 `PrismState.publish()` insertions after existing STATE mutations (including a per-frame diff-checked publish in `tickReplay` so Panel 2's reveal advances during autoplay), `window.__PRISM_TIMELINE_CACHE` exposed so Panel 2 doesn't refetch, `window.PrismPanel1 = {start, stop, isRunning}` export with stoppable rAF.
+- Primitive selection (data-driven): for each pair, if scene-space confidence delta ≥ `ZERO_DELTA_EPSILON` (0.05) → THREE.ArrowHelper from baseline to mutated; otherwise → THREE.SphereGeometry at baseline. Broad-leakage pair gets larger glowing red sphere when its delta is zero (current Session 059 case) OR red arrow if a future dataset shows broad-leakage with confidence drift. Data-discovery during implementation revealed two reality checks vs the original spec: the Phase A pipeline drops no-op pairs entirely (not `mutated_llm=null`) and the single broad-leakage pair has zero confidence delta across all three axes — the leakage signal was Oracle citation-surface passthrough per Session 059's already-documented architectural finding. Spec and plan were updated mid-session to match data reality.
+- Lazy scene init: `bootP2()` only loads the cache and subscribes to PrismState; `ensureInitialized()` runs the WebGLRenderer build on first `startP2()` so `clientWidth`/`Height` are valid when measured (container starts as `display:none` until tab activation). Panel 2's reveal polls `PrismState.getState().activeCycleIndex` per-frame inside its own rAF; visibleSet rebuilt only on `operatorFilter` change. Tab switching keeps Panel 1's rAF running when on Trajectories (Panel 1's `tickReplay` is the shared timeline driver — stopping it would freeze Panel 2's reveal); Panel 1's hidden canvas wastes ~1ms/frame of GPU but is acceptable for v1.
+- ARES-side: 4 new tests appended to `test_prism_timeline_json_contract.py` locking the Panel 2 contract — per-layer confidences on `baseline_llm` and `mutated_llm`, exactly 2 dropped pair_indices from the Session 059 pipeline output, and the broad-leakage pair's near-zero confidence delta paired with non-trivial citation-surface change. `REQUIRED_PAIR_KEYS` extended to include `baseline_llm`/`mutated_llm`.
+- Floor raised 3,733 → 3,737; ARES side adds 4 tests to one existing file. No edits to existing ARES code outside `CLAUDE.md` and this test block. Zero regressions.
+
 ## Session 057 / Step 1 — Skeleton-equivalence audit (Phase 7 opens)
 - Origin: 2026-05-05 direction lock. Phase 7 / Paper 3 candidate is "Evidence Authority Isolation" — measure whether attacker-controlled prose can change verdicts/confidence/cited-facts when the structured evidence skeleton is held constant. Honeyfile lane occupied by Mantis (arXiv 2410.20911) and CHeaT (USENIX 2025); structural-defense lane occupied by ASPO and OpenClaw. Uncharted lane is influence-leakage measurement.
 - Step 1 brief: SESSION_057_CC_PROMPT.md called for replay-mode harness against `results/session_048/` and `results/session_050/`. Verified at the start of the session that those artifacts contain only summarized per-scenario verdict rows — no per-layer Architect/Skeptic/Light/Oracle traces. Replay harness is therefore not viable from existing data; scope was narrowed to the audit step alone, with the build/measurement decision deferred to Session 058.
@@ -264,6 +273,17 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Implementation plan: `docs/superpowers/plans/2026-05-19-prism-labyrinth-renderer-v2.md`
 - Build-prep spec (earlier 2026-05-13): `docs/superpowers/specs/2026-05-13-prism-build-prep.md`
 - Parked sphere-chain attempt (do not regress to): `docs/marketing/prism-2026-05-14-sphere-chain.html`
+
+### Visualization (Phase 7 / Session 063)
+- Panel 2 (Confidence Trajectories) renderer: tab-strip layout in existing `prism.html`. Three new sibling JS files on skyframe-main:
+  - `assets/ares/prism-state.js` — event bus (`window.PrismState`: getState / publish / subscribe)
+  - `assets/ares/prism-tabs.js` — tab UI, start/stop wiring (Panel 1 stays running when on Trajectories — see Architecture note below)
+  - `assets/ares/prism-panel2.js` — Panel 2 scene + 98 primitives (75 arrows + 23 spheres in current data) + per-frame reveal + lazy scene init + start/stop
+- `assets/ares/prism.js` surgical edits: 7 publish inserts (including per-frame diff-checked publish in `tickReplay` for cross-panel timeline sync), `window.__PRISM_TIMELINE_CACHE` exposed, `window.PrismPanel1 = {start, stop, isRunning}` with stoppable rAF
+- JSON contract test additions: `ares/dialectic/tests/visualization/test_prism_timeline_json_contract.py` (4 new tests + 3 new constants + `REQUIRED_PAIR_KEYS` strengthened, floor 3,733 → 3,737)
+- Design spec: `docs/superpowers/specs/2026-05-20-prism-panel2-confidence-trajectories-design.md`
+- Implementation plan: `docs/superpowers/plans/2026-05-20-prism-panel2-confidence-trajectories.md`
+- Architecture note: Panel 1's `tickReplay()` is the shared timeline driver. `prism-tabs.js` keeps Panel 1's rAF running when on Trajectories so the playhead advances and Panel 2's reveal stays in lockstep. Panel 1's hidden canvas costs ~1ms/frame of GPU; a cleaner design would lift `tickReplay` into a shared timeline module.
 
 ### Analysis reports
 - `ares/dialectic/scripts/analysis/framing_strategy_report.py`

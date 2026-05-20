@@ -10,7 +10,9 @@
 Add a second visualization to the Prism page on skyframe-main:
 
 - **Panel 1 (Labyrinth):** chamber-by-chamber per-pair replay. Already shipped.
-- **Panel 2 (Confidence Trajectories):** per-pair vectors from baseline-confidence-coord to mutated-confidence-coord, revealed in pair_index order. Shows leakage as motion across the (architect_conf, skeptic_conf, oracle_conf) confidence cube.
+- **Panel 2 (Confidence Trajectories):** per-pair vectors from baseline-confidence-coord to mutated-confidence-coord across the (architect_conf, skeptic_conf, oracle_conf) confidence cube. Reveals two findings together:
+  - **75 of 98 pairs** show measurable confidence movement under attacker prose mutation — visualized as arrows in confidence space.
+  - **23 pairs (including the single broad-leakage pair)** have zero confidence delta — their arrows degenerate. The broad-leakage pair sits at the held cluster as a glowing red dot, because Session 059's leakage signal was **citation-surface drift**, not confidence drift (the Oracle's decision is preserved deterministically; only the explanation surface inherits the Architect's cite-set mutation). The visualization tells the truth: confidence numbers held even when the verdict's evidence basis silently shifted.
 
 The two panels share one timeline. One scrubber, one play/pause, one operator dial — driven from the existing Panel 1 chrome, broadcast to both panels via a tiny shared-state event bus. Only the active tab renders; the inactive tab's rAF is paused.
 
@@ -91,9 +93,9 @@ PrismState.publish({...})        ← new line
 
 Panel-specific fields (`focusedPairIndex`, `SCENE`, Panel 2's own arrow refs) stay private to each panel.
 
-### 3.2 Per-pair coordinate mapping (Panel 2)
+### 3.2 Per-pair coordinate mapping and primitive selection (Panel 2)
 
-For each pair where `mutated_llm !== null`:
+For each pair (every pair has both `baseline_llm` and `mutated_llm` populated — the Phase A pipeline drops no-op pairs entirely, so there is no `mutated_llm === null` branch to handle):
 
 ```
 baselineVec3 = (
@@ -110,24 +112,30 @@ mutatedVec3  = (
 # Map [0, 1] → [−CUBE_HALF, +CUBE_HALF] on each axis (CUBE_HALF=15 per mockup)
 sceneBaseline = baselineVec3.scale(CUBE_SIZE).sub(CUBE_HALF_VEC)
 sceneMutated  = mutatedVec3.scale(CUBE_SIZE).sub(CUBE_HALF_VEC)
-
-arrow = THREE.ArrowHelper(
-  dir    = (sceneMutated - sceneBaseline).normalize(),
-  origin = sceneBaseline,
-  length = (sceneMutated - sceneBaseline).length(),
-  color  = pair.broad_leakage ? 0xef4444 : 0xcbd5e1,   // red for broad-leakage, grey for held
-)
+delta         = sceneMutated - sceneBaseline
+deltaLength   = delta.length()
 ```
+
+Primitive selection depends on whether the pair has measurable confidence movement:
+
+| Condition | Primitive | Color | Rationale |
+|-----------|-----------|-------|-----------|
+| `deltaLength >= ZERO_DELTA_EPSILON` (0.05 scene units ≈ ~0.0017 confidence units) **AND** `!pair.broad_leakage` | `THREE.ArrowHelper` from baseline to mutated | grey-blue `0xcbd5e1` | Standard held-pair arrow. ~74 of 98 in real data. |
+| `deltaLength >= ZERO_DELTA_EPSILON` **AND** `pair.broad_leakage` | `THREE.ArrowHelper` from baseline to mutated | red `0xef4444` | Broad-leakage with measurable movement. **In the Session 059 dataset this branch is unused** (broad-leakage pair has zero delta) but the renderer must support it for future datasets where the leakage signal may be in confidence. |
+| `deltaLength < ZERO_DELTA_EPSILON` **AND** `!pair.broad_leakage` | `THREE.SphereGeometry` (small, dim) at `sceneBaseline` | grey-blue `0xcbd5e1` | Zero-delta held pair — the cycle ran but confidence didn't move. ~22 of 98 in real data. |
+| `deltaLength < ZERO_DELTA_EPSILON` **AND** `pair.broad_leakage` | `THREE.SphereGeometry` (larger, glowing) at `sceneBaseline` + a small label sprite | red `0xef4444` with `emissiveIntensity ≈ 1.6` | **The Session 059 broad-leakage pair.** Sits at the held cluster because the leakage was in citation surface, not confidence. The visual punch is "it should have moved but didn't — that IS the finding." Exactly 1 of 98 in real data. |
+
+`ZERO_DELTA_EPSILON` is set in scene-space units (after the [0,1]→[−15,+15] map). `0.05` scene units corresponds to a confidence delta of `0.05 / 30 ≈ 0.0017`, well below the minimum meaningful resolution of the LLM-emitted confidence values (which are typically 0.05-step granular).
 
 ### 3.3 Reveal logic
 
-- All arrows built once at scene init, default `arrow.visible = false`.
+- All primitives (arrows + spheres) built once at scene init, each tagged with its `pair_index`. Default `primitive.visible = false`.
 - **Per-frame poll, not event-driven** — Panel 1's `STATE.activeCycleIndex` advances inside `tickReplay()` at 60Hz during autoplay but is NOT published (publish calls fire only on user-input handlers + completion). So Panel 2's reveal runs inside its own rAF animate loop, reading the current playhead each frame:
   ```js
   // In Panel 2's animate() loop, every frame:
   const state = PrismState.getState();
-  for (const {pair, arrow} of ARROWS) {
-    arrow.visible =
+  for (const {pair, primitive} of PRIMITIVES) {
+    primitive.visible =
       visibleSet.has(pair.pair_index) &&
       pair.pair_index <= state.activeCycleIndex;
   }
@@ -145,7 +153,9 @@ arrow = THREE.ArrowHelper(
 
 ### 3.5 No-op pair handling
 
-One pair has `mutated_llm === null` (the `synonym_substitution_conservative_v2` no-op on one scenario, per Session 058.5 audit). Skip during arrow construction with a debug log. Not an error. JSON contract test (§5) locks this count at exactly 1.
+The Phase A pipeline DROPS no-op pairs from `prism-timeline.json` rather than emitting `mutated_llm === null`. In the Session 059 dataset, 2 pair_indices are missing (indices 3 and 4), leaving 98 pairs out of the 100-slot enumeration. Panel 2 iterates only the delivered 98 pairs — no null-branch handling is needed.
+
+Note: CLAUDE.md's Session 058.5 entry documents the `synonym_substitution_conservative_v2` operator as having "1 no-op" but the actual `prism-timeline.json` has 2 missing pair_indices. This discrepancy is locked as data (not corrected against the audit text) by the JSON contract test in §5.1.
 
 ## 4. Error handling (fail-loud, fail-visible)
 
@@ -167,10 +177,10 @@ File: `ares/dialectic/tests/visualization/test_prism_timeline_json_contract.py` 
 
 Add 4 new tests, raising the floor 3,733 → 3,737:
 
-1. `test_every_pair_has_baseline_llm_confidences` — for each non-no-op pair, `baseline_llm` contains `architect_confidence`, `skeptic_confidence`, `oracle_confidence`; all floats in `[0.0, 1.0]`.
-2. `test_every_pair_has_mutated_llm_confidences_or_explicit_null` — `mutated_llm` is either null OR contains the same three confidence fields with same range invariant.
-3. `test_no_op_pair_count_matches_audit` — exactly 1 pair has `mutated_llm === null` (matches Session 058.5 audit).
-4. `test_broad_leakage_pair_has_nonzero_confidence_delta` — the single broad-leakage pair has at least one of the three Δ-confidence values ≥ 0.01.
+1. `test_every_pair_has_baseline_llm_confidences` — for every pair, `baseline_llm` contains `architect_confidence`, `skeptic_confidence`, `oracle_confidence`; all floats in `[0.0, 1.0]`.
+2. `test_every_pair_has_mutated_llm_confidences` — for every pair, `mutated_llm` contains the same three confidence fields with same range invariant. (No null branch; Phase A pipeline drops no-op pairs entirely.)
+3. `test_dropped_pair_count_locks_pipeline_state` — exactly 2 pair_index values are missing from the enumeration. Locks the Session 059 pipeline output shape so a future regen with a different no-op count surfaces immediately.
+4. `test_broad_leakage_pair_has_zero_confidence_delta_per_session_059` — locks Session 059's architectural finding: the single broad-leakage pair has near-zero (< 0.01) confidence delta on all three axes, **and** the citation-surface change is non-trivial (either `architect_cited_facts` or `oracle_supporting_facts` differs between baseline and mutated). If a future dataset shows confidence drift on broad-leakage, this test fails loud and forces Panel 2 narrative + spec to update.
 
 Zero edits to existing ARES code outside `CLAUDE.md` and this new test block.
 
@@ -180,8 +190,8 @@ Zero edits to existing ARES code outside `CLAUDE.md` and this new test block.
 2. Click `TRAJECTORIES` — Panel 2 visible, Panel 1 hidden. `window.PrismPanel1.isRunning() === false`.
 3. Scrub Panel 1 back to 0, switch to Panel 2 — zero arrows.
 4. Play Panel 1, switch mid-replay — Panel 2 reveals arrows in lockstep, picks up at current playhead.
-5. Operator filter to `framing_suffix_v1` — switch to Panel 2 — only matching arrows visible; red broad-leakage arrow is in the set.
-6. Operator filter to `synonym_substitution_conservative_v2` — Panel 2 shows exactly 32 arrows (33 scenarios minus 1 documented no-op); no console warnings.
+5. Operator filter to `framing_suffix_v1` — switch to Panel 2 — only matching primitives visible (33 of 33); the broad-leakage pair (pair_index=1) renders as a glowing red sphere at the held-cluster coord (NOT as an arrow), because its confidence delta is zero in this dataset.
+6. Operator filter to `synonym_substitution_conservative_v2` — Panel 2 shows exactly 32 primitives (33 scenarios minus 1 dropped no-op); some are arrows, some are dim grey-blue spheres depending on per-pair confidence delta; no console warnings.
 7. Reduced-motion media query — autorotate off; arrows reveal as snap-cuts.
 8. Console clean: zero errors, zero unexpected warnings.
 
@@ -198,7 +208,9 @@ Panel 2's `init()` is the entry point; refactor risk caught by manual checklist.
 - **Floor expectation post-merge:** ARES count 3,733 → 3,737 (4 new contract tests). CLAUDE.md updated to reflect post-Session-063 (or whatever session number this lands as).
 - **First tab on landing:** Labyrinth, hard-coded. No URL hash deep-link support in v1 (could be added later as `#trajectories`).
 - **Arrow shaft thickness:** ArrowHelper default (`headLength`, `headWidth`) tuned to match the mockup's visual weight; concrete numbers picked during implementation pass against the live scene.
-- **No-op-pair handling in operator filter:** when filtering to the operator whose no-op pair exists, the filtered set is 32 not 33; this is correct, not a bug.
+- **No-op-pair handling in operator filter:** when filtering to `synonym_substitution_conservative_v2`, the filtered set is 32 not 33 because the Phase A pipeline drops the 1 no-op pair entirely from the JSON output (not emitted as `mutated_llm=null`). This is correct, not a bug.
+- **CLAUDE.md vs. actual dropped pair count discrepancy:** The Session 058.5 entry in CLAUDE.md describes `synonym_substitution_conservative_v2` as having "1 no-op" but `prism-timeline.json` has 2 dropped pair_indices (3, 4). The JSON contract test (§5.1 #3) locks the actual count at 2. Whether the CLAUDE.md text is wrong, the audit ran differently than the live measurement, or the dropped count is a downstream pipeline artifact is a separate ARES audit question outside Panel 2's scope. The visualization reflects what shipped.
+- **Broad-leakage pair narrative inversion:** The mockup put the broad-leakage pair at clearly-different coords from the held cluster. Real data has it at IDENTICAL coords (confidence preserved; the leakage was in citation surface per Session 059). Panel 2 visualizes this honestly by rendering the broad-leakage pair as a glowing red sphere at the held cluster, with the panel subtitle copy explaining the inversion. The mockup's "money shot" becomes the surprise: it didn't move, and that's exactly the architectural finding.
 
 ## 7. Files at a glance
 

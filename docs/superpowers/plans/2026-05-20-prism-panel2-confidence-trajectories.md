@@ -70,7 +70,7 @@ Open `ares/dialectic/tests/visualization/test_prism_timeline_json_contract.py`. 
 
 - [ ] **Step 3: Append the 4 new tests + 1 new constant**
 
-Append to the end of `ares/dialectic/tests/visualization/test_prism_timeline_json_contract.py`:
+Append to the end of `ares/dialectic/tests/visualization/test_prism_timeline_json_contract.py` (preserve a leading blank line):
 
 ```python
 
@@ -79,15 +79,34 @@ Append to the end of `ares/dialectic/tests/visualization/test_prism_timeline_jso
 # Panel 2 (Confidence Trajectories) contract additions
 # ────────────────────────────────────────────────────────────────────
 #
-# Panel 2 renders one arrow per pair from baseline_llm to mutated_llm
-# in (architect_confidence, skeptic_confidence, oracle_confidence)
-# space. These tests lock that the per-layer confidences exist, are
-# valid floats in [0, 1], that exactly one pair has mutated_llm=None
-# (the documented Session 058.5 no-op), and that the single broad-
-# leakage pair has at least one non-trivial confidence delta so the
-# rendered arrow has visible length.
+# Panel 2 renders one primitive per pair: an arrow from baseline_llm to
+# mutated_llm in (architect_confidence, skeptic_confidence,
+# oracle_confidence) space when confidence moves, or a sphere at the
+# baseline coord when the cycle's confidence held steady. These tests
+# lock the data shape Panel 2 depends on:
+#   (1) baseline_llm has the three confidence fields, all in [0, 1]
+#   (2) mutated_llm has them too (Phase A pipeline drops no-op pairs
+#       entirely; no null branch to handle)
+#   (3) the dropped-pair count is exactly 2 (locks Session 059 pipeline
+#       output shape so a regen with a different no-op count surfaces
+#       immediately — see "open items" #5 in the spec for the CLAUDE.md
+#       vs. data discrepancy)
+#   (4) the single broad-leakage pair has near-zero confidence delta
+#       AND a non-trivial citation-surface change — locks Session 059's
+#       architectural finding that the broad-leakage signal was in
+#       Oracle citation passthrough, not confidence drift. If a future
+#       dataset shows confidence drift on broad-leakage, this test
+#       fails loud and forces the Panel 2 narrative to update.
 
 CONFIDENCE_FIELDS = ("architect_confidence", "skeptic_confidence", "oracle_confidence")
+ZERO_DELTA_THRESHOLD = 0.01
+
+# Session 058.5 audit documented 1 no-op for synonym_substitution_conservative_v2,
+# but the live Session 059 pipeline output drops 2 pair_indices.
+# Whether the audit text is wrong, the live run had a different no-op count,
+# or there's a downstream pipeline artifact is a separate ARES question.
+# The visualization reflects what shipped: 2 dropped pairs.
+EXPECTED_DROPPED_PAIR_COUNT = 2
 
 
 def test_every_pair_has_baseline_llm_confidences(timeline: dict) -> None:
@@ -106,14 +125,14 @@ def test_every_pair_has_baseline_llm_confidences(timeline: dict) -> None:
             )
 
 
-def test_every_pair_has_mutated_llm_confidences_or_explicit_null(timeline: dict) -> None:
+def test_every_pair_has_mutated_llm_confidences(timeline: dict) -> None:
+    # Phase A pipeline drops no-op pairs entirely from the JSON.
+    # Every delivered pair therefore has a populated mutated_llm dict.
     for pair in timeline["pairs"]:
         mutated = pair.get("mutated_llm")
-        if mutated is None:
-            # Documented no-op; counted in test_no_op_pair_count_matches_audit
-            continue
         assert isinstance(mutated, dict), (
-            f"Pair {pair['pair_index']} mutated_llm must be dict or None, got {type(mutated).__name__}"
+            f"Pair {pair['pair_index']} mutated_llm must be a dict (pipeline drops no-ops), "
+            f"got {type(mutated).__name__}"
         )
         for field in CONFIDENCE_FIELDS:
             value = mutated.get(field)
@@ -125,32 +144,65 @@ def test_every_pair_has_mutated_llm_confidences_or_explicit_null(timeline: dict)
             )
 
 
-def test_no_op_pair_count_matches_audit(timeline: dict) -> None:
-    # Session 058.5 audit: synonym_substitution_conservative_v2 is a no-op
-    # on exactly 1 of its 33 scenarios. If the upstream pipeline ever
-    # drops or adds a no-op, Panel 2's arrow-count assumptions desync.
-    no_op_count = sum(1 for p in timeline["pairs"] if p.get("mutated_llm") is None)
-    assert no_op_count == 1, (
-        f"Expected exactly 1 pair with mutated_llm=None (Session 058.5 no-op), found {no_op_count}"
+def test_dropped_pair_count_locks_pipeline_state(timeline: dict) -> None:
+    # Locks the count of pair_indices missing from the global enumeration.
+    # Session 059 produces 2 dropped indices (3 and 4). Any change to this
+    # count means the pipeline ran differently — Panel 2's "N visible
+    # primitives per operator" expectations would silently drift.
+    pairs = timeline["pairs"]
+    indices = [p["pair_index"] for p in pairs]
+    enumeration_size = max(indices) + 1
+    delivered = len(indices)
+    dropped = enumeration_size - delivered
+    assert dropped == EXPECTED_DROPPED_PAIR_COUNT, (
+        f"Expected {EXPECTED_DROPPED_PAIR_COUNT} dropped pairs from the global enumeration "
+        f"(max_index={max(indices)}, delivered={delivered}, dropped={dropped}). "
+        f"If the pipeline now drops more or fewer no-ops, the visualization may need to update."
     )
 
 
-def test_broad_leakage_pair_has_nonzero_confidence_delta(timeline: dict) -> None:
-    # The single broad_leakage pair must show at least one non-trivial
-    # confidence shift between baseline and mutated, otherwise the
-    # rendered arrow degenerates to a zero-length point and the leakage
-    # story is invisible.
+def test_broad_leakage_pair_has_zero_confidence_delta_per_session_059(timeline: dict) -> None:
+    # Session 059's documented architectural finding: the broad-leakage
+    # signal was Oracle citation-surface passthrough (the Oracle inherits
+    # the Architect's cite-set drift), NOT confidence drift. The Oracle's
+    # decision (outcome + confidence) is preserved deterministically.
+    # Lock this with a paired assertion:
+    #   (a) confidence delta is near-zero on all three axes
+    #   (b) the citation surface IS different (architect_cited_facts
+    #       differs OR oracle_supporting_facts differs between baseline
+    #       and mutated)
+    # If a future dataset shows confidence drift on broad-leakage, (a)
+    # fails and Panel 2's renderer (which puts the broad-leakage pair as
+    # a glowing red sphere AT the baseline coord) needs to update to
+    # render an arrow instead.
     drift_pairs = [p for p in timeline["pairs"] if p["broad_leakage"]]
-    assert len(drift_pairs) == 1
+    assert len(drift_pairs) == 1, f"Expected exactly 1 broad_leakage pair, found {len(drift_pairs)}"
     pair = drift_pairs[0]
     baseline = pair["baseline_llm"]
     mutated = pair["mutated_llm"]
-    assert mutated is not None, (
-        f"broad_leakage pair {pair['pair_index']} has mutated_llm=None — impossible by definition"
-    )
+
+    # (a) Near-zero confidence delta
     deltas = [abs(float(mutated[f]) - float(baseline[f])) for f in CONFIDENCE_FIELDS]
-    assert max(deltas) >= 0.01, (
-        f"broad_leakage pair {pair['pair_index']} confidence deltas {deltas} all < 0.01 — arrow would be invisible"
+    assert max(deltas) < ZERO_DELTA_THRESHOLD, (
+        f"broad_leakage pair {pair['pair_index']}: confidence deltas {deltas} include one "
+        f">= {ZERO_DELTA_THRESHOLD}. Session 059 finding was citation-surface drift only — "
+        f"this would invert it. Update Panel 2 renderer + spec narrative."
+    )
+
+    # (b) Citation surface IS different
+    arch_baseline_cites = baseline.get("architect_cited_facts", [])
+    arch_mutated_cites = mutated.get("architect_cited_facts", [])
+    oracle_baseline_sup = baseline.get("oracle_supporting_facts", [])
+    oracle_mutated_sup = mutated.get("oracle_supporting_facts", [])
+    citation_surface_changed = (
+        arch_baseline_cites != arch_mutated_cites
+        or oracle_baseline_sup != oracle_mutated_sup
+    )
+    assert citation_surface_changed, (
+        f"broad_leakage pair {pair['pair_index']}: neither architect_cited_facts nor "
+        f"oracle_supporting_facts changed between baseline and mutated. The leakage signal "
+        f"should be IN the citation surface per Session 059 — if it isn't, the pipeline output "
+        f"is inconsistent with the documented finding."
     )
 ```
 
@@ -299,17 +351,19 @@ Replace the existing `<main>...</main>` block with:
         <div class="panel-header">
           <span class="panel-tag">Panel 2 &middot; confidence trajectories</span>
           <h2 class="panel-title">Trajectories</h2>
-          <p class="panel-subtitle">Each cycle is one arrow from baseline-confidence to mutated-confidence in (architect, skeptic, oracle) space. The drifted cycle's arrow stretches off-cluster (red).</p>
+          <p class="panel-subtitle">Each cycle is one primitive in (architect, skeptic, oracle) confidence space — an arrow when confidence moved, a sphere when it held. The broad-leakage cycle sits at the held cluster as a glowing red sphere because its leakage was in citation surface, not confidence numbers (Session 059).</p>
         </div>
         <div id="panel2-canvas" class="panel-canvas">
           <div class="stats">
-            arrows: <span class="value" id="stat2-arrows">0</span><br>
-            drift Δ: <span class="drift" id="stat2-drift">—</span>
+            visible: <span class="value" id="stat2-visible">0</span><br>
+            arrows / spheres: <span class="value" id="stat2-arrows">0</span> / <span class="value" id="stat2-spheres">0</span><br>
+            broad-leak: <span class="drift" id="stat2-drift">—</span>
           </div>
         </div>
         <div class="panel-legend">
-          <span class="legend-item"><span class="legend-dot" style="background:#cbd5e1"></span>Held cycle (baseline ≈ mutated)</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#ef4444;box-shadow:0 0 4px #ef4444"></span>Drifted cycle (large Δ)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#cbd5e1"></span>Held — arrow (confidence moved)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#cbd5e1;opacity:0.6"></span>Held — sphere (confidence steady)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ef4444;box-shadow:0 0 6px #ef4444"></span>Broad-leakage — citation-surface drift</span>
         </div>
       </div>
     </div>
@@ -700,10 +754,18 @@ Create `assets/ares/prism-panel2.js`:
 /*
  * ARES Prism — Panel 2 (Confidence Trajectories)
  *
- * Renders 98 arrows from baseline_llm to mutated_llm in
- * (architect_confidence, skeptic_confidence, oracle_confidence) space.
- * The single broad_leakage pair gets a longer/redder arrow; held pairs
- * cluster near the diagonal.
+ * Renders one primitive per pair in (architect_confidence,
+ * skeptic_confidence, oracle_confidence) space:
+ *  - Arrow from baseline_llm to mutated_llm when confidence moved
+ *    (~75 of 98 pairs in Session 059 dataset).
+ *  - Sphere at baseline coord when confidence held steady
+ *    (~23 of 98 pairs; includes the single broad-leakage pair, whose
+ *    leakage was in Oracle citation surface, NOT confidence drift —
+ *    per Session 059's documented architectural finding).
+ *
+ * Broad-leakage pair gets a larger glowing red sphere when its delta
+ * is zero (current Session 059 case) OR a red arrow if a future dataset
+ * shows broad-leakage with confidence drift.
  *
  * Shares timeline state with Panel 1 via window.PrismState. Reads data
  * from window.__PRISM_TIMELINE_CACHE (populated by prism.js loadTimeline).
@@ -733,7 +795,14 @@ const CUBE_EDGE_OPACITY = 0.04;
 
 const ARROW_HEAD_LENGTH = 0.7;
 const ARROW_HEAD_WIDTH  = 0.35;
-const ARROW_MIN_LENGTH  = 0.05;              // below this we still render a stub
+
+// Below this scene-space length, render a sphere instead of an arrow.
+// 0.05 scene units corresponds to ~0.0017 confidence units (well below
+// the ~0.05 granularity of LLM-emitted confidence values).
+const ZERO_DELTA_EPSILON = 0.05;
+
+const HELD_SPHERE_RADIUS  = 0.20;            // dim, small — zero-delta held pairs
+const DRIFT_SPHERE_RADIUS = 0.55;            // larger, glowing — broad-leakage at cluster
 
 // ────────────────────────────────────────────────────────────────────
 // State (panel-private)
@@ -745,13 +814,17 @@ const P2_STATE = {
   renderer: null,
   controls: null,
   container: null,
-  arrows: [],         // [{pair, arrow, lengthScene}, ...]
+  cache: null,        // Cached pairs from window.__PRISM_TIMELINE_CACHE; set in bootP2
+  primitives: [],     // [{pair, kind, primitive, lengthScene}, ...] kind in {'arrow', 'sphere'}
   visibleSet: null,   // Set<pair_index>; rebuilt on filter change
   lastOperatorFilter: null,
   rafHandle: null,
   running: false,
   unsubscribe: null,
-  ready: false,
+  ready: false,       // bootP2 finished (cache loaded, listener subscribed)
+  arrowCount: 0,      // total arrows built (lifetime, not visible-count)
+  sphereCount: 0,     // total spheres built
+  driftPairIndex: null,
 };
 
 // ────────────────────────────────────────────────────────────────────
@@ -882,26 +955,51 @@ function buildAxisLabels() {
 }
 
 // ────────────────────────────────────────────────────────────────────
-// Arrows
+// Primitive construction (arrows + spheres)
 // ────────────────────────────────────────────────────────────────────
 
-function buildArrows(pairs) {
-  let driftDeltaMax = 0;
-  let driftPairIndex = null;
+function makeArrow(baselineVec, mutatedVec, color, isDrift) {
+  const delta = mutatedVec.clone().sub(baselineVec);
+  const len = delta.length();
+  const dir = delta.clone().normalize();
+  const arrow = new THREE.ArrowHelper(dir, baselineVec, len, color, ARROW_HEAD_LENGTH, ARROW_HEAD_WIDTH);
+  arrow.visible = false;
+  arrow.line.material.transparent = true;
+  arrow.line.material.opacity = isDrift ? 0.95 : 0.7;
+  arrow.cone.material.transparent = true;
+  arrow.cone.material.opacity = isDrift ? 0.95 : 0.85;
+  return { primitive: arrow, kind: 'arrow', lengthScene: len };
+}
+
+function makeSphere(baselineVec, color, isDrift) {
+  const radius = isDrift ? DRIFT_SPHERE_RADIUS : HELD_SPHERE_RADIUS;
+  const geom = new THREE.SphereGeometry(radius, isDrift ? 16 : 10, isDrift ? 16 : 10);
+  const mat = new THREE.MeshStandardMaterial({
+    color,
+    emissive: color,
+    emissiveIntensity: isDrift ? 1.6 : 0.3,
+    metalness: 0,
+    roughness: 0.6,
+    transparent: true,
+    opacity: isDrift ? 0.95 : 0.55,
+    depthWrite: false,
+  });
+  const mesh = new THREE.Mesh(geom, mat);
+  mesh.position.copy(baselineVec);
+  mesh.visible = false;
+  return { primitive: mesh, kind: 'sphere', lengthScene: 0 };
+}
+
+function buildPrimitives(pairs) {
   for (const pair of pairs) {
-    if (pair.mutated_llm === null || pair.mutated_llm === undefined) {
-      // Documented no-op (Session 058.5: synonym_substitution_conservative_v2)
-      console.debug('Panel 2: skipping no-op pair', pair.pair_index, pair.operator);
-      continue;
-    }
-    let baseline, mutated;
+    let baselineVec, mutatedVec;
     try {
-      baseline = confidenceToScene(
+      baselineVec = confidenceToScene(
         pair.baseline_llm.architect_confidence,
         pair.baseline_llm.skeptic_confidence,
         pair.baseline_llm.oracle_confidence,
       );
-      mutated = confidenceToScene(
+      mutatedVec = confidenceToScene(
         pair.mutated_llm.architect_confidence,
         pair.mutated_llm.skeptic_confidence,
         pair.mutated_llm.oracle_confidence,
@@ -910,29 +1008,33 @@ function buildArrows(pairs) {
       console.warn('Panel 2: malformed pair', pair.pair_index, err.message);
       continue;
     }
-    const delta = mutated.clone().sub(baseline);
-    const len = Math.max(ARROW_MIN_LENGTH, delta.length());
-    const dir = delta.lengthSq() > 1e-8 ? delta.clone().normalize() : new THREE.Vector3(0, 1, 0);
-    const color = pair.broad_leakage ? DRIFT_COLOR_P2 : HELD_COLOR;
-    const arrow = new THREE.ArrowHelper(dir, baseline, len, color, ARROW_HEAD_LENGTH, ARROW_HEAD_WIDTH);
-    arrow.visible = false;
-    arrow.line.material.transparent = true;
-    arrow.line.material.opacity = pair.broad_leakage ? 0.95 : 0.7;
-    arrow.cone.material.transparent = true;
-    arrow.cone.material.opacity = pair.broad_leakage ? 0.95 : 0.85;
-    P2_STATE.scene.add(arrow);
-    P2_STATE.arrows.push({ pair, arrow, lengthScene: len });
-    if (pair.broad_leakage && len > driftDeltaMax) {
-      driftDeltaMax = len;
-      driftPairIndex = pair.pair_index;
+
+    const deltaLength = mutatedVec.clone().sub(baselineVec).length();
+    const isDrift = !!pair.broad_leakage;
+    const color = isDrift ? DRIFT_COLOR_P2 : HELD_COLOR;
+
+    let entry;
+    if (deltaLength >= ZERO_DELTA_EPSILON) {
+      entry = makeArrow(baselineVec, mutatedVec, color, isDrift);
+      P2_STATE.arrowCount++;
+    } else {
+      entry = makeSphere(baselineVec, color, isDrift);
+      P2_STATE.sphereCount++;
     }
+    entry.pair = pair;
+    P2_STATE.scene.add(entry.primitive);
+    P2_STATE.primitives.push(entry);
+
+    if (isDrift) P2_STATE.driftPairIndex = pair.pair_index;
   }
-  // Stats panel: drift Δ label
+
+  // Initial stats panel
   const driftEl = document.getElementById('stat2-drift');
-  if (driftEl) {
-    driftEl.textContent = driftPairIndex !== null
-      ? driftDeltaMax.toFixed(2)
-      : '—';
+  if (driftEl && P2_STATE.driftPairIndex !== null) {
+    const driftEntry = P2_STATE.primitives.find((e) => e.pair.pair_index === P2_STATE.driftPairIndex);
+    driftEl.textContent = driftEntry && driftEntry.kind === 'sphere'
+      ? 'citation surface'
+      : `Δ=${driftEntry.lengthScene.toFixed(2)}`;
   }
 }
 
@@ -958,20 +1060,26 @@ function onStateEvent(state) {
 function animateP2() {
   P2_STATE.rafHandle = requestAnimationFrame(animateP2);
   // Per-frame reveal poll. Cheap: ~100 ops/frame at N=98.
-  if (P2_STATE.visibleSet && P2_STATE.arrows.length > 0 && window.PrismState) {
+  if (P2_STATE.visibleSet && P2_STATE.primitives.length > 0 && window.PrismState) {
     const state = window.PrismState.getState();
     const visible = P2_STATE.visibleSet;
     const playhead = state.activeCycleIndex;
-    for (const entry of P2_STATE.arrows) {
-      entry.arrow.visible =
-        visible.has(entry.pair.pair_index) &&
-        entry.pair.pair_index <= playhead;
+    let revealedArrows = 0;
+    let revealedSpheres = 0;
+    for (const entry of P2_STATE.primitives) {
+      const show = visible.has(entry.pair.pair_index) && entry.pair.pair_index <= playhead;
+      entry.primitive.visible = show;
+      if (show) {
+        if (entry.kind === 'arrow') revealedArrows++;
+        else revealedSpheres++;
+      }
     }
-    // Stats panel: count revealed arrows
-    let revealed = 0;
-    for (const entry of P2_STATE.arrows) if (entry.arrow.visible) revealed++;
+    const visibleEl = document.getElementById('stat2-visible');
     const arrowsEl = document.getElementById('stat2-arrows');
-    if (arrowsEl) arrowsEl.textContent = String(revealed);
+    const spheresEl = document.getElementById('stat2-spheres');
+    if (visibleEl) visibleEl.textContent = String(revealedArrows + revealedSpheres);
+    if (arrowsEl) arrowsEl.textContent = String(revealedArrows);
+    if (spheresEl) spheresEl.textContent = String(revealedSpheres);
   }
   if (P2_STATE.controls) P2_STATE.controls.update();
   if (P2_STATE.renderer && P2_STATE.scene && P2_STATE.camera) {
@@ -981,6 +1089,11 @@ function animateP2() {
 
 function startP2() {
   if (P2_STATE.running) return;
+  // Lazy scene construction: container must be visible (clientWidth > 0)
+  // for WebGLRenderer to size correctly. If the cache hasn't populated
+  // yet, this returns false and we leave running=false; prism-tabs.js
+  // tolerates this (re-clicking the tab calls start() again).
+  if (!ensureInitialized()) return;
   P2_STATE.running = true;
   animateP2();
 }
@@ -1001,6 +1114,10 @@ const BOOT_RETRY_MS = 100;
 const BOOT_MAX_RETRIES = 50;
 let _bootAttempts = 0;
 
+// Cache-poll only; scene construction is LAZY (deferred until first start)
+// because the panel container is display:none on landing and reading
+// clientWidth/clientHeight then returns 0, which makes THREE.WebGLRenderer
+// commit to a 0x0 size that never recovers.
 function bootP2() {
   if (typeof THREE === 'undefined') {
     console.error('Panel 2: THREE.js not loaded');
@@ -1022,33 +1139,46 @@ function bootP2() {
     return;
   }
 
-  try {
-    initSceneP2();
-  } catch (err) {
-    console.error('Panel 2: scene init failed:', err);
-    return;
-  }
-  buildArrows(cache.pairs);
+  P2_STATE.cache = cache;
 
-  // Subscribe + sync: backfill from current state, then react to events
+  // Subscribe + sync NOW so we receive state events even before init.
+  // visibleSet is populated lazily from the first state event with the
+  // initial operatorFilter — see ensureInitialized().
   if (window.PrismState) {
+    P2_STATE.unsubscribe = window.PrismState.subscribe(onStateEvent);
     const initial = window.PrismState.getState();
     P2_STATE.lastOperatorFilter = initial.operatorFilter;
     rebuildVisibleSet(initial.visiblePairs.length > 0 ? initial.visiblePairs : cache.pairs);
-    P2_STATE.unsubscribe = window.PrismState.subscribe(onStateEvent);
   } else {
-    // PrismState missing: fall back to "show all arrows" (no playhead binding)
     P2_STATE.visibleSet = new Set(cache.pairs.map((p) => p.pair_index));
-    for (const entry of P2_STATE.arrows) entry.arrow.visible = true;
   }
 
   P2_STATE.ready = true;
 
-  // Auto-start ONLY if Panel 2 is the active tab on load. Otherwise wait
-  // for prism-tabs.js to call PrismPanel2.start() on tab switch.
+  // Auto-start ONLY if Panel 2 is already the active tab. Otherwise wait
+  // for prism-tabs.js to call PrismPanel2.start() on tab switch. start()
+  // will lazily run the scene/primitive construction once the container
+  // is visible (clientWidth/Height non-zero).
   if (document.body.dataset.activeTab === 'trajectories') {
     startP2();
   }
+}
+
+function ensureInitialized() {
+  if (P2_STATE.scene) return true;  // already built
+  if (!P2_STATE.cache) return false;  // cache not loaded yet
+  try {
+    initSceneP2();
+  } catch (err) {
+    console.error('Panel 2: scene init failed:', err);
+    return false;
+  }
+  buildPrimitives(P2_STATE.cache.pairs);
+  console.log(
+    `Panel 2: built ${P2_STATE.arrowCount} arrows + ${P2_STATE.sphereCount} spheres ` +
+    `from ${P2_STATE.cache.pairs.length} pairs (drift pair_index=${P2_STATE.driftPairIndex})`
+  );
+  return true;
 }
 
 window.PrismPanel2 = {
@@ -1056,6 +1186,7 @@ window.PrismPanel2 = {
   stop:      stopP2,
   isRunning: () => P2_STATE.running,
   isReady:   () => P2_STATE.ready,
+  isBuilt:   () => P2_STATE.scene !== null,
 };
 
 // Defer bootstrap until DOM is parsed and prism.js has had a chance to run init()
@@ -1270,31 +1401,31 @@ Wait 500ms. Then:
 ```js
 ({
   playhead: PrismState.getState().activeCycleIndex,
-  revealed: document.getElementById('stat2-arrows').textContent,
+  visible: document.getElementById('stat2-visible').textContent,
 })
 ```
-Expected: `playhead: 0, revealed: '0'` (or '1' if you count the pair at index 0 — depends on the `≤` boundary; the spec's reveal logic is `pair_index ≤ activeCycleIndex` so pair 0 is revealed when playhead is 0).
+Expected: `playhead: 0, visible: '1'` (pair 0 is revealed when playhead is 0; reveal predicate is `pair_index ≤ activeCycleIndex`).
 
 - [ ] **Step 5: Check #4 — mid-replay switch picks up at playhead**
 
-Switch back to Labyrinth, let it play for a few seconds, switch to Trajectories. Check `revealed` count is > 0 and < 98. Take screenshot.
+Switch back to Labyrinth, let it play for a few seconds, switch to Trajectories. Check `visible` count is > 0 and ≤ 98 (and arrows + spheres sums to `visible`). Take screenshot.
 
-- [ ] **Step 6: Check #5 — operator filter to framing_suffix_v1**
+- [ ] **Step 6: Check #5 — operator filter to framing_suffix_v1 (the broad-leakage operator)**
 
 ```
 browser_click(selector='.tab-btn[data-tab="labyrinth"]')
 browser_evaluate(js="const s=document.getElementById('operator-dial'); s.value='framing_suffix_v1'; s.dispatchEvent(new Event('change'));")
 browser_click(selector='.tab-btn[data-tab="trajectories"]')
 ```
-Wait 2000ms for replay. Verify the broad-leakage red arrow is in the visible set:
+Wait 2000ms for replay. Verify the broad-leakage primitive renders as a glowing red **sphere** (NOT an arrow) at the held-cluster coord:
 ```js
 ({
   filter: PrismState.getState().operatorFilter,
   visibleCount: PrismState.getState().visiblePairs.length,
-  driftVisible: Array.from(document.querySelectorAll('canvas')).length > 0 && /* visual check via screenshot */ true,
+  driftBit: document.getElementById('stat2-drift').textContent,
 })
 ```
-Expected: `filter: 'framing_suffix_v1', visibleCount: 33`. Take screenshot and confirm one red arrow is present.
+Expected: `filter: 'framing_suffix_v1', visibleCount: 33, driftBit: 'citation surface'`. Take screenshot and confirm: one glowing red sphere is present alongside the grey-blue arrows + dim spheres for this operator's other 32 pairs. The red sphere should be at a position visually indistinguishable from the held cluster — that's exactly the Session 059 narrative.
 
 - [ ] **Step 7: Check #6 — operator filter to synonym_substitution_conservative_v2**
 
@@ -1303,17 +1434,18 @@ browser_click(selector='.tab-btn[data-tab="labyrinth"]')
 browser_evaluate(js="const s=document.getElementById('operator-dial'); s.value='synonym_substitution_conservative_v2'; s.dispatchEvent(new Event('change'));")
 browser_click(selector='.tab-btn[data-tab="trajectories"]')
 ```
-Wait 2000ms. Verify exactly 32 arrows reveal:
+Wait 2000ms. Verify exactly 32 primitives reveal:
 ```js
 ({
   filter: PrismState.getState().operatorFilter,
   visiblePairCount: PrismState.getState().visiblePairs.length,
-  arrowsBuiltForFilter: window.PrismPanel2 && Array.from(document.body.querySelectorAll('*')).length, // proxy
-  consoleWarnings: 'check terminal output',
+  revealedVisible: document.getElementById('stat2-visible').textContent,
+  revealedArrows: document.getElementById('stat2-arrows').textContent,
+  revealedSpheres: document.getElementById('stat2-spheres').textContent,
 })
 browser_console_messages()
 ```
-Expected: `visiblePairCount: 32` (filter applies before publish — `applyOperatorFilter` already filters to operator membership only, doesn't drop the no-op pair). Panel 2 arrows revealed for this filter = 32 (no-op pair was already skipped at scene-init time). Console has the one expected `console.debug('Panel 2: skipping no-op pair', ...)` from `buildArrows`; zero `console.warn` or `console.error`.
+Expected: `visiblePairCount: 32` (the Phase A pipeline already dropped the no-op pair from the JSON; the operator dial just filters to membership). Panel 2 revealed primitives for this filter total 32, split into some arrows (pairs with confidence movement) and some spheres (zero-delta held pairs). Zero `console.warn`, zero `console.error`. The Panel 2 init log line printed once at boot is expected.
 
 - [ ] **Step 8: Check #7 — reduced-motion**
 
@@ -1330,7 +1462,7 @@ browser_console_messages()
 ```
 Expected: zero errors, zero unexpected warnings. Only acceptable messages are:
 - `Prism: loaded 98 pairs, operators: [...]` (Panel 1 init log)
-- `Panel 2: skipping no-op pair <idx> synonym_substitution_conservative_v2` (Panel 2 init debug, only when that filter applies)
+- `Panel 2: built <N> arrows + <M> spheres from 98 pairs (drift pair_index=1)` (Panel 2 init log, once at boot)
 
 - [ ] **Step 10: Panel 1 regression smoke (spec §5.3)**
 
@@ -1510,19 +1642,19 @@ Both repos at post-Session-063 state. Session complete.
 ## Self-review notes
 
 **Spec coverage:**
-- §1 Goal — Task 5 (Panel 2 scene), Task 6 (tabs)
+- §1 Goal — Task 5 (Panel 2 scene + primitive selection), Task 6 (tabs)
 - §2 Architecture — Tasks 2-6 cover all 5 file changes
 - §2.1 surgical edits — Task 4 with all 6 publish inserts + cache + export
 - §3.1 shared state shape — Task 3 (prism-state.js exposes the 4 fields)
-- §3.2 coordinate mapping — Task 5 (`confidenceToScene` function)
-- §3.3 reveal logic (per-frame poll, post-fix) — Task 5 (`animateP2` polls `PrismState.getState()`)
+- §3.2 coordinate mapping + primitive selection — Task 5 (`confidenceToScene` + `buildPrimitives` arrow-vs-sphere branch)
+- §3.3 reveal logic (per-frame poll) — Task 5 (`animateP2` polls `PrismState.getState()`; iterates `P2_STATE.primitives`)
 - §3.4 tab switching — Task 6 (`activate` function in prism-tabs.js)
-- §3.5 no-op pair handling — Task 5 (`buildArrows` skips with `console.debug`)
+- §3.5 no-op pair handling (pipeline drops, no null branch) — Task 5 (no null check needed; `buildPrimitives` assumes mutated_llm is populated, JSON contract test guards)
 - §4 error handling — Task 5 covers items 1, 2, 3, 4, 5, 6; Task 6 covers item 7 (DOMContentLoaded); item 8 (idempotent init) covered by `if (P2_STATE.running) return;` in `startP2`
-- §5.1 ARES contract additions — Task 1 (4 tests)
-- §5.2 manual verification — Task 7
+- §5.1 ARES contract additions (corrected) — Task 1 (4 tests: baseline confidences, mutated confidences without null branch, dropped-pair count = 2, broad-leakage zero confidence delta + non-trivial citation-surface change)
+- §5.2 manual verification — Task 7 (updated for sphere-vs-arrow expectations)
 - §5.3 Panel 1 regression smoke — Task 7 Step 10
-- §6 floor bump — Task 9
+- §6 open items (incl. CLAUDE.md vs data discrepancy disclosure) — surfaced in spec, narrative captured in Task 2 panel subtitle copy
 
 **Type consistency check:**
 - `PrismState.publish(partial)` — partial keys: `activeCycleIndex`, `autoplayRunning`, `operatorFilter`, `visiblePairs`. Matches `_state` shape in prism-state.js. ✓
@@ -1530,5 +1662,10 @@ Both repos at post-Session-063 state. Session complete.
 - `window.PrismPanel2.{start, stop, isRunning, isReady}` — declared in Task 5 Step 1; consumed in Task 6 Step 1. ✓
 - `window.__PRISM_TIMELINE_CACHE` — set in Task 4 Step 2 (`loadTimeline`); read in Task 5 Step 1 (`bootP2`). ✓
 - Reveal predicate `pair.pair_index <= state.activeCycleIndex` — same across spec §3.3, Task 5 Step 1, Task 7 verification. ✓
+- `P2_STATE.primitives` entry shape `{pair, kind, primitive, lengthScene}` — built in `makeArrow`/`makeSphere`, consumed in `animateP2` (reads `entry.kind`, `entry.primitive.visible`). ✓
+- Stats DOM ids `stat2-visible`, `stat2-arrows`, `stat2-spheres`, `stat2-drift` — set in Task 2 HTML, written in Task 5 `animateP2` + `buildPrimitives`, read in Task 7 verification. ✓
 
 **No placeholders:** all "TBD"/"TODO"/"implement later" scanned. None present.
+
+**Data-discovery revision history:**
+- 2026-05-20: Task 1 implementer caught that `prism-timeline.json` doesn't match the original test predicates. Spec §1, §3.2, §3.3, §3.5, §5.1, §5.2, §6 updated to match data reality. Plan Tasks 1, 2, 5, 7 updated correspondingly. Both spec and plan corrections live on `session/063-prism-panel2` and get squashed into the Session 063 commit.
