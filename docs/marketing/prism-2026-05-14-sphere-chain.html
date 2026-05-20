@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ARES Prism — Session 059 Resilience Interior View</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --panel-bg: #050505;
+      --border: #1a1a1a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --subtle: #64748b;
+      --accent-red: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+    header {
+      padding: 28px 32px 16px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    header .tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: 8px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 500;
+    }
+    header .subtitle {
+      margin: 8px auto 0;
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 600px;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      padding: 24px 28px;
+      gap: 22px;
+      max-width: 50vw;
+      width: 100%;
+      margin: 0 auto;
+    }
+    @media (max-width: 1100px) { main { max-width: 92vw; } }
+    .panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 14px 20px 10px;
+      border-bottom: 1px solid #141414;
+    }
+    .panel-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+    .panel-title {
+      margin: 2px 0 0;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .panel-subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .panel-canvas {
+      width: 100%;
+      height: 620px;
+      position: relative;
+      cursor: grab;
+    }
+    .panel-canvas:active { cursor: grabbing; }
+    .panel-legend {
+      padding: 10px 20px 12px;
+      border-top: 1px solid #141414;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 10px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      display: inline-block;
+    }
+    .stats {
+      position: absolute;
+      top: 10px; right: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.7;
+      letter-spacing: 0.3px;
+      text-align: right;
+      pointer-events: none;
+      mix-blend-mode: difference;
+    }
+    .stats .value { color: var(--text); }
+    .stats .drift { color: var(--accent-red); }
+    .controls {
+      padding: 14px 20px;
+      border-top: 1px solid #141414;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .controls label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+    .controls input[type=range] {
+      flex: 1;
+      min-width: 200px;
+    }
+    .controls select {
+      background: transparent;
+      border: 1px solid #475569;
+      color: var(--text);
+      padding: 6px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      border-radius: 4px;
+    }
+    footer {
+      padding: 18px 32px 24px;
+      color: var(--subtle);
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    #loading {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--subtle);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="tag">ARES Prism &middot; Panel 1</span>
+    <h1>The Labyrinth</h1>
+    <p class="subtitle">98 cycles drop breadcrumbs through the six agent chambers. The drifted cycle deviates at the Oracle layer (red, off-cluster). Session 059 — broad-reading dataset.</p>
+  </header>
+
+  <main>
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-tag">Panel 1 &middot; chamber chain</span>
+        <h2 class="panel-title">The Labyrinth</h2>
+        <p class="panel-subtitle">Drag to orbit. Use the scrubber to step through cycles. Click a breadcrumb to focus its path.</p>
+      </div>
+      <div id="panel1-canvas" class="panel-canvas">
+        <div id="loading">LOADING TIMELINE…</div>
+        <div class="stats">
+          cycles: <span class="value" id="stat-cycles">0/98</span><br>
+          held: <span class="value" id="stat-held">0</span><br>
+          drifted: <span class="drift" id="stat-drift">0</span>
+        </div>
+      </div>
+      <div class="controls">
+        <label for="scrubber">Cycle</label>
+        <input type="range" id="scrubber" min="0" max="97" value="97">
+        <label for="operator-dial">Operator</label>
+        <select id="operator-dial">
+          <option value="all">All operators</option>
+        </select>
+      </div>
+      <div class="panel-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#06b6d4"></span>Input</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Architect (LLM)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>Firewall</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Skeptic (LLM)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span>Oracle (Python)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>Verdict</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Drift moment</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    ARES Phase 7 &middot; Session 059 broad-reading dataset &middot; deterministic + reproducible &middot; <a href="pinscreen.html" style="color: var(--muted);">view the Pinscreen</a>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script>
+    'use strict';
+
+    const STATE = {
+      timeline: null,
+      pairs: [],
+      activeOperator: 'all',
+      activeCycleIndex: null,
+      visiblePairs: [],
+    };
+
+    const CHAMBERS = [
+      { id: 'input',     label: 'INPUT',     color: 0x06b6d4 },
+      { id: 'architect', label: 'ARCHITECT', color: 0xf59e0b },
+      { id: 'firewall',  label: 'FIREWALL',  color: 0x22c55e },
+      { id: 'skeptic',   label: 'SKEPTIC',   color: 0xf59e0b },
+      { id: 'oracle',    label: 'ORACLE',    color: 0x10b981 },
+      { id: 'verdict',   label: 'VERDICT',   color: 0xa78bfa },
+    ];
+    const CHAMBER_SPACING = 8.0;
+    const CHAMBER_RADIUS = 1.6;
+    const PIN_RADIUS = 0.10;
+    const DRIFT_COLOR = 0xef4444;
+    const HELD_COLOR = 0x64748b;
+
+    const SCENE = {
+      scene: null,
+      camera: null,
+      renderer: null,
+      controls: null,
+      chamberMeshes: [],
+      pinGroup: null,
+      driftMarkers: [],
+      container: null,
+    };
+
+    function initScene() {
+      SCENE.container = document.getElementById('panel1-canvas');
+      const w = SCENE.container.clientWidth;
+      const h = SCENE.container.clientHeight;
+
+      SCENE.scene = new THREE.Scene();
+      SCENE.scene.background = new THREE.Color(0x0a0a0a);
+      SCENE.scene.fog = new THREE.Fog(0x0a0a0a, 30, 80);
+
+      SCENE.camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 200);
+      SCENE.camera.position.set(0, 12, 52);
+      SCENE.camera.lookAt(0, 0, 0);
+
+      SCENE.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      SCENE.renderer.setPixelRatio(window.devicePixelRatio || 1);
+      SCENE.renderer.setSize(w, h);
+      SCENE.container.appendChild(SCENE.renderer.domElement);
+
+      SCENE.scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+      const keyLight = new THREE.DirectionalLight(0xffffff, 0.7);
+      keyLight.position.set(8, 12, 8);
+      SCENE.scene.add(keyLight);
+
+      SCENE.controls = new THREE.OrbitControls(SCENE.camera, SCENE.renderer.domElement);
+      SCENE.controls.enableDamping = true;
+      SCENE.controls.dampingFactor = 0.08;
+      SCENE.controls.enableZoom = false;
+      SCENE.controls.autoRotate = true;
+      SCENE.controls.autoRotateSpeed = 0.35;
+
+      buildChambers();
+
+      SCENE.pinGroup = new THREE.Group();
+      SCENE.scene.add(SCENE.pinGroup);
+
+      // Frame the full 6-chamber chain on first render, scaled to canvas aspect.
+      const initialZ = computeFramingDistance();
+      zoomTarget = initialZ;
+      zoomCurrent = initialZ;
+
+      window.addEventListener('resize', onResize);
+      SCENE.renderer.domElement.addEventListener('wheel', onWheel, { passive: false });
+      animate();
+    }
+
+    function computeFramingDistance() {
+      const canvas = SCENE.renderer.domElement;
+      const aspect = canvas.clientWidth / canvas.clientHeight;
+      const verticalFovRad = (SCENE.camera.fov * Math.PI) / 180;
+      // Chain span: 5 gaps * CHAMBER_SPACING + 2 * CHAMBER_RADIUS for end caps.
+      const chainSpan = (CHAMBERS.length - 1) * CHAMBER_SPACING + 2 * CHAMBER_RADIUS;
+      const marginFactor = 1.18;  // a bit of breathing room beyond the chain
+      // visible_width_at_z0 = 2 * z * tan(fov/2) * aspect
+      // Solve for z so visible_width >= chainSpan * marginFactor.
+      const z = (chainSpan * marginFactor) / (2 * Math.tan(verticalFovRad / 2) * aspect);
+      return Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z));
+    }
+
+    function buildChambers() {
+      const totalSpan = (CHAMBERS.length - 1) * CHAMBER_SPACING;
+      const startX = -totalSpan / 2;
+
+      CHAMBERS.forEach((chamber, i) => {
+        const x = startX + i * CHAMBER_SPACING;
+        const geo = new THREE.SphereGeometry(CHAMBER_RADIUS, 32, 24);
+        const mat = new THREE.MeshStandardMaterial({
+          color: chamber.color,
+          emissive: chamber.color,
+          emissiveIntensity: 0.18,
+          roughness: 0.6,
+          metalness: 0.1,
+          transparent: true,
+          opacity: 0.85,
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, 0, 0);
+        mesh.userData = { chamber: chamber.id };
+        SCENE.scene.add(mesh);
+        SCENE.chamberMeshes.push(mesh);
+
+        if (i < CHAMBERS.length - 1) {
+          const nextX = startX + (i + 1) * CHAMBER_SPACING;
+          const tubeLen = nextX - x - 2 * CHAMBER_RADIUS;
+          const tubeGeo = new THREE.CylinderGeometry(0.04, 0.04, tubeLen, 12);
+          const tubeMat = new THREE.MeshBasicMaterial({ color: 0x1f2937 });
+          const tube = new THREE.Mesh(tubeGeo, tubeMat);
+          tube.position.set(x + CHAMBER_RADIUS + tubeLen / 2, 0, 0);
+          tube.rotation.z = Math.PI / 2;
+          SCENE.scene.add(tube);
+        }
+      });
+    }
+
+    function onResize() {
+      if (!SCENE.renderer) return;
+      const w = SCENE.container.clientWidth;
+      const h = SCENE.container.clientHeight;
+      SCENE.camera.aspect = w / h;
+      SCENE.camera.updateProjectionMatrix();
+      SCENE.renderer.setSize(w, h);
+    }
+
+    function cycleYOffset(pairIndex) {
+      const ring = Math.floor(pairIndex / 14);
+      const slot = pairIndex % 14;
+      const angle = (slot / 14) * Math.PI * 2;
+      const ringRadius = 0.6 + ring * 0.35;
+      return {
+        y: Math.sin(angle) * ringRadius,
+        z: Math.cos(angle) * ringRadius,
+      };
+    }
+
+    function renderBreadcrumbs() {
+      while (SCENE.pinGroup.children.length > 0) {
+        const child = SCENE.pinGroup.children.pop();
+        child.geometry.dispose();
+        child.material.dispose();
+      }
+      SCENE.driftMarkers = [];
+
+      const totalSpan = (CHAMBERS.length - 1) * CHAMBER_SPACING;
+      const startX = -totalSpan / 2;
+
+      STATE.visiblePairs.forEach((pair) => {
+        const offset = cycleYOffset(pair.pair_index);
+
+        CHAMBERS.forEach((chamber, chamberIdx) => {
+          const x = startX + chamberIdx * CHAMBER_SPACING + CHAMBER_RADIUS + 0.25;
+
+          const isDriftChamber = pair.broad_leakage && (
+            (chamber.id === 'architect' && pair.first_diverging_layer === 'Architect') ||
+            (chamber.id === 'skeptic'   && pair.first_diverging_layer === 'Skeptic') ||
+            (chamber.id === 'oracle'    && pair.first_diverging_layer === 'Oracle') ||
+            (chamber.id === 'verdict'   && pair.first_diverging_layer === 'Final')
+          );
+
+          const color = isDriftChamber ? DRIFT_COLOR : HELD_COLOR;
+          const intensity = isDriftChamber ? 1.5 : 0.4;
+          const radius = isDriftChamber ? PIN_RADIUS * 1.8 : PIN_RADIUS;
+
+          const geo = new THREE.SphereGeometry(radius, 12, 8);
+          const mat = new THREE.MeshStandardMaterial({
+            color: color,
+            emissive: color,
+            emissiveIntensity: intensity,
+            transparent: true,
+            opacity: isDriftChamber ? 1.0 : 0.7,
+          });
+          const pin = new THREE.Mesh(geo, mat);
+          pin.position.set(x + offset.z * 0.4, offset.y, offset.z);
+          pin.userData = {
+            pairIndex: pair.pair_index,
+            chamberId: chamber.id,
+            isDrift: isDriftChamber,
+          };
+          SCENE.pinGroup.add(pin);
+
+          if (isDriftChamber) SCENE.driftMarkers.push(pin);
+        });
+      });
+    }
+
+    function applyScrubber(maxCycleIndex) {
+      SCENE.pinGroup.children.forEach((pin) => {
+        pin.visible = pin.userData.pairIndex <= maxCycleIndex;
+      });
+      const visibleCycles = STATE.visiblePairs.filter(
+        (p) => p.pair_index <= maxCycleIndex
+      );
+      const drifted = visibleCycles.filter((p) => p.broad_leakage).length;
+      document.getElementById('stat-cycles').textContent =
+        `${visibleCycles.length}/${STATE.pairs.length}`;
+      document.getElementById('stat-held').textContent =
+        String(visibleCycles.length - drifted);
+      document.getElementById('stat-drift').textContent = String(drifted);
+    }
+
+    function maxPairIndex(pairs) {
+      return pairs.length === 0 ? 0 : Math.max(...pairs.map((p) => p.pair_index));
+    }
+
+    function wireScrubber() {
+      const scr = document.getElementById('scrubber');
+      scr.max = String(maxPairIndex(STATE.pairs));
+      scr.value = scr.max;
+      scr.addEventListener('input', () => {
+        applyScrubber(parseInt(scr.value, 10));
+      });
+    }
+
+    const RAYCASTER = new THREE.Raycaster();
+    const POINTER = new THREE.Vector2();
+    let focusedCycleIndex = null;
+
+    function onCanvasClick(event) {
+      const rect = SCENE.renderer.domElement.getBoundingClientRect();
+      POINTER.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      POINTER.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      RAYCASTER.setFromCamera(POINTER, SCENE.camera);
+      const intersects = RAYCASTER.intersectObjects(SCENE.pinGroup.children);
+      if (intersects.length === 0) {
+        clearFocus();
+        return;
+      }
+      const hit = intersects[0].object;
+      focusCycle(hit.userData.pairIndex);
+    }
+
+    function focusCycle(pairIndex) {
+      focusedCycleIndex = pairIndex;
+      SCENE.pinGroup.children.forEach((pin) => {
+        if (pin.userData.pairIndex === pairIndex) {
+          pin.material.opacity = 1.0;
+          pin.material.emissiveIntensity = pin.userData.isDrift ? 2.0 : 1.4;
+        } else {
+          pin.material.opacity = 0.06;
+          pin.material.emissiveIntensity = 0.1;
+        }
+      });
+    }
+
+    function clearFocus() {
+      focusedCycleIndex = null;
+      SCENE.pinGroup.children.forEach((pin) => {
+        const isDrift = pin.userData.isDrift;
+        pin.material.opacity = isDrift ? 1.0 : 0.7;
+        pin.material.emissiveIntensity = isDrift ? 1.5 : 0.4;
+      });
+    }
+
+    function wireClick() {
+      SCENE.renderer.domElement.addEventListener('click', onCanvasClick);
+    }
+
+    function wireOperatorDial() {
+      const sel = document.getElementById('operator-dial');
+      sel.addEventListener('change', () => {
+        STATE.activeOperator = sel.value;
+        clearFocus();
+        recomputeVisible();
+        const scr = document.getElementById('scrubber');
+        scr.max = String(Math.max(0, maxPairIndex(STATE.visiblePairs)));
+        scr.value = scr.max;
+        applyScrubber(parseInt(scr.value, 10));
+      });
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      lerpZoom();
+      if (SCENE.controls) SCENE.controls.update();
+      if (SCENE.renderer && SCENE.scene && SCENE.camera) {
+        SCENE.renderer.render(SCENE.scene, SCENE.camera);
+      }
+    }
+
+    const ZOOM_STEP = 0.94;
+    const ZOOM_FRAMES = 10;
+    const ZOOM_MIN = 12.0;
+    const ZOOM_MAX = 80.0;
+    let zoomTarget = 52.0;
+    let zoomCurrent = 52.0;
+
+    function onWheel(event) {
+      event.preventDefault();
+      if (event.deltaY > 0) {
+        zoomTarget = Math.min(zoomTarget / ZOOM_STEP, ZOOM_MAX);
+      } else if (event.deltaY < 0) {
+        zoomTarget = Math.max(zoomTarget * ZOOM_STEP, ZOOM_MIN);
+      }
+    }
+
+    function lerpZoom() {
+      const alpha = 1.0 / ZOOM_FRAMES;
+      zoomCurrent += (zoomTarget - zoomCurrent) * alpha;
+      if (SCENE.camera) {
+        const dir = new THREE.Vector3();
+        SCENE.camera.getWorldDirection(dir);
+        dir.multiplyScalar(-1);
+        SCENE.camera.position.copy(dir.multiplyScalar(zoomCurrent));
+      }
+    }
+
+    async function loadTimeline() {
+      const res = await fetch('prism-timeline.json');
+      if (!res.ok) throw new Error(`Failed to load timeline: ${res.status}`);
+      const data = await res.json();
+      STATE.timeline = data;
+      STATE.pairs = data.pairs;
+      return data;
+    }
+
+    function populateOperatorDial() {
+      const sel = document.getElementById('operator-dial');
+      STATE.timeline.operators.forEach((op) => {
+        const opt = document.createElement('option');
+        opt.value = op;
+        opt.textContent = op;
+        sel.appendChild(opt);
+      });
+    }
+
+    function recomputeVisible() {
+      STATE.visiblePairs = STATE.pairs.filter((p) =>
+        STATE.activeOperator === 'all' || p.operator === STATE.activeOperator
+      );
+      updateStats();
+      if (SCENE.pinGroup) renderBreadcrumbs();
+    }
+
+    function updateStats() {
+      const total = STATE.visiblePairs.length;
+      const drifted = STATE.visiblePairs.filter((p) => p.broad_leakage).length;
+      const held = total - drifted;
+      document.getElementById('stat-cycles').textContent = `${total}/${STATE.pairs.length}`;
+      document.getElementById('stat-held').textContent = String(held);
+      document.getElementById('stat-drift').textContent = String(drifted);
+    }
+
+    async function init() {
+      try {
+        await loadTimeline();
+        populateOperatorDial();
+        document.getElementById('loading').style.display = 'none';
+        initScene();
+        recomputeVisible();
+        wireScrubber();
+        wireClick();
+        wireOperatorDial();
+        console.log('Prism timeline loaded:', STATE.pairs.length, 'pairs; THREE version:', THREE.REVISION);
+      } catch (err) {
+        document.getElementById('loading').textContent = 'FAILED TO LOAD: ' + err.message;
+        console.error(err);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

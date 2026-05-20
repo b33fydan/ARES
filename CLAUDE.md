@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 060)
+# CLAUDE.md — ARES Phase 7 (post-Session 062)
 
-**Last updated:** 2026-05-13
-**Test count floor (passing):** 3,673
+**Last updated:** 2026-05-19
+**Test count floor (passing):** 3,733
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -22,6 +22,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Session 059: first live InfluenceLeakage measurement. Dual-reading verdict: **narrow (Light Skeptic only): ALIVE**, **broad (Light + Oracle + Final): DEAD**. Light Skeptic itself never leaked across 2 sampled light pairs; the broad-reading kill fired at Oracle's `supporting_fact_ids` (Architect citation passthrough — a sibling architectural finding not anticipated by the brief). Run 2 cost: $1.95 / 134 cycles / wall ~30min. Both readings disclosed transparently per discipline (no retcon).
 - Session 060: narrow-reading characterization extends Paper 3's narrow N from 2 to 98 on the deterministic / light path. **100.00% narrow stability rate** (98/98 pairs, zero narrow fires across all three v2 operators). Total empirical N across runs: 101 light pairs, zero narrow fires. Cost $1.19, wall ~16 min. Characterization mode (no halt on narrow fire); halt scope explicitly authorized in the brief for this run only.
 - Session 061: 3D Pinscreen replay viewer for Phase 7 — Python pipeline (DataLoader / PinMapper / TimelineBuilder + CLI) emits `docs/marketing/pinscreen-timeline.json` from Session 059 traces (98 pins; 97 held / 1 drifted at INJ-001 framing_suffix_v1 Oracle layer, matching the documented citation-passthrough finding). Standalone Three.js page at `skyframe-main/assets/ares/pinscreen.html` consumes the JSON; deployed live via Netlify. Both pipeline and renderer shipped this session.
+- Session 062: Prism Labyrinth (Panel 1) renderer — production page at `skyframe-main/assets/ares/prism.html`, faithful port of the 2026-05-13 mockup against Session 059 data (98 cycles, 97 held / 1 drifted). Autoplay-first replay with scrubber takeover; full-kit interactivity (scrubber + operator dial + play/pause + click-to-focus). Drift surfaces at the **Architect** chamber per data (`first_diverging_layer="Architect"` for INJ-001 framing_suffix_v1); the mockup hardcoded Oracle as a storytelling shortcut, but the renderer is data-driven per spec § 4. ARES side adds one JSON contract test (8 tests). The 2026-05-14 sphere-chain attempt remains parked as a dated learning artifact.
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -158,6 +159,16 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - The broad-reading verdict from Session 059 (`Paper 3 claim status (brief_broad / Light + Oracle + Final): DEAD`) is unchanged by Session 060. The Oracle citation-surface passthrough remains the documented sibling architectural finding for Paper 3's methodology section.
 - 10 new tests in `test_narrow_characterization_runner.py` (pre-registered config locks, no-halt-on-narrow-fire across 33×3, light-path-only invariant, cost circuit-breaker, anchor guard, per-operator stats, JSONL persistence). Floor raised 3,637 → 3,647. Zero regressions. New files only — zero edits to existing `ares/` code outside the new modules.
 
+## Session 062 — Prism Labyrinth (Panel 1) renderer
+- Origin: Phase A pipeline (`cycle_trace.py` + `cycle_trace_builder.py` + `build_cycle_timeline.py` + `prism-timeline.json`) shipped earlier on `session/062-prism-labyrinth`. Phase B/C (renderer) was first attempted as a horizontal sphere-chain and parked 2026-05-14 because it diverged from the validated 2026-05-13 mockup. Session 062 re-ideated the renderer as a faithful port of the mockup against real Session 059 data.
+- Direction: autoplay-first interaction with scrubber-takes-over on user touch. Six stacked translucent chamber slabs (INPUT → ARCHITECT → FIREWALL → SKEPTIC → ORACLE → VERDICT) with wireframe edges, JetBrains Mono labels to the left, and vertical connection lines. 98 cycles drop breadcrumbs through the chambers in a 240ms-staggered replay loop; the one `broad_leakage=True` pair surfaces a red corner crumb at the chamber matching its `first_diverging_layer`. Loop length is anchored to `max(pair_index)` (~30s) because the upstream pipeline emits global-enumeration indices and drops no-op pairs — the JSON has documented gaps at indices {3, 4}.
+- Architecture (Approach 2 from the brainstorm): HTML shell + companion `prism.js` classic script. r128 stack matching `pinscreen.html`. Two-file deploy to skyframe-main + one CTA link addition.
+- Data discovery during execution: the broad-leakage pair (INJ-001 framing_suffix_v1, pair_index 1) has `first_diverging_layer="Architect"`, not Oracle. The Oracle citation-passthrough finding (Session 059) is technically a passthrough of the Architect's cite-set drift; the mockup hardcoded Oracle as the storytelling moment, but the renderer's data-driven design correctly places the red corner crumb at the Architect chamber. The spec was approved before this discovery; the plan was updated mid-execution to reflect the correct chamber.
+- New ARES file: `ares/dialectic/tests/visualization/test_prism_timeline_json_contract.py` — 8 tests locking the JSON schema as a regression guard (top-level keys, pair count, exactly-one broad-leakage pair, valid `first_diverging_layer`, required pair fields, operators list identity, per-pair operator membership, pair_index unique + sorted + non-negative + bounded). Catches pipeline-side breakage so the renderer never fails silently in a browser.
+- New skyframe-main files: `assets/ares/prism.html` (chrome, ~210 lines), `assets/ares/prism.js` (scene + behavior, ~635 lines), `assets/ares/prism-timeline.json` (Session 059 data copy). Modified: `ares.html` at repo root (Prism CTA link added next to Pinscreen).
+- The parked sphere-chain attempt is preserved at `docs/marketing/prism-2026-05-14-sphere-chain.html` per [[mockup-preservation]] discipline. The Phase A pipeline emits a renderer-agnostic JSON, so the parked artifact still loads if opened.
+- Floor raised 3,725 → 3,733; ARES side adds 1 new test file (8 tests). No edits to existing ARES code outside `CLAUDE.md`. Zero regressions.
+
 ## Session 057 / Step 1 — Skeleton-equivalence audit (Phase 7 opens)
 - Origin: 2026-05-05 direction lock. Phase 7 / Paper 3 candidate is "Evidence Authority Isolation" — measure whether attacker-controlled prose can change verdicts/confidence/cited-facts when the structured evidence skeleton is held constant. Honeyfile lane occupied by Mantis (arXiv 2410.20911) and CHeaT (USENIX 2025); structural-defense lane occupied by ASPO and OpenClaw. Uncharted lane is influence-leakage measurement.
 - Step 1 brief: SESSION_057_CC_PROMPT.md called for replay-mode harness against `results/session_048/` and `results/session_050/`. Verified at the start of the session that those artifacts contain only summarized per-scenario verdict rows — no per-layer Architect/Skeptic/Light/Oracle traces. Replay harness is therefore not viable from existing data; scope was narrowed to the audit step alone, with the build/measurement decision deferred to Session 058.
@@ -241,6 +252,18 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Generated artifact: `docs/marketing/pinscreen-timeline.json` (98 pins from Session 059)
 - Design spec: `docs/superpowers/specs/2026-05-13-replay-viewer-pinscreen-3d-design.md`
 - Implementation plan: `docs/superpowers/plans/2026-05-13-replay-viewer-pinscreen-3d.md`
+
+### Visualization (Phase 7 / Session 062)
+- v2 cycle-trace pipeline: `ares/dialectic/visualization/cycle_trace.py` (CycleSnapshot, PairTrace, CycleTimelineV2) + `cycle_trace_builder.py` (loader/assembler) + `build_cycle_timeline.py` (CLI)
+- CLI: `python -m ares.dialectic.visualization.build_cycle_timeline --traces <path> --output <path>`
+- Generated artifact: `docs/marketing/prism-timeline.json` (98 pairs from Session 059)
+- JSON contract test: `ares/dialectic/tests/visualization/test_prism_timeline_json_contract.py` (8 tests locking the renderer/pipeline interface)
+- Renderer (skyframe-main): `assets/ares/prism.html` (chrome) + `assets/ares/prism.js` (scene + behavior) + `assets/ares/prism-timeline.json` (data copy)
+- ares.html CTA wiring: `ares.html` at skyframe-main repo root (Prism link next to Pinscreen)
+- Design spec: `docs/superpowers/specs/2026-05-19-prism-labyrinth-renderer-v2-design.md`
+- Implementation plan: `docs/superpowers/plans/2026-05-19-prism-labyrinth-renderer-v2.md`
+- Build-prep spec (earlier 2026-05-13): `docs/superpowers/specs/2026-05-13-prism-build-prep.md`
+- Parked sphere-chain attempt (do not regress to): `docs/marketing/prism-2026-05-14-sphere-chain.html`
 
 ### Analysis reports
 - `ares/dialectic/scripts/analysis/framing_strategy_report.py`
