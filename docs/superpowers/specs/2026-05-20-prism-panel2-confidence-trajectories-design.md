@@ -122,16 +122,18 @@ arrow = THREE.ArrowHelper(
 ### 3.3 Reveal logic
 
 - All arrows built once at scene init, default `arrow.visible = false`.
-- On each `'prism:state'` event:
+- **Per-frame poll, not event-driven** — Panel 1's `STATE.activeCycleIndex` advances inside `tickReplay()` at 60Hz during autoplay but is NOT published (publish calls fire only on user-input handlers + completion). So Panel 2's reveal runs inside its own rAF animate loop, reading the current playhead each frame:
   ```js
-  const visibleSet = new Set(state.visiblePairs.map((p) => p.pair_index));
+  // In Panel 2's animate() loop, every frame:
+  const state = PrismState.getState();
   for (const {pair, arrow} of ARROWS) {
     arrow.visible =
       visibleSet.has(pair.pair_index) &&
       pair.pair_index <= state.activeCycleIndex;
   }
   ```
-- O(N) per event with the Set lookup. Recomputed without diffing — cheap enough.
+- `visibleSet` is cached and rebuilt only on `'prism:state'` events where `operatorFilter` actually changed (cheap diff check). This avoids rebuilding the Set 60 times per second.
+- Per-frame cost: O(N) Set lookup + N visibility writes. N=98. Cheap enough.
 
 ### 3.4 Tab switching
 
