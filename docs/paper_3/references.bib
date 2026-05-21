@@ -1,0 +1,47 @@
+% Paper 3 bibliography.
+%
+% Per Session 064 brief discipline: this file contains ONLY verified
+% entries. Unverified bibkeys are tracked in
+% docs/paper_3/skeleton_v1_0.json under "bibkeys_needed_unverified"
+% and are surfaced by tests/paper_3/test_citation_existence.py as a
+% TODO surface. No placeholder entries here — Paper 2's Sabet
+% hallucination (Session 054 audit, Session 055 remediation) showed
+% that placeholders-in-bib are how unverified entries silently grow
+% into hallucinated citations. Keep this file pristine.
+%
+% Deviation from Session 064 brief — bibkey choice:
+% The brief listed thematic keys `gmys-casiano-2026-deterministic-skeptic`
+% and `eth-can-ai-agents-agree`. Implementation found that the
+% ported helpers `extract_citations` + `citation_to_bibkey` produce
+% canonical Author-Year keys from natural prose cites like
+% `(Gmys-Casiano, 2026)` and `(Berdoz, Rugli, and Wattenhofer, 2026)`.
+% Thematic keys would force a custom cite convention in prose that
+% does not survive round-tripping through the ported helpers.
+% Decision: use canonical Author-Year keys in the bib so the
+% scaffolding actually works end-to-end. Cross-paper key relationships
+% are file-scoped:
+%
+%   Paper 2 bib: `gmys-casiano-2026` -> Paper 1
+%   Paper 3 bib: `gmys-casiano-2026` -> Paper 2  (this file)
+%
+% No global namespace exists, so this is unambiguous within each
+% paper. Flagged in the Session 064 debrief for web Claude review.
+
+@article{gmys-casiano-2026,
+  author  = {Gmys-Casiano, Daniel},
+  title   = {Light Skeptic: A Deterministic Primitive for Adversarial Multi-Agent {LLM} Pipelines},
+  year    = {2026},
+  journal = {Preprint, Skyframe Innovations},
+  note    = {ARES Paper 2, draft at docs/paper_2/PAPER2_DRAFT_v1_1.docx (598 KB, 13 sections, 5 figures, compiled Session 052 + remediated Session 055). Working title; venue / stable identifier (DOI / arXiv ID / AISec proceedings page) pending Paper 2 publication. Self-cite forward-references the deterministic Light Skeptic primitive that Paper 3 Finding 1 depends on.}
+}
+
+@article{berdoz-rugli-wattenhofer-2026,
+  author  = {Berdoz, Fr{\'e}d{\'e}ric and Rugli, Leonardo and Wattenhofer, Roger},
+  title   = {Can AI Agents Agree?},
+  year    = {2026},
+  journal = {arXiv preprint},
+  eprint  = {2603.01213},
+  archivePrefix = {arXiv},
+  doi     = {10.48550/arXiv.2603.01213},
+  note    = {ETH Zurich. Verified Session 053 against https://arxiv.org/abs/2603.01213 (entry reused from Paper 2's references.bib with identical bib key). Note middle author given name corrected from Marco to Leonardo per arXiv listing.}
+}

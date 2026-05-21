@@ -1,0 +1,419 @@
+{
+  "kind": "paper_structure_skeleton",
+  "paper_id": "paper_3_v1_0",
+  "working_title": "Decision Determinism, Explanation Drift: Decoupling Verdict Stability from Explanation Stability in Adversarial Multi-Agent LLM Pipelines",
+  "short_title": "Decision Determinism, Explanation Drift",
+  "author": "Daniel Gmys-Casiano (Skyframe Innovations)",
+  "venue": "AISec workshop at CCS",
+  "target_words_core": 8650,
+  "target_words_with_refs": 9000,
+  "section_count_numbered": 11,
+  "build_session": 64,
+  "build_start_test_floor": 3737,
+  "skeleton_version": "v1.0",
+  "framing_choice": "A: Decision Determinism, Explanation Drift",
+  "framing_rationale": "Frames the dual finding as one coherent architectural claim; sibling finding becomes methodology backbone, not footnote",
+  "section_order_choice": "Skeptic-first (Finding 1 before Finding 2)",
+  "section_order_rationale": "Paper 2 already established the Skeptic primitive; byte-stability result gives readers a confirmation beat before the harder decoupling claim lands",
+
+  "contribution_claims": [
+    "Decision determinism does not imply explanation determinism",
+    "The deterministic primitive in Paper 2 (Light Skeptic) buys verdict stability without buying explanation stability",
+    "The decision/explanation decoupling boundary is architecturally visible at one line of code (oracle.py supporting_fact_ids assignment)"
+  ],
+
+  "three_leg_story": {
+    "leg_1_narrow_byte_stable": {
+      "summary": "Light Skeptic byte-stable across 98/98 paired trials; 101/0 fires across the full chain.",
+      "load_bearing_primitive": "`_ = architect_output` at light_skeptic.py:185",
+      "anchor_test": "ares/dialectic/tests/agents/test_light_skeptic_anchor.py",
+      "data_source": "Session 060 narrow-extended run (20260510-224622-154556)"
+    },
+    "leg_2_sibling_passthrough": {
+      "summary": "Verdict.supporting_fact_ids inherits architect_message.get_all_fact_ids() under outcome=THREAT_CONFIRMED. Decision preserved deterministically; explanation surface inherits Architect drift.",
+      "code_anchor": "oracle.py lines 88-115 (decide() body); supporting_facts conditional on outcome",
+      "anchor_test_new_this_session": "ares/dialectic/tests/agents/test_oracle_supporting_fact_ids_passthrough.py",
+      "data_source": "Session 059 run 2 (20260510-193950-f401a8) broad-leakage cycle"
+    },
+    "leg_3_llm_path_bound": {
+      "summary": "Full LLM Skeptic pipeline drifts on 73 of 98 paired trials (74.49%, ~74.5%) somewhere. Deterministic path absorbs the judgment; LLM path does not.",
+      "exact_integer": "73 of 98 (74.49%)",
+      "decomposition": "first-diverging-layer: architect 39, skeptic_llm 34, light_skeptic 0, oracle 0, final_verdict 0, no_divergence 25",
+      "data_source": "Session 059 run 2 (20260510-193950-f401a8) §3 per-layer attribution"
+    }
+  },
+
+  "sections": [
+    {
+      "section_id": "abstract",
+      "section_number": null,
+      "title": "Abstract",
+      "target_words": 250,
+      "narrative_arc": "Problem (multi-agent LLM pipelines conflate verdict and explanation stability) -> Paper 2 forward-ref (deterministic Skeptic primitive established) -> three findings (F1 byte-stable, F2 passthrough, F3 LLM-path bound) -> claim (decoupling principle) -> reproducibility statement",
+      "claims": [
+        "Multi-agent LLM pipelines used for security and judgment decisions conflate two distinct stability properties",
+        "The deterministic Skeptic primitive (Paper 2) is byte-stable across 98/98 paired adversarial trials",
+        "The Oracle's explanation surface (supporting_fact_ids) is decoupled from this stability under THREAT_CONFIRMED outcomes",
+        "The full LLM pipeline drifts on 73/98 (74.49%) paired trials"
+      ],
+      "numbers_preregistered": ["98", "98/98", "73", "73/98", "74.49%"],
+      "bibkeys_required": ["gmys-casiano-2026-deterministic-skeptic"],
+      "figures": [],
+      "tables": [],
+      "subsections": []
+    },
+    {
+      "section_id": "introduction",
+      "section_number": 1,
+      "title": "Introduction",
+      "target_words": 600,
+      "narrative_arc": "Open with the broader problem: multi-agent LLM systems used for security and judgment decisions. Two stability properties readers conflate: does the verdict hold under input perturbation, and does the reasoning trail hold. Forward-ref Paper 2 result. Numbered contribution claims (three). Roadmap paragraph.",
+      "claims": [
+        "Multi-agent LLM systems are being deployed for safety-critical adjudication tasks",
+        "Two stability properties (decision, explanation) are commonly conflated",
+        "Paper 2's deterministic Skeptic established the verdict-stability primitive",
+        "Three contributions: byte-stability result, passthrough finding, LLM-path bound"
+      ],
+      "numbers_preregistered": [],
+      "bibkeys_required": ["gmys-casiano-2026-deterministic-skeptic", "multi-agent-llm-survey-needed", "prompt-injection-foundational-needed"],
+      "figures": [],
+      "tables": [],
+      "subsections": []
+    },
+    {
+      "section_id": "background",
+      "section_number": 2,
+      "title": "Background",
+      "target_words": 700,
+      "narrative_arc": "Multi-agent LLM pipelines (cite recent surveys). Adversarial framing injection (cite ETH 'Can AI Agents Agree?'). Deterministic vs LLM components in production systems. Citation surfaces in explainable AI literature. The conflation of decision stability and explanation stability in prior work.",
+      "claims": [
+        "Multi-agent LLM pipelines are an active research area",
+        "Adversarial prompt injection in multi-agent systems has been documented (ETH corroboration)",
+        "Production AI systems mix deterministic and LLM components",
+        "Citation surfaces are studied in explainable AI but not as a stability property",
+        "Prior work conflates decision and explanation stability"
+      ],
+      "numbers_preregistered": [],
+      "bibkeys_required": ["multi-agent-llm-survey-needed", "eth-can-ai-agents-agree", "citation-surfaces-xai-needed", "closed-world-deterministic-verification-needed"],
+      "figures": [],
+      "tables": [],
+      "subsections": []
+    },
+    {
+      "section_id": "ares_pipeline",
+      "section_number": 3,
+      "title": "ARES Pipeline (Compressed)",
+      "target_words": 500,
+      "narrative_arc": "Three-agent architecture (Architect, Skeptic, OracleJudge). EvidencePackets, frozen dataclasses, SHA256-verified provenance. Light Skeptic four-rule definition (forward-ref Paper 2 for full derivation). Closed-world evidence architecture. Cite Paper 2 throughout to avoid re-deriving.",
+      "claims": [
+        "Three-agent architecture: Architect (LLM), Skeptic (deterministic or LLM), OracleJudge (deterministic)",
+        "EvidencePackets are SHA256-verified frozen dataclasses",
+        "Light Skeptic operates on four rules (forward-ref Paper 2 for full derivation)",
+        "Closed-world evidence architecture: no LLM call constructs new facts",
+        "Reproducibility floor at build start: 3,737 tests"
+      ],
+      "numbers_preregistered": ["3737"],
+      "bibkeys_required": ["gmys-casiano-2026-deterministic-skeptic", "frozen-dataclass-pattern-needed"],
+      "figures": ["fig_1"],
+      "tables": [],
+      "subsections": []
+    },
+    {
+      "section_id": "methodology",
+      "section_number": 4,
+      "title": "Methodology",
+      "target_words": 1200,
+      "narrative_arc": "Paired-trial leakage protocol with pre-registered rubrics. Decomposition into citation-surface drift and confidence-axis drift. Sibling-isolation method. Run protocol with archival SHA256 manifests.",
+      "claims": [
+        "Paired-trial leakage protocol: baseline vs mutated evidence, same architecture",
+        "Leakage decomposes into citation-surface drift and confidence-axis drift",
+        "Sibling-isolation method: how the Oracle passthrough was identified",
+        "Pre-registered rubrics locked before data collection",
+        "Three runs archived with SHA256 manifests"
+      ],
+      "numbers_preregistered": ["3", "98"],
+      "bibkeys_required": [],
+      "figures": ["fig_2"],
+      "tables": ["tbl_1"],
+      "subsections": [
+        {"id": "4.1", "title": "Paired-trial leakage protocol", "target_words": 200},
+        {"id": "4.2", "title": "Decomposition of leakage", "target_words": 200},
+        {"id": "4.3", "title": "Sibling-isolation method", "target_words": 250},
+        {"id": "4.4", "title": "Pre-registered rubrics", "target_words": 350, "rubrics": [
+          "Byte-stability: SHA256 match on Verdict serialization",
+          "Citation-surface drift: set inequality on supporting_fact_ids",
+          "Confidence-axis drift: |Δ| > 0.05 on any of (architect, skeptic, oracle) confidence axes"
+        ]},
+        {"id": "4.5", "title": "Run protocol", "target_words": 200}
+      ]
+    },
+    {
+      "section_id": "finding_1_byte_stability",
+      "section_number": 5,
+      "title": "Finding 1: Light Skeptic Byte-Stability",
+      "target_words": 1000,
+      "narrative_arc": "98/98 paired trials byte-stable. Anchor at light_skeptic.py:185. Mechanism: deterministic Skeptic ignores architect output by construction. Anchor test in repo locks the primitive against regression.",
+      "claims": [
+        "Result: 98/98 paired trials byte-stable; 101/0 fires across the full chain",
+        "Anchor: the `_ = architect_output` discard at light_skeptic.py:185",
+        "Mechanism: deterministic Skeptic ignores architect output by construction",
+        "Anchor test in repo locks this primitive against regression"
+      ],
+      "numbers_preregistered": ["98", "98/98", "101/0", "185"],
+      "bibkeys_required": ["gmys-casiano-2026-deterministic-skeptic"],
+      "figures": ["fig_3", "fig_5"],
+      "tables": ["tbl_2"],
+      "subsections": [
+        {"id": "5.1", "title": "Result statement", "target_words": 200},
+        {"id": "5.2", "title": "Anchor: the discard at line 185", "target_words": 300},
+        {"id": "5.3", "title": "Mechanism: deterministic Skeptic ignores architect output by construction", "target_words": 300},
+        {"id": "5.4", "title": "Anchor test in repo", "target_words": 200}
+      ]
+    },
+    {
+      "section_id": "finding_2_oracle_passthrough",
+      "section_number": 6,
+      "title": "Finding 2: Oracle supporting_fact_ids Passthrough",
+      "target_words": 1500,
+      "load_bearing": true,
+      "narrative_arc": "Verdict object carries both decision and supporting_fact_ids (explanation surface). Code at oracle.py:88-115. Implication: decision preserved deterministically; explanation surface fully inherits whatever the Architect produced (under THREAT_CONFIRMED outcome). Empirical confirmation from Session 059 broad-leakage cycle. The decoupling principle: decision determinism is strictly weaker than explanation determinism, and the gap is architecturally visible.",
+      "claims": [
+        "Verdict object carries both decision (outcome) and supporting_fact_ids (explanation surface)",
+        "oracle.py:88-115 shows the conditional supporting_facts assignment by outcome",
+        "Under THREAT_CONFIRMED, supporting_facts = frozenset(arch_facts) — the Architect's drift propagates",
+        "Empirical: Session 059 broad-leakage cycle exhibits citation-surface drift on byte-stable Verdict outcome",
+        "Decision determinism is strictly weaker than explanation determinism; the gap is architecturally visible"
+      ],
+      "numbers_preregistered": ["88-115"],
+      "bibkeys_required": ["citation-surfaces-xai-needed"],
+      "figures": ["fig_4", "fig_6"],
+      "tables": [],
+      "subsections": [
+        {"id": "6.1", "title": "Verdict structure: decision and explanation surfaces", "target_words": 250},
+        {"id": "6.2", "title": "Code reality at oracle.py:88-115 (THREAT_CONFIRMED branch)", "target_words": 350},
+        {"id": "6.3", "title": "Implication: explanation surface inherits Architect output", "target_words": 300},
+        {"id": "6.4", "title": "Empirical confirmation from Session 059 broad-leakage cycle", "target_words": 350},
+        {"id": "6.5", "title": "The decoupling principle", "target_words": 250}
+      ]
+    },
+    {
+      "section_id": "finding_3_llm_path_bound",
+      "section_number": 7,
+      "title": "Finding 3: LLM-Path Bound",
+      "target_words": 800,
+      "narrative_arc": "Full LLM Skeptic pipeline: paired trials with both Skeptics replaced by LLM agents. Result: 73 of 98 pairs (74.49%) leak somewhere. Comparison: deterministic Skeptic absorbs the judgment; LLM Skeptic does not. This bounds what the deterministic primitive earns you. Honest framing: this is a published limitation, not a hidden one.",
+      "claims": [
+        "Full LLM Skeptic pipeline: paired trials with both Skeptics replaced by LLM agents",
+        "Result: 73 of 98 pairs (74.49%) leak somewhere — Session 059 run 2",
+        "Per-layer first-diverging counts: architect 39, skeptic_llm 34, no_divergence 25",
+        "Deterministic Skeptic absorbs the judgment; LLM Skeptic does not",
+        "Total pipeline still drifts substantially when adjacent components are LLM-driven",
+        "Published limitation, not hidden one"
+      ],
+      "numbers_preregistered": ["73", "73/98", "74.49%", "39", "34", "25"],
+      "bibkeys_required": ["eth-can-ai-agents-agree"],
+      "figures": ["fig_3"],
+      "tables": ["tbl_2"],
+      "subsections": [
+        {"id": "7.1", "title": "Full LLM Skeptic pipeline setup", "target_words": 150},
+        {"id": "7.2", "title": "Result: 73 of 98 paired trials leak somewhere", "target_words": 250},
+        {"id": "7.3", "title": "Comparison vs deterministic Skeptic", "target_words": 200},
+        {"id": "7.4", "title": "Bound on what the deterministic primitive earns", "target_words": 200}
+      ]
+    },
+    {
+      "section_id": "discussion",
+      "section_number": 8,
+      "title": "Discussion",
+      "target_words": 1200,
+      "narrative_arc": "Decoupling principle as general for multi-agent pipelines. Implications for production deterministic adjudication. Connection to Phase 5 semantic framing finding (structural firewalls catch 100%, framing detection 0%) — decoupling predicts this asymmetry. ETH corroboration. V2/V3 registry composition as an architectural contribution.",
+      "claims": [
+        "Decision/explanation decoupling as a general principle for multi-agent pipelines",
+        "Implications for deterministic adjudication in production systems",
+        "Connection to Phase 5 semantic framing finding: structural firewalls catch 100%, framing detection 0%",
+        "Decoupling principle predicts the structural/semantic asymmetry",
+        "ETH Zurich corroboration on LLM-path drift",
+        "V2/V3 registry composition pattern as a publishable architectural contribution supporting reproducibility"
+      ],
+      "numbers_preregistered": ["100%", "0%"],
+      "bibkeys_required": ["eth-can-ai-agents-agree", "gmys-casiano-2026-deterministic-skeptic"],
+      "figures": [],
+      "tables": [],
+      "subsections": [
+        {"id": "8.1", "title": "Decision/explanation decoupling as a general principle", "target_words": 250},
+        {"id": "8.2", "title": "Implications for deterministic adjudication in production systems", "target_words": 250},
+        {"id": "8.3", "title": "Connection to semantic framing injection (Paper 2 callback)", "target_words": 250},
+        {"id": "8.4", "title": "ETH Zurich corroboration", "target_words": 200},
+        {"id": "8.5", "title": "V2/V3 registry composition as architectural contribution", "target_words": 250}
+      ]
+    },
+    {
+      "section_id": "limitations",
+      "section_number": 9,
+      "title": "Limitations",
+      "target_words": 500,
+      "narrative_arc": "Single domain, single LLM family, LLM-path bound itself, closed-world evidence assumption, N=98 narrow corpus.",
+      "claims": [
+        "Single domain (cybersecurity threat analysis)",
+        "Single LLM family validated to date (Sonnet); multi-model validation pending",
+        "LLM-path bound is a published limitation",
+        "Closed-world evidence architecture may not generalize to open-world reasoning tasks",
+        "N=98 narrow corpus; broader validation pending Phase 6 arena"
+      ],
+      "numbers_preregistered": ["98"],
+      "bibkeys_required": [],
+      "figures": [],
+      "tables": [],
+      "subsections": []
+    },
+    {
+      "section_id": "future_work",
+      "section_number": 10,
+      "title": "Future Work",
+      "target_words": 400,
+      "narrative_arc": "Multi-model generalization. Explanation-surface intervention. Phase 6 semantic framing arena. Audit of other pipeline primitives for passthrough behavior.",
+      "claims": [
+        "Multi-model generalization of Light Skeptic stability across LLM families",
+        "Explanation-surface intervention: separate verifier on supporting_fact_ids, decoupled from Architect",
+        "Phase 6 semantic framing arena (forward-ref)",
+        "Audit of other pipeline primitives for passthrough behavior"
+      ],
+      "numbers_preregistered": [],
+      "bibkeys_required": [],
+      "figures": [],
+      "tables": [],
+      "subsections": []
+    },
+    {
+      "section_id": "references",
+      "section_number": 11,
+      "title": "References",
+      "target_words": 0,
+      "narrative_arc": "Full bibliography (see bibkeys_required_verified and bibkeys_needed_unverified at top level)",
+      "claims": [],
+      "numbers_preregistered": [],
+      "bibkeys_required": [],
+      "figures": [],
+      "tables": [],
+      "subsections": []
+    }
+  ],
+
+  "figures": [
+    {"id": "fig_1", "type": "architecture_diagram", "purpose": "ARES pipeline (Architect / Skeptic / Oracle), compressed from Paper 2", "source": "reuse Paper 2 asset", "host_section": 3},
+    {"id": "fig_2", "type": "conceptual_diagram", "purpose": "Decomposition: leakage = citation-surface drift + confidence-axis drift", "source": "new", "host_section": 4},
+    {"id": "fig_3", "type": "bar_chart", "purpose": "Byte-stability result (98/98 paired trials) and LLM Skeptic comparison", "source": "leakage runs", "host_section": 5},
+    {"id": "fig_4", "type": "conceptual_diagram", "purpose": "Decoupling: Verdict structure showing decision and explanation surfaces sourced from different paths", "source": "new", "host_section": 6},
+    {"id": "fig_5", "type": "code_snippet", "purpose": "light_skeptic.py:185 with annotation showing the discard", "source": "source", "host_section": 5},
+    {"id": "fig_6", "type": "code_snippet", "purpose": "oracle.py:88-115 with annotation showing the conditional passthrough", "source": "source", "host_section": 6}
+  ],
+
+  "tables": [
+    {"id": "tbl_1", "purpose": "Pre-registered rubrics with thresholds", "source": "§4.4", "host_section": 4},
+    {"id": "tbl_2", "purpose": "Three-run summary (N, byte-stable, citation-drift, confidence-drift counts)", "source": "leakage runs", "host_section": 5}
+  ],
+
+  "numbers_preregistered": [
+    {"value": "98", "source": "Session 060 narrow-extended run (20260510-224622-154556)", "lock_target": "§5.1, Tbl 2, §9, Abstract"},
+    {"value": "98/98", "source": "Session 060 narrow-extended run", "lock_target": "Abstract, §5.1, Fig 3"},
+    {"value": "101/0", "source": "Session 060", "lock_target": "§5.1"},
+    {"value": "185", "source": "ares/dialectic/agents/light_skeptic.py:185 (verbatim anchor at test_light_skeptic_anchor.py)", "lock_target": "§5.2, Fig 5"},
+    {"value": "88-115", "source": "ares/dialectic/agents/oracle.py decide() body (lines 88-115; brief originally cited 88-98)", "lock_target": "§6.2, Fig 6"},
+    {"value": "73", "source": "LEAKAGE_REPORT_20260510-193950-f401a8.md §3 per-layer attribution (98 LLM pairs - 25 no_divergence)", "lock_target": "Abstract, §7.2, Tbl 2"},
+    {"value": "73/98", "source": "LEAKAGE_REPORT_20260510-193950-f401a8.md", "lock_target": "Abstract, §7.2"},
+    {"value": "74.49%", "source": "LEAKAGE_REPORT_20260510-193950-f401a8.md (73/98)", "lock_target": "Abstract, §7.2"},
+    {"value": "39", "source": "LEAKAGE_REPORT §3 architect first-diverging count (LLM pipeline)", "lock_target": "§7.2"},
+    {"value": "34", "source": "LEAKAGE_REPORT §3 skeptic_llm first-diverging count", "lock_target": "§7.2"},
+    {"value": "25", "source": "LEAKAGE_REPORT §3 no_divergence count (LLM pipeline)", "lock_target": "§7.2"},
+    {"value": "3", "source": "data/paper_3/leakage_runs/", "lock_target": "§4.5, Tbl 2"},
+    {"value": "3737", "source": "Session 063 handoff CLAUDE.md floor", "lock_target": "§3 reproducibility paragraph"},
+    {"value": "100%", "source": "Phase 5 finding 7 (Session 048): structural firewall direct detection", "lock_target": "§8.3"},
+    {"value": "0%", "source": "Phase 5 finding 7 (Session 048): structural firewall framing detection", "lock_target": "§8.3"}
+  ],
+
+  "bibkeys_required_verified": [
+    {
+      "bibkey": "gmys-casiano-2026",
+      "role": "Paper 2 self-cite (forward-ref source for the deterministic Skeptic primitive)",
+      "status": "VERIFIED",
+      "source": "ARES Paper 2 draft at docs/paper_2/PAPER2_DRAFT_v1_1.docx. Key is canonical Author-Year so it round-trips cleanly through extract_citations + citation_to_bibkey from natural prose `(Gmys-Casiano, 2026)`. Brief listed `gmys-casiano-2026-deterministic-skeptic` (thematic); deviation documented in references.bib header. Cross-paper: Paper 2's own bib uses this same key for Paper 1 (file-scoped, no collision).",
+      "verified_session": 64,
+      "deviates_from_brief_naming": true,
+      "brief_key": "gmys-casiano-2026-deterministic-skeptic"
+    },
+    {
+      "bibkey": "berdoz-rugli-wattenhofer-2026",
+      "role": "ETH Zurich corroboration on multi-agent LLM convergence (§2 background, §7.4 honest framing, §8.4 corroboration)",
+      "status": "VERIFIED",
+      "source": "Berdoz, Rugli, Wattenhofer 2026 — arXiv 2603.01213. Identical bib entry to Paper 2's same-keyed entry (cross-paper key reuse for the same paper). Brief listed `eth-can-ai-agents-agree` (thematic); deviation documented in references.bib header.",
+      "verified_session": 64,
+      "deviates_from_brief_naming": true,
+      "brief_key": "eth-can-ai-agents-agree"
+    }
+  ],
+
+  "bibkeys_needed_unverified": [
+    {
+      "slug": "multi-agent-llm-survey-needed",
+      "description": "Multi-agent LLM pipeline survey, recent (2024-2026)",
+      "lock_target_sections": [1, 2],
+      "verification_required_before_commit": "Find actual published survey paper with matching scope; verify against arXiv / ACM DL / IEEE Xplore; record DOI or arXiv ID in references.bib"
+    },
+    {
+      "slug": "prompt-injection-foundational-needed",
+      "description": "Adversarial prompt injection in LLM agents (Greshake et al. or similar foundational ref)",
+      "lock_target_sections": [1, 2],
+      "verification_required_before_commit": "Verify Greshake et al. 'Not what you've signed up for' (or equivalent) against actual arXiv/USENIX listing"
+    },
+    {
+      "slug": "citation-surfaces-xai-needed",
+      "description": "Citation surfaces / explainable AI for LLMs",
+      "lock_target_sections": [2, 6],
+      "verification_required_before_commit": "Identify specific citation-surface XAI paper; risk: this is a coined framing in this paper, the closest published work may use different terminology"
+    },
+    {
+      "slug": "closed-world-deterministic-verification-needed",
+      "description": "Closed-world reasoning / deterministic verification in AI systems",
+      "lock_target_sections": [2],
+      "verification_required_before_commit": "Identify closed-world reasoning citation; CWA classical reference vs modern AI-systems framing"
+    },
+    {
+      "slug": "frozen-dataclass-pattern-needed",
+      "description": "Frozen dataclass / immutable-by-construction pattern in safety-critical Python (may need to be a software engineering citation rather than ML)",
+      "lock_target_sections": [3],
+      "verification_required_before_commit": "Likely a software-engineering citation (CACM / IEEE Software). Risk: may not exist in the form this paper needs; if so, drop and treat as folk knowledge in v1.0"
+    }
+  ],
+
+  "anchor_tests_required": [
+    {
+      "path": "ares/dialectic/tests/agents/test_light_skeptic_anchor.py",
+      "status": "EXISTS (Session 058)",
+      "session_064_action": "verify present and still passing",
+      "locks": "light_skeptic.py:185 `_ = architect_output` discard"
+    },
+    {
+      "path": "ares/dialectic/tests/agents/test_oracle_supporting_fact_ids_passthrough.py",
+      "status": "NEW (Session 064)",
+      "session_064_action": "create",
+      "locks": "Verdict.supporting_fact_ids == architect_message.get_all_fact_ids() under outcome=THREAT_CONFIRMED branch of oracle.py decide()"
+    },
+    {
+      "path": "tests/dialectic/measurement/test_paired_trial_byte_stability.py",
+      "status": "NEW (Session 064; brief assumed pre-existing but it does not)",
+      "session_064_action": "create",
+      "locks": "98/98 narrow byte-stability result on canonical Session 060 leakage run (data/paper_3/leakage_runs/20260510-224622-154556/)"
+    }
+  ],
+
+  "session_064_phasing_decision": "Option A: ship all 11 sections at v1.0, iterate to v1.1 (matches Paper 2 cadence)",
+  "session_064_code_snippet_placement": "inline as Figures 5 and 6 (load-bearing primitives)",
+  "session_064_phase7_visualization_callback": "out of scope for this paper",
+  "session_064_length_headroom": "8.5k core, headroom up to ~9.5k total if §6 expands beyond 1500",
+
+  "out_of_scope_session_064": [
+    "Writing any prose for docs/paper_3/source/PAPER3_DRAFT_v1_0_source.md",
+    "Building docs/paper_3/PAPER3_DRAFT_v1_0.docx",
+    "Verifying Needed bibkeys (defer to Session 065 with prose)"
+  ]
+}

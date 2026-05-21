@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 063)
+# CLAUDE.md — ARES Phase 7 (post-Session 064)
 
 **Last updated:** 2026-05-20
-**Test count floor (passing):** 3,737
+**Test count floor (passing):** 3,929
 
 ## Identity
 ARES = Adversarial Reasoning Engine System. Cybersecurity threat analysis framework.
@@ -24,6 +24,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Session 061: 3D Pinscreen replay viewer for Phase 7 — Python pipeline (DataLoader / PinMapper / TimelineBuilder + CLI) emits `docs/marketing/pinscreen-timeline.json` from Session 059 traces (98 pins; 97 held / 1 drifted at INJ-001 framing_suffix_v1 Oracle layer, matching the documented citation-passthrough finding). Standalone Three.js page at `skyframe-main/assets/ares/pinscreen.html` consumes the JSON; deployed live via Netlify. Both pipeline and renderer shipped this session.
 - Session 062: Prism Labyrinth (Panel 1) renderer — production page at `skyframe-main/assets/ares/prism.html`, faithful port of the 2026-05-13 mockup against Session 059 data (98 cycles, 97 held / 1 drifted). Autoplay-first replay with scrubber takeover; full-kit interactivity (scrubber + operator dial + play/pause + click-to-focus). Drift surfaces at the **Architect** chamber per data (`first_diverging_layer="Architect"` for INJ-001 framing_suffix_v1); the mockup hardcoded Oracle as a storytelling shortcut, but the renderer is data-driven per spec § 4. ARES side adds one JSON contract test (8 tests). The 2026-05-14 sphere-chain attempt remains parked as a dated learning artifact.
 - Session 063: Prism Panel 2 (Confidence Trajectories) renderer — second view in the existing `prism.html` under a tab strip with Panel 1. Each cycle becomes one primitive in (architect, skeptic, oracle) confidence space: arrow when confidence moved (~75/98 pairs), sphere when it held (~23/98). The single broad-leakage cycle sits at the held cluster as a glowing red sphere because Session 059's leakage was citation-surface drift, not confidence drift. Shared timeline via `window.PrismState` event bus; per-frame publish drives Panel 2's reveal in lockstep with Panel 1's autoplay. 4 new ARES JSON contract tests (floor 3,733 → 3,737); 3 new JS files + 2 modifications on skyframe-main. Panel 1 behavior unchanged.
+- Session 064: Paper 3 v1.0 skeleton + build pipeline scaffolded (no prose yet). Working title locked: "Decision Determinism, Explanation Drift". Framing A from web Claude's brief; Skeptic-first section order; AISec at CCS venue; 11 numbered sections + Abstract; 8,650 target words core. Three-leg story: (1) narrow Light Skeptic byte-stability 98/98 [Session 060]; (2) Oracle `supporting_fact_ids` passthrough under THREAT_CONFIRMED [structural finding from Session 059]; (3) LLM-path bound — exact integer locked from `LEAKAGE_REPORT_20260510-193950-f401a8.md §3` at **73 of 98 (74.49%)** divergence somewhere, with architect 39 / skeptic_llm 34 / no_divergence 25. Two new anchor tests landed (Oracle passthrough at `oracle.py` lines 89+102+116; paired-trial byte-stability against canonical Session 060 traces with SHA256 lock); existing `test_light_skeptic_anchor.py` confirmed at `light_skeptic.py:185`. Build pipeline mirrors Paper 2: `references.bib` (2 verified entries), ported `extract_citations` + `citation_to_bibkey` helpers, `test_citation_existence.py` (16 always-on + 4 properly-skipped) with Sabet-discipline guards that block unverified bibkeys from leaking into the bib, `number_check.py` with 11 resolvers covering all pre-registered numbers + dormant prose-substring mode for Session 065+ activation. Brief's thematic bibkey naming (`gmys-casiano-2026-deterministic-skeptic`, `eth-can-ai-agents-agree`) deviated to canonical Author-Year (`gmys-casiano-2026`, `berdoz-rugli-wattenhofer-2026`) because the ported helpers produce canonical keys from natural prose cite forms — flagged for web Claude review. Floor raised 3,737 → 3,929 (+192 tests across 5 new test files; 5 new docs/paper_3 files). Zero regressions. Out of scope: prose writing, docx build, verifying the 5 Needed bibkeys (Session 065 work).
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -31,6 +32,8 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - **Paper 2 v1.1 draft:** `docs/paper_2/PAPER2_DRAFT_v1_1.docx`
 - **Paper 2 source markdown:** `docs/paper_2/source/PAPER2_DRAFT_v1_1_source.md`
 - **Paper 2 references:** `docs/paper_2/references.bib`
+- **Paper 3 v1.0 skeleton (structural scaffold):** `docs/paper_3/skeleton_v1_0.json`
+- **Paper 3 references:** `docs/paper_3/references.bib`
 - **Phase 6 plan:** `docs/PHASE6_INJECTION_ARENA.md`
 
 ## Phase 5 Results (Sessions 045–046)
@@ -298,6 +301,17 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Paper 2 v1.1 prose integrator: `docs/paper_2/build_v1_1.py`
 - Paper 2 references compiler: `docs/paper_2/build_references.py`
 - Paper 2 number-check: `docs/paper_2/number_check.py` (caption + prose-body modes)
+
+### Paper 3 tooling (Phase 7 / Session 064)
+- Paper 3 structural scaffold: `docs/paper_3/skeleton_v1_0.json` (12 entries: Abstract + §1-§11; 8,650 target words core; three-leg story; pre-registered numbers; verified vs unverified bibkeys; anchor-test index)
+- Paper 3 references: `docs/paper_3/references.bib` (2 verified entries: `gmys-casiano-2026` Paper 2 self-cite; `berdoz-rugli-wattenhofer-2026` ETH "Can AI Agents Agree?"; per Sabet-discipline, unverified entries stay out)
+- Paper 3 build helpers: `docs/paper_3/build_references.py` (ported BibEntry/parse_bib + regression-locked `extract_citations`/`citation_to_bibkey` from Paper 2 Session 055 fix; docx integration deferred to Session 065)
+- Paper 3 number-check: `docs/paper_3/number_check.py` (11 resolvers covering pre-registered numbers from skeleton + LEAKAGE_REPORT + traces.jsonl + source files; dormant prose-substring mode seeded for Session 065+)
+- Paper 3 skeleton audit: `tests/paper_3/test_skeleton_audit.py` (49 structural tests locking the JSON schema)
+- Paper 3 citation existence audit: `tests/paper_3/test_citation_existence.py` (16 always-on: 5 enumeration + 7 structural + 4 Sabet-discipline guards; 4 conditional: 1 docx-pending + 3 ARES_RUN_NETWORK_TESTS-gated)
+- Paper 3 number-check tests: `tests/paper_3/test_number_check.py` (24 tests: smoke + per-resolver + claim engine + prose substring + report rendering)
+- Paper 3 Oracle passthrough anchor: `ares/dialectic/tests/agents/test_oracle_supporting_fact_ids_passthrough.py` (11 tests: source-level anchors at `oracle.py` lines 89+102+116 + behavioral anchors for THREAT_CONFIRMED passthrough + behavioral guards on THREAT_DISMISSED/INCONCLUSIVE non-passthrough branches)
+- Paper 3 paired-trial byte-stability anchor: `tests/dialectic/measurement/test_paired_trial_byte_stability.py` (16 tests: SHA256 lock on canonical Session 060 traces + 33+33+32=98 pair count + 98/98 narrow byte-stability assertion + per-operator decomposition)
 
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
