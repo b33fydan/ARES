@@ -84,6 +84,7 @@ class IdentifierSet:
     doi: str | None
     url: str | None
     canonical_path: str | None  # local-repo draft pointer
+    isbn: str | None  # ISBN-10 / ISBN-13 for pre-DOI book references
 
 
 _ARXIV_ID_RE = re.compile(r"^\d{4}\.\d{4,5}(v\d+)?$")
@@ -92,6 +93,9 @@ _URL_RE = re.compile(r"^https?://[^\s]+$")
 _LOCAL_PATH_RE = re.compile(
     r"docs/paper_[123]/[A-Za-z0-9_/\.\-]+\.(?:pdf|docx)"
 )
+# ISBN-10 (10 digits, last may be X) or ISBN-13 (13 digits, starts with 978/979).
+# Hyphens are tolerated by stripping them before match.
+_ISBN_RE = re.compile(r"^(?:\d{9}[\dXx]|97[89]\d{10})$")
 
 
 def extract_identifiers(entry) -> IdentifierSet:
@@ -99,6 +103,7 @@ def extract_identifiers(entry) -> IdentifierSet:
     arxiv = entry.get("eprint") or None
     doi = entry.get("doi") or None
     url = entry.get("url") or None
+    isbn = entry.get("isbn") or None
     canonical = None
     note = entry.get("note") or ""
     m = _LOCAL_PATH_RE.search(note)
@@ -109,11 +114,15 @@ def extract_identifiers(entry) -> IdentifierSet:
         doi=doi if doi else None,
         url=url if url else None,
         canonical_path=canonical,
+        isbn=isbn if isbn else None,
     )
 
 
 def has_any_identifier(idset: IdentifierSet) -> bool:
-    return any((idset.arxiv_id, idset.doi, idset.url, idset.canonical_path))
+    return any((
+        idset.arxiv_id, idset.doi, idset.url,
+        idset.canonical_path, idset.isbn,
+    ))
 
 
 # ============================================================================
@@ -244,6 +253,17 @@ class TestStructuralInvariants:
             if url and not _URL_RE.match(url):
                 bad.append((entry.key, url))
         assert not bad, f"Malformed URLs: {bad}"
+
+    def test_isbns_match_format(self, bib_entries):
+        """ISBN-10 (9 digits + check digit) or ISBN-13 (978/979 + 10 digits)."""
+        bad = []
+        for entry in bib_entries:
+            isbn = entry.get("isbn")
+            if isbn:
+                stripped = isbn.replace("-", "").replace(" ", "")
+                if not _ISBN_RE.match(stripped):
+                    bad.append((entry.key, isbn))
+        assert not bad, f"Malformed ISBNs: {bad}"
 
     def test_every_entry_has_author_and_year(self, bib_entries):
         for entry in bib_entries:
