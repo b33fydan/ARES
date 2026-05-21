@@ -115,6 +115,40 @@ class TestResolvers:
         )
         assert _resolve_test_floor_from_skeleton(skeleton) == 3737
 
+    def test_verdict_class_passthrough_map_resolves_from_source(self):
+        """Session 065 patch: §6.6 lock. The resolver reads oracle.py
+        and asserts the per-verdict-class supporting_facts source. If
+        oracle.py drifts, this fires."""
+        from docs.paper_3.number_check import (
+            _resolve_verdict_class_passthrough_map,
+        )
+        actual = _resolve_verdict_class_passthrough_map()
+        assert actual == {
+            "THREAT_CONFIRMED": "architect",
+            "THREAT_DISMISSED": "skeptic",
+            "INCONCLUSIVE": "union",
+        }
+
+    def test_verdict_class_passthrough_map_raises_when_branch_missing(
+        self, tmp_path, monkeypatch,
+    ):
+        """If a verdict-class branch goes missing from oracle.py, the
+        resolver must raise loudly, not silently return a partial map."""
+        from docs.paper_3 import number_check
+
+        # Replace ORACLE_PY with a fake source missing the
+        # THREAT_DISMISSED branch.
+        fake_oracle = tmp_path / "oracle_fake.py"
+        fake_oracle.write_text(
+            "supporting_facts = frozenset(arch_facts)\n"
+            "supporting_facts = frozenset(arch_facts | skep_facts)\n",
+            encoding="utf-8",
+        )
+        monkeypatch.setattr(number_check, "ORACLE_PY", fake_oracle)
+
+        with pytest.raises(LookupError, match="THREAT_DISMISSED"):
+            number_check._resolve_verdict_class_passthrough_map()
+
 
 # ============================================================================
 # Claim table + check engine
@@ -122,14 +156,16 @@ class TestResolvers:
 
 
 class TestClaimsTable:
-    def test_default_claims_returns_at_least_eleven(self):
+    def test_default_claims_returns_at_least_twelve(self):
+        """Session 065 patch added the verdict_class_passthrough_map
+        claim, bringing the count from 11 to 12."""
         from docs.paper_3.number_check import default_claims
         skeleton = json.loads(
             (REPO_ROOT / "docs" / "paper_3" / "skeleton_v1_0.json")
             .read_text(encoding="utf-8")
         )
         claims = default_claims(skeleton)
-        assert len(claims) >= 11
+        assert len(claims) >= 12
 
     def test_run_checks_all_pass_against_current_state(self):
         from docs.paper_3.number_check import default_claims, run_checks
@@ -222,6 +258,20 @@ class TestProseSubstringEngine:
         assert "supporting_fact_ids" in subs, (
             "Oracle passthrough symbol must appear in prose lock list"
         )
+
+    def test_prose_substring_claims_include_section_6_6_locks(self):
+        """Session 065 patch: §6.6 prose must reference the
+        non-passthrough branches and their line numbers."""
+        from docs.paper_3.number_check import prose_substring_claims
+        subs = prose_substring_claims()
+        for required in (
+            "THREAT_DISMISSED", "INCONCLUSIVE",
+            "102", "105", "109", "101-111",
+        ):
+            assert required in subs, (
+                f"§6.6 substring lock {required!r} missing from "
+                f"prose_substring_claims"
+            )
 
 
 # ============================================================================

@@ -187,6 +187,42 @@ def _resolve_oracle_passthrough_line_range() -> tuple[int, int]:
     return start, end
 
 
+def _resolve_verdict_class_passthrough_map() -> dict[str, str]:
+    """Read oracle.py and resolve the per-verdict-class supporting_facts
+    source. Returns a map {verdict_class: fact_source} where
+    fact_source is one of "architect", "skeptic", or "union".
+
+    Locks the Paper 3 §6.6 claim against silent regression in
+    oracle.py. If a future refactor changes which fact set a branch
+    assigns, this resolver will return a different map and the
+    skeleton-vs-source consistency check will fail.
+    """
+    source = ORACLE_PY.read_text(encoding="utf-8")
+    branches = {
+        "THREAT_CONFIRMED": (
+            "supporting_facts = frozenset(arch_facts)",
+            "architect",
+        ),
+        "THREAT_DISMISSED": (
+            "supporting_facts = frozenset(skep_facts)",
+            "skeptic",
+        ),
+        "INCONCLUSIVE": (
+            "supporting_facts = frozenset(arch_facts | skep_facts)",
+            "union",
+        ),
+    }
+    out: dict[str, str] = {}
+    for verdict_class, (needle, fact_source) in branches.items():
+        if needle not in source:
+            raise LookupError(
+                f"Could not find {verdict_class} branch assignment "
+                f"{needle!r} in oracle.py"
+            )
+        out[verdict_class] = fact_source
+    return out
+
+
 def _resolve_leakage_run_count() -> int:
     """Number of distinct timestamped leakage runs on disk."""
     if not LEAKAGE_RUNS_DIR.exists():
@@ -273,6 +309,15 @@ def default_claims(skeleton: dict) -> tuple[Claim, ...]:
             expected=3737,
             resolver=lambda: _resolve_test_floor_from_skeleton(skeleton),
         ),
+        Claim(
+            label="verdict_class_passthrough_map (§6.6 lock)",
+            expected={
+                "THREAT_CONFIRMED": "architect",
+                "THREAT_DISMISSED": "skeptic",
+                "INCONCLUSIVE": "union",
+            },
+            resolver=_resolve_verdict_class_passthrough_map,
+        ),
     )
 
 
@@ -296,6 +341,8 @@ def run_checks(claims: Iterable[Claim]) -> tuple[CheckResult, ...]:
             actual = claim.resolver()
             if claim.label.endswith("(>=3 expected)"):
                 passed = actual >= claim.expected
+            elif isinstance(claim.expected, dict):
+                passed = actual == claim.expected
             else:
                 passed = actual == claim.expected
         except Exception as exc:
@@ -376,12 +423,18 @@ def prose_substring_claims() -> tuple[str, ...]:
         "25",            # no_divergence
         "185",           # light_skeptic.py line number
         "88-115",        # oracle.py decide() body range
+        "101-111",       # oracle.py THREAT_CONFIRMED branch (Fig 6)
+        "102",           # oracle.py passthrough line (§6.2, Fig 6)
+        "105",           # oracle.py THREAT_DISMISSED branch (§6.6, Tbl 3)
+        "109",           # oracle.py INCONCLUSIVE branch (§6.6, Tbl 3)
         "3,737",         # test floor (formatted)
         "INJ-001",       # broad-leakage scenario id
         "framing_suffix_v1",  # broad-leakage operator
         "framing_prefix_v1",
         "synonym_substitution_conservative_v2",
         "THREAT_CONFIRMED",
+        "THREAT_DISMISSED",   # §6.6 non-passthrough branch
+        "INCONCLUSIVE",        # §6.6 non-passthrough branch
         "supporting_fact_ids",
         "_ = architect_output",
     )
