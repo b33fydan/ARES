@@ -306,10 +306,14 @@ class TestSabetDisciplineGuards:
             f"without verification: {leaked}"
         )
 
-    def test_unverified_bibkey_count_locked_at_five(self, skeleton):
-        """The Session 064 brief listed five Needed bibkeys. If this
-        count changes silently, prose has drifted from the brief."""
-        assert len(skeleton["bibkeys_needed_unverified"]) == 5
+    def test_unverified_bibkey_count_locked_at_one_post_session_068(self, skeleton):
+        """Session 064 brief listed five Needed bibkeys. Session 068
+        verified four of them (greshake / guo / reiter / jacovi) and
+        moved them to bibkeys_required_verified; one (frozen-dataclass-
+        pattern-needed) remains, scheduled for Phase C drop in the
+        same session. If this count changes silently after Session 068,
+        prose has drifted from the brief."""
+        assert len(skeleton["bibkeys_needed_unverified"]) == 1
 
     def test_unverified_slugs_have_verification_instructions(self, skeleton):
         for entry in skeleton["bibkeys_needed_unverified"]:

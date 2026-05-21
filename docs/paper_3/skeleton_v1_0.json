@@ -75,7 +75,7 @@
         "Three contributions: byte-stability result, passthrough finding, LLM-path bound"
       ],
       "numbers_preregistered": [],
-      "bibkeys_required": ["gmys-casiano-2026", "multi-agent-llm-survey-needed", "prompt-injection-foundational-needed"],
+      "bibkeys_required": ["gmys-casiano-2026", "guo-chen-zhang-2024", "greshake-abdelnabi-mishra-2023"],
       "figures": [],
       "tables": [],
       "subsections": []
@@ -94,7 +94,7 @@
         "Prior work conflates decision and explanation stability"
       ],
       "numbers_preregistered": [],
-      "bibkeys_required": ["multi-agent-llm-survey-needed", "berdoz-rugli-wattenhofer-2026", "citation-surfaces-xai-needed", "closed-world-deterministic-verification-needed"],
+      "bibkeys_required": ["guo-chen-zhang-2024", "berdoz-rugli-wattenhofer-2026", "jacovi-goldberg-2020", "reiter-1978-closed-world"],
       "figures": [],
       "tables": [],
       "subsections": []
@@ -185,7 +185,7 @@
         "Decision determinism is strictly weaker than explanation determinism; the gap is architecturally visible"
       ],
       "numbers_preregistered": ["88-115"],
-      "bibkeys_required": ["citation-surfaces-xai-needed"],
+      "bibkeys_required": ["jacovi-goldberg-2020"],
       "figures": ["fig_4", "fig_6"],
       "tables": [],
       "subsections": [
@@ -389,34 +389,46 @@
       "verified_session": 64,
       "deviates_from_brief_naming": true,
       "brief_key": "eth-can-ai-agents-agree"
+    },
+    {
+      "bibkey": "greshake-abdelnabi-mishra-2023",
+      "role": "Foundational indirect prompt injection reference (§1 introduction, §2 background)",
+      "status": "VERIFIED",
+      "source": "Greshake, Abdelnabi, Mishra, Endres, Holz, Fritz, 'Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection', AISec '23 (ACM Workshop on Artificial Intelligence and Security). DOI: 10.1145/3605764.3623985. Verified Session 068 via web search. Brief listed `prompt-injection-foundational-needed` (thematic).",
+      "verified_session": 68,
+      "deviates_from_brief_naming": true,
+      "brief_key": "prompt-injection-foundational-needed"
+    },
+    {
+      "bibkey": "guo-chen-zhang-2024",
+      "role": "Recent multi-agent LLM pipeline survey (§1 introduction, §2 background)",
+      "status": "VERIFIED",
+      "source": "Guo, Chen, Wang, Chang, Pei, Chawla, Wiest, Zhang, 'Large Language Model based Multi-Agents: A Survey of Progress and Challenges', IJCAI 2024. arXiv: 2402.01680. Verified Session 068 via web search. Brief listed `multi-agent-llm-survey-needed` (thematic).",
+      "verified_session": 68,
+      "deviates_from_brief_naming": true,
+      "brief_key": "multi-agent-llm-survey-needed"
+    },
+    {
+      "bibkey": "reiter-1978-closed-world",
+      "role": "Foundational closed-world assumption reference (§2 background)",
+      "status": "VERIFIED",
+      "source": "Reiter, 'On Closed World Data Bases', in Logic and Data Bases (Gallaire and Minker, eds.), Plenum Press, 1978, pp. 55-76. ISBN 9780306400605. Verified Session 068 via web search. Pre-DOI / pre-arXiv era; stable identifier is ISBN. Brief listed `closed-world-deterministic-verification-needed` (thematic).",
+      "verified_session": 68,
+      "deviates_from_brief_naming": true,
+      "brief_key": "closed-world-deterministic-verification-needed"
+    },
+    {
+      "bibkey": "jacovi-goldberg-2020",
+      "role": "NLP explanation-faithfulness reference for the citation-surface decoupling principle (§2 background, §6 Oracle passthrough)",
+      "status": "VERIFIED",
+      "source": "Jacovi and Goldberg, 'Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness?', ACL 2020, pp. 4198-4205. DOI: 10.18653/v1/2020.acl-main.386. Verified Session 068 via web search. Brief listed `citation-surfaces-xai-needed` (thematic).",
+      "verified_session": 68,
+      "deviates_from_brief_naming": true,
+      "brief_key": "citation-surfaces-xai-needed"
     }
   ],
 
   "bibkeys_needed_unverified": [
-    {
-      "slug": "multi-agent-llm-survey-needed",
-      "description": "Multi-agent LLM pipeline survey, recent (2024-2026)",
-      "lock_target_sections": [1, 2],
-      "verification_required_before_commit": "Find actual published survey paper with matching scope; verify against arXiv / ACM DL / IEEE Xplore; record DOI or arXiv ID in references.bib"
-    },
-    {
-      "slug": "prompt-injection-foundational-needed",
-      "description": "Adversarial prompt injection in LLM agents (Greshake et al. or similar foundational ref)",
-      "lock_target_sections": [1, 2],
-      "verification_required_before_commit": "Verify Greshake et al. 'Not what you've signed up for' (or equivalent) against actual arXiv/USENIX listing"
-    },
-    {
-      "slug": "citation-surfaces-xai-needed",
-      "description": "Citation surfaces / explainable AI for LLMs",
-      "lock_target_sections": [2, 6],
-      "verification_required_before_commit": "Identify specific citation-surface XAI paper; risk: this is a coined framing in this paper, the closest published work may use different terminology"
-    },
-    {
-      "slug": "closed-world-deterministic-verification-needed",
-      "description": "Closed-world reasoning / deterministic verification in AI systems",
-      "lock_target_sections": [2],
-      "verification_required_before_commit": "Identify closed-world reasoning citation; CWA classical reference vs modern AI-systems framing"
-    },
     {
       "slug": "frozen-dataclass-pattern-needed",
       "description": "Frozen dataclass / immutable-by-construction pattern in safety-critical Python (may need to be a software engineering citation rather than ML)",
