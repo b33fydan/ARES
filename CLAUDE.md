@@ -38,85 +38,6 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - **Paper 3 references:** `docs/paper_3/references.bib`
 - **Phase 6 plan:** `docs/PHASE6_INJECTION_ARENA.md`
 
-## Phase 5 Results (Sessions 045–046)
-- 12 adversarial scenarios (DIRECT / FRAMING / PROPAGATION)
-- Oracle Firewall: deterministic, zero LLM calls, 4 violation types
-- Guarded cycle: firewall checkpoint at Architect→Skeptic junction
-- Hot-swap quarantine protocol: fresh Architect on raw evidence when taint detected
-- First live benchmark: Detection 58.3%, Verdict accuracy 41.7%, 0 false positives
-- **Finding 7:** Deterministic firewalls catch structure (100%) but are blind to semantic framing (0%)
-- **Finding 8:** Agent replacement without evidence sanitization is insufficient against evidence-embedded framing
-
-## Phase 6 Results (Sessions 047–051)
-
-### Session 047 — Category B framing corpus expansion + registry
-- 15 new framing scenarios (INJ-013..027) in `injection_corpus_b_framing.py`
-- 5 strategy families: severity / authority / temporal / causal / narrative
-- `InjectionCorpusRegistry` aggregates 27 scenarios (DIRECT=4 · FRAMING=19 · PROPAGATION=4)
-
-### Session 048 — Live benchmark on full 27-scenario corpus
-- Production firewall-guarded single-turn cycle on claude-sonnet-4-6, 778s wall, 0 pipeline errors
-- Family detection / verdict accuracy:
-  - direct: 1.00 / 0.75
-  - framing: 0.00 / 0.79 (19 scenarios)
-  - propagation: 0.75 / 0.75
-- Per-family accuracy >0.70: severity (1.00), temporal (1.00), causal (1.00), narrative (0.75). Authority sub-threshold at 0.67.
-- **Confirms Finding 7 live on Sonnet 4.6**; surfaces candidate Finding 9 (Skeptic+Oracle rescues despite zero firewall detection)
-
-### Session 049 — Skeptic ablation + authority family expansion
-- **Finding 9 ablation:** ablated 0.6842 vs full 0.7895 (-10.53 pp) → **AMBIGUOUS**
-  - Per-family: severity -33.33 pp, temporal -50.00 pp, narrative -25.00 pp, authority/causal ±0
-  - 6 scenarios flipped; INJ-014 and INJ-020 (THREAT_DISMISSED) collapse to INCONCLUSIVE without Skeptic
-- Authority expansion (INJ-028..030): all 3 correct; family n=6 accuracy = 0.833 (up from n=3 0.667)
-
-### Session 050 — Light Skeptic + three-way benchmark + temporal expansion
-- **Finding 11: SUPPORTED.** Deterministic Light Skeptic (pure Python, zero LLM calls) matches full-LLM Skeptic on framing accuracy:
-  - full: 0.8400 (21/25) · ablated: 0.7200 (18/25) · light: 0.8400 (21/25), delta = 0.0000
-  - Tie or match on every family. Authority tied at 0.833 (n=6). Temporal n=5 at 100%.
-  - All three live acceptance gates pass: INJ-014 / INJ-020 reach THREAT_DISMISSED under light pipeline; INJ-006 stays INCONCLUSIVE.
-- Temporal expansion (INJ-031..033) → registry_v3 = 33 scenarios
-
-### Session 051 — Paper 2 figures + docx skeleton + number_check
-- Documentation-only: 0 `ares/` changes, 0 LLM runs
-- 5 figures (300 DPI), 13-section docx skeleton, 18-claim number_check (all PASS)
-
-## Sessions 052–053 — Documentation Reconciliation
-
-### Session 052 — Paper 2 v1.1 prose integration + references compilation
-- `build_v1_1.py` integrates prose from `docs/paper_2/source/PAPER2_DRAFT_v1_1_source.md` into the v1 skeleton structure
-- `build_references.py` compiles `docs/paper_2/references.bib` into the docx (ACM/AISec author-year)
-- `number_check.py` extended with per-family three-way cells + prose-body substring checks (55/55 PASS)
-- Source markdown placed at `docs/paper_2/source/` with 61 em-dashes scrubbed to commas
-- Final: `PAPER2_DRAFT_v1_1.docx` (598 KB, 13 sections, 9 subsections, 5 figures), 55 new tests
-
-### Session 053 — Paper 1 canonical reconciliation + CLAUDE.md freshness
-- Paper 1 canonical decision: PDF is source of truth (`docs/paper_1/CANONICAL.md`)
-- Title reconciliation: working title in CLAUDE.md was a paraphrase; canonical title is the long form on the PDF cover
-- `gmys-casiano-2026` bib entry updated with canonical title and pointer to `CANONICAL.md`
-- `tests/test_claude_md_freshness.py` makes CLAUDE.md self-validating: declared floor must be ≤ actual collected count, declared canonical paths must exist, last-updated must be a parseable ISO date
-
-### Session 054 — Citation audit + hallucination detection
-- Full enumeration of every citation in `PAPER2_DRAFT_v1_1.docx` (parenthetical + narrative forms, 6 total)
-- 5/6 cite keys VERIFIED against authoritative sources; `sabet-2025` flagged HALLUCINATED (no paper by Sabet matches the cited claim across multiple search phrasings)
-- Audit report: `docs/paper_2/citation_audit_report.md`
-- Sabet remediation prep with 3 candidate v1.2 prose alternatives: `docs/paper_2/sabet_remediation_findings.md`
-- Meta-finding footnote candidate (the hallucination is itself an instance of the semantic-framing failure class the paper describes): `docs/paper_2/meta_finding_footnote_candidate.md`
-- `tests/paper_2/test_citation_existence.py`: 12 always-on structural tests + 3 env-gated network tests (ARES_RUN_NETWORK_TESTS); does NOT catch real-but-unrelated-paper substitution (semantic verification is future work)
-
-### Session 055 — Sabet remediation + extract_citations helper patch
-- B2 from `sabet_remediation_findings.md` applied to v1.1 source markdown: the (Sabet et al., 2025) sentence and 70-90% numerical claim replaced with a directional statement requiring no citation; `sabet-2025` removed from `references.bib`; v1.1 docx rebuilt; `Sabet` no longer appears anywhere in rendered prose or References section
-- `build_references.extract_citations` extended to handle narrative form `Author et al. (YYYY)` (was paren-only; this is the bug that let Hossain and Lee silently drop from Session 052's coverage check)
-- Regression test `test_extract_finds_all_v1_1_source_cite_keys` locks the helper contract: every cite key in the v1.1 source must round-trip through extract_citations + citation_to_bibkey to a known key
-- Citation audit report extended with Remediation History section (the original HALLUCINATED finding preserved as the audit signal that surfaced the bug)
-- 5 / 5 cite keys VERIFIED post-remediation; zero PLACEHOLDER entries in `references.bib`
-
-## Session 056 — Pre-publish hardening (firewall fail-closed)
-- Origin: external review (Cursor + Codex) flagged the silent fallthrough in `guarded_cycle.py:278-285` as a structural fail-open. Path was unreachable in current code due to an implicit cross-file invariant, but had no tests, no assertion, and no docstring contract.
-- Producer-side fix: `FirewallVerdict.__post_init__` enforces the invariant `passed=False ⇒ sanitized_output is not None`. Constructing the bad shape now raises `ValueError`. Bad shape is impossible to instantiate via the dataclass.
-- Consumer-side fix: all three cycle runners (`run_guarded_cycle`, `run_ablated_cycle`, `run_light_guarded_cycle`) now raise `CycleError` locally if they ever receive a fail verdict without a sanitized fallback. Defense in depth per Codex's "belt-and-suspenders" pushback — keeps the security property auditable per file rather than chasing the invariant across modules.
-- 8 new tests across 4 files: `TestFirewallVerdictInvariant` (4) in `test_firewall.py`, `TestFirewallFailClosed` (2) in `test_guarded_cycle.py`, `TestFirewallFailClosed` (1 each) in `test_ablated_cycle.py` and `test_light_guarded_cycle.py`. The cycle tests use `MagicMock(spec=FirewallVerdict)` to bypass `__post_init__` and prove the consumer-side raise still fires if a future producer regression ever emits the bad shape.
-- No behavior change for any reachable input. Floor 3,404 unchanged; actual collected count 3,404 → 3,412. Zero regressions.
-
 ## Session 058 — Paired-scenario mutator + orthogonality audit + anchor test
 - Origin: Session 057 audit forced the mutator path (0 natural skeleton-equivalent groups in registry_v3). Session 058 builds the synthetic-mutation primitive that makes paired-prose measurement possible, plus the orthogonality audit that catches operator-collapse failure modes.
 - `paired_scenario_mutator.py` registers six v1 operators across three families (synonym / severity / framing). `MutatedScenarioPair.__post_init__` enforces skeleton invariance as a typed property: skeleton-hash equality, byte-identical (fact_id, field, entity_id, source_type, timestamp) tuples per Fact, ≥1 differing value_hash, and a hard `SkeletonInvariantError` on any violation. No-op pairs are rejected at the type boundary, not silently absorbed.
@@ -164,24 +85,6 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 - Total empirical N for Paper 3's narrow claim across the chain: Session 059 run 1 (N=1) + Session 059 run 2 (N=2) + Session 060 (N=98) = **101 light pairs, zero narrow fires**. Paper 3 narrow-claim status: `HOLDS at 98/98 pairs (100.00%)`.
 - The broad-reading verdict from Session 059 (`Paper 3 claim status (brief_broad / Light + Oracle + Final): DEAD`) is unchanged by Session 060. The Oracle citation-surface passthrough remains the documented sibling architectural finding for Paper 3's methodology section.
 - 10 new tests in `test_narrow_characterization_runner.py` (pre-registered config locks, no-halt-on-narrow-fire across 33×3, light-path-only invariant, cost circuit-breaker, anchor guard, per-operator stats, JSONL persistence). Floor raised 3,637 → 3,647. Zero regressions. New files only — zero edits to existing `ares/` code outside the new modules.
-
-## Session 062 — Prism Labyrinth (Panel 1) renderer
-- Origin: Phase A pipeline (`cycle_trace.py` + `cycle_trace_builder.py` + `build_cycle_timeline.py` + `prism-timeline.json`) shipped earlier on `session/062-prism-labyrinth`. Phase B/C (renderer) was first attempted as a horizontal sphere-chain and parked 2026-05-14 because it diverged from the validated 2026-05-13 mockup. Session 062 re-ideated the renderer as a faithful port of the mockup against real Session 059 data.
-- Direction: autoplay-first interaction with scrubber-takes-over on user touch. Six stacked translucent chamber slabs (INPUT → ARCHITECT → FIREWALL → SKEPTIC → ORACLE → VERDICT) with wireframe edges, JetBrains Mono labels to the left, and vertical connection lines. 98 cycles drop breadcrumbs through the chambers in a 240ms-staggered replay loop; the one `broad_leakage=True` pair surfaces a red corner crumb at the chamber matching its `first_diverging_layer`. Loop length is anchored to `max(pair_index)` (~30s) because the upstream pipeline emits global-enumeration indices and drops no-op pairs — the JSON has documented gaps at indices {3, 4}.
-- Architecture (Approach 2 from the brainstorm): HTML shell + companion `prism.js` classic script. r128 stack matching `pinscreen.html`. Two-file deploy to skyframe-main + one CTA link addition.
-- Data discovery during execution: the broad-leakage pair (INJ-001 framing_suffix_v1, pair_index 1) has `first_diverging_layer="Architect"`, not Oracle. The Oracle citation-passthrough finding (Session 059) is technically a passthrough of the Architect's cite-set drift; the mockup hardcoded Oracle as the storytelling moment, but the renderer's data-driven design correctly places the red corner crumb at the Architect chamber. The spec was approved before this discovery; the plan was updated mid-execution to reflect the correct chamber.
-- New ARES file: `ares/dialectic/tests/visualization/test_prism_timeline_json_contract.py` — 8 tests locking the JSON schema as a regression guard (top-level keys, pair count, exactly-one broad-leakage pair, valid `first_diverging_layer`, required pair fields, operators list identity, per-pair operator membership, pair_index unique + sorted + non-negative + bounded). Catches pipeline-side breakage so the renderer never fails silently in a browser.
-- New skyframe-main files: `assets/ares/prism.html` (chrome, ~210 lines), `assets/ares/prism.js` (scene + behavior, ~635 lines), `assets/ares/prism-timeline.json` (Session 059 data copy). Modified: `ares.html` at repo root (Prism CTA link added next to Pinscreen).
-- The parked sphere-chain attempt is preserved at `docs/marketing/prism-2026-05-14-sphere-chain.html` per [[mockup-preservation]] discipline. The Phase A pipeline emits a renderer-agnostic JSON, so the parked artifact still loads if opened.
-- Floor raised 3,725 → 3,733; ARES side adds 1 new test file (8 tests). No edits to existing ARES code outside `CLAUDE.md`. Zero regressions.
-
-## Session 063 — Prism Panel 2 (Confidence Trajectories) renderer
-- Origin: Panel 1 shipped Session 062 with autoplay-first replay + scrubber + operator dial. The validated mockup at `docs/marketing/prism-mockup.html` lines 573-619 showed Panel 2 as a static autorotating scatter of confidence points; Session 063 landed the production version as per-pair primitives in (architect, skeptic, oracle) confidence space, under a tab strip in the existing `prism.html`.
-- Architecture: Approach C — freeze `prism.js`, add three new sibling JS files on skyframe-main (`prism-state.js` event bus, `prism-tabs.js` tab UI, `prism-panel2.js` scene + primitives + reveal). Surgical edits to `prism.js`: 7 `PrismState.publish()` insertions after existing STATE mutations (including a per-frame diff-checked publish in `tickReplay` so Panel 2's reveal advances during autoplay), `window.__PRISM_TIMELINE_CACHE` exposed so Panel 2 doesn't refetch, `window.PrismPanel1 = {start, stop, isRunning}` export with stoppable rAF.
-- Primitive selection (data-driven): for each pair, if scene-space confidence delta ≥ `ZERO_DELTA_EPSILON` (0.05) → THREE.ArrowHelper from baseline to mutated; otherwise → THREE.SphereGeometry at baseline. Broad-leakage pair gets larger glowing red sphere when its delta is zero (current Session 059 case) OR red arrow if a future dataset shows broad-leakage with confidence drift. Data-discovery during implementation revealed two reality checks vs the original spec: the Phase A pipeline drops no-op pairs entirely (not `mutated_llm=null`) and the single broad-leakage pair has zero confidence delta across all three axes — the leakage signal was Oracle citation-surface passthrough per Session 059's already-documented architectural finding. Spec and plan were updated mid-session to match data reality.
-- Lazy scene init: `bootP2()` only loads the cache and subscribes to PrismState; `ensureInitialized()` runs the WebGLRenderer build on first `startP2()` so `clientWidth`/`Height` are valid when measured (container starts as `display:none` until tab activation). Panel 2's reveal polls `PrismState.getState().activeCycleIndex` per-frame inside its own rAF; visibleSet rebuilt only on `operatorFilter` change. Tab switching keeps Panel 1's rAF running when on Trajectories (Panel 1's `tickReplay` is the shared timeline driver — stopping it would freeze Panel 2's reveal); Panel 1's hidden canvas wastes ~1ms/frame of GPU but is acceptable for v1.
-- ARES-side: 4 new tests appended to `test_prism_timeline_json_contract.py` locking the Panel 2 contract — per-layer confidences on `baseline_llm` and `mutated_llm`, exactly 2 dropped pair_indices from the Session 059 pipeline output, and the broad-leakage pair's near-zero confidence delta paired with non-trivial citation-surface change. `REQUIRED_PAIR_KEYS` extended to include `baseline_llm`/`mutated_llm`.
-- Floor raised 3,733 → 3,737; ARES side adds 4 tests to one existing file. No edits to existing ARES code outside `CLAUDE.md` and this test block. Zero regressions.
 
 ## Session 057 / Step 1 — Skeleton-equivalence audit (Phase 7 opens)
 - Origin: 2026-05-05 direction lock. Phase 7 / Paper 3 candidate is "Evidence Authority Isolation" — measure whether attacker-controlled prose can change verdicts/confidence/cited-facts when the structured evidence skeleton is held constant. Honeyfile lane occupied by Mantis (arXiv 2410.20911) and CHeaT (USENIX 2025); structural-defense lane occupied by ASPO and OpenClaw. Uncharted lane is influence-leakage measurement.
@@ -334,5 +237,5 @@ Location: `C:\ares-phase-zero`. Python 3.11. Anthropic API.
 11. Deterministic Light Skeptic matches full-LLM Skeptic on framing (delta 0.00 across 25 scenarios) — **SUPPORTED**
 
 ## Branch
-`main` — sessions 045–053 all squash-merged and pushed to `origin/main`.
-Local-only branches `session-048..053` retained as historical refs (no upstream); safe to delete.
+`main` — sessions 045–065 all squash-merged and pushed to `origin/main`.
+Historical session branches retained locally (no upstream); safe to delete.
