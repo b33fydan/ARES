@@ -113,7 +113,7 @@
         "Reproducibility floor at build start: 3,737 tests"
       ],
       "numbers_preregistered": ["3737"],
-      "bibkeys_required": ["gmys-casiano-2026", "frozen-dataclass-pattern-needed"],
+      "bibkeys_required": ["gmys-casiano-2026"],
       "figures": ["fig_1"],
       "tables": [],
       "subsections": []
@@ -428,14 +428,7 @@
     }
   ],
 
-  "bibkeys_needed_unverified": [
-    {
-      "slug": "frozen-dataclass-pattern-needed",
-      "description": "Frozen dataclass / immutable-by-construction pattern in safety-critical Python (may need to be a software engineering citation rather than ML)",
-      "lock_target_sections": [3],
-      "verification_required_before_commit": "Likely a software-engineering citation (CACM / IEEE Software). Risk: may not exist in the form this paper needs; if so, drop and treat as folk knowledge in v1.0"
-    }
-  ],
+  "bibkeys_needed_unverified": [],
 
   "anchor_tests_required": [
     {

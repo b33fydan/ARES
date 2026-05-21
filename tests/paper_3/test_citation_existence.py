@@ -306,14 +306,15 @@ class TestSabetDisciplineGuards:
             f"without verification: {leaked}"
         )
 
-    def test_unverified_bibkey_count_locked_at_one_post_session_068(self, skeleton):
+    def test_unverified_bibkey_count_locked_at_zero_post_session_068(self, skeleton):
         """Session 064 brief listed five Needed bibkeys. Session 068
         verified four of them (greshake / guo / reiter / jacovi) and
-        moved them to bibkeys_required_verified; one (frozen-dataclass-
-        pattern-needed) remains, scheduled for Phase C drop in the
-        same session. If this count changes silently after Session 068,
-        prose has drifted from the brief."""
-        assert len(skeleton["bibkeys_needed_unverified"]) == 1
+        moved them to bibkeys_required_verified (Phase B); the fifth
+        (frozen-dataclass-pattern-needed) was dropped (Phase C) because
+        the frozen dataclass usage is a Python language idiom (PEP 557)
+        rather than a scholarly citation target. After Session 068, the
+        unverified list is empty by design."""
+        assert len(skeleton["bibkeys_needed_unverified"]) == 0
 
     def test_unverified_slugs_have_verification_instructions(self, skeleton):
         for entry in skeleton["bibkeys_needed_unverified"]:
