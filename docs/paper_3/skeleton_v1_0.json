@@ -57,7 +57,7 @@
         "The full LLM pipeline drifts on 73/98 (74.49%) paired trials"
       ],
       "numbers_preregistered": ["98", "98/98", "73", "73/98", "74.49%"],
-      "bibkeys_required": ["gmys-casiano-2026-deterministic-skeptic"],
+      "bibkeys_required": ["gmys-casiano-2026"],
       "figures": [],
       "tables": [],
       "subsections": []
@@ -75,7 +75,7 @@
         "Three contributions: byte-stability result, passthrough finding, LLM-path bound"
       ],
       "numbers_preregistered": [],
-      "bibkeys_required": ["gmys-casiano-2026-deterministic-skeptic", "multi-agent-llm-survey-needed", "prompt-injection-foundational-needed"],
+      "bibkeys_required": ["gmys-casiano-2026", "multi-agent-llm-survey-needed", "prompt-injection-foundational-needed"],
       "figures": [],
       "tables": [],
       "subsections": []
@@ -94,7 +94,7 @@
         "Prior work conflates decision and explanation stability"
       ],
       "numbers_preregistered": [],
-      "bibkeys_required": ["multi-agent-llm-survey-needed", "eth-can-ai-agents-agree", "citation-surfaces-xai-needed", "closed-world-deterministic-verification-needed"],
+      "bibkeys_required": ["multi-agent-llm-survey-needed", "berdoz-rugli-wattenhofer-2026", "citation-surfaces-xai-needed", "closed-world-deterministic-verification-needed"],
       "figures": [],
       "tables": [],
       "subsections": []
@@ -113,7 +113,7 @@
         "Reproducibility floor at build start: 3,737 tests"
       ],
       "numbers_preregistered": ["3737"],
-      "bibkeys_required": ["gmys-casiano-2026-deterministic-skeptic", "frozen-dataclass-pattern-needed"],
+      "bibkeys_required": ["gmys-casiano-2026", "frozen-dataclass-pattern-needed"],
       "figures": ["fig_1"],
       "tables": [],
       "subsections": []
@@ -160,7 +160,7 @@
         "Anchor test in repo locks this primitive against regression"
       ],
       "numbers_preregistered": ["98", "98/98", "101/0", "185"],
-      "bibkeys_required": ["gmys-casiano-2026-deterministic-skeptic"],
+      "bibkeys_required": ["gmys-casiano-2026"],
       "figures": ["fig_3", "fig_5"],
       "tables": ["tbl_2"],
       "subsections": [
@@ -226,7 +226,7 @@
         "Published limitation, not hidden one"
       ],
       "numbers_preregistered": ["73", "73/98", "74.49%", "39", "34", "25"],
-      "bibkeys_required": ["eth-can-ai-agents-agree"],
+      "bibkeys_required": ["berdoz-rugli-wattenhofer-2026"],
       "figures": ["fig_3"],
       "tables": ["tbl_2"],
       "subsections": [
@@ -251,7 +251,7 @@
         "V2/V3 registry composition pattern as a publishable architectural contribution supporting reproducibility"
       ],
       "numbers_preregistered": ["100%", "0%"],
-      "bibkeys_required": ["eth-can-ai-agents-agree", "gmys-casiano-2026-deterministic-skeptic"],
+      "bibkeys_required": ["berdoz-rugli-wattenhofer-2026", "gmys-casiano-2026"],
       "figures": [],
       "tables": [],
       "subsections": [
