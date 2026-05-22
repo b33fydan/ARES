@@ -1,8 +1,18 @@
 # Decision Determinism, Explanation Drift: Decoupling Verdict Stability from Explanation Stability in Adversarial Multi-Agent LLM Pipelines
 
-**Daniel Gmys-Casiano**
-Skyframe Innovations
-May 2026
+<!--
+  REVIEW-CYCLE ANONYMIZATION NOTE (Session 069 GO 3):
+  Author block stripped for double-blind submission to AISec 2026.
+  At camera-ready time, restore:
+    **Daniel Gmys-Casiano**
+    Skyframe Innovations
+    May 2026
+  Self-cites already in third-person form (Gmys-Casiano, 2026);
+  no further cite anonymization required. ARES / OracleJudge /
+  Light Skeptic names retained as research-artifact identifiers.
+-->
+
+**[Author block redacted for double-blind review]**
 
 ---
 
@@ -137,7 +147,7 @@ Phase 5 of the ARES program (Paper 2, Gmys-Casiano, 2026) reported a striking de
 
 ### 8.4 ETH Zurich corroboration
 
-The multi-agent LLM convergence problem that Paper 3 reports from one methodological vantage point is the same problem that recent independent work from ETH Zurich (Berdoz, Rugli, and Wattenhofer, 2026) reports from a different vantage point. ETH approached the problem through synthetic multi-agent debate: their question was whether LLM agents converge on agreement under iterated discussion, and their finding was that they often do not. Paper 3 approached the same architectural territory through adversarial cybersecurity evidence leakage: our question was whether decision determinism implies explanation determinism in a deterministic-adjudication pipeline, and our finding was that it does not. The two methodologies share no corpus, no evaluation harness, no architectural assumption beyond the basic shape of *multi-agent LLM pipeline*. The convergent observation — that multi-agent LLM systems exhibit substantive stability problems when independently measured from disjoint methodological frames — is the kind of cross-domain convergence that strengthens architectural rather than corpus-specific claims. Paper 3's contribution is one cut at a problem the field is converging on from multiple angles, and the cross-domain corroboration positions the contribution within a broader pattern of independent observations that the multi-agent LLM design space carries undermeasured stability risks.
+The multi-agent LLM convergence problem that Paper 3 reports from one methodological vantage point is the same problem that recent independent work from ETH Zurich (Berdoz, Rugli, and Wattenhofer, 2026) reports from a different vantage point. ETH approached the problem through synthetic multi-agent debate: the ETH question was whether LLM agents converge on agreement under iterated discussion, and the ETH finding was that they often do not. Paper 3 approached the same architectural territory through adversarial cybersecurity evidence leakage: the present paper's question is whether decision determinism implies explanation determinism in a deterministic-adjudication pipeline, and its finding is that it does not. The two methodologies share no corpus, no evaluation harness, no architectural assumption beyond the basic shape of *multi-agent LLM pipeline*. The convergent observation — that multi-agent LLM systems exhibit substantive stability problems when independently measured from disjoint methodological frames — is the kind of cross-domain convergence that strengthens architectural rather than corpus-specific claims. Paper 3's contribution is one cut at a problem the field is converging on from multiple angles, and the cross-domain corroboration positions the contribution within a broader pattern of independent observations that the multi-agent LLM design space carries undermeasured stability risks.
 
 ### 8.5 V2/V3 registry composition as architectural contribution
 
@@ -172,3 +182,11 @@ The third direction is the Phase 6 semantic framing arena. Phase 5 of the ARES p
 The fourth direction is an audit of other ARES pipeline primitives for passthrough behavior. The Oracle's `supporting_fact_ids` is one observable explanation surface; the Verdict's `reasoning` field, the per-cycle audit log, the cycle-narrative agent, and any API-surface serialization of the Verdict are candidate sibling surfaces that may inherit the same Architect drift under their own conditional branches. A systematic per-primitive audit, modeled on Section 6.6's verdict-class passthrough map, is queued as a follow-on methodology contribution.
 
 Taken together, these four directions form a coherent research program: multi-model validation hardens the byte-stability claim across the LLM design space; explanation-surface intervention closes the passthrough gap; the Phase 6 arena scales the adversarial workload beyond the present paper's N = 98; and the per-primitive audit identifies sibling surfaces that may inherit the same architectural property. Each direction is bounded enough to be queued as its own ARES program milestone.
+
+---
+
+## Appendix: Generative AI Use Declaration
+
+*Per the AISec 2026 Call for Papers, this paragraph declares the extent to which generative AI tools were used in preparing this paper. It is positioned after the references / appendices and is exempt from the page limit.*
+
+This paper was prepared with the assistance of Anthropic's Claude family of large language models, specifically Claude Code (Opus 4.7 with 1M context window) operating within the Anthropic command-line interface environment. Claude was used for: (a) prose drafting and section-by-section revision under written briefs prepared by the authors; (b) implementation of the ARES test suite, anchor tests, and influence-leakage measurement infrastructure (current floor: 3,937 passing tests with zero regressions across the measurement chain); (c) bibliographic management, citation extraction, and verification of cited references against arXiv, ACM Digital Library, and ISO standards databases; (d) regression analysis on numerical-claim substring checks against locked source artifacts and pre-registered run manifests. All empirical claims, numerical results, code-level architectural assertions, and citation entries were independently verified by the authors against the cited source artifacts and the live ARES test suite. The ARES codebase, paired-trial leakage traces (SHA256-locked at the recorded manifest paths), and source markdown are publicly available under GPL-3.0 for independent replication of the empirical results reported in Sections 5, 6, and 7.
