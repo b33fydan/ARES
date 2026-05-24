@@ -41,7 +41,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BIB_PATH = REPO_ROOT / "docs" / "paper_3" / "references.bib"
 SKELETON_PATH = REPO_ROOT / "docs" / "paper_3" / "skeleton_v1_0.json"
-DOCX_PATH = REPO_ROOT / "docs" / "paper_3" / "PAPER3_DRAFT_v1_0.docx"
+DOCX_PATH = REPO_ROOT / "docs" / "paper_3" / "retired" / "PAPER3_DRAFT_v1_0.docx"
 SOURCE_MD_PATH = (
     REPO_ROOT / "docs" / "paper_3" / "source" / "PAPER3_DRAFT_v1_0_source.md"
 )
@@ -333,12 +333,25 @@ class TestSabetDisciplineGuards:
 @pytest.mark.skipif(
     not DOCX_PATH.exists(),
     reason=(
-        "Paper 3 docx not built yet (Session 064 is skeleton-only; "
-        "docx lands Session 065+)"
+        "Archival docx not present at docs/paper_3/retired/. The "
+        "Session 072 docx pipeline retirement moved this artifact "
+        "under docs/paper_3/retired/; if the file is missing entirely "
+        "the regression guard cannot run."
     ),
 )
 class TestDocxCitationsResolveAgainstBib:
-    """Activates once Session 065+ produces PAPER3_DRAFT_v1_0.docx."""
+    """Regression guard against bibkey drops, running against the
+    retired Session-071 docx snapshot.
+
+    Session 072 retired the docx pipeline; the canonical submission
+    artifact is now the acmart sigconf PDF, and the active prose-substring
+    gate is ``docs/paper_3/acmart_spike/verify_pdf_substrings.py``.
+    This test stays alive as a frozen reference: it extracts every
+    literal cite key from the archived docx body and asserts each one
+    resolves to an entry in the current ``references.bib``. If a future
+    session drops or renames a verified bibkey that the Session-071
+    docx cites, this test will catch it before the bib drift propagates.
+    """
 
     def test_every_prose_cite_resolves_to_a_bib_entry(self, bib_keys):
         from docs.paper_2.number_check import extract_docx_text

@@ -1,6 +1,6 @@
 # Paper 3 number_check report
 
-**Overall: PASS (37 / 37 claims validated)**
+**Overall: PASS (12 / 12 claims validated)**
 
 | claim | expected | actual | pass |
 |---|---:|---:|:---:|
@@ -16,31 +16,6 @@
 | leakage run count on disk (>=3 expected) | 3 | 3 | PASS |
 | test floor at Session 064 build start (3737) | 3737 | 3737 | PASS |
 | verdict_class_passthrough_map (§6.6 lock) | {'THREAT_CONFIRMED': 'architect', 'THREAT_DISMISSED': 'skeptic', 'INCONCLUSIVE': 'union'} | {'THREAT_CONFIRMED': 'architect', 'THREAT_DISMISSED': 'skeptic', 'INCONCLUSIVE': 'union'} | PASS |
-| prose contains '98' | True | True | PASS |
-| prose contains '98/98' | True | True | PASS |
-| prose contains '101/0' | True | True | PASS |
-| prose contains '73' | True | True | PASS |
-| prose contains '73/98' | True | True | PASS |
-| prose contains '74.49%' | True | True | PASS |
-| prose contains '39' | True | True | PASS |
-| prose contains '34' | True | True | PASS |
-| prose contains '25' | True | True | PASS |
-| prose contains '185' | True | True | PASS |
-| prose contains '88-115' | True | True | PASS |
-| prose contains '101-111' | True | True | PASS |
-| prose contains '102' | True | True | PASS |
-| prose contains '105' | True | True | PASS |
-| prose contains '109' | True | True | PASS |
-| prose contains '3,737' | True | True | PASS |
-| prose contains 'INJ-001' | True | True | PASS |
-| prose contains 'framing_suffix_v1' | True | True | PASS |
-| prose contains 'framing_prefix_v1' | True | True | PASS |
-| prose contains 'synonym_substitution_conservative_v2' | True | True | PASS |
-| prose contains 'THREAT_CONFIRMED' | True | True | PASS |
-| prose contains 'THREAT_DISMISSED' | True | True | PASS |
-| prose contains 'INCONCLUSIVE' | True | True | PASS |
-| prose contains 'supporting_fact_ids' | True | True | PASS |
-| prose contains '_ = architect_output' | True | True | PASS |
 
 ---
 
