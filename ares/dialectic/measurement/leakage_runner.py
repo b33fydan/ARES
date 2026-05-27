@@ -36,6 +36,7 @@ from pathlib import Path
 from typing import Any, Iterable, Optional
 
 from ares.dialectic.agents.strategies.client import AnthropicClient
+from ares.dialectic.agents.strategies.client_factory import AnyLLMClient, make_client
 from ares.dialectic.agents.strategies.guarded_cycle import (
     GuardedCycleResult,
     run_guarded_cycle,
@@ -669,6 +670,7 @@ class RunnerConfig:
     cost_ceiling_usd: float = DEFAULT_COST_CEILING_USD
     pipelines: tuple[str, ...] = ("llm", "light")
     model: str = DEFAULT_MODEL
+    provider: str = "anthropic"
     traces_root: Path = DEFAULT_TRACES_ROOT
     skip_anchor_check: bool = False    # tests can flip this for synthetic runs
 
@@ -711,7 +713,7 @@ def run_preflight(
     *,
     config: RunnerConfig | None = None,
     n_pairs: int = DEFAULT_PREFLIGHT_CYCLES,
-    client: AnthropicClient | None = None,
+    client: AnyLLMClient | None = None,
 ) -> dict[str, Any]:
     """Run the pre-flight estimator.
 
@@ -724,7 +726,7 @@ def run_preflight(
     if config is None:
         config = RunnerConfig()
     if client is None:
-        client = AnthropicClient(model=config.model)
+        client = make_client(config.provider, model=config.model)
 
     registry = build_registry_v3()
     scenarios = list(registry.all_scenarios())
@@ -814,7 +816,7 @@ def run_preflight(
 def run_full_measurement(
     *,
     config: RunnerConfig | None = None,
-    client: AnthropicClient | None = None,
+    client: AnyLLMClient | None = None,
 ) -> RunSummary:
     """Execute the 264-cycle measurement run.
 
@@ -825,7 +827,7 @@ def run_full_measurement(
     if config is None:
         config = RunnerConfig()
     if client is None:
-        client = AnthropicClient(model=config.model)
+        client = make_client(config.provider, model=config.model)
 
     run_id = _new_run_id()
     started_iso = _utc_now_iso()
