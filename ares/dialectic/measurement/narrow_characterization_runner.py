@@ -34,7 +34,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
-from ares.dialectic.agents.strategies.client import AnthropicClient
+from ares.dialectic.agents.strategies.client_factory import AnyLLMClient, make_client
 from ares.dialectic.measurement.influence_leakage import CONFIDENCE_DRIFT_THRESHOLD
 from ares.dialectic.measurement.leakage_runner import (
     DEFAULT_TRACES_ROOT,
@@ -80,6 +80,7 @@ class NarrowCharacterizationConfig:
     operator_names: tuple[str, ...] = PRE_REGISTERED_OPERATOR_NAMES
     cost_ceiling_usd: float = NARROW_EXT_COST_CEILING_USD
     model: str = NARROW_EXT_DEFAULT_MODEL
+    provider: str = "anthropic"
     traces_root: Path = DEFAULT_TRACES_ROOT
     skip_anchor_check: bool = False  # tests can flip for synthetic runs
 
@@ -164,6 +165,8 @@ class NarrowExtendedSummary:
     run_id: str
     timestamp_iso: str
     git_sha: str
+    provider: str
+    model: str
     cycles_completed: int
     total_cost_usd: float
     halt_reason: str
@@ -226,7 +229,7 @@ class NarrowExtendedSummary:
 def run_preflight(
     *,
     config: NarrowCharacterizationConfig | None = None,
-    client: AnthropicClient | None = None,
+    client: AnyLLMClient | None = None,
     n_cycles: int = NARROW_EXT_PREFLIGHT_CYCLES,
 ) -> dict[str, Any]:
     """Run a 5-cycle light-path pre-flight; extrapolate to N=99 + 33
@@ -238,7 +241,7 @@ def run_preflight(
     if config is None:
         config = NarrowCharacterizationConfig()
     if client is None:
-        client = AnthropicClient(model=config.model)
+        client = make_client(config.provider, model=config.model)
 
     registry = build_registry_v3()
     scenarios = list(registry.all_scenarios())
@@ -325,7 +328,7 @@ def run_preflight(
 def run_narrow_characterization(
     *,
     config: NarrowCharacterizationConfig | None = None,
-    client: AnthropicClient | None = None,
+    client: AnyLLMClient | None = None,
 ) -> NarrowExtendedSummary:
     """Execute the N=99 narrow-reading characterization on the light path.
 
@@ -336,7 +339,7 @@ def run_narrow_characterization(
     if config is None:
         config = NarrowCharacterizationConfig()
     if client is None:
-        client = AnthropicClient(model=config.model)
+        client = make_client(config.provider, model=config.model)
 
     run_id = _new_run_id()
     started_iso = _utc_now_iso()
@@ -351,6 +354,8 @@ def run_narrow_characterization(
             run_id=run_id,
             timestamp_iso=started_iso,
             git_sha=git_sha,
+            provider=config.provider,
+            model=config.model,
             cycles_completed=0,
             total_cost_usd=0.0,
             halt_reason=HALT_ANCHOR_TEST_FAILURE,
@@ -509,6 +514,8 @@ def run_narrow_characterization(
         run_id=run_id,
         timestamp_iso=started_iso,
         git_sha=git_sha,
+        provider=config.provider,
+        model=config.model,
         cycles_completed=cycles_completed,
         total_cost_usd=total_cost,
         halt_reason=halt_reason,

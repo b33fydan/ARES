@@ -57,6 +57,8 @@ def _section_metadata(summary: RunSummary) -> str:
         f"- **run_id**: `{summary.run_id}`",
         f"- **timestamp**: `{summary.timestamp_iso}`",
         f"- **git_sha**: `{summary.git_sha}`",
+        f"- **provider**: `{summary.provider}`",
+        f"- **model**: `{summary.model}`",
         f"- **total_cost_usd**: `${summary.total_cost_usd:.4f}`",
         f"- **cycles_completed**: `{summary.cycles_completed}`",
         f"- **halt_reason**: `{halt_label}`",

@@ -1,6 +1,6 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 074)
+# CLAUDE.md — ARES Phase 7 (post-Session 075)
 
-**Last updated:** 2026-05-26
+**Last updated:** 2026-05-27
 **Test count floor (passing):** 3,937
 
 > Context-hygiene rule: this file holds current state + the last 3 sessions in full.
@@ -23,7 +23,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Multi-model LLM (Anthropic + OpenAI
 - **Paper 3 v1.0 is COMPLETE** — prose, real figures (Session 073), all gates passing, acmart sigconf PDF ready for AISec '26 double-blind submission. Submission pipeline pending (anonymous.4open.science mirror, submission upload — Dan-manual).
 - Debate chapter is CLOSED. Single-turn is production. Multi-turn stays in the lab.
 - Current accuracy on threat-analysis baseline: 84.6% across 39 scenarios (33 SC + 6 PT)
-- **Active direction: Step 5 — multi-model validation** (Session 074). Client infrastructure built for Anthropic + OpenAI + Gemini. Live measurement runs next.
+- **Active direction: Step 5 — multi-model validation** (Sessions 074-075). Client infrastructure built (S074). Live measurements complete (S075): narrow ALIVE on Sonnet 4.6, GPT-4o, and Gemini 2.5 Pro. Cross-model comparison at `CROSS_MODEL_COMPARISON.md`.
 
 ### V4 Tribunal sequence (Phase 7 roadmap)
 | Step | Plan | Status |
@@ -33,7 +33,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Multi-model LLM (Anthropic + OpenAI
 | 2 | NIH harness | DONE (→ S059-060 InfluenceLeakage) |
 | 3 | Adaptive corpus C (3-5 sessions) | OPEN |
 | 4 | Light Skeptic v2 (2-4 sessions) | OPEN |
-| 5 | Multi-model validation (2-3 sessions) | **IN PROGRESS** (S074) |
+| 5 | Multi-model validation (2-3 sessions) | **IN PROGRESS** (S074-075) |
 
 Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing.md`, `docs/Claude Code x Codex (1).md`, `docs/ARES Session Notes — Cube Sketches + Phase 7 Direction Locked (2026-05-05).md`
 
@@ -55,12 +55,13 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Sessions 066–068 — §7 + §4; §8/§9/§10 Discussion bloc; bibkey verification (4 verified: Greshake 2023, Guo 2024, Reiter 1978, Jacovi 2020).
 - Session 069 GO 1 — Paper 2 v1.2 promoted to canonical. Adds fifth generalizable observation to §8: *deterministic verification converts semantic attacks into data integrity attacks rather than eliminating them*. number_check 55/55.
 - Session 070 — Paper 3 final sections (Abstract + §1 + §2 + §3) + `references.bib` title reconcile. 1,912w new prose. Paper 3 prose feature-complete at ~8,404 body words.
+- Session 071 — Paper 3 v1.0 docx built + verification-complete (37/37 PASS). Path A bibkey reconcile. Full suite 4,113+75skip+0fail.
+- Session 072 — Paper 3 docx → acmart sigconf migration. pdftotext 25/25 PASS. 10 body / 11 overall. Docx pipeline retired.
 
 ### Last 3 sessions (full)
-- Session 071: Paper 3 v1.0 docx built and verification-complete. **Phase A (docx build)**: new build script `docs/paper_3/build_v1_0.py` consumes the canonical source markdown via the established pattern from Paper 2's `build_v1_1.py` (HTML comment stripping, inline markdown rendering, bullet-list handling), and orders the docx as Title → redacted author block → body sections → References (sourced from `references.bib` via `parse_bib_file`) → Appendix. New artifact: `docs/paper_3/PAPER3_DRAFT_v1_0.docx`. Completion gate `python -m docs.paper_3.number_check --docx` activates prose-substring mode and validates all 25 locked substrings against the docx body — **37/37 PASS** (12 skeleton-vs-source + 25 prose-substring). **Phase B (Path A bibkey reconcile)**: the docx-pending citation-existence test surfaced a Session 068 bibkey-convention deviation; Path A direction chose to rename the three Session-068 multi-author bibkeys to canonical `firstauthor-year` form matching Paper 2's `lee-2024` / `hossain-2025` convention. `jacovi-goldberg-2020` and `berdoz-rugli-wattenhofer-2026` retained. Two §2 cite-form recasts to parenthetical. Path B (helper regex under Session 055 lock) and Path C (aliasing) rejected; shared regression-locked code untouched. Anonymization preserved end-to-end. Figures referenced in prose but not yet rendered — out of scope for the verification gate. Paper 3 v1.0 prose-complete + verification-complete; parked for the arXiv gate. Full suite: **4,113 passed + 75 skipped + 0 failed**.
-- Session 072: Paper 3 submission pipeline migrated from docx to ACM acmart sigconf LaTeX for AISec 2026 double-blind submission. **Spike (Part A)**: new `docs/paper_3/build_acmart.py` consumes the same canonical source markdown and emits a `[sigconf,anonymous,review]` `.tex` with ACM CCS/keywords stubs, size-accurate framebox figure placeholders for fig_1–fig_6, and `\nocite{*}` + `ACM-Reference-Format.bst` rendering of the verified bibliography. MiKTeX 25.12 installed via winget. Three-gate page triage landed at **10 body / 11 overall (PASS)** after relocating Fig 2 + Fig 5 to a "Supplementary Figures" appendix and surgical removal of the §10 closing-recap paragraph (70 words; locked-substring guard 25/25 preserved; §4 methodology untouched). `references.bib` note fields cleaned across all six verified entries. **Part B (citation migration)**: canonical-source citations migrated to pandoc-style markers `[@key]` (13) and `@key` (7); `build_acmart.py` post-processes into natbib `\citep{}` / `\citet{}` with `\citestyle{acmauthoryear}`. Two Session 071 §2 cite-form recasts reverted to natural narrative. pdftotext substring gate at `docs/paper_3/acmart_spike/verify_pdf_substrings.py` confirms **25/25 locked substrings present in the submitted PDF**. **Docx pipeline retired** per strategy GO: `build_v1_0.py` → `docs/paper_3/retired/build_v1_0_docx.py`, `PAPER3_DRAFT_v1_0.docx` → `docs/paper_3/retired/`; the docx-pending citation test repointed at the archival snapshot (no test-count loss). New artifacts (uncommitted at writeup): `paper_3_acmart.{tex,pdf}`, `page_audit.py`, `verify_pdf_substrings.py`, `migrate_cites.py`, `DOCX_PIPELINE_FATE.md`, `ANONYMIZATION_PLAN.md`. Test suite: 99 passed + 3 skipped in `tests/paper_3/`. Zero regressions. Outstanding for strategy: anonymization plan decisions (Skyframe-Innovations journal field, anonymous.4open.science URL wiring, submission-packet timing).
 - Session 073: Paper 3 real figures — all 6 placeholder figures replaced with publication-quality vector PDFs. Squash-merged at `a60c35b`. **Phase 1 (audit)**: manifested all 6 figures — 3 DATA (fig_3 bar chart, fig_5/fig_6 code snippets), 3 DESIGN-REQUIRED (fig_1 pipeline architecture, fig_2 InfluenceLeakage 4-bit, fig_4 Verdict two-surface). Paper 2 `fig1_architecture.png` inspected: content-clean, metadata-clean (Matplotlib only), 300 DPI but raster; fresh anonymized vector render per directive. **Phase 2 (render)**: new `docs/paper_3/build_figures.py` renders all 6 to vector PDF at sigconf column widths. fig_3 locked to backed quantities only: 98/98 stable vs 73/98 diverge, matching locked prose substrings. All figures smaller than placeholders — no body page growth. Gates: pdftotext 25/25 PASS, tests/paper_3/ 99+3skip, full suite 3,863+75skip+0fail (3,938 collected, floor 3,937). Pages: **10 body / 11 overall** (unchanged). Session prompt updated with 4 strategy rulings (CSVs→source artifacts, 10/12 AISec limits confirmed, DESIGN-REQUIRED category for fig_1/2/4 with guardrails, fig_1 fresh render). **Paper 3 is now a complete submission artifact.** Strategic re-sync completed: diagnosed relay-drift from Sessions 061-072, reconciled V4 Tribunal sequence (Steps 0-2 done, 3-5 open), locked workflow decision (CC as anchor, Claude-web as consultant, Notion as publish target).
-- Session 074 (in progress): Multi-model client infrastructure for Step 5 (multi-model validation). New files: `openai_client.py`, `gemini_client.py`, `client_factory.py` — all share the `LLMResponse` interface from `client.py`. Provider factory dispatches on `"anthropic"` / `"openai"` / `"gemini"`. `RunnerConfig` gained `provider` field; `leakage_runner.py` factory sites updated to use `make_client()`. Smoke test: all three providers verified live (Sonnet 4.6 / GPT-4o / Gemini 2.5 Pro → PING_OK). Zero regressions (3,863+75skip+0fail). Live measurement runs (98-pair workload on GPT-4o and Gemini 2.5 Pro) queued for next session. Cost ceiling: $20 per model.
+- Session 074: Multi-model client infrastructure for Step 5 (multi-model validation). New files: `openai_client.py`, `gemini_client.py`, `client_factory.py` — all share the `LLMResponse` interface from `client.py`. Provider factory dispatches on `"anthropic"` / `"openai"` / `"gemini"`. `RunnerConfig` gained `provider` field; `leakage_runner.py` factory sites updated to use `make_client()`. Smoke test: all three providers verified live (Sonnet 4.6 / GPT-4o / Gemini 2.5 Pro → PING_OK). Zero regressions (3,863+75skip+0fail). Committed `7a3e5aa`.
+- Session 075: Step 5 live measurement runs — **narrow ALIVE across all three model families**. **GPT-4o**: 133 cycles, $1.66, narrow ALIVE (0/1), broad DEAD, LLM-path 76/98 diverge (77.6%). **Gemini 2.5 Pro**: 117 cycles, $2.04, narrow ALIVE (0/1), broad DEAD, LLM-path 52/86 diverge (60.5%). Both confirm the same structural findings as Sonnet 4.6 baseline: (1) Light Skeptic judgment-level output is stable under framing mutations regardless of LLM family, (2) broad kill fires at Oracle `supporting_fact_ids` passthrough (architectural, not model-dependent), (3) zero oracle/final_verdict divergence on LLM path. Gemini shows less Architect-layer framing sensitivity (60.5%) than Sonnet (74.5%) and GPT-4o (77.6%). Infrastructure: `scripts/run_session_075.py` CLI with `--provider` flag + UTF-16 `.env` loading; `RunSummary`/`NarrowExtendedSummary` gained `provider`/`model` fields; narrow runner adapted for multi-provider; `scripts/cross_model_comparison.py` renders 3-column comparison. Total Step 5 API spend: $5.65 ($1.95 + $1.66 + $2.04). Zero regressions (3,863+75skip+0fail).
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -193,6 +194,15 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Anthropic client (unchanged): `ares/dialectic/agents/strategies/client.py` — `AnthropicClient`, `LLMResponse` (shared by all providers)
 - `RunnerConfig.provider` field added to `leakage_runner.py` (default: `"anthropic"`)
 
+### Multi-model measurement (Session 075)
+- Session 075 CLI: `scripts/run_session_075.py` — `--provider`, `--model`, `--light-only`, UTF-16 `.env` loading
+- Cross-model comparison: `scripts/cross_model_comparison.py` — auto-discovers runs, renders side-by-side markdown table
+- GPT-4o traces: `data/paper_3/leakage_runs/20260527-121916-c543fa/`, report `LEAKAGE_REPORT_20260527-121916-c543fa.md`
+- Gemini 2.5 Pro traces: `data/paper_3/leakage_runs/20260527-123857-c2d10f/`, report `LEAKAGE_REPORT_20260527-123857-c2d10f.md`
+- Cross-model comparison: `CROSS_MODEL_COMPARISON.md` (auto-generated by `scripts/cross_model_comparison.py`)
+- `RunSummary` and `NarrowExtendedSummary` gained `provider`/`model` fields; `summary.json` persisted alongside traces
+- `NarrowCharacterizationConfig` gained `provider` field; both narrow runners use `make_client()` dispatch
+
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
 - `results/session_049/` — ablation deltas + family comparison
@@ -213,5 +223,6 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 
 ## Branch
 `main` — sessions 045–073 all squash-merged and pushed to `origin/main`.
-Session 074 (multi-model infrastructure) in progress — commit pending after live measurement runs.
+Session 074 committed `7a3e5aa` (multi-model infrastructure).
+Session 075 on `session/075-multi-model-measurement` — all three model runs complete, commit pending.
 Historical session branches retained locally (no upstream); safe to delete.

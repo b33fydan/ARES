@@ -248,6 +248,8 @@ class RunSummary:
     run_id: str
     timestamp_iso: str
     git_sha: str
+    provider: str
+    model: str
     cycles_completed: int
     total_cost_usd: float
     halt_reason: str
@@ -840,6 +842,8 @@ def run_full_measurement(
             run_id=run_id,
             timestamp_iso=started_iso,
             git_sha=git_sha,
+            provider=config.provider,
+            model=config.model,
             cycles_completed=0,
             total_cost_usd=0.0,
             halt_reason=HALT_ANCHOR_TEST_FAILURE,
@@ -1006,10 +1010,12 @@ def run_full_measurement(
 
     anchor_end = True if config.skip_anchor_check else anchor_test_passes()
 
-    return RunSummary(
+    summary = RunSummary(
         run_id=run_id,
         timestamp_iso=started_iso,
         git_sha=git_sha,
+        provider=config.provider,
+        model=config.model,
         cycles_completed=cycles_completed,
         total_cost_usd=total_cost,
         halt_reason=halt_reason,
@@ -1028,6 +1034,14 @@ def run_full_measurement(
         traces_path=str(traces_path),
         sha256_path=str(sha256_path),
     )
+
+    summary_json_path = traces_dir / "summary.json"
+    summary_json_path.write_text(
+        json.dumps(summary.to_dict(), indent=2, sort_keys=True),
+        encoding="utf-8",
+    )
+
+    return summary
 
 
 # ---------------------------------------------------------------------------
