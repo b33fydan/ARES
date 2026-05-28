@@ -1,6 +1,6 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 075)
+# CLAUDE.md — ARES Phase 7 (post-Session 076)
 
-**Last updated:** 2026-05-27
+**Last updated:** 2026-05-28
 **Test count floor (passing):** 3,937
 
 > Context-hygiene rule: this file holds current state + the last 3 sessions in full.
@@ -23,7 +23,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Multi-model LLM (Anthropic + OpenAI
 - **Paper 3 v1.0 is COMPLETE** — prose, real figures (Session 073), all gates passing, acmart sigconf PDF ready for AISec '26 double-blind submission. Submission pipeline pending (anonymous.4open.science mirror, submission upload — Dan-manual).
 - Debate chapter is CLOSED. Single-turn is production. Multi-turn stays in the lab.
 - Current accuracy on threat-analysis baseline: 84.6% across 39 scenarios (33 SC + 6 PT)
-- **Active direction: Step 5 — multi-model validation** (Sessions 074-075). Client infrastructure built (S074). Live measurements complete (S075): narrow ALIVE on Sonnet 4.6, GPT-4o, and Gemini 2.5 Pro. Cross-model comparison at `CROSS_MODEL_COMPARISON.md`.
+- **Active direction: Step 5 — multi-model validation** (Sessions 074-076). Client infrastructure built (S074). Live measurements complete (S075): narrow ALIVE on Sonnet 4.6, GPT-4o, and Gemini 2.5 Pro. **Narrow characterization complete (S076): 100.00% stability on all three model families** — GPT-4o 98/98, Gemini 91/91, matching Sonnet baseline 98/98. Cross-model comparison at `CROSS_MODEL_COMPARISON.md`.
 
 ### V4 Tribunal sequence (Phase 7 roadmap)
 | Step | Plan | Status |
@@ -33,7 +33,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Multi-model LLM (Anthropic + OpenAI
 | 2 | NIH harness | DONE (→ S059-060 InfluenceLeakage) |
 | 3 | Adaptive corpus C (3-5 sessions) | OPEN |
 | 4 | Light Skeptic v2 (2-4 sessions) | OPEN |
-| 5 | Multi-model validation (2-3 sessions) | **IN PROGRESS** (S074-075) |
+| 5 | Multi-model validation (2-3 sessions) | **DONE** (S074-076: infra + live + narrow characterization) |
 
 Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing.md`, `docs/Claude Code x Codex (1).md`, `docs/ARES Session Notes — Cube Sketches + Phase 7 Direction Locked (2026-05-05).md`
 
@@ -57,11 +57,12 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Session 070 — Paper 3 final sections (Abstract + §1 + §2 + §3) + `references.bib` title reconcile. 1,912w new prose. Paper 3 prose feature-complete at ~8,404 body words.
 - Session 071 — Paper 3 v1.0 docx built + verification-complete (37/37 PASS). Path A bibkey reconcile. Full suite 4,113+75skip+0fail.
 - Session 072 — Paper 3 docx → acmart sigconf migration. pdftotext 25/25 PASS. 10 body / 11 overall. Docx pipeline retired.
+- Session 073 — Paper 3 real figures: 6 placeholder figures replaced with publication-quality vector PDFs. Paper 3 now a complete submission artifact. Strategic re-sync: diagnosed relay-drift, reconciled V4 Tribunal sequence.
 
 ### Last 3 sessions (full)
-- Session 073: Paper 3 real figures — all 6 placeholder figures replaced with publication-quality vector PDFs. Squash-merged at `a60c35b`. **Phase 1 (audit)**: manifested all 6 figures — 3 DATA (fig_3 bar chart, fig_5/fig_6 code snippets), 3 DESIGN-REQUIRED (fig_1 pipeline architecture, fig_2 InfluenceLeakage 4-bit, fig_4 Verdict two-surface). Paper 2 `fig1_architecture.png` inspected: content-clean, metadata-clean (Matplotlib only), 300 DPI but raster; fresh anonymized vector render per directive. **Phase 2 (render)**: new `docs/paper_3/build_figures.py` renders all 6 to vector PDF at sigconf column widths. fig_3 locked to backed quantities only: 98/98 stable vs 73/98 diverge, matching locked prose substrings. All figures smaller than placeholders — no body page growth. Gates: pdftotext 25/25 PASS, tests/paper_3/ 99+3skip, full suite 3,863+75skip+0fail (3,938 collected, floor 3,937). Pages: **10 body / 11 overall** (unchanged). Session prompt updated with 4 strategy rulings (CSVs→source artifacts, 10/12 AISec limits confirmed, DESIGN-REQUIRED category for fig_1/2/4 with guardrails, fig_1 fresh render). **Paper 3 is now a complete submission artifact.** Strategic re-sync completed: diagnosed relay-drift from Sessions 061-072, reconciled V4 Tribunal sequence (Steps 0-2 done, 3-5 open), locked workflow decision (CC as anchor, Claude-web as consultant, Notion as publish target).
 - Session 074: Multi-model client infrastructure for Step 5 (multi-model validation). New files: `openai_client.py`, `gemini_client.py`, `client_factory.py` — all share the `LLMResponse` interface from `client.py`. Provider factory dispatches on `"anthropic"` / `"openai"` / `"gemini"`. `RunnerConfig` gained `provider` field; `leakage_runner.py` factory sites updated to use `make_client()`. Smoke test: all three providers verified live (Sonnet 4.6 / GPT-4o / Gemini 2.5 Pro → PING_OK). Zero regressions (3,863+75skip+0fail). Committed `7a3e5aa`.
 - Session 075: Step 5 live measurement runs — **narrow ALIVE across all three model families**. **GPT-4o**: 133 cycles, $1.66, narrow ALIVE (0/1), broad DEAD, LLM-path 76/98 diverge (77.6%). **Gemini 2.5 Pro**: 117 cycles, $2.04, narrow ALIVE (0/1), broad DEAD, LLM-path 52/86 diverge (60.5%). Both confirm the same structural findings as Sonnet 4.6 baseline: (1) Light Skeptic judgment-level output is stable under framing mutations regardless of LLM family, (2) broad kill fires at Oracle `supporting_fact_ids` passthrough (architectural, not model-dependent), (3) zero oracle/final_verdict divergence on LLM path. Gemini shows less Architect-layer framing sensitivity (60.5%) than Sonnet (74.5%) and GPT-4o (77.6%). Infrastructure: `scripts/run_session_075.py` CLI with `--provider` flag + UTF-16 `.env` loading; `RunSummary`/`NarrowExtendedSummary` gained `provider`/`model` fields; narrow runner adapted for multi-provider; `scripts/cross_model_comparison.py` renders 3-column comparison. Total Step 5 API spend: $5.65 ($1.95 + $1.66 + $2.04). Zero regressions (3,863+75skip+0fail).
+- Session 076: Step 5 narrow characterization on GPT-4o and Gemini 2.5 Pro — **100.00% stability on all three model families**. **GPT-4o**: 131 cycles, $1.00, 98/98 pairs stable, zero narrow fires. **Gemini 2.5 Pro**: 122 cycles, $1.21, 91/91 pairs stable, zero narrow fires (91 not 98 because 7 operators produced no-op mutations on Gemini). All three operators (framing_prefix_v1, framing_suffix_v1, synonym_substitution_conservative_v2) individually at 100.00% on both providers. Combined with Sonnet baseline (S060: 98/98), the narrow non-interference claim now holds at N=287 total pairs across three model families with zero fires. Infrastructure: `scripts/run_session_076.py` CLI (S060 narrow pattern + S075 UTF-16 `.env` + `--provider` flag); `summary.json` persisted for cross-model discovery; `cross_model_comparison.py` updated with S076 narrow run IDs. Total Session 076 API spend: $2.21 ($1.00 + $1.21). Total Step 5 spend: $7.86. Zero regressions (4,113+75skip+0fail).
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -194,11 +195,14 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Anthropic client (unchanged): `ares/dialectic/agents/strategies/client.py` — `AnthropicClient`, `LLMResponse` (shared by all providers)
 - `RunnerConfig.provider` field added to `leakage_runner.py` (default: `"anthropic"`)
 
-### Multi-model measurement (Session 075)
+### Multi-model measurement (Sessions 075-076)
 - Session 075 CLI: `scripts/run_session_075.py` — `--provider`, `--model`, `--light-only`, UTF-16 `.env` loading
+- Session 076 CLI: `scripts/run_session_076.py` — multi-provider narrow characterization (S060 pattern + S075 `.env`/`--provider`)
 - Cross-model comparison: `scripts/cross_model_comparison.py` — auto-discovers runs, renders side-by-side markdown table
-- GPT-4o traces: `data/paper_3/leakage_runs/20260527-121916-c543fa/`, report `LEAKAGE_REPORT_20260527-121916-c543fa.md`
-- Gemini 2.5 Pro traces: `data/paper_3/leakage_runs/20260527-123857-c2d10f/`, report `LEAKAGE_REPORT_20260527-123857-c2d10f.md`
+- GPT-4o full traces (S075): `data/paper_3/leakage_runs/20260527-121916-c543fa/`, report `LEAKAGE_REPORT_20260527-121916-c543fa.md`
+- Gemini full traces (S075): `data/paper_3/leakage_runs/20260527-123857-c2d10f/`, report `LEAKAGE_REPORT_20260527-123857-c2d10f.md`
+- GPT-4o narrow traces (S076): `data/paper_3/leakage_runs/20260528-000438-5614fa/`, report `LEAKAGE_REPORT_20260528-000438-5614fa_narrow_extended.md`
+- Gemini narrow traces (S076): `data/paper_3/leakage_runs/20260528-000629-a3bf23/`, report `LEAKAGE_REPORT_20260528-000629-a3bf23_narrow_extended.md`
 - Cross-model comparison: `CROSS_MODEL_COMPARISON.md` (auto-generated by `scripts/cross_model_comparison.py`)
 - `RunSummary` and `NarrowExtendedSummary` gained `provider`/`model` fields; `summary.json` persisted alongside traces
 - `NarrowCharacterizationConfig` gained `provider` field; both narrow runners use `make_client()` dispatch
@@ -222,7 +226,6 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 11. Deterministic Light Skeptic matches full-LLM Skeptic on framing (delta 0.00 across 25 scenarios) — **SUPPORTED**
 
 ## Branch
-`main` — sessions 045–073 all squash-merged and pushed to `origin/main`.
-Session 074 committed `7a3e5aa` (multi-model infrastructure).
-Session 075 on `session/075-multi-model-measurement` — all three model runs complete, commit pending.
+`main` — sessions 045–075 all squash-merged and pushed to `origin/main`.
+Session 076 on `session/076-narrow-characterization-multi-model` — GPT-4o + Gemini narrow characterization complete, commit pending.
 Historical session branches retained locally (no upstream); safe to delete.

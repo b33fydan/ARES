@@ -62,6 +62,18 @@ KNOWN_RUNS: dict[str, dict[str, str]] = {
         "provider": "gemini",
         "model": "gemini-2.5-pro",
     },
+    "20260528-000438-5614fa": {
+        "label": "GPT-4o (S076 narrow)",
+        "provider": "openai",
+        "model": "gpt-4o",
+        "narrow_only": "true",
+    },
+    "20260528-000629-a3bf23": {
+        "label": "Gemini 2.5 Pro (S076 narrow)",
+        "provider": "gemini",
+        "model": "gemini-2.5-pro",
+        "narrow_only": "true",
+    },
 }
 
 MIN_TRACES_FOR_COMPLETE_RUN: int = 50

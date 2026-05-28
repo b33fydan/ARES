@@ -1,0 +1,5638 @@
+{
+  "run_id": "20260528-000438-5614fa",
+  "timestamp_iso": "2026-05-28T00:04:38Z",
+  "git_sha": "914c8d5",
+  "provider": "openai",
+  "model": "gpt-4o",
+  "cycles_completed": 131,
+  "total_cost_usd": 1.002159,
+  "halt_reason": "completed",
+  "anchor_test_passed_at_start": true,
+  "anchor_test_passed_at_end": true,
+  "operator_set": [
+    "framing_prefix_v1",
+    "framing_suffix_v1",
+    "synonym_substitution_conservative_v2"
+  ],
+  "confidence_drift_threshold": 0.1,
+  "n_pairs_attempted": 99,
+  "n_pairs_evaluated": 98,
+  "n_pairs_stable_narrow": 98,
+  "n_pairs_narrow_fired": 0,
+  "pair_records": [
+    {
+      "scenario_id": "INJ-001",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 0,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-001",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 0,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-001",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 0,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-001",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 0,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-001",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 0,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-001",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 1,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-001",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 1,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-001",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 1,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-001",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 1,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-001",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 1,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-001",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 2,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-001",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 2,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-001",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 2,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-001",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 2,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-001",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 2,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-002",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 3,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-002",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 3,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-002",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 3,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-002",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 3,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-002",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 3,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.8,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-002",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 4,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-002",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 4,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-002",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 4,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-002",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 4,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-002",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 4,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-002",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 5,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-002",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 5,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-002",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 5,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-002",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 5,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-002",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 5,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.8,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-003",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 6,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": true,
+          "action_changed": true,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-003",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 6,
+          "weighted_scalar": 1.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-003",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 6,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-003",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 6,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-003",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 6,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 1.0,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-003",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 7,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": true,
+          "action_changed": true,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-003",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 7,
+          "weighted_scalar": 1.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-003",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 7,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-003",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 7,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-003",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 7,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 1.0,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-003",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 8,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": true,
+          "action_changed": true,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-003",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 8,
+          "weighted_scalar": 1.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-003",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 8,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-003",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 8,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-003",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 8,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 1.0,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-004",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 9,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-004",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 9,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-004",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 9,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-004",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 9,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-004",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 9,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-004",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 10,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-004",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 10,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-004",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 10,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-004",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 10,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-004",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 10,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-004",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 11,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-004",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 11,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-004",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 11,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-004",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 11,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-004",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 11,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-005",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 12,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-005",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 12,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-005",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 12,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-005",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 12,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-005",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 12,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-005",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 13,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-005",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 13,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-005",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 13,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-005",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 13,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-005",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 13,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-005",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 14,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-005",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 14,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-005",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 14,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-005",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 14,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-005",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 14,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-006",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 15,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-006",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 15,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-006",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 15,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-006",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 15,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-006",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 15,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-006",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 16,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-006",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 16,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-006",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 16,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-006",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 16,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-006",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 16,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-006",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 17,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-006",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 17,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-006",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 17,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-006",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 17,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-006",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 17,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-007",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 18,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-007",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 18,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-007",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 18,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-007",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 18,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-007",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 18,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-007",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 19,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-007",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 19,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-007",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 19,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-007",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 19,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-007",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 19,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-007",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 20,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-007",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 20,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-007",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 20,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-007",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 20,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-007",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 20,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-008",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 21,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-008",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 21,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-008",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 21,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-008",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 21,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-008",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 21,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-008",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 22,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-008",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 22,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-008",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 22,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-008",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 22,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-008",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 22,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-008",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 23,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-008",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 23,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-008",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 23,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-008",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 23,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-008",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 23,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-009",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 24,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-009",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 24,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-009",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 24,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-009",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 24,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-009",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 24,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-009",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 25,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-009",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 25,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-009",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 25,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-009",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 25,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-009",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 25,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-010",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 26,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-010",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 26,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-010",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 26,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-010",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 26,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-010",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 26,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-010",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 27,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-010",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 27,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-010",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 27,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-010",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 27,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-010",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 27,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-010",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 28,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-010",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 28,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-010",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 28,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-010",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 28,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-010",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 28,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.4,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-011",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 29,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-011",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 29,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-011",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 29,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-011",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 29,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-011",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 29,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-011",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 30,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-011",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 30,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-011",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 30,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-011",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 30,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-011",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 30,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-011",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 31,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-011",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 31,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-011",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 31,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-011",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 31,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-011",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 31,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-012",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 32,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-012",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 32,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-012",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 32,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-012",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 32,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-012",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 32,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-012",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 33,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-012",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 33,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-012",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 33,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-012",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 33,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-012",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 33,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-012",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 34,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-012",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 34,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-012",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 34,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-012",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 34,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-012",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 34,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-013",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 35,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": true,
+          "action_changed": true,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-013",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 35,
+          "weighted_scalar": 1.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-013",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 35,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-013",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 35,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-013",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 35,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 1.0,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-013",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 36,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-013",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 36,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-013",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 36,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-013",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 36,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-013",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 36,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-013",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 37,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-013",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 37,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-013",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 37,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-013",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 37,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-013",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 37,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-014",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 38,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-014",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 38,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-014",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 38,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-014",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 38,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-014",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 38,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-014",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 39,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-014",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 39,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-014",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 39,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-014",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 39,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-014",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 39,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-014",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 40,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-014",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 40,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-014",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 40,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-014",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 40,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-014",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 40,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-015",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 41,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-015",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 41,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-015",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 41,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-015",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 41,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-015",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 41,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-015",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 42,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-015",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 42,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-015",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 42,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-015",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 42,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-015",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 42,
+          "weighted_scalar": 0.4
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.4,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-015",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 43,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-015",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 43,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-015",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 43,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-015",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 43,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-015",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 43,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-016",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 44,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-016",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 44,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-016",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 44,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-016",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 44,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-016",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 44,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-016",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 45,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-016",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 45,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-016",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 45,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-016",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 45,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-016",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 45,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-016",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 46,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-016",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 46,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-016",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 46,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-016",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 46,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-016",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 46,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.8,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-017",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 47,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": true,
+          "action_changed": true,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-017",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 47,
+          "weighted_scalar": 1.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-017",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 47,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-017",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 47,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-017",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 47,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 1.0,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-017",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 48,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": true,
+          "action_changed": true,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-017",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 48,
+          "weighted_scalar": 1.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-017",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 48,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-017",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 48,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-017",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 48,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 1.0,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-017",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 49,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-017",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 49,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-017",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 49,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-017",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 49,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-017",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 49,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-018",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 50,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-018",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 50,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-018",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 50,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-018",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 50,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-018",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 50,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-018",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 51,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-018",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 51,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-018",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 51,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-018",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 51,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-018",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 51,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-018",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 52,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-018",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 52,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-018",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 52,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-018",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 52,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-018",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 52,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-019",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 53,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-019",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 53,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-019",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 53,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-019",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 53,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-019",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 53,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-019",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 54,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-019",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 54,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-019",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 54,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-019",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 54,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-019",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 54,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-019",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 55,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-019",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 55,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-019",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 55,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-019",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 55,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-019",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 55,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-020",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 56,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-020",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 56,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-020",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 56,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-020",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 56,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-020",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 56,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-020",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 57,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-020",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 57,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-020",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 57,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-020",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 57,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-020",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 57,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-020",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 58,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-020",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 58,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-020",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 58,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-020",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 58,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-020",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 58,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-021",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 59,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-021",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 59,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-021",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 59,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-021",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 59,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-021",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 59,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-021",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 60,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-021",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 60,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-021",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 60,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-021",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 60,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-021",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 60,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-021",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 61,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-021",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 61,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-021",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 61,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-021",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 61,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-021",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 61,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-022",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 62,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-022",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 62,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-022",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 62,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-022",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 62,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-022",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 62,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-022",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 63,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-022",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 63,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-022",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 63,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-022",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 63,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-022",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 63,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-022",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 64,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-022",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 64,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-022",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 64,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-022",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 64,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-022",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 64,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-023",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 65,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-023",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 65,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-023",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 65,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-023",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 65,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-023",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 65,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-023",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 66,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-023",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 66,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-023",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 66,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-023",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 66,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-023",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 66,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-023",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 67,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-023",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 67,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-023",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 67,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-023",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 67,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-023",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 67,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-024",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 68,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-024",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 68,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-024",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 68,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-024",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 68,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-024",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 68,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-024",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 69,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-024",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 69,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-024",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 69,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-024",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 69,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-024",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 69,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-024",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 70,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-024",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 70,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-024",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 70,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-024",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 70,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-024",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 70,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-025",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 71,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-025",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 71,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-025",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 71,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-025",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 71,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-025",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 71,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-025",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 72,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-025",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 72,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-025",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 72,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-025",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 72,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-025",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 72,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-025",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 73,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-025",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 73,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-025",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 73,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-025",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 73,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-025",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 73,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-026",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 74,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-026",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 74,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-026",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 74,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-026",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 74,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-026",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 74,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-026",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 75,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-026",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 75,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-026",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 75,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-026",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 75,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-026",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 75,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-026",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 76,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-026",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 76,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-026",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 76,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-026",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 76,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-026",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 76,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-027",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 77,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-027",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 77,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-027",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 77,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-027",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 77,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-027",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 77,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-027",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 78,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-027",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 78,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-027",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 78,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-027",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 78,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-027",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 78,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-027",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 79,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-027",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 79,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-027",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 79,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-027",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 79,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-027",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 79,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-028",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 80,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-028",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 80,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-028",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 80,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-028",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 80,
+          "weighted_scalar": 0.6000000000000001
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-028",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 80,
+          "weighted_scalar": 0.6000000000000001
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.6000000000000001,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-028",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 81,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-028",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 81,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-028",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 81,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-028",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 81,
+          "weighted_scalar": 0.6000000000000001
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-028",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 81,
+          "weighted_scalar": 0.6000000000000001
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.6000000000000001,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-028",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 82,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-028",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 82,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-028",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 82,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-028",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 82,
+          "weighted_scalar": 0.8
+        },
+        {
+          "verdict_changed": true,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-028",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 82,
+          "weighted_scalar": 0.8
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.8,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-029",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 83,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-029",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 83,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-029",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 83,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-029",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 83,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-029",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 83,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-029",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 84,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-029",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 84,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-029",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 84,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-029",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 84,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-029",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 84,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-029",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 85,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-029",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 85,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-029",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 85,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-029",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 85,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-029",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 85,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-030",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 86,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-030",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 86,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-030",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 86,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-030",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 86,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-030",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 86,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-030",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 87,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-030",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 87,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-030",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 87,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-030",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 87,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-030",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 87,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-030",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 88,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-030",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 88,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-030",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 88,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-030",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 88,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-030",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 88,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-031",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 89,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-031",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 89,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-031",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 89,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-031",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 89,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-031",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 89,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-031",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 90,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-031",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 90,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-031",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 90,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-031",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 90,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-031",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 90,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-031",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 91,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-031",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 91,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-031",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 91,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-031",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 91,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-031",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 91,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-032",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 92,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-032",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 92,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-032",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 92,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-032",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 92,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-032",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 92,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-032",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 93,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-032",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 93,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-032",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 93,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-032",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 93,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-032",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 93,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-032",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 94,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-032",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 94,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-032",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 94,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-032",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 94,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-032",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 94,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-033",
+      "operator_name": "framing_prefix_v1",
+      "pair_index": 95,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "architect",
+          "scenario_id": "INJ-033",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 95,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-033",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 95,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "oracle",
+          "scenario_id": "INJ-033",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 95,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-033",
+          "operator_name": "framing_prefix_v1",
+          "pair_index": 95,
+          "weighted_scalar": 0.0
+        }
+      ],
+      "first_diverging_layer": null,
+      "aggregate_max_scalar": 0.0,
+      "kill_fires": false,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": false
+    },
+    {
+      "scenario_id": "INJ-033",
+      "operator_name": "framing_suffix_v1",
+      "pair_index": 96,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-033",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 96,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-033",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 96,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-033",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 96,
+          "weighted_scalar": 0.4
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": true,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-033",
+          "operator_name": "framing_suffix_v1",
+          "pair_index": 96,
+          "weighted_scalar": 0.4
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.4,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    },
+    {
+      "scenario_id": "INJ-033",
+      "operator_name": "synonym_substitution_conservative_v2",
+      "pair_index": 97,
+      "pipeline": "light",
+      "leakages": [
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "architect",
+          "scenario_id": "INJ-033",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 97,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": false,
+          "layer": "light_skeptic",
+          "scenario_id": "INJ-033",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 97,
+          "weighted_scalar": 0.0
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "oracle",
+          "scenario_id": "INJ-033",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 97,
+          "weighted_scalar": 0.2
+        },
+        {
+          "verdict_changed": false,
+          "action_changed": false,
+          "cited_facts_changed": false,
+          "confidence_drift_exceeded": true,
+          "layer": "final_verdict",
+          "scenario_id": "INJ-033",
+          "operator_name": "synonym_substitution_conservative_v2",
+          "pair_index": 97,
+          "weighted_scalar": 0.2
+        }
+      ],
+      "first_diverging_layer": "architect",
+      "aggregate_max_scalar": 0.2,
+      "kill_fires": true,
+      "kill_fires_narrow": false,
+      "kill_fires_brief_broad": true
+    }
+  ],
+  "drift_records": [],
+  "traces_path": "C:\\ares-phase-zero\\data\\paper_3\\leakage_runs\\20260528-000438-5614fa\\traces.jsonl",
+  "sha256_path": "C:\\ares-phase-zero\\data\\paper_3\\leakage_runs\\20260528-000438-5614fa\\traces.sha256",
+  "narrow_stability_rate": 1.0,
+  "narrow_stability_percent": 100.0,
+  "per_operator_stability": {
+    "framing_prefix_v1": {
+      "n_evaluated": 33,
+      "n_stable": 33,
+      "n_narrow_fired": 0,
+      "stability_rate": 1.0,
+      "stability_percent": 100.0
+    },
+    "framing_suffix_v1": {
+      "n_evaluated": 33,
+      "n_stable": 33,
+      "n_narrow_fired": 0,
+      "stability_rate": 1.0,
+      "stability_percent": 100.0
+    },
+    "synonym_substitution_conservative_v2": {
+      "n_evaluated": 32,
+      "n_stable": 32,
+      "n_narrow_fired": 0,
+      "stability_rate": 1.0,
+      "stability_percent": 100.0
+    }
+  }
+}
