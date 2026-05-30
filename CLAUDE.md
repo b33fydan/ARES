@@ -24,6 +24,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Multi-model LLM (Anthropic + OpenAI
 - Debate chapter is CLOSED. Single-turn is production. Multi-turn stays in the lab.
 - Current accuracy on threat-analysis baseline: 84.6% across 39 scenarios (33 SC + 6 PT)
 - **Active direction: Step 5 — multi-model validation** (Sessions 074-076). Client infrastructure built (S074). Live measurements complete (S075): narrow ALIVE on Sonnet 4.6, GPT-4o, and Gemini 2.5 Pro. **Narrow characterization complete (S076): 100.00% stability on all three model families** — GPT-4o 98/98, Gemini 91/91, matching Sonnet baseline 98/98. Cross-model comparison at `CROSS_MODEL_COMPARISON.md`.
+- ⚠️ **Narrow-result caveat (verified post-S076):** the N=287 / 100% narrow-stability figure is invariant *by construction*, not empirical — the Light Skeptic reads only `fact.field` while the mutators vary only `fact.value` (disjoint sets), and 2 of the 4 narrow bits are hardcoded constants. The cross-model framing is decorative (model family can't move the narrow metric). The genuine, model-dependent leak is the Architect→Oracle `supporting_fact_ids` passthrough (60–78% LLM-path divergence, S075). Does **not** affect Paper 3 (predates S074–076).
 
 ### V4 Tribunal sequence (Phase 7 roadmap)
 | Step | Plan | Status |
@@ -226,6 +227,5 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 11. Deterministic Light Skeptic matches full-LLM Skeptic on framing (delta 0.00 across 25 scenarios) — **SUPPORTED**
 
 ## Branch
-`main` — sessions 045–075 all squash-merged and pushed to `origin/main`.
-Session 076 on `session/076-narrow-characterization-multi-model` — GPT-4o + Gemini narrow characterization complete, commit pending.
+`main` — sessions 045–076 all squash-merged and pushed to `origin/main`.
 Historical session branches retained locally (no upstream); safe to delete.
