@@ -208,6 +208,16 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - `RunSummary` and `NarrowExtendedSummary` gained `provider`/`model` fields; `summary.json` persisted alongside traces
 - `NarrowCharacterizationConfig` gained `provider` field; both narrow runners use `make_client()` dispatch
 
+### Architect-path measurement (Phase 7 / Session 077)
+- Spec: `docs/superpowers/specs/2026-05-29-architect-path-measurement-design.md`; plan: `docs/superpowers/plans/2026-05-29-architect-path-measurement.md`
+- Schema: `ares/dialectic/measurement/architect_framing_schema.py` — `ArchitectFramingConfig`, `ResampleRecord`, `OperatorFramingResult`, `ScenarioFramingResult`, `ArchitectFramingSummary`
+- Metrics/stats: `ares/dialectic/measurement/architect_framing_metrics.py` — Jaccard, within/cross distances, mean-shift permutation test, bootstrap CI, `classify_operator`
+- Scenario selection: `ares/dialectic/measurement/architect_framing_selection.py` — diverging scenarios from S059 LLM-path traces (17 found in Sonnet S059)
+- Positive control: `ares/dialectic/measurement/architect_framing_control.py` — drop highest kill-chain-stage fact (closes the "no positive control" gap)
+- Runner: `ares/dialectic/measurement/architect_framing_runner.py` — `run_preflight`, `run_measurement`; reuses `leakage_runner._run_one_cycle` (apples-to-apples with the 60–78%); injectable `cycle_fn` for offline tests
+- Report: `ares/dialectic/measurement/architect_framing_report.py`; CLI: `scripts/run_session_077.py` (preflight-gated; $8 hard cost cap)
+- Status: code complete + offline-tested (+29 tests → 4,142 pass / 0 fail); **live Sonnet pilot is Dan-gated** (run `--preflight-only` first)
+
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
 - `results/session_049/` — ablation deltas + family comparison
