@@ -220,6 +220,11 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Report: `ares/dialectic/measurement/architect_framing_report.py`; CLI: `scripts/run_session_077.py` (preflight-gated; $8 hard cost cap)
 - Status: code complete + offline-tested (+29 tests → 4,142 pass / 0 fail); **live Sonnet pilot is Dan-gated** (run `--preflight-only` first)
 
+### Verdict sanitization (Phase 7 / Session 078)
+- Opt-in Oracle passthrough fix: `ares/dialectic/agents/verdict_sanitizer.py` — `relevant_fact_ids` (outcome-conditioned packet-derived kill-chain rule), `sanitize_verdict` (frozen copy, replaces only `supporting_fact_ids`), `create_sanitized_oracle_verdict` (opt-in factory peer of `oracle.create_oracle_verdict`). Deterministic; closes the Architect→Oracle `supporting_fact_ids` framing leak on the opt-in path. `oracle.py` + passthrough anchor untouched (Paper 3 reproducible on HEAD).
+- Tests: `ares/dialectic/tests/agents/test_verdict_sanitizer.py` (10 unit/integration) + `ares/dialectic/tests/agents/test_verdict_sanitizer_invariance_anchor.py` (inverse of the passthrough anchor; locks the drift-free fixed behavior).
+- Spec/plan: `docs/superpowers/specs/2026-05-31-oracle-passthrough-sanitization-design.md`, `docs/superpowers/plans/2026-05-31-oracle-passthrough-sanitization.md`.
+
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
 - `results/session_049/` — ablation deltas + family comparison
