@@ -167,3 +167,23 @@ def test_sanitize_returns_new_instance_leaving_original_unchanged():
     assert s is not v
     assert v.supporting_fact_ids == frozenset({"x"})  # original untouched
     assert s.supporting_fact_ids == frozenset({"f-a"})
+
+
+# --- create_sanitized_oracle_verdict ---
+
+def test_factory_sanitizes_and_narrator_holds_sanitized_verdict():
+    pkt = _packet({"f-exec": "data", "f-recon": "src_ip", "f-scan": "port_scan"})
+    # Architect cites the low-stage facts; the packet also holds f-exec (stage 2).
+    arch = _msg(
+        "architect", Phase.THESIS, MessageType.HYPOTHESIS,
+        ["f-recon", "f-scan"], 0.85, 1,
+    )
+    skep = _msg(
+        "skeptic", Phase.ANTITHESIS, MessageType.REBUTTAL, ["f-recon"], 0.3, 2,
+    )
+    verdict, narrator = create_sanitized_oracle_verdict(arch, skep, pkt)
+    assert verdict.outcome == VerdictOutcome.THREAT_CONFIRMED
+    # Sanitized = packet max-stage {f-exec}, NOT the architect's {f-recon, f-scan}.
+    assert verdict.supporting_fact_ids == frozenset({"f-exec"})
+    # The narrator is built from the sanitized verdict, so it cites the sanitized set.
+    assert narrator.verdict is verdict

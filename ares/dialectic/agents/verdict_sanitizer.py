@@ -73,10 +73,16 @@ def sanitize_verdict(verdict: Verdict, packet: "EvidencePacket") -> Verdict:
     )
 
 
-def create_sanitized_oracle_verdict(  # noqa: ARG001
+def create_sanitized_oracle_verdict(
     architect_msg: "DialecticalMessage",
     skeptic_msg: "DialecticalMessage",
     packet: "EvidencePacket",
 ) -> "tuple[Verdict, OracleNarrator]":
-    """Placeholder — implemented in Task 3."""
-    raise NotImplementedError
+    """Opt-in peer of oracle.create_oracle_verdict: compute the deterministic
+    verdict, sanitize its supporting_fact_ids, then build a narrator from the
+    SANITIZED verdict so its explanation cites the sanitized set."""
+    verdict = OracleJudge.compute_verdict(architect_msg, skeptic_msg, packet)
+    sanitized = sanitize_verdict(verdict, packet)
+    narrator = OracleNarrator(verdict=sanitized)
+    narrator.observe(packet)
+    return sanitized, narrator
