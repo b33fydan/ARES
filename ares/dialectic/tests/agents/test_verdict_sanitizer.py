@@ -142,3 +142,28 @@ def test_inconclusive_returns_all_facts():
 
 def test_empty_packet_returns_empty_frozenset():
     assert relevant_fact_ids(_EmptyPacket(), VerdictOutcome.THREAT_CONFIRMED) == frozenset()
+
+
+# --- sanitize_verdict ---
+
+def test_sanitize_replaces_only_supporting_fact_ids():
+    pkt = _packet({"f-exec": "data", "f-recon": "src_ip"})
+    v = _verdict(VerdictOutcome.THREAT_CONFIRMED, supporting={"bogus-1", "bogus-2"})
+    s = sanitize_verdict(v, pkt)
+    # supporting set is re-derived (max-stage = data) ...
+    assert s.supporting_fact_ids == frozenset({"f-exec"})
+    # ... and every other field is preserved verbatim.
+    assert s.outcome == v.outcome
+    assert s.confidence == v.confidence
+    assert s.architect_confidence == v.architect_confidence
+    assert s.skeptic_confidence == v.skeptic_confidence
+    assert s.reasoning == v.reasoning
+
+
+def test_sanitize_returns_new_instance_leaving_original_unchanged():
+    pkt = _packet({"f-a": "data"})
+    v = _verdict(VerdictOutcome.INCONCLUSIVE, supporting={"x"})
+    s = sanitize_verdict(v, pkt)
+    assert s is not v
+    assert v.supporting_fact_ids == frozenset({"x"})  # original untouched
+    assert s.supporting_fact_ids == frozenset({"f-a"})

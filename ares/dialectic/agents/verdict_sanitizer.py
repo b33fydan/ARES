@@ -64,9 +64,13 @@ def relevant_fact_ids(
     return frozenset(f.fact_id for f in facts)
 
 
-def sanitize_verdict(verdict: Verdict, packet: "EvidencePacket") -> Verdict:  # noqa: ARG001
-    """Placeholder — implemented in Task 2."""
-    raise NotImplementedError
+def sanitize_verdict(verdict: Verdict, packet: "EvidencePacket") -> Verdict:
+    """Return a copy of `verdict` with supporting_fact_ids re-derived from the
+    packet (framing-invariant). Every other field is preserved."""
+    return replace(
+        verdict,
+        supporting_fact_ids=relevant_fact_ids(packet, verdict.outcome),
+    )
 
 
 def create_sanitized_oracle_verdict(  # noqa: ARG001
