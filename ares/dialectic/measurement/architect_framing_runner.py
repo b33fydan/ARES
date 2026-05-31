@@ -15,7 +15,9 @@ from pathlib import Path
 from typing import Any, Callable
 
 from ares.dialectic.agents.strategies.client_factory import make_client
-from ares.dialectic.measurement.architect_framing_control import build_positive_control_scenario
+from ares.dialectic.measurement.architect_framing_control import (
+    build_positive_control_scenario, choose_control_drop_fact,
+)
 from ares.dialectic.measurement.architect_framing_metrics import (
     classify_operator, cross_distances, within_distances,
 )
@@ -169,15 +171,18 @@ def run_measurement(
             op_results.append(classify_operator(cross, within, seed=config.seed,
                                                  operator_name=op_name))
 
-        # positive control
+        # positive control: drop a fact the baseline Architect actually cites,
+        # then require its divergence to significantly exceed the noise floor.
         try:
-            ctrl = build_positive_control_scenario(base)
+            drop_fid = choose_control_drop_fact(base.packet, base_sets)
+            ctrl = build_positive_control_scenario(base, drop_fact_id=drop_fid)
             ctrl_sets = _resample(ctrl, client=client, cycle_fn=cycle_fn,
                                   condition=CONDITION_CONTROL, operator_name=_CONTROL_SENTINEL,
                                   k=config.k_resamples, sink=records)
             ctrl_cross = cross_distances(base_sets, ctrl_sets)
-            within_max = max(within) if within else 0.0
-            control_exceeds = (sum(ctrl_cross) / len(ctrl_cross)) > within_max if ctrl_cross else False
+            cv = classify_operator(ctrl_cross, within, seed=config.seed,
+                                   operator_name=_CONTROL_SENTINEL)
+            control_exceeds = cv.effect_size > 0.0 and cv.p_value < 0.05
         except ValueError:
             ctrl_cross, control_exceeds = [], False
 
