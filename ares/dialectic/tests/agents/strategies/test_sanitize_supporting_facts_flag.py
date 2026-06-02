@@ -207,3 +207,49 @@ def test_light_cycle_flag_on_matches_rule_and_preserves_decision():
     # Decision determinism.
     assert off_v.outcome == on_v.outcome
     assert off_v.confidence == on_v.confidence
+
+
+# --- cycle-level framing invariance (before/after proof-of-fix) ---
+
+def _invariance_packet() -> EvidencePacket:
+    # Three stage-0 (src_ip) recon facts to draw two distinct 2-subsets from,
+    # and two stage-2 (data) facts as the stable max-stage set.
+    return _packet(
+        {
+            "f-r1": "src_ip", "f-r2": "src_ip", "f-r3": "src_ip",
+            "f-exec": "data", "f-exec2": "data",
+        },
+        packet_id="inv-pkt",
+    )
+
+
+def test_cycle_framing_invariance_before_and_after():
+    pkt = _invariance_packet()
+    framing_a = ["f-r1", "f-r2"]
+    framing_b = ["f-r2", "f-r3"]  # different identities, same count + confidence
+
+    # Default path: the leak is visible — cited sets differ under reframing.
+    off_a = run_cycle_with_strategies(
+        pkt, threat_analyzer=_analyzer(framing_a), explanation_finder=_finder_empty(),
+    )
+    off_b = run_cycle_with_strategies(
+        pkt, threat_analyzer=_analyzer(framing_b), explanation_finder=_finder_empty(),
+    )
+    assert off_a.verdict.outcome == off_b.verdict.outcome == VerdictOutcome.THREAT_CONFIRMED
+    assert off_a.verdict.supporting_fact_ids != off_b.verdict.supporting_fact_ids
+
+    # Sanitized path: reframing no longer moves the cited set (the fix).
+    on_a = run_cycle_with_strategies(
+        pkt, threat_analyzer=_analyzer(framing_a), explanation_finder=_finder_empty(),
+        sanitize_supporting_facts=True,
+    )
+    on_b = run_cycle_with_strategies(
+        pkt, threat_analyzer=_analyzer(framing_b), explanation_finder=_finder_empty(),
+        sanitize_supporting_facts=True,
+    )
+    assert on_a.verdict.supporting_fact_ids == on_b.verdict.supporting_fact_ids
+    assert on_a.verdict.supporting_fact_ids == relevant_fact_ids(pkt, VerdictOutcome.THREAT_CONFIRMED)
+    assert on_a.verdict.supporting_fact_ids == frozenset({"f-exec", "f-exec2"})
+
+    # Decision surface preserved across the reframing.
+    assert on_a.verdict.confidence == off_a.verdict.confidence
