@@ -19,6 +19,7 @@ from ares.dialectic.agents.verdict_sanitizer import (
     sanitize_verdict,
 )
 from ares.dialectic.agents.strategies.live_cycle import run_cycle_with_strategies
+from ares.dialectic.agents.strategies.guarded_cycle import run_guarded_cycle
 from ares.dialectic.evidence.fact import EntityType, Fact
 from ares.dialectic.evidence.packet import EvidencePacket, TimeWindow
 from ares.dialectic.evidence.provenance import Provenance, SourceType
@@ -134,3 +135,53 @@ def test_live_cycle_flag_preserves_decision():
     # on == sanitize(off): the flag transforms only the cited set.
     assert on.verdict.supporting_fact_ids == sanitize_verdict(off.verdict, pkt).supporting_fact_ids
     assert off.verdict.supporting_fact_ids != on.verdict.supporting_fact_ids
+
+
+# --- guarded cycle ---
+
+def test_guarded_cycle_flag_off_is_leaky():
+    pkt = _confirmed_packet()
+    res = run_guarded_cycle(
+        pkt,
+        threat_analyzer=_analyzer(["f-recon", "f-scan"]),
+        explanation_finder=_finder_empty(),
+        firewall=None,
+        enable_hot_swap=False,
+    )
+    v = res.cycle_result.verdict
+    assert v.outcome == VerdictOutcome.THREAT_CONFIRMED
+    assert v.supporting_fact_ids == frozenset({"f-recon", "f-scan"})
+
+
+def test_guarded_cycle_flag_on_is_sanitized():
+    pkt = _confirmed_packet()
+    res = run_guarded_cycle(
+        pkt,
+        threat_analyzer=_analyzer(["f-recon", "f-scan"]),
+        explanation_finder=_finder_empty(),
+        firewall=None,
+        enable_hot_swap=False,
+        sanitize_supporting_facts=True,
+    )
+    v = res.cycle_result.verdict
+    assert v.outcome == VerdictOutcome.THREAT_CONFIRMED
+    assert v.supporting_fact_ids == frozenset({"f-exec"})
+    assert v.supporting_fact_ids == relevant_fact_ids(pkt, v.outcome)
+
+
+def test_guarded_cycle_flag_preserves_decision():
+    pkt = _confirmed_packet()
+    off = run_guarded_cycle(
+        pkt, threat_analyzer=_analyzer(["f-recon", "f-scan"]),
+        explanation_finder=_finder_empty(), firewall=None, enable_hot_swap=False,
+    )
+    on = run_guarded_cycle(
+        pkt, threat_analyzer=_analyzer(["f-recon", "f-scan"]),
+        explanation_finder=_finder_empty(), firewall=None, enable_hot_swap=False,
+        sanitize_supporting_facts=True,
+    )
+    off_v, on_v = off.cycle_result.verdict, on.cycle_result.verdict
+    assert off_v.outcome == on_v.outcome
+    assert off_v.confidence == on_v.confidence
+    assert on_v.supporting_fact_ids == sanitize_verdict(off_v, pkt).supporting_fact_ids
+    assert off_v.supporting_fact_ids != on_v.supporting_fact_ids
