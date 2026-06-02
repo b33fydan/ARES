@@ -287,17 +287,12 @@ def render_figure_placeholder(spec: FigureSpec) -> str:
     references intact (the prose is frozen per Session 072 brief).
     """
     env = "figure*" if spec.span == "double" else "figure"
-    safe_fig_id = latex_escape(spec.fig_id)
     canonical_n = _canonical_figure_number(spec.fig_id)
-    # Width = full column width (``\linewidth``); height fixed in inches.
-    # ``\framebox[\linewidth]{...}`` puts a visible border around the area.
-    body = (
-        f"\\framebox[\\linewidth]{{"
-        f"\\rule{{0pt}}{{{spec.height_in}in}}"
-        f"\\textit{{[Placeholder: {safe_fig_id} ({spec.span} column, "
-        f"{spec.height_in}\\,in)]}}"
-        f"}}"
-    )
+    # Real vector figure (Session 073 assets). Double-column floats
+    # (``figure*``) span ``\textwidth``; single-column floats span
+    # ``\columnwidth``. Matches the assets rendered by build_figures.py.
+    width = "\\textwidth" if spec.span == "double" else "\\columnwidth"
+    body = f"\\includegraphics[width={width}]{{../figures/{spec.fig_id}.pdf}}"
     return (
         f"\\setcounter{{figure}}{{{canonical_n - 1}}}\n"
         f"\\begin{{{env}}}[!htbp]\n"
