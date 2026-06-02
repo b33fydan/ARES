@@ -197,6 +197,7 @@ def run_light_guarded_cycle(
     firewall: Optional[OracleFirewall] = None,
     agent_id_prefix: str = "ares",
     include_narration: bool = True,
+    sanitize_supporting_facts: bool = False,
 ) -> LightGuardedCycleResult:
     """Run a Light-Skeptic-guarded single-turn dialectical cycle.
 
@@ -220,6 +221,8 @@ def run_light_guarded_cycle(
         firewall: OracleFirewall instance. ``None`` disables validation.
         agent_id_prefix: Prefix for generated agent IDs.
         include_narration: If True, run OracleNarrator.
+        sanitize_supporting_facts: If True, re-derive Verdict.supporting_fact_ids
+            from the packet (framing-invariant). Default False = legacy passthrough.
 
     Returns:
         A frozen :class:`LightGuardedCycleResult`.
@@ -312,6 +315,11 @@ def run_light_guarded_cycle(
             cycle_id=cycle_id,
             cause=exc,
         ) from exc
+
+    # --- Optional supporting_fact_ids sanitization (opt-in, default off) ---
+    if sanitize_supporting_facts:
+        from ares.dialectic.agents.verdict_sanitizer import sanitize_verdict
+        verdict = sanitize_verdict(verdict, packet)
 
     # --- Optional narration ---
     narrator_message: Optional[DialecticalMessage] = None

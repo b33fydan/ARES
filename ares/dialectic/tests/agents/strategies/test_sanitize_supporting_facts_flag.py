@@ -20,6 +20,7 @@ from ares.dialectic.agents.verdict_sanitizer import (
 )
 from ares.dialectic.agents.strategies.live_cycle import run_cycle_with_strategies
 from ares.dialectic.agents.strategies.guarded_cycle import run_guarded_cycle
+from ares.dialectic.agents.strategies.light_guarded_cycle import run_light_guarded_cycle
 from ares.dialectic.evidence.fact import EntityType, Fact
 from ares.dialectic.evidence.packet import EvidencePacket, TimeWindow
 from ares.dialectic.evidence.provenance import Provenance, SourceType
@@ -185,3 +186,24 @@ def test_guarded_cycle_flag_preserves_decision():
     assert off_v.confidence == on_v.confidence
     assert on_v.supporting_fact_ids == sanitize_verdict(off_v, pkt).supporting_fact_ids
     assert off_v.supporting_fact_ids != on_v.supporting_fact_ids
+
+
+# --- light guarded cycle (Light Skeptic; outcome-agnostic assertions) ---
+
+def test_light_cycle_flag_on_matches_rule_and_preserves_decision():
+    pkt = _confirmed_packet()
+    off = run_light_guarded_cycle(
+        pkt, threat_analyzer=_analyzer(["f-recon", "f-scan"]), firewall=None,
+    )
+    on = run_light_guarded_cycle(
+        pkt, threat_analyzer=_analyzer(["f-recon", "f-scan"]), firewall=None,
+        sanitize_supporting_facts=True,
+    )
+    off_v, on_v = off.cycle_result.verdict, on.cycle_result.verdict
+    # Fix: on-path cited set == the packet-derived rule for that outcome.
+    assert on_v.supporting_fact_ids == relevant_fact_ids(pkt, on_v.outcome)
+    # on == sanitize(off).
+    assert on_v.supporting_fact_ids == sanitize_verdict(off_v, pkt).supporting_fact_ids
+    # Decision determinism.
+    assert off_v.outcome == on_v.outcome
+    assert off_v.confidence == on_v.confidence
