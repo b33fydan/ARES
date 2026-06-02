@@ -33,3 +33,17 @@ def test_figure_width_matches_span(tmp_path):
     assert "\\includegraphics[width=\\textwidth]{../figures/fig_1.pdf}" in tex
     for fid in ("fig_2", "fig_3", "fig_4", "fig_5", "fig_6"):
         assert f"\\includegraphics[width=\\columnwidth]{{../figures/{fid}.pdf}}" in tex
+
+
+def test_captions_have_no_placeholder_text(tmp_path):
+    tex = _build_tex(tmp_path)
+    assert "Placeholder for spike measurement" not in tex
+
+
+def test_captions_keep_real_descriptions(tmp_path):
+    tex = _build_tex(tmp_path)
+    # spot-check three captions survive intact after the spike strip
+    # (underscores are LaTeX-escaped in the rendered caption)
+    assert "compressed from Paper 2." in tex
+    assert "Byte-stability result (98/98 paired trials) and LLM Skeptic comparison." in tex
+    assert "Oracle decision logic, THREAT\\_CONFIRMED branch (oracle.py:101-111)." in tex

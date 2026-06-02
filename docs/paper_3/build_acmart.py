@@ -156,7 +156,7 @@ _FIGURE_ROSTER: tuple[FigureSpec, ...] = (
         height_in=2.6,
         caption=(
             "ARES three-agent pipeline (Architect / Skeptic / OracleJudge), "
-            "compressed from Paper 2. Placeholder for spike measurement."
+            "compressed from Paper 2."
         ),
     ),
     FigureSpec(
@@ -166,7 +166,7 @@ _FIGURE_ROSTER: tuple[FigureSpec, ...] = (
         height_in=2.4,
         caption=(
             "Leakage decomposition into citation-surface drift and "
-            "confidence-axis drift. Placeholder for spike measurement."
+            "confidence-axis drift."
         ),
     ),
     FigureSpec(
@@ -176,7 +176,7 @@ _FIGURE_ROSTER: tuple[FigureSpec, ...] = (
         height_in=2.4,
         caption=(
             "Byte-stability result (98/98 paired trials) and LLM Skeptic "
-            "comparison. Placeholder for spike measurement."
+            "comparison."
         ),
     ),
     FigureSpec(
@@ -186,8 +186,7 @@ _FIGURE_ROSTER: tuple[FigureSpec, ...] = (
         height_in=2.5,
         caption=(
             "Decoupling: Verdict structure showing decision and explanation "
-            "surfaces sourced from different paths. Placeholder for spike "
-            "measurement."
+            "surfaces sourced from different paths."
         ),
     ),
     FigureSpec(
@@ -196,8 +195,7 @@ _FIGURE_ROSTER: tuple[FigureSpec, ...] = (
         span="single",
         height_in=1.4,
         caption=(
-            "light_skeptic.py:185 with annotation showing the discard. "
-            "Placeholder for spike measurement."
+            "light_skeptic.py:185 with annotation showing the discard."
         ),
     ),
     FigureSpec(
@@ -207,7 +205,7 @@ _FIGURE_ROSTER: tuple[FigureSpec, ...] = (
         height_in=2.6,
         caption=(
             "Oracle decision logic, THREAT_CONFIRMED branch "
-            "(oracle.py:101-111). Placeholder for spike measurement."
+            "(oracle.py:101-111)."
         ),
     ),
 )
