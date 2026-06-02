@@ -20,6 +20,11 @@ from pathlib import Path
 
 import matplotlib
 matplotlib.use("pdf")
+# B3 fix (Session 080): embed TrueType fonts (fonttype 42) instead of the
+# matplotlib PDF-backend default of Type 3, which ACM camera-ready /
+# IEEE PDF eXpress reject.
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
