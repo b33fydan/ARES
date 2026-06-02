@@ -128,6 +128,7 @@ def run_guarded_cycle(
     hot_swap_factory: Optional[Callable[[], "ThreatAnalyzer"]] = None,
     agent_id_prefix: str = "ares",
     include_narration: bool = True,
+    sanitize_supporting_facts: bool = False,
 ) -> GuardedCycleResult:
     """Run a firewall-guarded single-turn dialectical cycle.
 
@@ -152,6 +153,8 @@ def run_guarded_cycle(
             Required when enable_hot_swap is True.
         agent_id_prefix: Prefix for generated agent IDs.
         include_narration: If True, run OracleNarrator for human explanation.
+        sanitize_supporting_facts: If True, re-derive Verdict.supporting_fact_ids
+            from the packet (framing-invariant). Default False = legacy passthrough.
 
     Returns:
         GuardedCycleResult with cycle output and firewall metadata.
@@ -359,6 +362,11 @@ def run_guarded_cycle(
             cycle_id=cycle_id,
             cause=e,
         ) from e
+
+    # --- Optional supporting_fact_ids sanitization (opt-in, default off) ---
+    if sanitize_supporting_facts:
+        from ares.dialectic.agents.verdict_sanitizer import sanitize_verdict
+        verdict = sanitize_verdict(verdict, packet)
 
     # --- SYNTHESIS phase (optional narration) ---
     narrator_message: Optional[DialecticalMessage] = None

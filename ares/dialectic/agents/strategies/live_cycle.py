@@ -45,6 +45,7 @@ def run_cycle_with_strategies(
     narrative_generator: Optional["NarrativeGenerator"] = None,
     agent_id_prefix: str = "ares",
     include_narration: bool = True,
+    sanitize_supporting_facts: bool = False,
 ) -> CycleResult:
     """Run a single-turn dialectical cycle with injected strategies.
 
@@ -60,6 +61,8 @@ def run_cycle_with_strategies(
         narrative_generator: Strategy for OracleNarrator's explanation.
         agent_id_prefix: Prefix for generated agent IDs.
         include_narration: If True, run OracleNarrator for human explanation.
+        sanitize_supporting_facts: If True, re-derive Verdict.supporting_fact_ids
+            from the packet (framing-invariant). Default False = legacy passthrough.
 
     Returns:
         CycleResult with verdict and all messages.
@@ -159,6 +162,14 @@ def run_cycle_with_strategies(
             cycle_id=cycle_id,
             cause=e,
         ) from e
+
+    # --- Optional supporting_fact_ids sanitization (opt-in, default off) ---
+    # Re-derive the verdict's cited facts from the packet alone so framing
+    # cannot move them. Done before the narrator so the narration cites the
+    # sanitized set. Lazy import keeps the default path's import graph intact.
+    if sanitize_supporting_facts:
+        from ares.dialectic.agents.verdict_sanitizer import sanitize_verdict
+        verdict = sanitize_verdict(verdict, packet)
 
     # --- SYNTHESIS phase (optional narration) ---
     narrator_message: Optional[DialecticalMessage] = None
