@@ -57,10 +57,19 @@ network_only = pytest.mark.skipif(
 
 
 # Acknowledged PLACEHOLDER entries: bib keys without a stable
-# identifier pending human resolution. Empty for Session 064 — the
-# scaffolding rule is "no placeholders in references.bib"; unverified
-# bibkeys live in skeleton_v1_0.json instead.
-ACKNOWLEDGED_PLACEHOLDERS: frozenset[str] = frozenset()
+# identifier pending human resolution. Unverified bibkeys live in
+# skeleton_v1_0.json instead (the "no placeholders in references.bib"
+# scaffolding rule).
+#
+# gmys-casiano-2026 (Paper 2 self-cite) is VERIFIED (it is in
+# EXPECTED_VERIFIED_KEYS) but has no public stable identifier yet:
+# Paper 2 is an as-yet-unposted preprint. Session 080 (B4) removed its
+# only prior "identifier" — a `note` field rendering a local
+# `docs/paper_2/...docx` path, which was a double-blind soft-deanon
+# fingerprint + a non-standard citation in the published bibliography.
+# Acknowledged here pending the Paper 2 arXiv ID (see the TODO above the
+# entry in references.bib).
+ACKNOWLEDGED_PLACEHOLDERS: frozenset[str] = frozenset({"gmys-casiano-2026"})
 
 
 # The verified bibkeys for Paper 3 v1.0. These must round-trip cleanly
