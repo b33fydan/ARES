@@ -77,18 +77,19 @@ gets fixed. Three quality fixes are recommended before camera-ready; the cheapes
   (and `ps.fonttype = 42`), re-render the 6 figures, recompile, re-check `pdffonts`.
 - **Whose call:** CC-fixable.
 
-### B4 — LOW / JUDGMENT · local `.docx` path renders in the published bibliography
-- **Evidence:** the Paper 2 self-cite renders as *"… Preprint (2026). Canonical draft
-  at docs/paper_2/PAPER2_DRAFT_v1_2.docx."* — the `note` field of `gmys-casiano-2026`
-  (`references.bib:40`).
-- **Why it matters:** soft-deanon fingerprint (exposes repo workflow structure) +
-  non-standard citation (a published reference shouldn't point at a local file). The
-  bib header (`references.bib:19–25`) claims `note` fields "are removed entirely" — this
-  one slipped through.
-- **Fix:** drop the `note` from `gmys-casiano-2026`, or replace it with Paper 2's arXiv
-  ID once it posts (existing TODO at `references.bib:33`).
-- **Whose call:** **Dan** — `ANONYMIZATION_PLAN.md` item 3 logged this as a deferred
-  strategy decision. (Recommendation: drop the note.)
+### B4 — ✅ RESOLVED (2026-06-02, post-S080) · local `.docx` path removed from the bibliography
+- **Was:** the Paper 2 self-cite rendered *"… Preprint (2026). Canonical draft at
+  docs/paper_2/PAPER2_DRAFT_v1_2.docx."* — the `note` field of `gmys-casiano-2026`
+  (soft-deanon fingerprint + non-standard citation; the bib header claimed `note` fields
+  were "removed entirely", but this one slipped through).
+- **Fix applied:** dropped the `note` field; the bibliography now renders just
+  *"… Preprint (2026)."*. Recompiled — `.docx` path count in the PDF is now **0**; gates
+  re-green (substrings 25/25, body 10 / overall 11, author-clean).
+- **Coupling caught by the test gate:** the `note`'s `\url{}` was doubling as the entry's
+  stable identifier (`test_citation_existence.py`). Resolved honestly via the designed
+  escape hatch — `gmys-casiano-2026` added to `ACKNOWLEDGED_PLACEHOLDERS` (it is a
+  *verified* self-cite that simply has no public ID until Paper 2 posts to arXiv), not by
+  weakening the rule or re-adding the leak.
 
 ### B5 — JUDGMENT (likely no action) · self-cite volume + appendix-routed figures
 - ~10+ `[Gmys-Casiano 2026]` cites to a single prior author — standard third-person
@@ -107,27 +108,29 @@ gets fixed. Three quality fixes are recommended before camera-ready; the cheapes
 | Format | double-column ACM (sigconf) | `sigconf, anonymous, review` | ✓ |
 | GenAI-use declaration | **mandatory**, after refs/appendices | present (Appendix B) | ✓ |
 | Anonymity | double-blind | anonymous mode on; metadata clean | ✓ |
+| Submission portal | HotCRP **https://aisec26.hotcrp.com/** | — | Dan-manual upload |
+| Abstract registration | **none** (single firm paper deadline) | n/a | ✓ confirmed 2026-06-02 |
 
 > Body is *exactly* 10 pages — the caption fix (B1) only ever *shortens* captions, so it
 > is safe for the budget. Don't let any future edit push the body past 10.
 
 ## D. Pre-submission checklist (supersedes `ANONYMIZATION_PLAN.md` item 4)
 
-**CC-fixable (with Dan's go-ahead):**
-- [ ] B1 + B2 — rewrite 6 captions + make `build_acmart.py` emit `\includegraphics`, then regenerate the `.tex` from the script (one honest pass)
-- [ ] B3 — Type-1 (`fonttype 42`) in `build_figures.py`, re-render the 6 figures
-- [ ] Recompile (`pdflatex ×2` + `bibtex`); re-run `verify_pdf_substrings.py` (expect 25/25), `page_audit.py` (expect body ≤ 10 / overall ≤ 12), `pytest tests/paper_3/`
-- [ ] Re-confirm `pdffonts` shows **no Type 3**; `pdfinfo` / XMP still author-clean
+**CC-fixable — ✅ DONE (2026-06-02; S080 + B4 follow-up):**
+- [x] B1 + B2 — captions stripped + `build_acmart.py` emits `\includegraphics`; `.tex` regenerated (empty-diff proof)
+- [x] B3 — Type-1 (`fonttype 42`) in `build_figures.py`; 6 figures re-rendered (now CID TrueType)
+- [x] Recompile + gates: `verify_pdf_substrings.py` 25/25, `page_audit.py` body 10 / overall 11, `pytest tests/paper_3/` 104 pass; full suite 4173+75skip+0fail
+- [x] `pdffonts` shows **no Type 3**; `pdfinfo` / XMP author-clean
+- [x] B4 — `.docx` note-field dropped from `references.bib`; bibliography clean
 
 **Dan strategy calls:**
-- [ ] B4 — drop the `note` `.docx` path (recommend: yes)
-- [ ] B5 — final self-cite + appendix-dependency read
+- [ ] B5 — final self-cite + appendix-dependency read (low priority; both judged acceptable)
 
 **Dan manual (submission logistics):**
-- [ ] anonymous.4open.science mirror (steps in §E); wire URL into Appendix B only if adding one
+- [ ] anonymous.4open.science mirror — **optional** (only matters if you want reviewers to inspect code; AISec recommends it *when linking a repo* — see §E). **Never print the real `github.com/...` URL.**
 - [ ] Eyeball running headers ("Anon.") on every page of the *final* recompiled PDF
-- [ ] Upload PDF to the AISec submission portal (HotCRP — link from https://aisec.cc/)
-- [ ] Buffer: start the formal packet by **~2026-07-10** (≥ 2 weeks before the firm deadline)
+- [ ] Upload PDF to the AISec HotCRP portal: **https://aisec26.hotcrp.com/** (single **firm** deadline 2026-07-24; **no** separate abstract registration)
+- [ ] Buffer: start the formal packet by **~2026-07-10**
 
 ## E. anonymous.4open.science mirror (carried from `ANONYMIZATION_PLAN.md` item 1, CFP-confirmed)
 
@@ -138,3 +141,14 @@ gets fixed. Three quality fixes are recommended before camera-ready; the cheapes
    narratively, "publicly available under GPL-3.0", with no URL — re-verified
    2026-06-02). If you add a URL, put `\url{…}` in Appendix B; otherwise leave it for
    camera-ready.
+
+> **AISec '26 policy note (verified 2026-06-02 against aisec.cc):** the CFP says
+> *"Ensure that there is no way to identify authors, including … when linking code
+> repositories (consider using anonymous.4open.science)."* So the mirror is the
+> **recommended** path *only if you choose to link a repo* — the paper links none, so it
+> is compliant as-is. The repo (`github.com/b33fydan/ARES`) is public and ARES has a
+> public following, but that does **not** break double-blind: AISec's policy governs the
+> *artifact*, is silent on prior public dissemination/publicity, and reviewers are not to
+> actively de-anonymize. The one rule that matters: **never print the real GitHub URL in
+> the submission PDF.** (No separate abstract-registration deadline; single firm deadline
+> 2026-07-24; portal https://aisec26.hotcrp.com/.)
