@@ -33,3 +33,11 @@ def test_cost_ceiling_hard_capped():
 def test_invalid_provider_rejected():
     with pytest.raises(ValueError, match="provider"):
         ArchitectFramingConfig(s059_traces_path="x", provider="bogus")
+
+
+def test_scaled_ceiling_under_new_cap_is_accepted():
+    # S082 scale: the run uses --cost-ceiling 35 (est ~$26.5). A $35 ceiling is
+    # refused under the old $8 cap and accepted under the raised $40 cap. This
+    # locks the new capability and is the proof-of-change for the cap bump.
+    cfg = ArchitectFramingConfig(s059_traces_path="x", cost_ceiling_usd=35.0)
+    assert cfg.cost_ceiling_usd == 35.0

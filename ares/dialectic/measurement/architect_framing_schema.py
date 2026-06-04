@@ -11,7 +11,7 @@ from ares.dialectic.measurement.leakage_runner import (
 
 CONDITION_BASELINE: str = "baseline"
 CONDITION_CONTROL: str = "control"
-ARCHITECT_FRAMING_HARD_CEILING_USD: float = 8.0  # tighter than leakage runner's 20.0
+ARCHITECT_FRAMING_HARD_CEILING_USD: float = 40.0  # raised 8->40 (S082) to allow the K=20/17-scenario scaled run (~$26.5 at ceiling $35); a runaway-spend guard, not a tight pilot cap
 
 VERDICT_REAL: str = "framing_channel_real"
 VERDICT_NOISE: str = "within_noise"
