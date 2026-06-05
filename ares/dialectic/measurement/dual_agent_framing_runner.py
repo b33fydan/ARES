@@ -130,3 +130,123 @@ def run_preflight(
         "cost_ceiling_usd": config.cost_ceiling_usd,
         "exceeds_ceiling": est > config.cost_ceiling_usd,
     }
+
+
+def run_measurement(
+    *, config: DualAgentFramingConfig, client=None, cycle_fn: CycleFn = _run_one_cycle,
+) -> DualAgentFramingSummary:
+    if client is None:
+        client = make_client(config.provider, model=config.model)
+
+    run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')}-{uuid.uuid4().hex[:6]}"
+    registry = build_registry_v3()
+    by_id = {s.metadata.scenario_id: s for s in registry.all_scenarios()}
+
+    selected = _selected_ids(config, by_id)
+    to_run = selected[: config.max_scenarios]
+    deferred = tuple(selected[config.max_scenarios:])
+
+    mutator = PairedScenarioMutator(
+        operators=tuple(_resolve_operator(n) for n in config.operator_names)
+    )
+
+    records: list[DualAgentResampleRecord] = []
+    scenario_results: list[ScenarioDualFramingResult] = []
+    total_cost = 0.0
+    halt_reason = "completed"
+
+    for sid in to_run:
+        if total_cost >= config.cost_ceiling_usd:
+            halt_reason = "cost_ceiling"
+            deferred = deferred + (sid,)
+            continue
+        base = by_id[sid]
+        arch_base, skep_base = _resample_dual(
+            base, client=client, cycle_fn=cycle_fn, condition=CONDITION_BASELINE,
+            operator_name=None, k=config.k_resamples, sink=records)
+        arch_within = within_distances(arch_base)
+        skep_within = within_distances(skep_base)
+
+        arch_ops, skep_ops, mirror_records, skipped = [], [], [], []
+        for op_name in config.operator_names:
+            try:
+                pair = mutator.mutate(base, op_name)
+            except SkeletonInvariantError:
+                skipped.append(op_name)
+                continue
+            arch_framed, skep_framed = _resample_dual(
+                pair.mutated_scenario, client=client, cycle_fn=cycle_fn,
+                condition=framing_condition(op_name), operator_name=op_name,
+                k=config.k_resamples, sink=records)
+            arch_ops.append(classify_operator(
+                cross_distances(arch_base, arch_framed), arch_within,
+                seed=config.seed, operator_name=op_name))
+            skep_ops.append(classify_operator(
+                cross_distances(skep_base, skep_framed), skep_within,
+                seed=config.seed, operator_name=op_name))
+            mirror_records.append(build_mirror_record(
+                scenario_id=sid, operator_name=op_name,
+                arch_base_sets=arch_base, arch_framed_sets=arch_framed,
+                skep_base_sets=skep_base, skep_framed_sets=skep_framed))
+
+        # single joint positive control: drop the most-jointly-cited fact.
+        arch_ctrl_cross: list[float] = []
+        skep_ctrl_cross: list[float] = []
+        arch_ctrl_exceeds = skep_ctrl_exceeds = False
+        try:
+            drop_fid = choose_control_drop_fact(base.packet, arch_base + skep_base)
+            ctrl = build_positive_control_scenario(base, drop_fact_id=drop_fid)
+            arch_ctrl, skep_ctrl = _resample_dual(
+                ctrl, client=client, cycle_fn=cycle_fn, condition=CONDITION_CONTROL,
+                operator_name=_CONTROL_SENTINEL, k=config.k_resamples, sink=records)
+            arch_ctrl_cross = cross_distances(arch_base, arch_ctrl)
+            skep_ctrl_cross = cross_distances(skep_base, skep_ctrl)
+            acv = classify_operator(arch_ctrl_cross, arch_within,
+                                    seed=config.seed, operator_name=_CONTROL_SENTINEL)
+            scv = classify_operator(skep_ctrl_cross, skep_within,
+                                    seed=config.seed, operator_name=_CONTROL_SENTINEL)
+            arch_ctrl_exceeds = acv.effect_size > 0.0 and acv.p_value < 0.05
+            skep_ctrl_exceeds = scv.effect_size > 0.0 and scv.p_value < 0.05
+        except ValueError:
+            pass
+
+        scenario_results.append(ScenarioDualFramingResult(
+            scenario_id=sid,
+            architect=AgentFramingResult(
+                agent=AGENT_ARCHITECT, within_distances=tuple(arch_within),
+                control_distances=tuple(arch_ctrl_cross),
+                control_exceeds_noise=arch_ctrl_exceeds, operator_results=tuple(arch_ops)),
+            skeptic=AgentFramingResult(
+                agent=AGENT_SKEPTIC, within_distances=tuple(skep_within),
+                control_distances=tuple(skep_ctrl_cross),
+                control_exceeds_noise=skep_ctrl_exceeds, operator_results=tuple(skep_ops)),
+            mirror=tuple(mirror_records),
+            skipped_operators=tuple(skipped),
+        ))
+        total_cost = sum(r.cost_usd for r in records)
+
+    traces_dir = Path(config.traces_root) / run_id
+    traces_dir.mkdir(parents=True, exist_ok=True)
+    traces_path = traces_dir / "traces.jsonl"
+    with traces_path.open("w", encoding="utf-8") as fh:
+        for r in records:
+            fh.write(json.dumps(r.to_dict(), sort_keys=True) + "\n")
+
+    control_valid_architect = bool(scenario_results) and all(
+        s.architect.control_exceeds_noise for s in scenario_results)
+    control_valid_skeptic = bool(scenario_results) and all(
+        s.skeptic.control_exceeds_noise for s in scenario_results)
+
+    summary = DualAgentFramingSummary(
+        run_id=run_id,
+        timestamp_iso=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        git_sha=_git_sha(), provider=config.provider, model=config.model,
+        k_resamples=config.k_resamples, operator_names=config.operator_names,
+        scenario_results=tuple(scenario_results), deferred_scenario_ids=deferred,
+        control_valid_architect=control_valid_architect,
+        control_valid_skeptic=control_valid_skeptic,
+        total_cost_usd=total_cost, halt_reason=halt_reason, traces_path=str(traces_path),
+    )
+    (traces_dir / "summary.json").write_text(
+        json.dumps(dataclasses.asdict(summary), indent=2, sort_keys=True), encoding="utf-8")
+    return summary
