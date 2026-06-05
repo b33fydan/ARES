@@ -6,10 +6,12 @@ the Architect cites all 5 facts in baseline and collapses to the single
 threat-narrative fact {inj020-fact-003} under every operator, while the
 `threat_dismissed` decision is invariant.
 
-It also surfaces (without characterizing) that the recorded
-`oracle_supporting_facts` is NOT a literal copy of `architect_cited_facts`
-in this run -- they differ in 100/100 INJ-020 records -- so the downstream
-Oracle explanation surface is a separate phenomenon, not a naive passthrough.
+It also shows WHY the recorded `oracle_supporting_facts` is NOT a literal copy
+of `architect_cited_facts` (they differ in 100/100 INJ-020 records):
+`compute_verdict` is outcome-conditioned, and INJ-020 is DISMISSED, so its
+support set is the Skeptic's facts, not the Architect's. The per-outcome
+arch-vs-oracle section verifies this corpus-wide (CONFIRMED -> arch==oracle;
+INCONCLUSIVE -> arch subset of oracle; DISMISSED -> differ).
 
 Read-only. Stdlib only. No LLM, no network. ASCII output. Run:
 
@@ -178,6 +180,29 @@ def section_corpus(rows: dict) -> None:
         print(f"  {k:9s}: {v}")
 
 
+def section_oracle_outcome(rows: dict) -> None:
+    """Verify the outcome-conditioned decision table corpus-wide (oracle.py:100-109):
+    CONFIRMED -> support == Architect facts; INCONCLUSIVE -> Architect subset of
+    support (arch | skep); DISMISSED -> support == Skeptic facts (differs from
+    Architect). This is WHY oracle_supporting_facts != architect_cited_facts for
+    INJ-020 (DISMISSED) -- it is a different agent's channel, not an Oracle transform.
+    """
+    print("\n## oracle_supporting_facts vs architect_cited_facts, by baseline outcome")
+    hdr = (f"{'scenario':9s} {'baseline outcome':18s} "
+           f"{'arch==oracle':>13s} {'arch<=oracle':>13s}")
+    print(hdr)
+    print("-" * len(hdr))
+    for s in sorted(rows):
+        base = [r for r in rows[s] if r["condition"] == "baseline"]
+        if not base:
+            continue
+        oc = Counter(r["final_outcome"] for r in base).most_common(1)[0][0]
+        n = len(base)
+        eq = sum(1 for r in base if arch_set(r) == oracle_set(r))
+        sub = sum(1 for r in base if arch_set(r) <= oracle_set(r))
+        print(f"{s:9s} {oc:18s} {eq:>10d}/{n:<2d} {sub:>10d}/{n:<2d}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--traces", type=Path, default=DEFAULT_TRACES)
@@ -190,6 +215,7 @@ def main() -> None:
     section_detail("INJ-020", rows)
     section_detail("INJ-014", rows)
     section_corpus(rows)
+    section_oracle_outcome(rows)
 
 
 if __name__ == "__main__":
