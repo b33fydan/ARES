@@ -203,6 +203,50 @@ def section_oracle_outcome(rows: dict) -> None:
         print(f"{s:9s} {oc:18s} {eq:>10d}/{n:<2d} {sub:>10d}/{n:<2d}")
 
 
+def section_skeptic_drift(rows: dict) -> None:
+    """FREE recon of the Skeptic's explanation channel (S083 follow-up). For
+    DISMISSED verdicts, oracle_supporting_facts == the Skeptic's cited facts
+    (oracle.py:104-105), so the Skeptic's drift reads straight off these traces.
+    Exploratory: raw baseline-vs-framed modal sets, NO noise floor / positive
+    control. Architect shown for contrast -- the dual-agent mirror (Architect
+    collapses toward the contested fact, Skeptic expands toward it).
+    """
+    def skep_modal(recs, cond):
+        dis = [r for r in recs
+               if r["condition"] == cond and r["final_outcome"] == "threat_dismissed"]
+        if len(dis) < 5:                       # need a usable dismissed sample
+            return None, 0
+        (fs, _), = Counter(oracle_set(r) for r in dis).most_common(1)
+        return fs, len(dis)
+
+    print("\n## Dual-agent drift (recon): Skeptic vs Architect, DISMISSED scenarios")
+    hdr = (f"{'scenario/operator':44s} {'SKEP jac':>8s} {'SKEP dir':>9s} "
+           f"{'ARCH jac':>8s} {'ARCH dir':>9s} {'n_dis':>5s}")
+    print(hdr)
+    print("-" * len(hdr))
+    total = moved = both = 0
+    for s in sorted(rows):
+        recs = rows[s]
+        sB, _ = skep_modal(recs, "baseline")
+        if sB is None:
+            continue
+        aB, _, _ = modal(recs, "baseline")
+        for op in OPERATORS:
+            sF, sFn = skep_modal(recs, f"framing:{op}")
+            if sF is None:
+                continue
+            aF, _, _ = modal(recs, f"framing:{op}")
+            sj, aj = jaccard(sB, sF), jaccard(aB, aF)
+            total += 1
+            moved += sj > 0
+            both += (sj > 0 and aj > 0)
+            print(f"{s + '/' + op:44.44s} {sj:>8.2f} {classify(sB, sF):>9s} "
+                  f"{aj:>8.2f} {classify(aB, aF):>9s} {sFn:>5d}")
+    print(f"\nSkeptic drifts (jac>0): {moved}/{total}; both agents drift: {both}/{total}.")
+    print("Exploratory only -- Skeptic baseline is noisier than the Architect's, so "
+          "publication-grade numbers need a dedicated noise-controlled run.")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--traces", type=Path, default=DEFAULT_TRACES)
@@ -216,6 +260,7 @@ def main() -> None:
     section_detail("INJ-014", rows)
     section_corpus(rows)
     section_oracle_outcome(rows)
+    section_skeptic_drift(rows)
 
 
 if __name__ == "__main__":

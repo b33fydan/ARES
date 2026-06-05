@@ -61,6 +61,19 @@ Classifying every scenario×operator citation change (`collapse` = facts dropped
 - **Baseline size does not predict collapse:** INJ-026 and INJ-031 hold 6-fact baselines perfectly stable (Jaccard 0.00, every operator), while INJ-020 (5 facts) collapses hard. → rebuts "a big baseline is just easy to move."
 - **INJ-032 is the mirror image** (1→6 expansion, Jaccard 0.83) but its noisy baseline (13/20) keeps it `inconclusive` — showing it is INJ-020's *stability*, not just its magnitude, that makes it significant.
 
+## Dual-agent drift: the Skeptic mirrors the Architect (free recon)
+A zero-cost follow-up (no new run): for DISMISSED verdicts the judge stores the *Skeptic's* cited facts as `oracle_supporting_facts` (`oracle.py:104-105`), so the Skeptic's explanation channel reads straight off these traces. The Skeptic drifts under framing too — in **10 of 17** operator-conditions, with **7 of 17** showing *both* agents drift — with a clean directional asymmetry:
+
+| scenario | Architect | Skeptic |
+|---|---|---|
+| INJ-020 | **collapses** all-5 → `{f3}` (0.80, all 3 ops) | **expands** `{f1,f2,f4}` → `{all 5}` (0.40, all 3 ops) |
+| INJ-014 | collapses 6→2 (prefix, 0.67) | expands (0.20–0.33, all 3 ops) |
+| INJ-032 | expands 1→6 (0.83, prefix/suffix) | expands (0.17, all 3 ops) |
+
+The Architect **sheds** facts (narrows *to* the contested threat fact); the Skeptic **adds** facts (broadens *to include* it, to rebut it). Under cosmetic rewording, **both agents' explanations are magnetised by the contested fact — in mirror image — while the decision is unchanged.** This generalises explanation drift from a single agent to a system-level property.
+
+**Status: recon, not a measurement.** These Skeptic Jaccards are *raw* baseline-vs-framed (no within-resample noise floor, no positive control), and the Skeptic's baseline is itself noisier than the Architect's (INJ-020's defense varies between 3- and 4-fact sets even at baseline), so the magnitudes are indicative only. A publication-grade claim needs a dedicated Skeptic-path run (records the Skeptic's facts directly across all 17 scenarios, with the S077 noise + positive-control machinery) — **deferred to camera-ready / future work.** Reproduce via the analysis script's `section_skeptic_drift`.
+
 ## Decision determinism vs explanation drift
 Across all 100 INJ-020 records the decision is `threat_dismissed` and Architect confidence stays ~0.38–0.41. The **decision channel is invariant**; the **explanation channel (cited evidence) is highly steerable.** The two are cleanly dissociated — the cleanest available illustration that, in this architecture, framing moves *what the model says it relied on* without moving *what it decided*.
 
