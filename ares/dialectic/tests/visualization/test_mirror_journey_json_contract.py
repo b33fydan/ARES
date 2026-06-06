@@ -49,6 +49,10 @@ def test_hero_real_numbers(journey):
     assert len(h["skeptic"]["framed_facts"]) == 5  # expands to all 5
     assert h["verdict"] == "threat_dismissed"
     assert h["verdict_held_fraction"] == 1.0
+    # noise floor + p-value are the published S084 honesty numbers (scene 3)
+    for agent in ("architect", "skeptic"):
+        assert h[agent]["within_noise"] == 0.0
+        assert h[agent]["p_value"] == 0.0
 
 
 def test_landscape_real_numbers(journey):

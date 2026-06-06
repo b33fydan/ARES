@@ -2,10 +2,11 @@
 
 The S084 dual-agent run records BOTH agents' cited facts per resample, keyed by
 ``condition`` (baseline | control | framing:<operator>). We recompute the
-INJ-020 hero (modal cited-fact sets, jaccard distances, verdict-held fraction)
-directly from the traces. The aggregate "landscape" prevalence is the published
-S084 result, carried as documented constants (see source below) and pinned by
-the JSON contract test.
+INJ-020 hero cited-fact sets (modal), jaccard distances, and verdict-held
+fraction directly from the traces. The run-level aggregates the per-resample
+traces don't expose — each agent's within-noise floor, the framing p-value, and
+the cross-scenario "landscape" prevalence — are the published S084 result,
+carried as documented constants (see below) and pinned by the JSON contract test.
 
 New file (ARES "new files only" rule); peer of cycle_trace_builder.py.
 """
@@ -25,6 +26,8 @@ from ares.dialectic.visualization.mirror_journey_schema import (
 
 HERO_SCENARIO = "INJ-020"
 BASELINE_CONDITION = "baseline"
+# INJ-020 is operator-universal in S084 (arch -> {f3}, skep -> all 5,
+# J=0.80/0.40 on prefix, suffix, AND synonym), so prefix is representative.
 HERO_FRAMING_CONDITION = "framing:framing_prefix_v1"
 THREAT_FACT = "inj020-fact-003"
 
@@ -36,6 +39,14 @@ LANDSCAPE = Landscape(
     opposed=4, aligned=5, single=20, none_=21,
     architect_real=11, skeptic_real=9, n_scenarios=17,
 )
+
+# INJ-020 within-noise floor and framing p-value (both agents, all operators).
+# Source: S084 report + summary.json (within_median=0.000, p_value=0.000 for
+# architect and skeptic on every framing operator). Carried as constants for the
+# same reason as LANDSCAPE: they are run-level stats the per-resample traces do
+# not expose. Retargeting this adapter to another run means updating these.
+HERO_WITHIN_NOISE = 0.0
+HERO_P_VALUE = 0.0
 
 
 def jaccard_distance(a: set[str], b: set[str]) -> float:
@@ -92,13 +103,13 @@ def build_mirror_journey(traces_path: Path, run_id: str) -> MirrorJourney:
     architect = AgentFraming(
         agent="architect", baseline_facts=arch_base, framed_facts=arch_framed,
         jaccard=round(jaccard_distance(set(arch_base), set(arch_framed)), 4),
-        within_noise=0.0, p_value=0.0,
+        within_noise=HERO_WITHIN_NOISE, p_value=HERO_P_VALUE,
         direction=_direction(arch_base, arch_framed),
     )
     skeptic = AgentFraming(
         agent="skeptic", baseline_facts=skep_base, framed_facts=skep_framed,
         jaccard=round(jaccard_distance(set(skep_base), set(skep_framed)), 4),
-        within_noise=0.0, p_value=0.0,
+        within_noise=HERO_WITHIN_NOISE, p_value=HERO_P_VALUE,
         direction=_direction(skep_base, skep_framed),
     )
     hero = Hero(
