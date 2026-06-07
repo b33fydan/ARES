@@ -7,7 +7,7 @@ tiers. No LLM, no network, no cost, no preflight. Emits a FrontierSummary with a
 """
 from __future__ import annotations
 
-from typing import Callable, Dict, List, Tuple
+from typing import Dict, List, Tuple
 
 from ares.dialectic.agents.light_skeptic_v2_ladder import (
     DETERMINISTIC_TIERS,
@@ -17,7 +17,6 @@ from ares.dialectic.measurement.read_depth_corpus import (
     ALL_ENTRIES,
     BENIGN_ENTRIES,
     MALIGN_ENTRIES,
-    CorpusCEntry,
     corpus_digest,
     inject_authorization,
 )
