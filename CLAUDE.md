@@ -1,7 +1,7 @@
 # CLAUDE.md — ARES Phase 7 (post-Session 086)
 
 **Last updated:** 2026-06-07
-**Test count floor (passing):** 4,056
+**Test count floor (passing):** 4,090
 
 > Context-hygiene rule: this file holds current state + the last 3 sessions in full.
 > Older session prose rolls off to `docs/SESSION_LOG.md` at the top of each session.
