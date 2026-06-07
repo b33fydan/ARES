@@ -254,7 +254,7 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 
 ### ARES-VISION "The Mirror" journey (Phase 7 / Session 085)
 - Spec/plan: `docs/superpowers/specs/2026-06-06-ares-vision-mirror-journey-design.md`, `docs/superpowers/plans/2026-06-06-ares-vision-mirror-journey.md`.
-- Data adapter (ARES): `ares/dialectic/visualization/mirror_journey_schema.py` (`AgentFraming`/`Hero`/`Landscape`/`MirrorJourney` + `mirror_journey_to_json`), `mirror_journey_builder.py` (`build_mirror_journey`, `jaccard_distance`; parses S084 traces by `condition`; INJ-020 modal sets; LANDSCAPE + within/p as sourced constants), `build_mirror_journey.py` (CLI). Artifact `docs/marketing/mirror-journey.json`; tests `ares/dialectic/tests/visualization/test_mirror_journey_{schema,builder,json_contract}.py` (+13).
+- Data adapter (ARES): `ares/dialectic/visualization/mirror_journey_{schema,builder}.py` + `build_mirror_journey.py` (CLI) → `docs/marketing/mirror-journey.json`. Parses S084 traces by `condition`; INJ-020 modal sets; LANDSCAPE/within/p as sourced constants. Tests `test_mirror_journey_{schema,builder,json_contract}.py` (+13).
 - Renderer (skyframe-main, staged not deployed): `assets/ares/mirror.{html,css,js}` + `mirror-journey.json`; "See it move →" link in `ares.html` hero-CTAs; CTA "Explore the live data" → `prism.html`. Vanilla IntersectionObserver, no Three.js. Auto-memory `project-s085-ares-vision-mirror`.
 
 ### Live results
