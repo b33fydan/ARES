@@ -52,7 +52,7 @@ class CorpusCEntry:
         return self.scenario.metadata.scenario_id
 
 
-def _build(sid: str, name: str, verdict: str, facts) -> BenchmarkScenario:
+def _build(sid: str, name: str, verdict: str, facts, winner="ARCHITECT") -> BenchmarkScenario:
     packet = EvidencePacket(packet_id=sid.lower(), time_window=_TW)
     for f in facts:
         packet.add_fact(f)
@@ -60,7 +60,7 @@ def _build(sid: str, name: str, verdict: str, facts) -> BenchmarkScenario:
     meta = ScenarioMetadata(
         scenario_id=sid, name=name, description=name,
         mitre_attack_ids=("T1003",), mitre_tactic="Credential Access",
-        difficulty_tier=3, expected_verdict=verdict, expected_winner="ARCHITECT",
+        difficulty_tier=3, expected_verdict=verdict, expected_winner=winner,
         fact_count=len(facts), notes="read-depth frontier corpus C",
     )
     return BenchmarkScenario(metadata=meta, packet=packet)
@@ -126,7 +126,7 @@ def _b_twin_001() -> BenchmarkScenario:
         _f(p, 1, "user-svc", "logon_type", "Service (Type 5)", SourceType.AUTH_LOG),
         _f(p, 2, "proc-svc", "process_name", "C:\\Windows\\System32\\svchost.exe"),
         _f(p, 3, "proc-svc", "command_line", "svchost.exe -k netsvcs -p"),
-    ])
+    ], winner="SKEPTIC")
 
 
 def _b_twin_002() -> BenchmarkScenario:
@@ -139,7 +139,7 @@ def _b_twin_002() -> BenchmarkScenario:
         _f(p, 3, "host-ws01b", "file_created",
            "C:\\Program Files\\Vendor\\update.exe signed installer",
            SourceType.SYSLOG),
-    ])
+    ], winner="SKEPTIC")
 
 
 def _b_carry_001() -> BenchmarkScenario:
@@ -150,7 +150,7 @@ def _b_carry_001() -> BenchmarkScenario:
            "https://cdn.example.com/users/public/tracker.js", SourceType.SYSLOG),
         _f(p, 2, "host-web", "http_user_agent", "Mozilla/5.0 standard browser",
            SourceType.SYSLOG),
-    ])
+    ], winner="SKEPTIC")
 
 
 def _b_clean_001() -> BenchmarkScenario:
@@ -162,7 +162,7 @@ def _b_clean_001() -> BenchmarkScenario:
         _f(p, 2, "host-fw", "port_scan", "single port 443 check", SourceType.SYSLOG),
         _f(p, 3, "change-mgmt", "change_ticket", "CHG-44021 approved maintenance",
            SourceType.AUTH_LOG),
-    ])
+    ], winner="SKEPTIC")
 
 
 MALIGN_ENTRIES: Tuple[CorpusCEntry, ...] = (
@@ -197,6 +197,9 @@ def inject_authorization(scenario: BenchmarkScenario) -> BenchmarkScenario:
     Rebuilds the packet with every existing fact plus a new ``change_ticket``
     fact, so the structural tier (which keys on auth-field presence) swings
     benign while the value-reading tiers stay malign. Deterministic.
+
+    Intended for malign scenarios; calling it on a scenario that already
+    contains an authorization fact simply adds a second one (no guard).
     """
     sid = scenario.metadata.scenario_id
     new_packet = EvidencePacket(

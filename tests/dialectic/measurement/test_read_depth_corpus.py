@@ -36,6 +36,8 @@ def test_counts_and_labels():
 def test_unique_scenario_ids_and_fact_prefixes():
     ids = [e.scenario.metadata.scenario_id for e in ALL_ENTRIES]
     assert len(set(ids)) == len(ids)
+    fact_ids = [f.fact_id for e in ALL_ENTRIES for f in e.scenario.packet.get_all_facts()]
+    assert len(set(fact_ids)) == len(fact_ids)
 
 
 def test_struct_twin_shares_field_skeleton_with_malign_twin():
