@@ -74,8 +74,8 @@ def test_positive_control_flips_tier1_only():
     for pc in s.positive_control_records:
         if pc.scenario_id.startswith("RDF-M-LEX-001") and pc.view == VIEW_STANDALONE:
             by_tier[pc.tier_id] = pc
-    assert by_tier["v1_field"].moved is True
-    assert by_tier["v1_field"].controlled_malign_verdict is False
+    assert by_tier["v2_structured"].moved is True
+    assert by_tier["v2_structured"].controlled_malign_verdict is False
     assert by_tier["v2_lexical"].moved is False
     assert by_tier["v2_lexical"].controlled_malign_verdict is True
 
