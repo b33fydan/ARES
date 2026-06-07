@@ -2,6 +2,9 @@
 """Tests for the read-depth frontier result schema."""
 from __future__ import annotations
 
+import dataclasses
+
+import pytest
 from ares.dialectic.measurement.read_depth_frontier_schema import (
     VIEW_CUMULATIVE,
     VIEW_STANDALONE,
@@ -64,8 +67,6 @@ def test_summary_roundtrip_via_json():
 
 
 def test_frozen():
-    import dataclasses
-    import pytest
     c = _coord()
     with pytest.raises(dataclasses.FrozenInstanceError):
         c.tpr = 0.1  # type: ignore[misc]

@@ -19,6 +19,7 @@ from ares.dialectic.measurement.read_depth_evasion_operators import (
     temp_to_temporary_transform,
 )
 from ares.dialectic.messages.protocol import MessageBuilder, MessageType, Phase
+import pytest
 from ares.dialectic.scripts.non_interference.paired_scenario_mutator import (
     PairedScenarioMutator,
     SkeletonInvariantError,
@@ -88,13 +89,12 @@ def test_operators_are_skeleton_invariant_via_mutator():
     s = _scenario([("process_name", "C:\\Temp\\update.exe")])
     mut = PairedScenarioMutator(operators=EVASION_OPERATORS, seed=0)
     pair = mut.mutate(s, "exe_to_binary_v1")  # must not raise
-    assert pair.skeleton_hash == pair.skeleton_hash  # constructed => invariant held
+    assert pair.mutation_record  # at least one fact value changed (skeleton held)
 
 
 def test_noop_when_token_absent_raises_via_mutator():
     s = _scenario([("normal_login", "user signed in at 09:00")])
     mut = PairedScenarioMutator(operators=EVASION_OPERATORS, seed=0)
-    import pytest
     with pytest.raises(SkeletonInvariantError):
         mut.mutate(s, "exe_to_binary_v1")  # no ".exe" => no-op => rejected
 
