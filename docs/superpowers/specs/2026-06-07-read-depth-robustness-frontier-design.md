@@ -58,7 +58,7 @@ without losing detection.
 | 1 | `v2-structured` | typed values (bool/int/enum) + fields | **new** | ~0 (a bool can't be paraphrased) | med — but *trusts* attacker-set structured facts |
 | 2 | `v2-lexical` | string values via raw regex/keyword | **new** | med–high (evadable by paraphrase) | med–high |
 | 3 | `v2-canonical` | tier-2 rules with normalize-then-match (case/path/synonym-lite) | **new** | med (partial recovery) | high |
-| 4 | `LLM` semantic | string values by meaning | exists (S084) | high (drift — S084) | highest, but noisy + FP-prone |
+| 4 | `LLM` semantic | string values by meaning | fresh Corpus-C run (S084 = machinery, not data) | high (drift — S084) | highest, but noisy + FP-prone |
 
 ### 3.1 The five malign-rule classes (from the V3 tribunal, Task 3)
 
@@ -116,6 +116,7 @@ is the recipe." Opposite punchline, equally publishable. Bands are committed *be
 - **Job:** guarantee coverage of injection **classes whose malign signal lives in the `value`** (the
   five classes in §3.1) — otherwise detection-gain is unmeasurable, because v1 cannot be beaten on
   signals that are not present.
+- **[SUPERSEDED by Phase B (S087): the strategy below was reversed — Corpus C is a purpose-built set of 8 fresh `RDF-*` scenarios with zero overlap with `injection_registry_v3`, not a reuse of v3. Design-time text retained for traceability.]**
 - **Strategy (minimal authoring):** reuse `injection_registry_v3.py` (33 scenarios) as the base;
   audit it for class coverage; author targeted additions **only** where a class is bare. Add **benign
   twins** (same structured skeleton, benign value) as the FP/negative-control set, and a **positive
@@ -152,7 +153,7 @@ is the recipe." Opposite punchline, equally publishable. Bands are committed *be
 - `ares/dialectic/measurement/read_depth_frontier_schema.py` — frozen result types (per-tier X/Y,
   per-scenario records, frontier summary).
 - `ares/dialectic/measurement/read_depth_frontier_runner.py` — offline runner for tiers 0–3; LLM
-  anchor via reuse/top-up.
+  anchor via a fresh full Corpus-C run (not an S084 reuse/top-up; see §9).
 - `ares/dialectic/measurement/read_depth_frontier_report.py` — markdown + frontier-coordinate
   emitter (feeds the eventual visual-companion plot).
 - Corpus C additions alongside the existing registries (new file; v3 untouched).
@@ -164,8 +165,8 @@ is the recipe." Opposite punchline, equally publishable. Bands are committed *be
 
 - Tiers 1–3 and the entire X/Y measurement for tiers 0–3 are **offline, deterministic, free**.
 - **Honest cost driver:** the LLM anchor (tier 4) costs API proportional to `|Corpus C| × K`.
-  Mitigations: reuse the S084 run (`20260605-194137-713674`) for the overlapping scenario subset;
-  bound a fresh top-up under a project cost ceiling (precedent: S082/S084 ran ~$24–25 at $40 cap).
+  **Correction (post-Phase-B, S087): this is a fresh, full Corpus-C run — *not* a reuse or "top-up" of S084.** Phase B replaced the "reuse `injection_registry_v3` as the base" plan with a purpose-built **Adaptive Corpus C** (8 fresh `RDF-*` scenarios). S084's run (`20260605-194137-713674`) measured 17 `INJ-*` scenarios from `injection_registry_v3` — **zero overlap** with Corpus C's `RDF-*` set — and carries **no benign control stratum**, so the frontier Y = TPR − FPR is *underivable* from it. **S084's legitimate residual role:** an out-of-corpus drift anchor, plus reuse of its framing operators and noise-floor/positive-control machinery (`architect_framing_{metrics,control}.py`) — *not* a source of tier-4 (X, Y) coordinates. **Estimated cost:** ~$7-12 for a full fresh Corpus-C anchor run (≈ $0.0144/cycle at S084's unit cost; Corpus C packets are smaller — 2-3 facts vs. ~6 for INJ — so the lower end is likely);
+  bound it under a project cost ceiling (precedent: S082/S084 ran ~$24–25 at $40 cap).
   Claim is "the novel deterministic contribution is free; the baseline anchor is the only meter."
 - Rough shape: LS v2 build ≈ 2–3 sessions; Corpus C + harness + measurement + report ≈ 2–3 sessions;
   interleavable. (Research estimates, not commitments.)
@@ -205,7 +206,7 @@ is the recipe." Opposite punchline, equally publishable. Bands are committed *be
 - Ladder: **5 points** (v1 / structured / lexical / canonical / LLM) — confirmed.
 - Y axis: **detection − FP** (single composite), not a 3D detection/FP split — confirmed.
 - Perturbation: **both families** — semantic paraphrase (primary) + lexical-evasion (in scope).
-- Corpus: **minimal authoring** assumed (reuse v3 + patch bare classes); fuller fresh corpus
+- Corpus: **RESOLVED in Phase B (S087) → fuller fresh corpus** (Adaptive Corpus C, 8 `RDF-*`, zero overlap with v3). Design-time note: **minimal authoring** was *assumed* (reuse v3 + patch bare classes); the fuller fresh corpus
   available if the author prefers — *flagged for final confirmation*.
 
 ## 13. Success criteria
@@ -229,6 +230,6 @@ phase is its own session-branch + squash-merge:
 - **Phase B — Adaptive Corpus C + perturbation harness (Step 3).** Author class-coverage additions +
   benign twins + positive control; wire the offline measurement runner for tiers 0–3.
 - **Phase C — Pre-registration + LLM anchor + frontier report.** Commit bands/falsifier, run the
-  bounded tier-4 top-up (the only metered step), emit the (X, Y) coordinates + report.
+  fresh full Corpus-C tier-4 run (~$7-12, the only metered step; not an S084 reuse — see §9), emit the (X, Y) coordinates + report.
 
 Writing-plans should scope to **Phase A first**, not attempt all three phases in one plan.
