@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 087)
+# CLAUDE.md — ARES Phase 7 (post-Session 088)
 
 **Last updated:** 2026-06-10
-**Test count floor (passing):** 4,090
+**Test count floor (passing):** 4,116
 
 > Context-hygiene rule: this file holds current state + the last 3 sessions in full.
 > Older session prose rolls off to `docs/SESSION_LOG.md` at the top of each session.
@@ -75,6 +75,7 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Session 084 — Dual-agent framing measurement + LIVE RESULT (run `20260605-194137-713674`, $24.41): Architect 11 REAL, Skeptic REAL on 9 conditions/6 scenarios; opposed mirror = INJ-020. Squash `75bb815`. (Full prose → `docs/SESSION_LOG.md`.)
 - Session 086 — Read-Depth Robustness Frontier Phase A: 5 LS-v2 peer modules (tiers 0-3 + ladder registry); +26 tests; 4231+75skip+0fail. Squash `59f59e5`.
 - Session 087 — Read-Depth Robustness Frontier Phase B: Adaptive Corpus C (8 scenarios + neg/pos controls) + offline frontier harness (`read_depth_{corpus,evasion_operators,frontier_schema,frontier_metrics,frontier_runner,frontier_report}.py`) + CLI `run_session_087.py`; per-tier (X,Y) in standalone+cumulative views (standalone J 0/0.25/0.50/0.75, cumulative flat 0.25); +34 tests; 4265+75skip+0fail. Squash `58562d7`.
+- Session 088 — Read-Depth Robustness Frontier Phase C scaffolding: pre-registration committed (bands frozen), tier-4 anchor runner (offline-tested, live run gated), verdict report. +~23 tests. Live tier-4 run + verdict = separate Dan-gated step.
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -269,6 +270,17 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - `ares/dialectic/agents/light_skeptic_v2_canonical.py` — tier 3: canonicalize-then-match.
 - `ares/dialectic/agents/light_skeptic_v2_ladder.py` — `DETERMINISTIC_TIERS` registry + `LADDER_ORDER`; LLM anchor named only.
 - Tests: `ares/dialectic/tests/agents/test_light_skeptic_v2_*.py` (+26 offline).
+
+### Read-depth Phase C — pre-registration + tier-4 anchor + verdict (Phase 7 / Session 088)
+- Spec/plan: `docs/superpowers/specs/2026-06-10-read-depth-frontier-phase-c-design.md`, `docs/superpowers/plans/2026-06-10-read-depth-frontier-phase-c.md`.
+- Pre-registration (gating artifact, bands frozen before run): `docs/paper_4/PREREGISTRATION_read_depth_frontier_phase_c.md`.
+- Decision rule + frozen bands: `ares/dialectic/measurement/read_depth_verdict.py` — `FRAMING_ROBUST_MAX_X` (0.10), `HIGH_DETECTION_MIN_J` (0.50), `CornerPoint`, `classify_frontier`, `VERDICT_SUPPORTED`/`VERDICT_FALSIFIED`. SSOT guard: `tests/paper_4/test_prereg_bands_match_code.py`.
+- Tier-4 result schema (frozen, CI + per-operator p): `ares/dialectic/measurement/read_depth_tier4_schema.py` — `Tier4OperatorRecord`, `Tier4ScenarioRecord`, `Tier4Coordinate`, `Tier4Summary`, `READ_DEPTH_TIER4_HARD_CEILING_USD` (15.0).
+- Tier-4 noise-gated flip metrics: `ares/dialectic/measurement/read_depth_tier4_metrics.py` — `malign_rate`, `majority_malign`, `flip_decision`, `bootstrap_flip_rate_ci` (reuses `architect_framing_metrics.permutation_pvalue`).
+- Tier-4 anchor runner (injectable `cycle_fn`, offline-tested; live run gated): `ares/dialectic/measurement/read_depth_tier4_anchor.py` — `Tier4Config`, `estimate_cost_usd`, `run_tier4_anchor`, `make_live_cycle_fn` (lazy network import). Malign verdict = `final_outcome == "threat_confirmed"`.
+- Verdict report (combine 5 coords, apply pre-registered rule, render): `ares/dialectic/measurement/read_depth_verdict_report.py` — `build_corner_points`, `render_verdict_report` (cumulative view is verdict-bearing).
+- CLI: `scripts/run_session_088.py` — `--dry-run`/`--preflight-only`/`--confirm-live`/`--cost-ceiling` ($15 hard cap), UTF-16 `.env`, prereg-file gate.
+- Tests: `tests/dialectic/measurement/test_read_depth_{verdict,tier4_schema,tier4_metrics,tier4_anchor,verdict_report}.py` + `tests/dialectic/measurement/test_run_session_088_cli.py` + `tests/paper_4/test_prereg_bands_match_code.py` (+~23 offline).
 
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
