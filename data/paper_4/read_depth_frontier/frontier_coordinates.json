@@ -1,0 +1,105 @@
+{
+  "config": {
+    "lexical_operator_names": [
+      "exe_to_binary_v1",
+      "temp_to_temporary_v1"
+    ],
+    "operating_point": 0.0,
+    "seed": 0,
+    "semantic_operator_names": [
+      "framing_prefix_v1",
+      "framing_suffix_v1"
+    ]
+  },
+  "coordinates": [
+    {
+      "fpr": 0.0,
+      "n_benign": 4,
+      "n_malign": 4,
+      "tier_id": "v1_field",
+      "tpr": 0.0,
+      "view": "standalone",
+      "x_lexical": 0.0,
+      "x_semantic": 0.0,
+      "youden_j": 0.0
+    },
+    {
+      "fpr": 0.75,
+      "n_benign": 4,
+      "n_malign": 4,
+      "tier_id": "v2_structured",
+      "tpr": 1.0,
+      "view": "standalone",
+      "x_lexical": 0.0,
+      "x_semantic": 0.0,
+      "youden_j": 0.25
+    },
+    {
+      "fpr": 0.25,
+      "n_benign": 4,
+      "n_malign": 4,
+      "tier_id": "v2_lexical",
+      "tpr": 0.75,
+      "view": "standalone",
+      "x_lexical": 0.4,
+      "x_semantic": 0.0,
+      "youden_j": 0.5
+    },
+    {
+      "fpr": 0.25,
+      "n_benign": 4,
+      "n_malign": 4,
+      "tier_id": "v2_canonical",
+      "tpr": 1.0,
+      "view": "standalone",
+      "x_lexical": 0.0,
+      "x_semantic": 0.0,
+      "youden_j": 0.75
+    },
+    {
+      "fpr": 0.0,
+      "n_benign": 4,
+      "n_malign": 4,
+      "tier_id": "v1_field",
+      "tpr": 0.0,
+      "view": "cumulative",
+      "x_lexical": 0.0,
+      "x_semantic": 0.0,
+      "youden_j": 0.0
+    },
+    {
+      "fpr": 0.75,
+      "n_benign": 4,
+      "n_malign": 4,
+      "tier_id": "v2_structured",
+      "tpr": 1.0,
+      "view": "cumulative",
+      "x_lexical": 0.0,
+      "x_semantic": 0.0,
+      "youden_j": 0.25
+    },
+    {
+      "fpr": 0.75,
+      "n_benign": 4,
+      "n_malign": 4,
+      "tier_id": "v2_lexical",
+      "tpr": 1.0,
+      "view": "cumulative",
+      "x_lexical": 0.0,
+      "x_semantic": 0.0,
+      "youden_j": 0.25
+    },
+    {
+      "fpr": 0.75,
+      "n_benign": 4,
+      "n_malign": 4,
+      "tier_id": "v2_canonical",
+      "tpr": 1.0,
+      "view": "cumulative",
+      "x_lexical": 0.0,
+      "x_semantic": 0.0,
+      "youden_j": 0.25
+    }
+  ],
+  "corpus_digest": "9401b7188ba790a5"
+}
