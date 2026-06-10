@@ -21,7 +21,7 @@ from ares.dialectic.measurement.read_depth_frontier_metrics import (
     is_malign_verdict, tpr_fpr, youden_j, flip_rate,
 )
 from ares.dialectic.measurement.read_depth_tier4_metrics import (
-    bootstrap_flip_rate_ci, flip_decision, majority_malign,
+    bootstrap_flip_rate_ci, flip_decision, majority_malign, malign_rate,
 )
 from ares.dialectic.measurement.read_depth_tier4_schema import (
     Tier4Coordinate, Tier4OperatorRecord, Tier4ScenarioRecord, Tier4Summary,
@@ -83,6 +83,10 @@ def run_tier4_anchor(cfg: Tier4Config, *, cycle_fn: CycleFn) -> Tier4Summary:
     for e in MALIGN_ENTRIES:
         op_recs: List[Tier4OperatorRecord] = []
         variants = _mutate_variants(e.scenario, _SEMANTIC_OPERATORS, cfg.seed)
+        # Positional zip assumes every framing operator mutated (no no-ops).
+        # True for the digest-frozen Corpus C (both framing ops mutate all 4
+        # malign scenarios); operator_name is provenance-only and never feeds
+        # the positionally-appended flip cells or any X/Y math.
         op_names = [op.operator_name for op in _SEMANTIC_OPERATORS][: len(variants)]
         b = base_llm[e.scenario_id]
         for op_name, variant in zip(op_names, variants):
@@ -96,7 +100,7 @@ def run_tier4_anchor(cfg: Tier4Config, *, cycle_fn: CycleFn) -> Tier4Summary:
             flipped_cum, _ = flip_decision(base_cum, pert_cum, seed=cfg.seed)
             cells["cumulative"].append(flipped_cum)
             op_recs.append(Tier4OperatorRecord(
-                operator_name=op_name, perturbed_malign_rate=majority_malign(pv) and 1.0 or 0.0,
+                operator_name=op_name, perturbed_malign_rate=malign_rate(pv),
                 flipped=flipped_sa, p_value=p, n_resamples=cfg.k_resamples))
         records.append(Tier4ScenarioRecord(
             scenario_id=e.scenario_id, is_malign=True, stratum=e.stratum,
