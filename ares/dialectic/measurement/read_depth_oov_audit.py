@@ -378,15 +378,15 @@ def _rewrite_table(orig, new) -> str:
 def make_audit_judge(provider: str, model: str = "") -> SingleJudgeFn:
     """Build a single-packet judge for one independent panelist (lazy network
     import). Reuses the frozen SOC-analyst judge prompt for comparability with
-    the verdict run; provider is one of anthropic/openai/gemini."""
+    the verdict run; provider is one of anthropic/openai/gemini. An unknown
+    provider raises ValueError downstream in make_client (the single validation
+    point); model="" resolves to that provider's default there too."""
     from ares.dialectic.measurement.read_depth_oov_validator import (
         make_live_judge_fn,
     )
-    from ares.dialectic.agents.strategies.client_factory import PROVIDER_DEFAULTS
-    resolved = model or PROVIDER_DEFAULTS[provider]
-    paired = make_live_judge_fn(resolved, provider)
+    paired = make_live_judge_fn(model, provider)
 
-    def _single(scenario):
+    def _single(scenario: BenchmarkScenario) -> Tuple[bool, float]:
         # the frozen judge only reads the second (evaded) argument
         return paired(scenario, scenario)
 
