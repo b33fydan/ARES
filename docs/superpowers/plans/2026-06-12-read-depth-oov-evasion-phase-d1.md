@@ -1410,19 +1410,27 @@ git commit -F <msgfile>   # feat(s089): Phase D CLI (preflight-gated, $10 cap, p
 
 ```python
 # tests/dialectic/measurement/test_read_depth_oov_no_network_anchor.py
-"""The deterministic seam (schema, validator gate, runner with injected fns)
-must carry no module-level LLM/network dependency — mirrors the v1 anchor."""
-import sys
+"""The deterministic seam (schema, generator, validator, runner) must not
+import anthropic at any level. Mirrors the established v1 / v2-ladder purity
+anchors: source-text inspection, which is robust to suite-order pollution
+(unlike a global sys.modules check). The lazy `make_client` import inside the
+make_live_* factories is fine — it is not a literal `import anthropic`."""
+import importlib
+import inspect
+
+_SEAM_MODULES = (
+    "ares.dialectic.measurement.read_depth_oov_schema",
+    "ares.dialectic.measurement.read_depth_oov_generator",
+    "ares.dialectic.measurement.read_depth_oov_validator",
+    "ares.dialectic.measurement.read_depth_oov_runner",
+)
 
 
-def test_schema_and_validator_do_not_import_anthropic_at_module_load():
-    for mod in ("ares.dialectic.measurement.read_depth_oov_schema",
-                "ares.dialectic.measurement.read_depth_oov_validator",
-                "ares.dialectic.measurement.read_depth_oov_runner"):
-        __import__(mod)
-    assert "anthropic" not in sys.modules, (
-        "a Phase-D measurement module imported anthropic at load time; the "
-        "live client must stay behind make_live_* lazy imports")
+def test_no_oov_seam_module_imports_anthropic():
+    for name in _SEAM_MODULES:
+        src = inspect.getsource(importlib.import_module(name))
+        assert "import anthropic" not in src, name
+        assert "from anthropic" not in src, name
 
 
 def test_runner_executes_with_injected_fakes_only():
@@ -1441,12 +1449,12 @@ def test_runner_executes_with_injected_fakes_only():
     assert summ.total_cost_usd == 0.0
 ```
 
-Note: if another already-imported test in the same session pulled in `anthropic`, run this file in isolation (`python -m pytest tests/dialectic/measurement/test_read_depth_oov_no_network_anchor.py -p no:cacheprovider -v`) so `sys.modules` reflects only this module's imports.
+This mirrors `test_light_skeptic_v2_ladder_and_purity.py::test_no_v2_module_imports_anthropic` (source-text inspection), so it stays green under the full-suite run in Task 9 — it does not depend on global `sys.modules` state.
 
-- [ ] **Step 2: Run to verify it passes immediately** (the modules from Tasks 1/3/4 already satisfy it — this is a guard, not new behavior)
+- [ ] **Step 2: Run to verify it passes** (the Task 1/2/3/4 modules already satisfy it — this is a guard, not new behavior)
 
 Run: `python -m pytest tests/dialectic/measurement/test_read_depth_oov_no_network_anchor.py -v`
-Expected: PASS (2 tests). If `test_schema_and_validator_...` fails, a module added a top-level `import anthropic` or a non-lazy `make_client` import — move it inside `make_live_*`.
+Expected: PASS (2 tests). If `test_no_oov_seam_module_imports_anthropic` fails, a seam module added a literal `import anthropic` / `from anthropic` — the live client must be reached only via the lazy `make_client` import inside the `make_live_*` factories.
 
 - [ ] **Step 3: Commit**
 
@@ -1497,4 +1505,4 @@ git commit -F <msgfile>   # docs(s089): CLAUDE.md ledger + Phase D code location
 - **Spec coverage:** §4 components 1-5 -> Tasks 2,3,4,5 (+ schema Task 1); §5 arms -> generator `build_prompt` + runner arm loop; §6 metrics -> runner `adversarial_x_scenario` + `per_candidate_flip_rate`; §7 3-way rule + any-hole + empty-corpus guard -> `classify_oov_verdict` (Task 1) + prereg (Task 6); §8 constraints -> new-files-only, injectable seams, anchor (Task 8); §9 file plan -> Tasks 1-7; §11 error handling -> validator reject paths + CLI gates; §12 testing -> every task is TDD + Task 8 anchor + Task 6 SSOT; §13 cost -> `estimate_cost_usd` + `$10` cap; §16 caveats -> report + prereg.
 - **Placeholder scan:** none; every code step is complete.
 - **Type consistency:** `OOVCandidate.value_rewrites: Tuple[Tuple[str,str],...]`, `rewrites_dict()`, `GenerateFn=(scenario,arm,k)->(list,cost)`, `JudgeFn=(orig,evaded)->(bool,cost)`, `classify_oov_verdict(tuple)->str`, `OOVArmSummary` field names are identical across schema/runner/report/tests.
-- **Known verification points flagged inline:** `EvidencePacket.get_fact` accessor name (Task 3 note); `_EVADE` test-data tuning so canonical truly stops matching (Task 4 note); `sys.modules` isolation for the anchor (Task 8 note).
+- **Known verification points flagged inline:** `EvidencePacket.get_fact` accessor name (Task 3 note); `_EVADE` test-data tuning so canonical truly stops matching (Task 4 note); source-text purity anchor mirroring `test_light_skeptic_v2_ladder_and_purity` (Task 8).
