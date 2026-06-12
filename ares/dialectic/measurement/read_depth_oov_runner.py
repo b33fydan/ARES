@@ -7,7 +7,7 @@ all flip measurement and the verdict are deterministic.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
 from ares.dialectic.agents.light_skeptic_v2_ladder import DETERMINISTIC_TIERS
