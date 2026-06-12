@@ -330,7 +330,7 @@ def test_black_box_prompt_omits_matcher_internals():
     # the malign values are shown
     assert "procdump.exe" in user
     # each fact is keyed by fact_id so the model can return rewrites
-    assert "rdf-m-lex-001-fact-2" in user
+    assert "rdf-m-lex-001-fact-002" in user
 
 
 def test_white_box_prompt_includes_matcher_internals():
@@ -344,15 +344,15 @@ def test_white_box_prompt_includes_matcher_internals():
 def test_parse_candidates_builds_skeleton_keyed_rewrites():
     raw = '''Here are disguises:
     [
-      {"rdf-m-lex-001-fact-2": "C:/Users/Public/pd-utility"},
-      {"rdf-m-lex-001-fact-3": "pd-utility dumps the auth process memory"}
+      {"rdf-m-lex-001-fact-002": "C:/Users/Public/pd-utility"},
+      {"rdf-m-lex-001-fact-003": "pd-utility dumps the auth process memory"}
     ]
     Done.'''
     cands = parse_candidates(_SC, ARM_BLACK, raw)
     assert len(cands) == 2
     assert cands[0].arm == ARM_BLACK
     assert cands[0].scenario_id == "RDF-M-LEX-001"
-    assert cands[0].value_rewrites == (("rdf-m-lex-001-fact-2",
+    assert cands[0].value_rewrites == (("rdf-m-lex-001-fact-002",
                                         "C:/Users/Public/pd-utility"),)
 
 
@@ -521,7 +521,7 @@ from ares.dialectic.measurement.read_depth_oov_validator import (
     apply_candidate, check_skeleton, is_novel, validate_candidate,
 )
 
-_SC = get_entry("RDF-M-LEX-001").scenario  # facts: fact-1/2/3
+_SC = get_entry("RDF-M-LEX-001").scenario  # facts: fact-001/002/003
 
 
 def _cand(rewrites):
@@ -538,7 +538,7 @@ def _judge_no(orig, evaded):
 
 def test_apply_preserves_skeleton():
     evaded = apply_candidate(
-        _SC, _cand({"rdf-m-lex-001-fact-2": "C:/Users/Public/pd-utility"}))
+        _SC, _cand({"rdf-m-lex-001-fact-002": "C:/Users/Public/pd-utility"}))
     ok, reason = check_skeleton(_SC, evaded)
     assert ok, reason
 
@@ -552,8 +552,8 @@ def test_unknown_fact_id_rejected_as_skeleton_failure():
 
 def test_no_op_rewrite_rejected():
     # rewrite a fact to its own value -> no value_hash differs -> no-op
-    same = _SC.packet.get_fact("rdf-m-lex-001-fact-2").value
-    res, _ = validate_candidate(_SC, _cand({"rdf-m-lex-001-fact-2": same}),
+    same = _SC.packet.get_fact("rdf-m-lex-001-fact-002").value
+    res, _ = validate_candidate(_SC, _cand({"rdf-m-lex-001-fact-002": same}),
                                 _judge_yes)
     assert res.accepted is False and res.skeleton_ok is False
 
@@ -561,7 +561,7 @@ def test_no_op_rewrite_rejected():
 def test_in_vocab_only_disguise_is_not_novel():
     # introduces only "binary" (a known synonym fold) -> non-novel -> rejected
     res, cost = validate_candidate(
-        _SC, _cand({"rdf-m-lex-001-fact-2": "C:/Users/Public/procdump binary"}),
+        _SC, _cand({"rdf-m-lex-001-fact-002": "C:/Users/Public/procdump binary"}),
         _judge_yes)
     assert res.skeleton_ok is True and res.novel is False
     assert res.accepted is False and cost == 0.0  # judge never called
@@ -570,7 +570,7 @@ def test_in_vocab_only_disguise_is_not_novel():
 def test_oov_disguise_accepted_when_judge_confirms_malign():
     res, cost = validate_candidate(
         _SC,
-        _cand({"rdf-m-lex-001-fact-3": "pd-utility dumps auth-process memory"}),
+        _cand({"rdf-m-lex-001-fact-003": "pd-utility dumps auth-process memory"}),
         _judge_yes)
     assert res.skeleton_ok and res.novel and res.judge_malign is True
     assert res.accepted is True and cost == 0.005
@@ -579,7 +579,7 @@ def test_oov_disguise_accepted_when_judge_confirms_malign():
 def test_oov_disguise_rejected_when_judge_says_benign():
     res, _ = validate_candidate(
         _SC,
-        _cand({"rdf-m-lex-001-fact-3": "routine software update downloaded"}),
+        _cand({"rdf-m-lex-001-fact-003": "routine software update downloaded"}),
         _judge_no)
     assert res.novel is True and res.judge_malign is False
     assert res.accepted is False and res.reject_reason == "judge_benign"
@@ -733,7 +733,7 @@ def make_live_judge_fn(model: str, provider: str = "anthropic") -> JudgeFn:
     return _fn
 ```
 
-Note for the implementer: `EvidencePacket.get_fact(fact_id)` is used in the test to read a fact's current value; if that accessor does not exist, read via `next(f for f in _SC.packet.get_all_facts() if f.fact_id == "rdf-m-lex-001-fact-2").value` instead. Verify the accessor name before running Step 2.
+Note for the implementer: `EvidencePacket.get_fact(fact_id)` is used in the test to read a fact's current value; if that accessor does not exist, read via `next(f for f in _SC.packet.get_all_facts() if f.fact_id == "rdf-m-lex-001-fact-002").value` instead. Verify the accessor name before running Step 2.
 
 - [ ] **Step 4: Run test to verify it passes**
 
@@ -770,13 +770,13 @@ from ares.dialectic.measurement.read_depth_oov_runner import (
 
 # A disguise that strips every threat token -> canonical can no longer match.
 _EVADE = {
-    "RDF-M-LEX-001": {"rdf-m-lex-001-fact-2": "C:/Users/Public/pd-utility",
-                      "rdf-m-lex-001-fact-3": "pd-utility reads auth memory"},
-    "RDF-M-LEX-002": {"rdf-m-lex-002-fact-1": "C:/Users/Public/refresh-tool",
-                      "rdf-m-lex-002-fact-3": "C:/Users/Public/refresh-tool 1.2MB"},
-    "RDF-M-SYN-001": {"rdf-m-syn-001-fact-1": "payload placed in public area"},
-    "RDF-M-PATCH-001": {"rdf-m-patch-001-fact-2": "pd-utility reads auth memory",
-                        "rdf-m-patch-001-fact-3": "C:/Users/Public/pd-utility"},
+    "RDF-M-LEX-001": {"rdf-m-lex-001-fact-002": "C:/Users/Public/pd-utility",
+                      "rdf-m-lex-001-fact-003": "pd-utility reads auth memory"},
+    "RDF-M-LEX-002": {"rdf-m-lex-002-fact-001": "C:/Users/Public/refresh-tool",
+                      "rdf-m-lex-002-fact-003": "C:/Users/Public/refresh-tool 1.2MB"},
+    "RDF-M-SYN-001": {"rdf-m-syn-001-fact-001": "payload placed in public area"},
+    "RDF-M-PATCH-001": {"rdf-m-patch-001-fact-002": "pd-utility reads auth memory",
+                        "rdf-m-patch-001-fact-003": "C:/Users/Public/pd-utility"},
 }
 
 
