@@ -39,6 +39,7 @@ def test_audited_returns_summary_and_disguise_records():
     d = disguises[0]
     assert d.scenario_id == "RDF-M-LEX-002" and d.accepted is True
     assert d.canonical_flipped is True            # threat tokens stripped
+    assert d.lexical_flipped is True              # .exe stripped from the temp path
     # original_values captured from the pre-rewrite packet
     ov = dict(d.original_values)
     assert ov["rdf-m-lex-002-fact-001"] == "C:\\Temp\\update.exe"

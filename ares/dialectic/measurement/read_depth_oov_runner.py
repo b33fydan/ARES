@@ -100,6 +100,7 @@ def run_oov_experiment_audited(
                 res, vcost = validate_candidate(e.scenario, cand, judge_fn)
                 total_cost += vcost
                 _guard()
+                # definitionally False for rejected candidates (cannot flip a tier)
                 canon_flip = lex_flip = False
                 if res.accepted:
                     n_acc += 1
