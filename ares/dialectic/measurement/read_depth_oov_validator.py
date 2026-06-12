@@ -28,6 +28,30 @@ JudgeFn = Callable[[BenchmarkScenario, BenchmarkScenario], Tuple[bool, float]]
 _PRICE_IN = 3.0 / 1_000_000
 _PRICE_OUT = 15.0 / 1_000_000
 
+
+class CostCeilingExceeded(RuntimeError):
+    """Raised mid-run when accumulated live cost crosses the configured ceiling."""
+
+
+# List-price approximations (USD per token). The cost ceiling is a safety bound,
+# not a billing system; these need only be reasonable and provider-distinct.
+# (price_in_per_token, price_out_per_token)
+PRICE_TABLE: dict[str, tuple[float, float]] = {
+    "anthropic": (_PRICE_IN, _PRICE_OUT),
+    "openai": (2.5 / 1_000_000, 10.0 / 1_000_000),
+    "gemini": (1.25 / 1_000_000, 10.0 / 1_000_000),
+}
+
+
+def cost_for(provider: str, usage_in: int, usage_out: int) -> float:
+    """Provider-aware token cost. Unknown provider raises (never silent mis-cost)."""
+    if provider not in PRICE_TABLE:
+        raise ValueError(
+            f"no price for provider {provider!r}; known: {sorted(PRICE_TABLE)}")
+    price_in, price_out = PRICE_TABLE[provider]
+    return usage_in * price_in + usage_out * price_out
+
+
 # Tokens the canonicalizer itself folds; a disguise built only from these is
 # the in-vocabulary case S088 already measured, not a new disguise.
 _KNOWN_FOLD_VOCAB = set(_SYNONYMS.keys()) | set(_SYNONYMS.values())
@@ -122,7 +146,7 @@ def validate_candidate(
 
 
 def _call_cost(usage_in: int, usage_out: int) -> float:
-    return usage_in * _PRICE_IN + usage_out * _PRICE_OUT
+    return cost_for("anthropic", usage_in, usage_out)
 
 
 def make_live_judge_fn(model: str, provider: str = "anthropic") -> JudgeFn:
@@ -143,7 +167,7 @@ def make_live_judge_fn(model: str, provider: str = "anthropic") -> JudgeFn:
             if isinstance(f.value, str))
         resp = client.complete(system=system, user=f"Facts:\n{facts}")
         malign = resp.content.strip().lower().startswith("y")
-        return malign, _call_cost(resp.usage_input_tokens,
-                                  resp.usage_output_tokens)
+        return malign, cost_for(provider, resp.usage_input_tokens,
+                                resp.usage_output_tokens)
 
     return _fn

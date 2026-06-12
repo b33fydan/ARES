@@ -12,6 +12,7 @@ _SEAM_MODULES = (
     "ares.dialectic.measurement.read_depth_oov_generator",
     "ares.dialectic.measurement.read_depth_oov_validator",
     "ares.dialectic.measurement.read_depth_oov_runner",
+    "ares.dialectic.measurement.read_depth_oov_audit",
 )
 
 
@@ -36,3 +37,9 @@ def test_runner_executes_with_injected_fakes_only():
     summ = run_oov_experiment(OOVConfig(k=1, arms=("black",)),
                               generate_fn=gen, judge_fn=judge)
     assert summ.total_cost_usd == 0.0
+
+
+def test_make_audit_judge_is_importable_and_lazy():
+    # importing the symbol must not require any network SDK
+    from ares.dialectic.measurement.read_depth_oov_audit import make_audit_judge
+    assert callable(make_audit_judge)
