@@ -15,9 +15,14 @@ from typing import Any, Mapping, Optional, Tuple
 
 READ_DEPTH_OOV_HARD_CEILING_USD = 10.0
 
-# A FALSIFIED ("the deterministic recipe is real") verdict requires the
-# adversary to evade ZERO scenarios in the arm under test: any meaning-
-# preserving hole proves the matcher is evadable.
+# EXPORTED SSOT invariant — intentionally cross-module, NOT dead code.
+# Names the pre-registered "any hole" rule: a FALSIFIED verdict requires the
+# adversary to evade ZERO scenarios in every arm under test — any meaning-
+# preserving rewrite that fools the matcher falsifies the hypothesis.
+# Consumed by the Phase D pre-registration guard:
+#   tests/paper_4/test_oov_prereg_bands_match_code.py (added in a later task).
+# The FALSIFIED branch of classify_oov_verdict below implements exactly this
+# rule (reached only when no arm evaded any scenario).
 FALSIFIED_REQUIRES_ZERO_EVASIONS = True
 
 ARM_BLACK = "black"
@@ -57,7 +62,10 @@ class OOVCandidate:
 
 @dataclass(frozen=True)
 class OOVValidationResult:
-    """The outcome of running one candidate through the validity gate."""
+    """The outcome of running one candidate through the validity gate.
+
+    Transient (not persisted) — this is why it has no ``to_dict``/``from_dict``.
+    """
 
     candidate: OOVCandidate
     skeleton_ok: bool
@@ -167,11 +175,16 @@ def classify_oov_verdict(arm_summaries: Tuple[OOVArmSummary, ...]) -> str:
         return VERDICT_SUPPORTED_STRONG
     if white is not None and white.scenarios_evaded:
         return VERDICT_SUPPORTED_MODERATE
+    # Implements the any-hole rule named by FALSIFIED_REQUIRES_ZERO_EVASIONS.
     return VERDICT_FALSIFIED
 
 
 def oov_corpus_digest(candidates: Tuple[OOVCandidate, ...]) -> str:
-    """Deterministic, order-independent digest over accepted candidates."""
+    """Deterministic, order-independent digest over accepted candidates.
+
+    Note: the ``|``-delimited format assumes controlled-vocabulary
+    ``scenario_id`` and ``arm`` values (no literal ``|`` in either field).
+    """
     parts = sorted(
         f"{c.scenario_id}|{c.arm}|"
         + ";".join(f"{fid}={val}" for fid, val in c.value_rewrites)

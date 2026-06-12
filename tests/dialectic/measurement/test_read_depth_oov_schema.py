@@ -37,6 +37,12 @@ def test_white_only_hole_is_supported_moderate():
     assert classify_oov_verdict(arms) == VERDICT_SUPPORTED_MODERATE
 
 
+def test_both_arms_evade_black_wins():
+    arms = (_arm(ARM_BLACK, n_accepted=5, evaded=["RDF-M-LEX-001"]),
+            _arm(ARM_WHITE, n_accepted=5, evaded=["RDF-M-LEX-002"]))
+    assert classify_oov_verdict(arms) == VERDICT_SUPPORTED_STRONG
+
+
 def test_survives_both_is_falsified():
     arms = (_arm(ARM_BLACK, n_accepted=5, evaded=[]),
             _arm(ARM_WHITE, n_accepted=5, evaded=[]))
