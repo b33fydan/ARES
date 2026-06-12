@@ -67,13 +67,24 @@ def check_skeleton(
 def _tokens(scenario: BenchmarkScenario) -> set:
     out: set = set()
     for f in scenario.packet.get_all_facts():
-        if isinstance(f.value, str):
+        if isinstance(f.value, str):  # non-string values (int, bool, …) are skipped
             out.update(_TOKEN.findall(f.value.lower()))
     return out
 
 
 def is_novel(original: BenchmarkScenario, evaded: BenchmarkScenario) -> bool:
-    """Novel unless the only new tokens are the canonicalizer's own synonyms."""
+    """Novel unless the only NEW tokens introduced are the canonicalizer's own
+    synonym-fold vocabulary.
+
+    A rewrite that introduces NO new tokens at all (pure deletion or reordering)
+    is treated as NOVEL on purpose: deletions like dropping '.exe' from
+    ``procdump.exe`` -> ``procdump`` are legitimate, meaning-preserving disguises
+    that defeat the executable matcher while a human still recognises the threat.
+    Those candidates must be forwarded to the judge (not silently rejected here)
+    so they are measured.  The gate only excludes the trivial in-vocabulary
+    synonym reuse that S088 already measured — i.e. ``introduced`` is non-empty
+    AND every new token is already in ``_KNOWN_FOLD_VOCAB``.
+    """
     introduced = _tokens(evaded) - _tokens(original)
     if introduced and introduced.issubset(_KNOWN_FOLD_VOCAB):
         return False

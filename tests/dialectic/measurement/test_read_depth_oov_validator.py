@@ -67,3 +67,11 @@ def test_oov_disguise_rejected_when_judge_says_benign():
         _judge_no)
     assert res.novel is True and res.judge_malign is False
     assert res.accepted is False and res.reject_reason == "judge_benign"
+
+
+def test_deletion_only_rewrite_is_treated_as_novel():
+    # Dropping ".exe" introduces no NEW token yet is a legitimate disguise;
+    # is_novel must NOT reject it (the judge adjudicates meaning, not this gate).
+    evaded = apply_candidate(
+        _SC, _cand({"rdf-m-lex-001-fact-002": "C:/Users/Public/procdump"}))
+    assert is_novel(_SC, evaded) is True
