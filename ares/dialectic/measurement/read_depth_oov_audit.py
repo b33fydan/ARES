@@ -119,7 +119,11 @@ def evaded_scenarios(records: Tuple[OOVDisguiseRecord, ...]) -> Tuple[str, ...]:
 
 
 def reconstruct_disguised(record: OOVDisguiseRecord) -> BenchmarkScenario:
-    """Rebuild the disguised packet from the frozen corpus + persisted rewrites."""
+    """Rebuild the disguised packet from the frozen corpus + persisted rewrites.
+
+    Raises KeyError if record.scenario_id is not in the frozen corpus (a corpus
+    version mismatch) — failing loudly is correct for a paper-quality audit.
+    """
     base = get_entry(record.scenario_id).scenario
     return apply_candidate(
         base, OOVCandidate(record.scenario_id, record.arm, record.value_rewrites))
