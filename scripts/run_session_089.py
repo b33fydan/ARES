@@ -36,12 +36,29 @@ def _load_env() -> int:
     return loaded
 
 
+def write_verdict_artifacts(out_dir: Path, summary, disguises) -> None:
+    """Write the verdict (oov_summary.json + oov_report.md) plus the new
+    audit sidecar (oov_disguises.json) carrying every candidate's disguise."""
+    from ares.dialectic.measurement.read_depth_oov_report import render_oov_report
+    from ares.dialectic.measurement.read_depth_oov_audit import dump_disguises
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "oov_summary.json").write_text(summary.to_json(), encoding="utf-8")
+    (out_dir / "oov_report.md").write_text(
+        render_oov_report(summary), encoding="utf-8")
+    header = {"corpus_digest": summary.corpus_digest,
+              "oov_corpus_digest": summary.oov_corpus_digest,
+              "model": summary.model, "provider": summary.provider,
+              "k": summary.k, "verdict": summary.verdict}
+    (out_dir / "oov_disguises.json").write_text(
+        dump_disguises(header, disguises), encoding="utf-8")
+
+
 def main(argv=None) -> int:
     from ares.dialectic.measurement.read_depth_oov_schema import (
         ARM_BLACK, ARM_WHITE, ARMS, READ_DEPTH_OOV_HARD_CEILING_USD,
     )
     from ares.dialectic.measurement.read_depth_oov_runner import (
-        OOVConfig, estimate_cost_usd, run_oov_experiment,
+        OOVConfig, estimate_cost_usd, run_oov_experiment_audited,
     )
     p = argparse.ArgumentParser(description="Session 089 — OOV evasion (Phase D)")
     p.add_argument("--provider", required=True)
@@ -61,7 +78,8 @@ def main(argv=None) -> int:
 
     arms = ARMS if args.arm == "both" else (
         ARM_BLACK if args.arm == "black" else ARM_WHITE,)
-    cfg = OOVConfig(k=args.k, model=args.model, provider=args.provider, arms=arms)
+    cfg = OOVConfig(k=args.k, model=args.model, provider=args.provider, arms=arms,
+                    cost_ceiling_usd=args.cost_ceiling)
     est = estimate_cost_usd(cfg)
     print(f"[preflight] cost estimate ${est} (ceiling ${args.cost_ceiling})")
 
@@ -86,17 +104,13 @@ def main(argv=None) -> int:
     from ares.dialectic.measurement.read_depth_oov_validator import (
         make_live_judge_fn,
     )
-    from ares.dialectic.measurement.read_depth_oov_report import render_oov_report
-    summary = run_oov_experiment(
+    summary, disguises = run_oov_experiment_audited(
         cfg, generate_fn=make_live_generate_fn(args.model, args.provider),
         judge_fn=make_live_judge_fn(args.model, args.provider))
     out_dir = _REPO_ROOT / "data" / "paper_4" / "read_depth_oov"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "oov_summary.json").write_text(summary.to_json(), encoding="utf-8")
-    (out_dir / "oov_report.md").write_text(render_oov_report(summary),
-                                           encoding="utf-8")
+    write_verdict_artifacts(out_dir, summary, disguises)
     print(f"[done] verdict {summary.verdict}; spent ${summary.total_cost_usd}; "
-          f"wrote oov_summary.json + oov_report.md")
+          f"wrote oov_summary.json + oov_report.md + oov_disguises.json")
     return 0
 
 
