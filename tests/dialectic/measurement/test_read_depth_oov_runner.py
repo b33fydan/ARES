@@ -65,6 +65,10 @@ def test_canonical_evaded_in_black_box_is_supported_strong():
     assert set(black.scenarios_evaded) == {e.scenario_id for e in MALIGN_ENTRIES}
     assert summ.total_cost_usd > 0.0
     assert len(summ.oov_corpus_digest) == 16
+    assert black.per_candidate_flip_rate == 1.0   # every accepted candidate flipped
+    # reject buckets + accepted exhaustively partition the candidate count
+    assert (black.n_accepted + black.n_rejected_skeleton
+            + black.n_rejected_novelty + black.n_rejected_judge) == black.n_candidates
 
 
 def test_canonical_holds_is_falsified():
@@ -74,6 +78,7 @@ def test_canonical_holds_is_falsified():
     for a in summ.arm_summaries:
         assert a.adversarial_x_scenario == 0.0
         assert a.n_accepted > 0
+        assert a.per_candidate_flip_rate == 0.0
 
 
 def test_empty_generation_is_instrument_failure():
