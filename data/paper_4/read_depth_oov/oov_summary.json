@@ -1,0 +1,427 @@
+{
+  "arm_summaries": [
+    {
+      "adversarial_x_scenario": 0.5,
+      "arm": "black",
+      "n_accepted": 32,
+      "n_candidates": 32,
+      "n_malign_scenarios": 4,
+      "n_rejected_judge": 0,
+      "n_rejected_novelty": 0,
+      "n_rejected_skeleton": 0,
+      "per_candidate_flip_rate": 0.34375,
+      "scenarios_evaded": [
+        "RDF-M-LEX-002",
+        "RDF-M-SYN-001"
+      ]
+    },
+    {
+      "adversarial_x_scenario": 0.5,
+      "arm": "white",
+      "n_accepted": 32,
+      "n_candidates": 32,
+      "n_malign_scenarios": 4,
+      "n_rejected_judge": 0,
+      "n_rejected_novelty": 0,
+      "n_rejected_skeleton": 0,
+      "per_candidate_flip_rate": 0.3125,
+      "scenarios_evaded": [
+        "RDF-M-LEX-002",
+        "RDF-M-SYN-001"
+      ]
+    }
+  ],
+  "corpus_digest": "9401b7188ba790a5",
+  "k": 8,
+  "model": "claude-sonnet-4-20250514",
+  "oov_corpus_digest": "9900b91f707e2ef8",
+  "provider": "anthropic",
+  "records": [
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "black",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": true,
+      "scenario_id": "RDF-M-LEX-002"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": true,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-SYN-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    },
+    {
+      "arm": "white",
+      "canonical_flipped": false,
+      "lexical_flipped": false,
+      "scenario_id": "RDF-M-PATCH-001"
+    }
+  ],
+  "total_cost_usd": 0.1104,
+  "verdict": "SUPPORTED_STRONG"
+}
