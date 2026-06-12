@@ -1,0 +1,1962 @@
+{
+  "corpus_digest": "9401b7188ba790a5",
+  "k": 8,
+  "model": "claude-sonnet-4-20250514",
+  "oov_corpus_digest": "a4ea1d0645152ffa",
+  "provider": "anthropic",
+  "records": [
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\pd.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "pd.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdu~1.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdu~1.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\proc_dump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "proc_dump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump64.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump64.exe -ma lsass.exe C:\\Temp\\memory.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\pdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "pdump.exe -ma lsass.exe C:\\Temp\\core.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\dump_proc.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "dump_proc.exe -ma lsass.exe C:\\Temp\\process.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-001",
+          "RemoteInteractive (Type 10)"
+        ],
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-001",
+          "Network logon (Type 10)"
+        ],
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\sysinternals_pd.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "sysinternals_pd.exe -ma lsass.exe C:\\Temp\\mem_dump.bin"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-001",
+          "RemoteInteractive (Type 10)"
+        ],
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-001",
+          "Interactive over network (10)"
+        ],
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\microsoft_procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "microsoft_procdump.exe -ma lsass.exe C:\\Temp\\auth_service.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "process_name = C:\\Users\\Public\\Documents\\system_updater.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "file_created = C:\\Users\\Public\\Documents\\system_updater.exe written 1.2MB"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": true,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "process_name = %TEMP%\\patch_installer.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "file_created = %TEMP%\\patch_installer.exe written 1228800 bytes"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "process_name = C:\\Windows\\Temp\\maintenance.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "file_created = C:\\Windows\\Temp\\maintenance.exe written 1258291 bytes"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "process_name = C:/tmp/upgrade_client.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "file_created = C:/tmp/upgrade_client.exe written 1.2MB"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": true,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "process_name = C:\\$Recycle.Bin\\refresh.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "file_created = C:\\$Recycle.Bin\\refresh.exe written 1200KB"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "process_name = C:\\ProgramData\\installer_v2.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "file_created = C:\\ProgramData\\installer_v2.exe written 0x12C000 bytes"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "process_name = C:\\Users\\%USERNAME%\\AppData\\Local\\Temp\\setup_tool.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "file_created = C:\\Users\\%USERNAME%\\AppData\\Local\\Temp\\setup_tool.exe written 1228800 bytes"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "process_name = C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\service_mgr.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "file_created = C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\service_mgr.exe written 1.2MB"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "executable deposited to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "bootstrapper executing from shared directory"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "payload written to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "launcher operational from common folder"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "artifact placed in C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "injector active from communal location"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "component staged to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "initiator running from accessible directory"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "module delivered to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "dispatcher executing from world-readable path"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "specimen installed to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "carrier process from shared workspace"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "asset deployed to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "stager operating from open folder"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "resource materialized in C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "orchestrator launched from unrestricted zone"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "command_line = procdump.exe -memory_analysis lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "process_name = C:\\Users\\Public\\procdump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "command_line = procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "process_name = C:\\Users\\Public\\procdump64.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "command_line = procdump.exe -ma winlogon.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "process_name = C:\\Users\\Public\\procdump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-001",
+          "KB5038790 installed 2026-05-01"
+        ],
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-001",
+          "patch_applied = KB5038790 deployed 2026-05-01"
+        ],
+        [
+          "rdf-m-patch-001-fact-002",
+          "command_line = procdump.exe -ma lsass.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "command_line = proc-dump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "process_name = C:\\Users\\Public\\proc-dump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "command_line = procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "process_name = C:/Users/Public/procdump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-001",
+          "KB5038790 installed 2026-05-01"
+        ],
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-001",
+          "patch_applied = KB5038790 applied 2026-05-01"
+        ],
+        [
+          "rdf-m-patch-001-fact-002",
+          "command_line = procdump.exe -full lsass.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "black",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "command_line = procdump.exe -ma ls4ss.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "process_name = C:\\Users\\Public\\procdump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procmon.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procmon.exe -ma lsass.exe C:\\Temp\\system_memory.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -64 -ma lsass.exe C:\\Windows\\System32\\config\\lsass_backup.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -accepteula -64 -ma 692 C:\\Temp\\process_692.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Program Files\\SysInternals\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma winlogon.exe C:\\Windows\\Logs\\memory_dump.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -r -ma Local Security Authority Process C:\\Data\\authority_process.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Windows\\System32\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma \"Local Security Authority Process\" C:\\ProgramData\\security_dump.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -accepteula -ma 712 C:\\Users\\Administrator\\Documents\\process_dump_712.dmp"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Users\\Public\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma lsass.exe C:\\Temp\\lsass.dmp"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-001-fact-002",
+          "C:\\Tools\\Sysinternals\\procdump.exe"
+        ],
+        [
+          "rdf-m-lex-001-fact-003",
+          "procdump.exe -ma \"C:\\Windows\\System32\\lsass.exe\" \"C:\\Logs\\credential_service.dmp\""
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Windows\\System32\\wbem\\update.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Windows\\System32\\wbem\\update.exe written 1.2MB"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Tem p\\update.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": true,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Users\\Public\\update.ex e"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Users\\Public\\update.ex e written 1.2MB"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": true,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\staging\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\staging\\update.exe written 1.2MB"
+        ]
+      ]
+    },
+    {
+      "accepted": false,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": null,
+      "lexical_flipped": false,
+      "novel": false,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "non_novel_in_vocab",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temporary\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temporary\\update.exe written 1.2MB"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\updat e.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\updat e.exe written 1.2MB"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": true,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\Temp\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\Temp\\update.exe written 1.2MB"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-LEX-002",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-lex-002-fact-001",
+          "C:\\cache\\update.exe"
+        ],
+        [
+          "rdf-m-lex-002-fact-003",
+          "C:\\cache\\update.exe written 1.2MB"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "file_created = executable dropped to C:\\Users\\Shared\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "process_name = loader running from shared folder"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "file_created = binary dropped to C:\\PerfLogs\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "process_name = loader running from performance logs directory"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "file_created = binary dropped to C:\\Intel\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "process_name = loader running from intel folder"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "file_created = payload dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "process_name = loader running from common folder"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "file_created = binary dropped to %PUBLIC%\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "process_name = loader running from %PUBLIC% location"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "file_created = binary dropped to C:/Users/Public/"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "process_name = loader running from public directory"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "file_created = malware dropped to C:\\Users\\All Users\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "process_name = loader running from all users folder"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": true,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "binary dropped to C:\\Users\\Public\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "loader running from public folder"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-SYN-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-syn-001-fact-001",
+          "file_created = binary dropped to C:\\$Recycle.Bin\\"
+        ],
+        [
+          "rdf-m-syn-001-fact-002",
+          "process_name = loader running from recycle bin"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma winlogon.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Windows\\System32\\procdump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "proc_dump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\proc_dump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe --memory-analysis lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Program Files\\procdump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump64.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Tools\\procdump64.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -mm lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma \"Local Security Authority Subsystem Service\""
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Windows\\Temp\\procdump.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "pd.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\pd.exe"
+        ]
+      ]
+    },
+    {
+      "accepted": true,
+      "arm": "white",
+      "canonical_flipped": false,
+      "judge_malign": true,
+      "lexical_flipped": false,
+      "novel": true,
+      "original_values": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Users\\Public\\procdump.exe"
+        ]
+      ],
+      "reject_reason": "",
+      "scenario_id": "RDF-M-PATCH-001",
+      "skeleton_ok": true,
+      "value_rewrites": [
+        [
+          "rdf-m-patch-001-fact-002",
+          "procdump.exe -accepteula -ma lsass.exe"
+        ],
+        [
+          "rdf-m-patch-001-fact-003",
+          "C:\\Intel\\procdump.exe"
+        ]
+      ]
+    }
+  ],
+  "verdict": "SUPPORTED_STRONG"
+}
