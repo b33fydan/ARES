@@ -23,10 +23,6 @@ from ares.dialectic.scripts.scenario_corpus import BenchmarkScenario
 # (scenario, arm, k) -> (candidates, cost_usd)
 GenerateFn = Callable[[BenchmarkScenario, str, int], Tuple[List[OOVCandidate], float]]
 
-# Anthropic Sonnet-4 list price (USD per token).
-_PRICE_IN = 3.0 / 1_000_000
-_PRICE_OUT = 15.0 / 1_000_000
-
 _SYSTEM = (
     "You are a red-team adversary testing a security log scanner. Given "
     "telemetry facts that describe a real attack, rewrite the string VALUES "
@@ -100,8 +96,12 @@ def parse_candidates(
     return out
 
 
-def _call_cost(usage_in: int, usage_out: int) -> float:
-    return usage_in * _PRICE_IN + usage_out * _PRICE_OUT
+def _call_cost(provider: str, usage_in: int, usage_out: int) -> float:
+    # Lazy import keeps the deterministic seam free of module-level coupling
+    # (mirrors the lazy make_client in the live factory); cost_for is the
+    # validator's shared provider-aware price table and raises on unknowns.
+    from ares.dialectic.measurement.read_depth_oov_validator import cost_for
+    return cost_for(provider, usage_in, usage_out)
 
 
 def make_live_generate_fn(model: str, provider: str = "anthropic") -> GenerateFn:
@@ -114,7 +114,8 @@ def make_live_generate_fn(model: str, provider: str = "anthropic") -> GenerateFn
         user = user + f"\n\nProduce {k} distinct disguise attempts."
         resp = client.complete(system=system, user=user)
         cands = parse_candidates(scenario, arm, resp.content)
-        cost = _call_cost(resp.usage_input_tokens, resp.usage_output_tokens)
+        cost = _call_cost(provider, resp.usage_input_tokens,
+                          resp.usage_output_tokens)
         return cands, cost
 
     return _fn

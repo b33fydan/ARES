@@ -1,9 +1,12 @@
 # tests/dialectic/measurement/test_read_depth_oov_generator.py
+import pytest
+
 from ares.dialectic.measurement.read_depth_corpus import get_entry
 from ares.dialectic.measurement.read_depth_oov_schema import ARM_BLACK, ARM_WHITE
 from ares.dialectic.measurement.read_depth_oov_generator import (
-    build_prompt, parse_candidates,
+    _call_cost, build_prompt, parse_candidates,
 )
+from ares.dialectic.measurement.read_depth_oov_validator import cost_for
 
 _SC = get_entry("RDF-M-LEX-001").scenario
 
@@ -48,3 +51,24 @@ def test_parse_candidates_tolerates_garbage():
     assert parse_candidates(_SC, ARM_BLACK, "no json here") == []
     assert parse_candidates(_SC, ARM_BLACK, "[not, valid, json}") == []
     assert parse_candidates(_SC, ARM_BLACK, '{"not": "a list"}') == []
+
+
+# --- provider-aware generation cost (session 091) -------------------------
+# The live generator must price tokens by the actual provider it runs on, not
+# a hardcoded Anthropic constant. _call_cost delegates to the validator's
+# shared, provider-aware price table (the same seam S090 gave the judge).
+
+
+def test_call_cost_is_provider_aware():
+    assert _call_cost("openai", 1000, 1000) == cost_for("openai", 1000, 1000)
+    # a non-anthropic provider is priced off its own row, not Sonnet's
+    assert _call_cost("openai", 1000, 1000) != _call_cost("anthropic", 1000, 1000)
+
+
+def test_call_cost_anthropic_value_matches_shared_table():
+    assert _call_cost("anthropic", 1234, 567) == cost_for("anthropic", 1234, 567)
+
+
+def test_call_cost_unknown_provider_raises_never_silent():
+    with pytest.raises(ValueError):
+        _call_cost("googol", 1, 1)
