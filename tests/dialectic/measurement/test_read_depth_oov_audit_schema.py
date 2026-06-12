@@ -29,6 +29,7 @@ def test_is_evading_requires_accepted_and_canonical_flip():
     assert _rec().is_evading() is True
     assert _rec(canonical_flipped=False).is_evading() is False
     assert _rec(accepted=False).is_evading() is False
+    assert _rec(accepted=False, canonical_flipped=True).is_evading() is False
 
 
 def test_sidecar_dump_load_roundtrip():

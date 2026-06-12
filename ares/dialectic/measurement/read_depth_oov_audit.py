@@ -91,7 +91,7 @@ def dump_disguises(header: Mapping[str, Any],
     return json.dumps(payload, sort_keys=True, indent=2)
 
 
-def load_disguises(text: str) -> Tuple[dict, Tuple[OOVDisguiseRecord, ...]]:
+def load_disguises(text: str) -> Tuple[dict[str, Any], Tuple[OOVDisguiseRecord, ...]]:
     """Inverse of dump_disguises: (header_without_records, records)."""
     payload = json.loads(text)
     records = tuple(OOVDisguiseRecord.from_dict(r)
