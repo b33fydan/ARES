@@ -375,6 +375,24 @@ def _rewrite_table(orig, new) -> str:
     return "<br>".join(cells)
 
 
+def make_audit_judge(provider: str, model: str = "") -> SingleJudgeFn:
+    """Build a single-packet judge for one independent panelist (lazy network
+    import). Reuses the frozen SOC-analyst judge prompt for comparability with
+    the verdict run; provider is one of anthropic/openai/gemini."""
+    from ares.dialectic.measurement.read_depth_oov_validator import (
+        make_live_judge_fn,
+    )
+    from ares.dialectic.agents.strategies.client_factory import PROVIDER_DEFAULTS
+    resolved = model or PROVIDER_DEFAULTS[provider]
+    paired = make_live_judge_fn(resolved, provider)
+
+    def _single(scenario):
+        # the frozen judge only reads the second (evaded) argument
+        return paired(scenario, scenario)
+
+    return _single
+
+
 def render_audit_report(summary: OOVAuditSummary) -> str:
     lines = []
     lines.append("# OOV Evasion — Phase E Judge-Robustness AUDIT")
