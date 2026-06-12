@@ -19,7 +19,9 @@ from typing import Any, Callable, Mapping, Optional, Tuple
 
 from ares.dialectic.measurement.read_depth_corpus import BENIGN_ENTRIES, get_entry
 from ares.dialectic.measurement.read_depth_oov_schema import OOVCandidate
-from ares.dialectic.measurement.read_depth_oov_validator import apply_candidate
+from ares.dialectic.measurement.read_depth_oov_validator import (
+    CostCeilingExceeded, apply_candidate,
+)
 from ares.dialectic.scripts.scenario_corpus import BenchmarkScenario
 
 # --- audit verdict labels --------------------------------------------------
@@ -305,10 +307,6 @@ def run_audit(records: Tuple[OOVDisguiseRecord, ...], judges: JudgePanel, *,
     """Re-judge the evading disguises + controls with the independent panel and
     apply the pre-registered rule. Judges are injected (offline-testable); the
     live panel is built by make_audit_judge behind the CLI gate."""
-    # late import avoids any import cycle through the validator
-    from ares.dialectic.measurement.read_depth_oov_validator import (
-        CostCeilingExceeded,
-    )
     labels = tuple(lbl for lbl, _ in judges)
     state = {"cost": 0.0}
 
