@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import Any, Mapping, Optional, Tuple
+from typing import Any, Callable, Mapping, Optional, Tuple
 
 from ares.dialectic.measurement.read_depth_corpus import BENIGN_ENTRIES, get_entry
 from ares.dialectic.measurement.read_depth_oov_schema import OOVCandidate
@@ -274,3 +274,83 @@ class OOVAuditSummary:
 
     def to_json(self) -> str:
         return json.dumps(self.to_dict(), sort_keys=True, indent=2)
+
+
+SingleJudgeFn = Callable[[BenchmarkScenario], Tuple[bool, float]]
+JudgePanel = Tuple[Tuple[str, SingleJudgeFn], ...]
+
+_PER_CALL_USD = 0.02  # preflight upper-bound per judge call
+
+
+def estimate_audit_cost(records: Tuple[OOVDisguiseRecord, ...], n_judges: int,
+                        *, per_call_usd: float = _PER_CALL_USD) -> float:
+    n_items = (len(select_evading(records)) + len(positive_controls(records))
+               + len(negative_controls(records)))
+    return round(n_items * n_judges * per_call_usd, 4)
+
+
+def run_audit_preflight(records: Tuple[OOVDisguiseRecord, ...],
+                        judge_labels: Tuple[str, ...]) -> dict:
+    return {"estimate_usd": estimate_audit_cost(records, len(judge_labels)),
+            "n_evading": len(select_evading(records)),
+            "n_pos_controls": len(positive_controls(records)),
+            "n_neg_controls": len(negative_controls(records)),
+            "evaded_scenarios": list(evaded_scenarios(records)),
+            "judges": list(judge_labels)}
+
+
+def run_audit(records: Tuple[OOVDisguiseRecord, ...], judges: JudgePanel, *,
+              cost_ceiling_usd: float,
+              base_oov_corpus_digest: str = "") -> OOVAuditSummary:
+    """Re-judge the evading disguises + controls with the independent panel and
+    apply the pre-registered rule. Judges are injected (offline-testable); the
+    live panel is built by make_audit_judge behind the CLI gate."""
+    # late import avoids any import cycle through the validator
+    from ares.dialectic.measurement.read_depth_oov_validator import (
+        CostCeilingExceeded,
+    )
+    labels = tuple(lbl for lbl, _ in judges)
+    state = {"cost": 0.0}
+
+    def _vote(scenario) -> Tuple[Tuple[str, bool], ...]:
+        votes = []
+        for lbl, fn in judges:
+            malign, cost = fn(scenario)
+            state["cost"] += cost
+            if state["cost"] > cost_ceiling_usd:
+                raise CostCeilingExceeded(
+                    f"audit cost ${state['cost']:.4f} exceeds ceiling "
+                    f"${cost_ceiling_usd}")
+            votes.append((lbl, bool(malign)))
+        return tuple(votes)
+
+    evading_js = []
+    for r in select_evading(records):
+        votes = _vote(reconstruct_disguised(r))
+        cls = classify_evading(tuple(v for _, v in votes))
+        evading_js.append(EvadingJudgement(
+            r.scenario_id, r.arm, r.value_rewrites, r.original_values,
+            bool(r.judge_malign), votes, cls))
+
+    controls = []
+    for sc in positive_controls(records):
+        votes = _vote(sc)
+        controls.append(ControlJudgement(
+            sc.metadata.scenario_id, "positive", True, votes,
+            all(v for _, v in votes)))
+    for sc in negative_controls(records):
+        votes = _vote(sc)
+        controls.append(ControlJudgement(
+            sc.metadata.scenario_id, "negative", False, votes,
+            all(not v for _, v in votes)))
+
+    evaded = evaded_scenarios(records)
+    psc = {s: scenario_confirmed(tuple(evading_js), s) for s in evaded}
+    cpass = controls_pass(tuple(controls))
+    verdict = classify_audit_verdict(evaded, psc, cpass)
+    return OOVAuditSummary(
+        evading=tuple(evading_js), controls=tuple(controls),
+        per_scenario_confirmed=tuple(sorted(psc.items())),
+        judge_labels=labels, controls_passed=cpass, audit_verdict=verdict,
+        total_cost_usd=round(state["cost"], 4),
+        base_oov_corpus_digest=base_oov_corpus_digest)
