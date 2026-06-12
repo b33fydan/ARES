@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 088)
+# CLAUDE.md — ARES Phase 7 (post-Session 089)
 
-**Last updated:** 2026-06-10
-**Test count floor (passing):** 4,116
+**Last updated:** 2026-06-12
+**Test count floor (passing):** 4,150
 
 > Context-hygiene rule: this file holds current state + the last 3 sessions in full.
 > Older session prose rolls off to `docs/SESSION_LOG.md` at the top of each session.
@@ -76,6 +76,7 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Session 086 — Read-Depth Robustness Frontier Phase A: 5 LS-v2 peer modules (tiers 0-3 + ladder registry); +26 tests; 4231+75skip+0fail. Squash `59f59e5`.
 - Session 087 — Read-Depth Robustness Frontier Phase B: Adaptive Corpus C (8 scenarios + neg/pos controls) + offline frontier harness (`read_depth_{corpus,evasion_operators,frontier_schema,frontier_metrics,frontier_runner,frontier_report}.py`) + CLI `run_session_087.py`; per-tier (X,Y) in standalone+cumulative views (standalone J 0/0.25/0.50/0.75, cumulative flat 0.25); +34 tests; 4265+75skip+0fail. Squash `58562d7`.
 - Session 088 — Read-Depth Robustness Frontier Phase C: pre-registration committed (bands frozen X_sem≤0.10 / cumulative J≥0.50), tier-4 anchor runner + verdict report (+23 tests). **LIVE VERDICT: trilemma SUPPORTED** (Sonnet 4, K=20, Corpus C `9401b7188ba790a5`, $3.23) — good corner empty on the cumulative view (all rungs cap at J=0.25 via the structural FPR=0.75); LLM framing-susceptible (RDF-M-SYN-001 malign→benign under a suffix paraphrase, p=0.001), standalone TPR=0.75/FPR=0; standalone v2_canonical (0, 0.75) the named X_lexical-by-construction non-falsifier. Result note: `docs/paper_4/S088_READ_DEPTH_FRONTIER_VERDICT_2026-06-10.md`. Next: OOV adversarial evasion generator (the single experiment that decides SUPPORTED vs FALSIFIED). Scaffolding squash `252ecd4`.
+- Session 089 — Read-Depth Robustness Frontier **Phase D1** — OOV adversarial evasion instrument ("LLM proposes, code disposes"): LLM-adversary generator (black/white-box prompts + tolerant parser) + deterministic validity gate (skeleton-invariance + in-vocab novelty) + LLM-judge meaning-oracle + frozen-corpus runner measuring `v2_canonical` adversarial flip-rate + 3-way graded verdict (`classify_oov_verdict`: black-box hole ⇒ SUPPORTED_STRONG, white-box-only hole ⇒ SUPPORTED_MODERATE, survives both ⇒ FALSIFIED) + report + CLI `run_session_089.py` + Phase D pre-registration (SSOT-guarded). Resolves the S088 named non-falsifier; verdict direction corrected (OOV-evades ⇒ SUPPORTED, OOV-holds ⇒ FALSIFIED). Offline/free; live D2 generation+judging run gated ($10 cap). +34 tests; full suite 4,325 pass / 75 skip / 0 fail. Subagent-driven TDD on `session/089-read-depth-oov-evasion`.
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -281,6 +282,16 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Verdict report (combine 5 coords, apply pre-registered rule, render): `ares/dialectic/measurement/read_depth_verdict_report.py` — `build_corner_points`, `render_verdict_report` (cumulative view is verdict-bearing).
 - CLI: `scripts/run_session_088.py` — `--dry-run`/`--preflight-only`/`--confirm-live`/`--cost-ceiling` ($15 hard cap), UTF-16 `.env`, prereg-file gate.
 - Tests: `tests/dialectic/measurement/test_read_depth_{verdict,tier4_schema,tier4_metrics,tier4_anchor,verdict_report}.py` + `tests/dialectic/measurement/test_run_session_088_cli.py` + `tests/paper_4/test_prereg_bands_match_code.py` (+~23 offline).
+
+### Read-depth Phase D1 — OOV adversarial evasion (Session 089)
+- Spec/plan: `docs/superpowers/specs/2026-06-11-read-depth-oov-evasion-design.md`, `docs/superpowers/plans/2026-06-12-read-depth-oov-evasion-phase-d1.md`.
+- Pre-registration (frozen before any live run; SSOT-guarded by `tests/paper_4/test_oov_prereg_bands_match_code.py`): `docs/paper_4/PREREGISTRATION_oov_evasion_phase_d.md`.
+- Schema + 3-way verdict: `ares/dialectic/measurement/read_depth_oov_schema.py` — `OOVCandidate`, `OOVValidationResult`, `OOVEvasionRecord`, `OOVArmSummary`, `OOVFrontierSummary`, `classify_oov_verdict`, `oov_corpus_digest`, `READ_DEPTH_OOV_HARD_CEILING_USD` (10.0), `FALSIFIED_REQUIRES_ZERO_EVASIONS` (SSOT any-hole invariant).
+- Adversary generator (lazy live fn): `ares/dialectic/measurement/read_depth_oov_generator.py` — `build_prompt` (black/white-box), `parse_candidates`, `make_live_generate_fn`, `GenerateFn`.
+- Deterministic validity gate + judge: `ares/dialectic/measurement/read_depth_oov_validator.py` — `apply_candidate`, `check_skeleton` (reuses `MutatedScenarioPair` invariants), `is_novel` (introduced-token vs canonicalizer synonym vocab; pure deletions are novel by design), `validate_candidate`, `make_live_judge_fn`, `JudgeFn`.
+- Runner + report: `ares/dialectic/measurement/read_depth_oov_runner.py` (`OOVConfig`, `estimate_cost_usd`, `run_preflight`, `run_oov_experiment`) + `read_depth_oov_report.py` (`render_oov_report`).
+- CLI: `scripts/run_session_089.py` — `--dry-run`/`--preflight-only`/`--confirm-live`/`--cost-ceiling` ($10 hard cap)/`--arm black|white|both`, UTF-16 `.env`, prereg-file gate.
+- Tests: `tests/dialectic/measurement/test_read_depth_oov_{schema,generator,validator,runner,report}.py` + `test_run_session_089_cli.py` + `test_read_depth_oov_no_network_anchor.py` (source-text purity, suite-robust) + `tests/paper_4/test_oov_prereg_bands_match_code.py` (+34 offline). Live D2 run (generation+judging) gated, not yet run.
 
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
