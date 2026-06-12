@@ -17,6 +17,11 @@ import json
 from dataclasses import dataclass
 from typing import Any, Mapping, Optional, Tuple
 
+from ares.dialectic.measurement.read_depth_corpus import BENIGN_ENTRIES, get_entry
+from ares.dialectic.measurement.read_depth_oov_schema import OOVCandidate
+from ares.dialectic.measurement.read_depth_oov_validator import apply_candidate
+from ares.dialectic.scripts.scenario_corpus import BenchmarkScenario
+
 # --- audit verdict labels --------------------------------------------------
 AUDIT_ROBUST = "ROBUST"
 AUDIT_PARTIAL = "PARTIAL"
@@ -98,3 +103,41 @@ def load_disguises(text: str) -> Tuple[dict[str, Any], Tuple[OOVDisguiseRecord, 
                     for r in payload.get("records", []))
     header = {k: v for k, v in payload.items() if k != "records"}
     return header, records
+
+
+_BENIGN_SANITY_ID = "RDF-B-CLEAN-001"  # all-tiers-benign baseline negative control
+
+
+def select_evading(
+    records: Tuple[OOVDisguiseRecord, ...]
+) -> Tuple[OOVDisguiseRecord, ...]:
+    return tuple(r for r in records if r.is_evading())
+
+
+def evaded_scenarios(records: Tuple[OOVDisguiseRecord, ...]) -> Tuple[str, ...]:
+    return tuple(sorted({r.scenario_id for r in select_evading(records)}))
+
+
+def reconstruct_disguised(record: OOVDisguiseRecord) -> BenchmarkScenario:
+    """Rebuild the disguised packet from the frozen corpus + persisted rewrites."""
+    base = get_entry(record.scenario_id).scenario
+    return apply_candidate(
+        base, OOVCandidate(record.scenario_id, record.arm, record.value_rewrites))
+
+
+def positive_controls(
+    records: Tuple[OOVDisguiseRecord, ...]
+) -> Tuple[BenchmarkScenario, ...]:
+    """Originals of each evaded scenario — a discriminating judge calls these malign."""
+    return tuple(get_entry(sid).scenario for sid in evaded_scenarios(records))
+
+
+def negative_controls(
+    records: Tuple[OOVDisguiseRecord, ...]
+) -> Tuple[BenchmarkScenario, ...]:
+    """Benign twins of evaded scenarios + the clean baseline — judges call these benign."""
+    evaded = set(evaded_scenarios(records))
+    twins = tuple(e.scenario for e in BENIGN_ENTRIES if e.twin_id in evaded)
+    sanity = tuple(e.scenario for e in BENIGN_ENTRIES
+                   if e.scenario_id == _BENIGN_SANITY_ID)
+    return twins + sanity
