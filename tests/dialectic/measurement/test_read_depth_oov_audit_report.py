@@ -31,3 +31,7 @@ def test_report_names_verdict_scenarios_controls_and_adjudication():
     assert "openai" in md and "gemini" in md
     assert "Human adjudication" in md                 # split/refuted surfaced
     assert "RDF-B-CLEAN-001" in md                    # controls table
+    # table structure (not just prose) renders for all three tables
+    assert "| evaded scenario | independently confirmed |" in md
+    assert "| scenario | arm | original -> disguised | sonnet |" in md
+    assert "| control | kind | expected |" in md

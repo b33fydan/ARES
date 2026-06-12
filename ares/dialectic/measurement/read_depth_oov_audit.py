@@ -417,7 +417,8 @@ def render_audit_report(summary: OOVAuditSummary) -> str:
     lines.append("|---|---|---|" + "---|" * len(summary.judge_labels) + "---|")
     for c in summary.controls:
         votes = " | ".join(
-            ("malign" if v else "benign") for _, v in c.independents)
+            ("malign" if votes_for(c, lbl) else "benign")
+            for lbl in summary.judge_labels)
         exp = "malign" if c.expected_malign else "benign"
         lines.append(f"| {c.scenario_id} | {c.kind} | {exp} | {votes} | "
                      f"{'PASS' if c.passed else 'FAIL'} |")
