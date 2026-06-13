@@ -86,7 +86,7 @@
         "Faithfulness of explanation surfaces in AI systems is distinct from decision stability — a recurring theme in XAI literature"
       ],
       "numbers_preregistered": [],
-      "bibkeys_required": ["greshake-2023", "guo-2024", "jacovi-goldberg-2020", "reiter-1978"],
+      "bibkeys_required": ["greshake-2023", "guo-2024", "jacovi-goldberg-2020", "reiter-1978", "tsipras-2019", "albanie-2022", "jin-2020"],
       "figures": [],
       "tables": []
     },
@@ -403,23 +403,28 @@
       "role": "Paper 3 self-cite — 'Decision Determinism, Explanation Drift'; establishes the Oracle passthrough finding and the architecture Paper 4 builds on",
       "status": "VERIFIED",
       "source": "docs/paper_3/acmart_spike/paper_3_acmart.pdf (canonical acmart sigconf PDF); Session 073 figure completion + Session 080 de-risk"
+    },
+    {
+      "bibkey": "jin-2020",
+      "role": "OOV/synonym evasion of text classifiers (§2 background, §6) — TextFooler establishes that synonym substitution defeats pattern-matching detectors while preserving meaning",
+      "status": "VERIFIED",
+      "source": "Jin, Jin, Zhou, Szolovits, 'Is BERT Really Robust? A Strong Baseline for Natural Language Attack on Text Classification and Entailment', AAAI 2020, arXiv 1907.11932. Verified 2026-06-13 (S094) via web search."
+    },
+    {
+      "bibkey": "tsipras-2019",
+      "role": "Robustness-frontier / robustness-accuracy tradeoff (§2 background, §4) — grounds the tradeoff-space framing of the read-depth frontier",
+      "status": "VERIFIED",
+      "source": "Tsipras, Santurkar, Engstrom, Turner, Madry, 'Robustness May Be at Odds with Accuracy', ICLR 2019, arXiv 1805.12152. Verified 2026-06-13 (S094) via web search."
+    },
+    {
+      "bibkey": "albanie-2022",
+      "role": "Pre-registration in ML evaluation (§2 background, §4) — the NeurIPS pre-registration-in-ML workshop grounds committing decision rules before the deciding run",
+      "status": "VERIFIED",
+      "source": "Albanie, Henriques, Bertinetto, Hernandez-Garcia, Doughty, Varol (eds.), 'NeurIPS 2021 Workshop on Pre-registration in Machine Learning', PMLR 181, 2022. Verified 2026-06-13 (S094) via proceedings.mlr.press/v181."
     }
   ],
 
-  "bibkeys_needed_unverified": [
-    {
-      "slug": "preregistration-ml-eval-needed",
-      "verification_instructions": "Web search: 'pre-registration open science machine learning evaluation reproducibility' — look for Pineau et al. ML reproducibility checklist or similar ML pre-reg canonical cite"
-    },
-    {
-      "slug": "evasion-attacks-detectors-needed",
-      "verification_instructions": "Web search: 'adversarial evasion attacks intrusion detection systems out-of-vocabulary NLP detectors' — look for canonical cite on OOV/synonym evasion of text classifiers or security detectors"
-    },
-    {
-      "slug": "robustness-frontier-needed",
-      "verification_instructions": "Web search: 'robustness frontier detection tradeoff framing adversarial NLP security' — look for a paper characterizing the detection vs robustness tradeoff space in adversarial ML settings"
-    }
-  ],
+  "bibkeys_needed_unverified": [],
 
   "anchor_tests_required": [
     {

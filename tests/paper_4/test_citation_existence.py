@@ -20,12 +20,13 @@ def skeleton():
     return json.loads(SKELETON.read_text(encoding="utf-8"))
 
 def test_references_bib_parses(bib_entries):
-    assert len(bib_entries) == 8  # 5 reused + 3 self-cites
+    assert len(bib_entries) == 11  # 5 reused + 3 self-cites + 3 new-lit (S094)
 
 def test_expected_verified_keys_present(bib_keys):
     for k in ("greshake-2023", "guo-2024", "jacovi-goldberg-2020",
               "reiter-1978", "berdoz-rugli-wattenhofer-2026",
-              "gmys-casiano-2026a", "gmys-casiano-2026b", "gmys-casiano-2026c"):
+              "gmys-casiano-2026a", "gmys-casiano-2026b", "gmys-casiano-2026c",
+              "jin-2020", "tsipras-2019", "albanie-2022"):
         assert k in bib_keys, k
 
 def test_every_entry_has_author_and_year(bib_entries):
