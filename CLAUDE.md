@@ -1,7 +1,7 @@
 # CLAUDE.md — ARES Phase 7 (post-Session 094)
 
 **Last updated:** 2026-06-13
-**Test count floor (passing):** 4,241
+**Test count floor (passing):** 4,243
 
 > Context-hygiene rule: this file holds current state + the last 3 sessions in full.
 > Older session prose rolls off to `docs/SESSION_LOG.md` at the top of each session.
@@ -105,6 +105,7 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - **Paper 4 references (verified-only):** `docs/paper_4/references.bib`
 - **Paper 4 number-check (resolvers locked to S088/S089-run2/S090 artifacts):** `docs/paper_4/number_check.py`
 - **Paper 4 figure renderer:** `docs/paper_4/build_figures.py`
+- **Paper 4 v1.0 source markdown (prose v0.1, pandoc cite markers):** `docs/paper_4/source/PAPER4_DRAFT_v1_0_source.md`
 - **Phase 6 plan:** `docs/PHASE6_INJECTION_ARENA.md`
 
 ## Architecture Constraints (NON-NEGOTIABLE)
@@ -319,8 +320,9 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Bib helpers (verbatim copy of Paper 3's): `docs/paper_4/build_references.py`. Verified-only bib `docs/paper_4/references.bib` (5 reused + 3 self-cites `gmys-casiano-2026a/b/c`; new keys tracked unverified in the skeleton until Phase 3).
 - Number-check: `docs/paper_4/number_check.py` (13 resolvers → SUPPORTED_STRONG / ROBUST / cumulative J=0.25 / SYN-001 p=0.0005 / named-IOC zero-flips / 15·3 confirmed·split / OOV cost 0.106) + report `docs/paper_4/number_check_report.md`.
 - Gates: `tests/paper_4/test_{skeleton_audit,citation_existence,number_check}.py` (skeleton-audit / citation-existence / number-check + skeleton↔resolver subset lock). Code-reality anchors already exist from S086–S090.
-- Out of scope for Phase 1 (later phases): prose (`source/`), acmart build + PDF gate.
 - Figures (Phase 2): `docs/paper_4/build_figures.py` -> 6 vector PDFs `docs/paper_4/figures/fig_{1..6}.pdf` (TrueType/fonttype 42; data figures loaded from the S088-S090 artifacts). fig_2 is the money figure (frontier standalone vs cumulative). Test `tests/paper_4/test_build_figures.py`.
+- Prose (Phase 3): `docs/paper_4/source/PAPER4_DRAFT_v1_0_source.md` — Abstract + §1-§12 + appendix (~6.3k words, voice-approved); 3 §2 cites web-verified (jin-2020 / tsipras-2019 / albanie-2022). `number_check.py --source` + `tests/paper_4/test_number_check.py::TestProse` lock the prose to 22 load-bearing substrings (35/35 with --source).
+- Out of scope (Phase 4, later): acmart build (`build_acmart.py`) + PDF substring gate.
 
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
