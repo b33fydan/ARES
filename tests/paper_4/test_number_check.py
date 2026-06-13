@@ -33,7 +33,14 @@ class TestHarness:
 
 
 class TestSkeletonSourceConsistency:
-    def test_every_skeleton_number_has_passing_resolver(self):
+    def test_covered_skeleton_numbers_have_passing_resolvers(self):
+        # Scope: asserts every skeleton number in `covered` (the result-bearing
+        # values) is backed by a passing resolver. Numbers NOT in `covered` are
+        # locked elsewhere, not here: corpus digests (skeleton SSOT + Phase-3
+        # prose), K / costs / per-candidate flip rates / frozen bands 0.1+0.5 /
+        # rung-count 5 (prereg + prose), and the scenarios-evaded list (resolver
+        # returns a tuple whose repr differs from the skeleton list repr — so it
+        # is skipped here by design).
         import json, pathlib
         sk = json.loads((pathlib.Path(nc.__file__).resolve().parents[2]
                          / "docs/paper_4/skeleton_v1_0.json").read_text("utf-8"))

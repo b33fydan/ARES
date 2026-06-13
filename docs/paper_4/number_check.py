@@ -90,7 +90,10 @@ def _resolve_oov_verdict() -> str:
 
 
 def _resolve_oov_black_evaded() -> tuple:
-    s = next(a for a in _load(OOV_SUMMARY)["arm_summaries"] if a["arm"] == "black")
+    s = next((a for a in _load(OOV_SUMMARY)["arm_summaries"]
+              if a["arm"] == "black"), None)
+    if s is None:
+        raise LookupError("OOV summary missing 'black' arm entry")
     return tuple(sorted(s["scenarios_evaded"]))            # (LEX-002, SYN-001)
 
 
