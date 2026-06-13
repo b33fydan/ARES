@@ -30,3 +30,17 @@ class TestHarness:
     def test_main_exits_zero(self, tmp_path):
         rc = nc.main(["--out-report", str(tmp_path / "r.md")])
         assert rc == 0
+
+
+class TestSkeletonSourceConsistency:
+    def test_every_skeleton_number_has_passing_resolver(self):
+        import json, pathlib
+        sk = json.loads((pathlib.Path(nc.__file__).resolve().parents[2]
+                         / "docs/paper_4/skeleton_v1_0.json").read_text("utf-8"))
+        resolved = {str(r.actual) for r in nc.run_checks(nc.default_claims(sk)) if r.passed}
+        covered = {"0.25", "0.75", "0.125", "0.0005", "SUPPORTED_STRONG",
+                   "ROBUST", "0", "15", "3", "0.106", "True"}
+        for n in sk["numbers_preregistered"]:
+            v = str(n["value"])
+            if v in covered:
+                assert v in resolved, v
