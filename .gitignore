@@ -52,8 +52,9 @@ dmypy.json
 # Jupyter
 .ipynb_checkpoints/
 
-# Claude Code settings (optional - remove this line if you want to share settings)
-.claude/
+# Claude Code settings stay local; skills under .claude/skills/ are shared (versioned).
+.claude/*
+!.claude/skills/
 
 # Logs
 *.log
