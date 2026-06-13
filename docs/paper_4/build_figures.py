@@ -107,9 +107,14 @@ def render_fig_2() -> None:
             color = C_DIVERGE if (tier == "v2_canonical" and occupied) else C_LADDER
             ax.scatter([xx], [j], s=46, color=color, zorder=3,
                        edgecolor="white", linewidth=0.6)
-            ax.annotate(_TIER_LABEL[tier], (xx, j),
-                        textcoords="offset points", xytext=(5, 3),
-                        fontsize=6.0, color="#333333")
+            # Standalone separates points by J (legible). Cumulative
+            # collapses the upper rungs onto J=0.25 — labeling them there
+            # overprints, so label only the separated v1_field and let the
+            # arrowed "all rungs cap" annotation speak for the cluster.
+            if view == "standalone" or tier == "v1_field":
+                ax.annotate(_TIER_LABEL[tier], (xx, j),
+                            textcoords="offset points", xytext=(5, 3),
+                            fontsize=6.0, color="#333333")
         ax.set_title(view, fontsize=8, fontweight="bold")
         ax.set_xlabel(r"$X_{\mathrm{sem}}$ (framing-flip rate)", fontsize=7.5)
         ax.set_xlim(-0.03, 0.42)
@@ -122,8 +127,10 @@ def render_fig_2() -> None:
     axes[0].set_ylabel("Youden's J (TPR - FPR)", fontsize=7.5)
     axes[0].text(0.005, 0.96, "good corner", fontsize=6, color=C_STABLE,
                  style="italic", va="top")
-    axes[1].text(0.20, 0.27, "all rungs cap\nat J = 0.25", fontsize=6.5,
-                 color=C_DIVERGE, ha="left", va="center", style="italic")
+    axes[1].annotate("all 5 rungs cap\nat J = 0.25", xy=(0.045, 0.25),
+                     xytext=(0.17, 0.46), fontsize=6.5, color=C_DIVERGE,
+                     ha="left", va="center", style="italic",
+                     arrowprops=dict(arrowstyle="->", color=C_DIVERGE, lw=0.8))
     fig.suptitle("Read-depth frontier: good corner occupied standalone, "
                  "empty cumulative", fontsize=8.5, fontweight="bold")
     fig.tight_layout(rect=(0, 0, 1, 0.95))
@@ -166,10 +173,9 @@ def render_fig_3() -> None:
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.legend(fontsize=6.5, loc="upper left", framealpha=0.9)
-    ax.text(0.5, 8.0, "evaded", fontsize=6.5, color=C_DIVERGE,
-            ha="center", style="italic")
-    ax.text(2.5, 8.0, "", fontsize=6.5)
-    ax.axvspan(0.5, 2.5, color=C_DIVERGE, alpha=0.05)
+    ax.axvspan(0.5, 2.5, color=C_DIVERGE, alpha=0.06)
+    ax.text(1.5, 8.2, "evaded", fontsize=6.5, color=C_DIVERGE,
+            ha="center", va="top", style="italic")
     fig.tight_layout()
     _save(fig, "fig_3")
 
