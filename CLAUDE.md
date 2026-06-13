@@ -1,7 +1,7 @@
-# CLAUDE.md — ARES Phase 7 (post-Session 090)
+# CLAUDE.md — ARES Phase 7 (post-Session 094)
 
-**Last updated:** 2026-06-12
-**Test count floor (passing):** 4,188
+**Last updated:** 2026-06-13
+**Test count floor (passing):** 4,239
 
 > Context-hygiene rule: this file holds current state + the last 3 sessions in full.
 > Older session prose rolls off to `docs/SESSION_LOG.md` at the top of each session.
@@ -82,6 +82,7 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Session 091 — Provider-aware OOV generator cost fix (`bd72bdb`): routed `read_depth_oov_generator._call_cost` through the validator's shared `cost_for` (added S090 for the judge), dropping the hardcoded Anthropic per-token constants so non-anthropic providers no longer mis-cost (unknown providers now raise). Latent today (the OOV adversary always runs anthropic). +3 offline tests; full suite 4,366 pass / 75 skip / 0 fail.
 - Session 092 — **Paper 4 design session** (docs-only): brainstorm → spec → writing-plans for Paper 4 off the closed S086–S090 read-depth frontier. Framing locked: the **read-depth robustness trilemma as a result** (frontier-first + embedded-refute structure; write-from-closed-artifacts scope; later peer venue, decoupled from Paper 3's AISec slot). Deliverables: design spec `docs/superpowers/specs/2026-06-12-paper-4-read-depth-trilemma-design.md` + Phase 1 scaffold plan `docs/superpowers/plans/2026-06-13-paper-4-scaffold.md` (skeleton JSON + verified-only bib + skeleton-audit/citation-existence/number-check gates, locked to on-disk S088/S089-run2/S090 artifacts; surfaced two number reconciliations — OOV run-2 canonical, SYN-001 p=0.0005). Notion debrief posted. No code/tests; the build (scaffold → figures → prose → acmart) is later sessions.
 - Session 093 — **ARES session-close skill** (tooling): brainstorm → spec → skill-creator build of `.claude/skills/ares-session-close/SKILL.md` — a project skill that runs the end-of-session ritual in order: gate commit/push (CLAUDE.md ledger + squash-merge to `main`, *confirm before push*), post the Notion debrief + In Plain Terms, then crystalize. Fired every ARES session via a new CLAUDE.md Workflow cue (skill + cue, **not** a settings.json hook — hooks run shell, can't do the debrief/crystalize reasoning). Also un-ignored `.claude/skills/` so skills are versioned (`.claude/*` + `!.claude/skills/`; `ares-knowledge` now tracked too). Validated by dogfooding it to close this very session. Spec `docs/superpowers/specs/2026-06-13-ares-session-close-skill-design.md`. No code/tests; floor unchanged.
+- Session 094 — **Paper 4 scaffold (Phase 1)**: built the read-depth-trilemma paper's structural SSOT + verification gates from the closed S086–S090 artifacts (no new measurement). `docs/paper_4/skeleton_v1_0.json` (12-section frontier-first scaffold; `numbers_preregistered` locked to on-disk `tier4_summary.json` + `oov_summary.json`(run-2) + `oov_audit.json`; per-section numbers a strict subset of the top-level registry; figure/table↔host-section consistency tested) + verified-only `docs/paper_4/references.bib` (5 reused + 3 self-cites `gmys-casiano-2026a/b/c`; new keys tracked unverified in the skeleton until Phase 3) + `docs/paper_4/number_check.py` (13 resolvers → SUPPORTED_STRONG / ROBUST / cumulative J=0.25 / SYN-001 p=0.0005 / named-IOC zero-flips / 15·3 confirmed·split / OOV cost $0.106). 3 gates `tests/paper_4/test_{skeleton_audit,citation_existence,number_check}.py` (+48 collected). Honored the two number reconciliations (OOV run-2 canonical 0.28125/0.2903…; SYN-001 p=0.0005, not the rounded 0.001). Subagent-driven TDD (two-stage review per task) on `session/094-paper-4-scaffold`; full suite 4,413 pass / 76 skip / 0 fail. Next: Phase 2 figures → Phase 3 prose → Phase 4 acmart (each its own plan).
 
 ## Canonical Artifacts
 - **Paper 1:** `docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf`
@@ -100,6 +101,9 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - **Paper 3 v1.0 docx (retired Session 072, archival only):** `docs/paper_3/retired/PAPER3_DRAFT_v1_0.docx`
 - **Paper 3 v1.0 docx build script (retired Session 072):** `docs/paper_3/retired/build_v1_0_docx.py`
 - **Paper 3 figure renderer:** `docs/paper_3/build_figures.py` (Session 073; 6 vector PDFs at `docs/paper_3/figures/fig_{1..6}.pdf`)
+- **Paper 4 v1.0 skeleton (structural scaffold, SSOT):** `docs/paper_4/skeleton_v1_0.json`
+- **Paper 4 references (verified-only):** `docs/paper_4/references.bib`
+- **Paper 4 number-check (resolvers locked to S088/S089-run2/S090 artifacts):** `docs/paper_4/number_check.py`
 - **Phase 6 plan:** `docs/PHASE6_INJECTION_ARENA.md`
 
 ## Architecture Constraints (NON-NEGOTIABLE)
@@ -307,6 +311,14 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Verdict CLI sidecar: `scripts/run_session_089.py` — `write_verdict_artifacts` emits `oov_disguises.json`.
 - Audit CLI: `scripts/run_session_090.py` — `--judges`/`--sidecar`/`--dry-run`/`--preflight-only`/`--confirm-live`/`--cost-ceiling` ($10 cap), UTF-16 `.env`, prereg-file gate.
 - Tests: `tests/dialectic/measurement/test_read_depth_oov_{pricing,audit_schema,audited,audit_select,audit_verdict,audit_runner,audit_report}.py` + `test_run_session_090_cli.py` + the extended `test_read_depth_oov_no_network_anchor.py` + `tests/paper_4/test_oov_audit_prereg_bands_match_code.py` (+38 offline).
+
+### Paper 4 scaffold (read-depth trilemma; Phase 1 / Session 094)
+- Spec/plan: `docs/superpowers/specs/2026-06-12-paper-4-read-depth-trilemma-design.md`, `docs/superpowers/plans/2026-06-13-paper-4-scaffold.md`.
+- Structural skeleton (SSOT): `docs/paper_4/skeleton_v1_0.json` — 12-section frontier-first scaffold; `numbers_preregistered` locked to on-disk S088 (`tier4_summary.json`/`frontier_coordinates.json`) + S089 run-2 (`oov_summary.json`) + S090 (`oov_audit.json`); per-section numbers a strict subset of the top-level registry; figure/table↔host-section consistency enforced by the audit test.
+- Bib helpers (verbatim copy of Paper 3's): `docs/paper_4/build_references.py`. Verified-only bib `docs/paper_4/references.bib` (5 reused + 3 self-cites `gmys-casiano-2026a/b/c`; new keys tracked unverified in the skeleton until Phase 3).
+- Number-check: `docs/paper_4/number_check.py` (13 resolvers → SUPPORTED_STRONG / ROBUST / cumulative J=0.25 / SYN-001 p=0.0005 / named-IOC zero-flips / 15·3 confirmed·split / OOV cost 0.106) + report `docs/paper_4/number_check_report.md`.
+- Gates: `tests/paper_4/test_{skeleton_audit,citation_existence,number_check}.py` (skeleton-audit / citation-existence / number-check + skeleton↔resolver subset lock). Code-reality anchors already exist from S086–S090.
+- Out of scope for Phase 1 (later phases): figures (`build_figures.py`), prose (`source/`), acmart build + PDF gate.
 
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
