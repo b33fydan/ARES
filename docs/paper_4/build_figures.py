@@ -224,10 +224,109 @@ def render_fig_4() -> None:
     _save(fig, "fig_4")
 
 
+def render_fig_1() -> None:
+    rungs = [
+        ("v1_field", "reads: field presence only"),
+        ("v2_structured", "reads: high-threat field + stage logic"),
+        ("v2_lexical", "reads: exe-in-user-path regex"),
+        ("v2_canonical", "reads: canonicalize-then-match"),
+        ("llm_semantic", "reads: full LLM by meaning"),
+    ]
+    fig, ax = plt.subplots(figsize=(DOUBLE_COL, 3.0))
+    ax.set_xlim(0, 10); ax.set_ylim(0, 6); ax.axis("off")
+    bw, bh = 5.2, 0.8
+    for i, (name, reads) in enumerate(rungs):
+        x = 0.6 + i * 0.7
+        y = 0.6 + i * 1.0
+        shade = 0.30 + 0.14 * i
+        ax.add_patch(FancyBboxPatch(
+            (x, y), bw, bh, boxstyle="round,pad=0.06",
+            facecolor=C_LADDER, alpha=shade, edgecolor=C_LADDER, linewidth=1.0))
+        ax.text(x + 0.15, y + bh / 2, name, ha="left", va="center",
+                fontsize=7.5, fontweight="bold", family="monospace")
+        ax.text(x + bw - 0.15, y + bh / 2, reads, ha="right", va="center",
+                fontsize=6.0, color="#333333", style="italic")
+    ax.annotate("", xy=(0.35, 5.6), xytext=(0.35, 0.5),
+                arrowprops=dict(arrowstyle="->", color=C_DIVERGE, lw=1.4))
+    ax.text(0.05, 3.0, "read depth", rotation=90, va="center", ha="center",
+            fontsize=7, color=C_DIVERGE, fontweight="bold")
+    ax.text(9.6, 0.2, "deeper -> more detection AND more\nattacker-controlled "
+            "surface (the trilemma)", ha="right", va="bottom",
+            fontsize=6.5, color=C_DIVERGE, style="italic")
+    _save(fig, "fig_1")
+
+
+def render_fig_5() -> None:
+    fig, ax = plt.subplots(figsize=(DOUBLE_COL, 2.4))
+    ax.set_xlim(0, 12); ax.set_ylim(0, 5); ax.axis("off")
+    boxes = [
+        (0.3, 3.0, "LLM adversary\n(generate\ndisguises)", C_ADVERSARY),
+        (3.2, 3.0, "deterministic gate\n(skeleton +\nnovelty)", C_STABLE),
+        (6.1, 3.0, "LLM judge\n(meaning-\npreserving?)", C_AUDIT),
+        (9.0, 3.0, "verdict", C_LADDER),
+    ]
+    bw, bh = 2.4, 1.4
+    for x, y, label, color in boxes:
+        ax.add_patch(FancyBboxPatch((x, y), bw, bh, boxstyle="round,pad=0.08",
+                     facecolor=color, alpha=0.85, edgecolor="black", linewidth=0.8))
+        ax.text(x + bw / 2, y + bh / 2, label, ha="center", va="center",
+                fontsize=7, fontweight="bold", color="white")
+    for x1 in (0.3, 3.2, 6.1):
+        ax.annotate("", xy=(x1 + bw + 0.45, 3.0 + bh / 2),
+                    xytext=(x1 + bw + 0.05, 3.0 + bh / 2),
+                    arrowprops=dict(arrowstyle="->", color="black", lw=1.2))
+    ax.add_patch(FancyBboxPatch((6.1, 0.5), 5.3, 1.2, boxstyle="round,pad=0.08",
+                 facecolor=C_AUDIT, alpha=0.5, edgecolor=C_AUDIT, linewidth=1.0))
+    ax.text(8.75, 1.1, "independent audit: GPT-4o + Gemini\n+ calibration controls",
+            ha="center", va="center", fontsize=6.5, fontweight="bold", color="#222222")
+    ax.annotate("", xy=(9.0 + bw / 2, 2.95), xytext=(9.0 + bw / 2, 1.75),
+                arrowprops=dict(arrowstyle="->", color=C_AUDIT, lw=1.1))
+    ax.text(6.0, 4.7, "LLM proposes, code disposes", ha="center", va="top",
+            fontsize=8, fontweight="bold", color="#222222")
+    _save(fig, "fig_5")
+
+
+def _first_syn001_disguise() -> dict:
+    for e in _load(OOV / "oov_audit.json")["evading"]:
+        if (e["scenario_id"] == "RDF-M-SYN-001" and e["arm"] == "black"
+                and e["classification"] == "independent_confirmed"):
+            return e
+    raise LookupError("no confirmed black SYN-001 evading disguise found")
+
+
+def render_fig_6() -> None:
+    e = _first_syn001_disguise()
+    orig = [v for _, v in e["original_values"]]
+    new = [v for _, v in e["value_rewrites"]]
+    fig, ax = plt.subplots(figsize=(DOUBLE_COL, 1.9))
+    ax.set_xlim(0, 12); ax.set_ylim(0, len(orig) + 1.6); ax.axis("off")
+    ax.text(3.0, len(orig) + 1.1, "original (canonical matches)", ha="center",
+            fontsize=7, fontweight="bold", color=C_STABLE)
+    ax.text(9.0, len(orig) + 1.1, "OOV disguise (canonical misses)", ha="center",
+            fontsize=7, fontweight="bold", color=C_DIVERGE)
+    for i, (o, n) in enumerate(zip(orig, new)):
+        y = len(orig) - i
+        ax.add_patch(mpatches.Rectangle((0.2, y - 0.35), 5.6, 0.7,
+                     facecolor=C_CODEBG, edgecolor=C_BORDER, linewidth=0.5))
+        ax.text(0.4, y, o, ha="left", va="center", fontsize=6.0, family="monospace")
+        ax.add_patch(mpatches.Rectangle((6.2, y - 0.35), 5.6, 0.7,
+                     facecolor="#FFEBEE", edgecolor=C_DIVERGE, linewidth=0.5))
+        ax.text(6.4, y, n, ha="left", va="center", fontsize=6.0, family="monospace")
+        ax.annotate("", xy=(6.15, y), xytext=(5.85, y),
+                    arrowprops=dict(arrowstyle="->", color="#999999", lw=0.8))
+    ax.text(6.0, 0.2, "meaning preserved -> both independents (GPT-4o + Gemini) "
+            "read it malign", ha="center", va="bottom", fontsize=6.0,
+            color=C_DIVERGE, style="italic")
+    _save(fig, "fig_6")
+
+
 ALL_FIGURES: dict[int, "callable"] = {}
+ALL_FIGURES[1] = render_fig_1
 ALL_FIGURES[2] = render_fig_2
 ALL_FIGURES[3] = render_fig_3
 ALL_FIGURES[4] = render_fig_4
+ALL_FIGURES[5] = render_fig_5
+ALL_FIGURES[6] = render_fig_6
 
 
 def main() -> int:
