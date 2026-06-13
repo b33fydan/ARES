@@ -104,6 +104,7 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - **Paper 4 v1.0 skeleton (structural scaffold, SSOT):** `docs/paper_4/skeleton_v1_0.json`
 - **Paper 4 references (verified-only):** `docs/paper_4/references.bib`
 - **Paper 4 number-check (resolvers locked to S088/S089-run2/S090 artifacts):** `docs/paper_4/number_check.py`
+- **Paper 4 figure renderer:** `docs/paper_4/build_figures.py`
 - **Phase 6 plan:** `docs/PHASE6_INJECTION_ARENA.md`
 
 ## Architecture Constraints (NON-NEGOTIABLE)
@@ -318,7 +319,8 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - Bib helpers (verbatim copy of Paper 3's): `docs/paper_4/build_references.py`. Verified-only bib `docs/paper_4/references.bib` (5 reused + 3 self-cites `gmys-casiano-2026a/b/c`; new keys tracked unverified in the skeleton until Phase 3).
 - Number-check: `docs/paper_4/number_check.py` (13 resolvers → SUPPORTED_STRONG / ROBUST / cumulative J=0.25 / SYN-001 p=0.0005 / named-IOC zero-flips / 15·3 confirmed·split / OOV cost 0.106) + report `docs/paper_4/number_check_report.md`.
 - Gates: `tests/paper_4/test_{skeleton_audit,citation_existence,number_check}.py` (skeleton-audit / citation-existence / number-check + skeleton↔resolver subset lock). Code-reality anchors already exist from S086–S090.
-- Out of scope for Phase 1 (later phases): figures (`build_figures.py`), prose (`source/`), acmart build + PDF gate.
+- Out of scope for Phase 1 (later phases): prose (`source/`), acmart build + PDF gate.
+- Figures (Phase 2): `docs/paper_4/build_figures.py` -> 6 vector PDFs `docs/paper_4/figures/fig_{1..6}.pdf` (TrueType/fonttype 42; data figures loaded from the S088-S090 artifacts). fig_2 is the money figure (frontier standalone vs cumulative). Test `tests/paper_4/test_build_figures.py`.
 
 ### Live results
 - `results/session_048/` — full 27-scenario raw + per-strategy CSV + summary
