@@ -130,8 +130,104 @@ def render_fig_2() -> None:
     _save(fig, "fig_2")
 
 
+_OOV_SCENARIOS = ["RDF-M-LEX-001", "RDF-M-LEX-002",
+                  "RDF-M-SYN-001", "RDF-M-PATCH-001"]
+_OOV_SHORT = {"RDF-M-LEX-001": "LEX-001\n(lsass)",
+              "RDF-M-LEX-002": "LEX-002\n(exe-in-temp)",
+              "RDF-M-SYN-001": "SYN-001\n(synonym)",
+              "RDF-M-PATCH-001": "PATCH-001\n(procdump)"}
+
+
+def _oov_flips(arm: str) -> dict:
+    """scenario_id -> count of canonical_flipped over its K records, for arm."""
+    recs = [r for r in _load(OOV / "oov_summary.json")["records"]
+            if r["arm"] == arm]
+    out = {s: 0 for s in _OOV_SCENARIOS}
+    for r in recs:
+        if r["canonical_flipped"]:
+            out[r["scenario_id"]] += 1
+    return out
+
+
+def render_fig_3() -> None:
+    black = _oov_flips("black")
+    white = _oov_flips("white")
+    fig, ax = plt.subplots(figsize=(SINGLE_COL, 2.3))
+    x = range(len(_OOV_SCENARIOS)); w = 0.38
+    ax.bar([i - w / 2 for i in x], [black[s] for s in _OOV_SCENARIOS], w,
+           color=C_ADVERSARY, label="black-box", edgecolor="white", linewidth=0.5)
+    ax.bar([i + w / 2 for i in x], [white[s] for s in _OOV_SCENARIOS], w,
+           color=C_AUDIT, label="white-box", edgecolor="white", linewidth=0.5)
+    ax.set_xticks(list(x))
+    ax.set_xticklabels([_OOV_SHORT[s] for s in _OOV_SCENARIOS], fontsize=6.0)
+    ax.set_ylabel("canonical flips (of K=8)", fontsize=7.5)
+    ax.set_ylim(0, 8.5)
+    ax.tick_params(axis="y", labelsize=7)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.legend(fontsize=6.5, loc="upper left", framealpha=0.9)
+    ax.text(0.5, 8.0, "evaded", fontsize=6.5, color=C_DIVERGE,
+            ha="center", style="italic")
+    ax.text(2.5, 8.0, "", fontsize=6.5)
+    ax.axvspan(0.5, 2.5, color=C_DIVERGE, alpha=0.05)
+    fig.tight_layout()
+    _save(fig, "fig_3")
+
+
+_JUDGES = [("sonnet", "Sonnet\n(original)", C_BORDER),
+           ("gemini", "Gemini", C_AUDIT),
+           ("openai", "GPT-4o", C_ADVERSARY)]
+
+
+def _audit_malign_counts() -> dict:
+    """judge -> count of malign verdicts over the evading disguises.
+    sonnet is malign on every evading entry by construction; the
+    independents come from each entry's `independents` list."""
+    ev = _load(OOV / "oov_audit.json")["evading"]
+    counts = {"sonnet": 0, "gemini": 0, "openai": 0}
+    for e in ev:
+        if e.get("sonnet_malign", True):
+            counts["sonnet"] += 1
+        for judge, verdict in e["independents"]:
+            if verdict:
+                counts[judge] += 1
+    return counts
+
+
+def render_fig_4() -> None:
+    audit = _load(OOV / "oov_audit.json")
+    counts = _audit_malign_counts()
+    n_ev = len(audit["evading"])
+    n_conf = sum(1 for e in audit["evading"]
+                 if e["classification"] == "independent_confirmed")
+    n_split = sum(1 for e in audit["evading"]
+                  if e["classification"] == "independent_split")
+    n_ctrl = len(audit["controls"])
+    fig, ax = plt.subplots(figsize=(SINGLE_COL, 2.3))
+    xs = range(len(_JUDGES))
+    ax.bar(list(xs), [counts[k] for k, _, _ in _JUDGES],
+           0.6, color=[c for _, _, c in _JUDGES], edgecolor="white", linewidth=0.5)
+    for i, (k, _, _) in enumerate(_JUDGES):
+        ax.text(i, counts[k] + 0.3, str(counts[k]), ha="center",
+                fontsize=8, fontweight="bold")
+    ax.set_xticks(list(xs))
+    ax.set_xticklabels([lbl for _, lbl, _ in _JUDGES], fontsize=6.5)
+    ax.set_ylabel(f"malign verdicts (of {n_ev} evading)", fontsize=7.5)
+    ax.set_ylim(0, n_ev + 3)
+    ax.tick_params(axis="y", labelsize=7)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.set_title(f"Audit: {n_conf} confirmed / {n_split} split; "
+                 f"{n_ctrl}/{n_ctrl} controls pass -> ROBUST",
+                 fontsize=7.0, fontweight="bold")
+    fig.tight_layout()
+    _save(fig, "fig_4")
+
+
 ALL_FIGURES: dict[int, "callable"] = {}
 ALL_FIGURES[2] = render_fig_2
+ALL_FIGURES[3] = render_fig_3
+ALL_FIGURES[4] = render_fig_4
 
 
 def main() -> int:
