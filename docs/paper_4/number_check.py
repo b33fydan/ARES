@@ -58,10 +58,15 @@ def _load(p: Path) -> dict:
 
 
 def _tier4_coord(view: str, field: str):
+    # Match the skeleton lock_target contract exactly: the LLM rung
+    # (tier_id="llm_semantic"), not merely the first row for this view.
+    # Today tier4_summary.json carries one row per view (both llm_semantic),
+    # so the tier_id guard is a no-op; it hardens against a future re-run
+    # that serializes the deterministic rungs into this file too.
     for c in _load(TIER4)["coordinates"]:
-        if c["view"] == view:
+        if c["view"] == view and c.get("tier_id") == "llm_semantic":
             return c[field]
-    raise LookupError(f"tier4 view {view!r} not found")
+    raise LookupError(f"tier4 llm_semantic coord for view {view!r} not found")
 
 
 def _resolve_cumulative_j_cap() -> float:
