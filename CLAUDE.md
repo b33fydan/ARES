@@ -16,6 +16,7 @@ Location: `C:\ares-phase-zero`. Python 3.11. Multi-model LLM (Anthropic + OpenAI
 - **Claude-web is a consultant**, not the orchestrator. Dan adds session logs as markdown to Claude-web's project library.
 - **Notion is a publish target**, not a coordination surface. Session logs posted after each commit.
 - Decision locked Session 073-074 (2026-05-24) after diagnosing relay-drift from Sessions 061-072.
+- **Session close:** When Dan signals the session is ending ("done for today", "wrap up", "close out", "end session", "that's a wrap"), invoke the `ares-session-close` skill — it gates commit/push (CLAUDE.md ledger + squash-merge to `main`, confirm before push), posts the Notion debrief + In Plain Terms, then crystalizes. Offer it if the intent is ambiguous; never fire mid-task.
 
 ## Where We Are
 - Paper 1 published: "The Problem Is Inside the Black Box: Asymmetric Calibration Failure in Multi-Agent LLM Debate" (canonical PDF, 11 pages, see `docs/paper_1/CANONICAL.md`)
