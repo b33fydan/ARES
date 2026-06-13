@@ -311,8 +311,16 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--docx", type=Path, default=None,
         help=(
             "Optional: validate the prose body of this docx against "
-            "prose_substring_claims(). "
-            "Phase 3 scope: this mode is dormant until prose lands."
+            "prose_substring_claims(). Dormant — Paper 4 prose is markdown; "
+            "use --source instead."
+        ),
+    )
+    parser.add_argument(
+        "--source", type=Path, default=None,
+        help=(
+            "Optional: validate the prose body of this markdown source "
+            "(docs/paper_4/source/PAPER4_DRAFT_v1_0_source.md) against "
+            "prose_substring_claims(). The Phase-3 markdown path."
         ),
     )
     return parser
@@ -329,6 +337,12 @@ def main(argv: Optional[Iterable[str]] = None) -> int:
         docx_text = extract_docx_text(args.docx.resolve())
         results = results + check_prose_substrings(
             docx_text, prose_substring_claims(),
+        )
+
+    if args.source is not None and args.source.exists():
+        source_text = args.source.read_text(encoding="utf-8")
+        results = results + check_prose_substrings(
+            source_text, prose_substring_claims(),
         )
 
     report = render_report(results)

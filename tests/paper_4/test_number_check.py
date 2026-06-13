@@ -51,3 +51,29 @@ class TestSkeletonSourceConsistency:
             v = str(n["value"])
             if v in covered:
                 assert v in resolved, v
+
+
+class TestProse:
+    """Phase-3 activation: the prose source must contain every load-bearing
+    substring in prose_substring_claims() verbatim (locks the draft to the
+    numbers). Markdown --source path; the docx path stays dormant."""
+
+    def _source_text(self) -> str:
+        import pathlib
+        src = (pathlib.Path(nc.__file__).resolve().parents[2]
+               / "docs/paper_4/source/PAPER4_DRAFT_v1_0_source.md")
+        return src.read_text(encoding="utf-8")
+
+    def test_source_contains_all_prose_substrings(self):
+        results = nc.check_prose_substrings(self._source_text(),
+                                            nc.prose_substring_claims())
+        missing = [r.label for r in results if not r.passed]
+        assert not missing, missing
+
+    def test_main_source_mode_exits_zero(self, tmp_path):
+        import pathlib
+        src = (pathlib.Path(nc.__file__).resolve().parents[2]
+               / "docs/paper_4/source/PAPER4_DRAFT_v1_0_source.md")
+        rc = nc.main(["--out-report", str(tmp_path / "r.md"),
+                      "--source", str(src)])
+        assert rc == 0
