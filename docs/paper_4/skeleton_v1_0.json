@@ -52,7 +52,7 @@
         "Two independent judge families (GPT-4o, Gemini) corroborate the evasions are meaning-preserving threats under calibration controls",
         "The trilemma is empirical and pre-registered, not a theoretical impossibility — but the good corner is empty as measured"
       ],
-      "numbers_preregistered": ["0.25", "2/4", "15/18", "4/4"],
+      "numbers_preregistered": ["0.25", "SUPPORTED_STRONG", "ROBUST"],
       "bibkeys_required": ["gmys-casiano-2026a", "gmys-casiano-2026b", "gmys-casiano-2026c"],
       "figures": [],
       "tables": []
@@ -86,7 +86,7 @@
         "Faithfulness of explanation surfaces in AI systems is distinct from decision stability — a recurring theme in XAI literature"
       ],
       "numbers_preregistered": [],
-      "bibkeys_required": ["greshake-2023", "guo-2024", "jacovi-goldberg-2020"],
+      "bibkeys_required": ["greshake-2023", "guo-2024", "jacovi-goldberg-2020", "reiter-1978"],
       "figures": [],
       "tables": []
     },
@@ -118,7 +118,7 @@
         "Frozen pre-registered bands: framing-robust iff X_sem ≤ 0.10; high detection iff cumulative J ≥ 0.50; good corner = both simultaneously",
         "Decision rule locked before tier-4 run: SUPPORTED if good corner empty, FALSIFIED if any rung occupies it"
       ],
-      "numbers_preregistered": ["8", "0.10", "0.50"],
+      "numbers_preregistered": ["8", "0.1", "0.5"],
       "bibkeys_required": [],
       "figures": [],
       "tables": ["tbl_1"]
@@ -131,11 +131,11 @@
       "claims": [
         "S088 tier-4 live run (Sonnet 4, K=20, Corpus C digest 9401b7188ba790a5, $3.23): all four deterministic rungs cap at cumulative J=0.25 — the structural tier's FPR=0.75 propagates through the entire stack",
         "Standalone view shows the genuine detection ladder: v1_field J=0.0, v2_structured J=0.25, v2_lexical J=0.50, v2_canonical J=0.75; the standalone-to-cumulative gap is P3's empirical signature",
-        "LLM tier (v2_semantic) shows standalone J=0.75, X_sem=0.125 [0.00, 0.38] — it detects but is framing-susceptible (RDF-M-SYN-001 suffix flip p=0.0005)",
+        "LLM tier (llm_semantic) shows standalone J=0.75, X_sem=0.125 [0.00, 0.375] — it detects but is framing-susceptible (RDF-M-SYN-001 suffix flip p=0.0005)",
         "v2_canonical appears to occupy the good corner in standalone: J=0.75, X_sem=0.0 (framing-robust by construction) — this is the lone escape that §6 adversarially probes",
         "Finding 1 SUPPORTED under the pre-registered bands: the cumulative view confirms the good corner is empty for all rungs"
       ],
-      "numbers_preregistered": ["0.25", "0.75", "0.0", "0.50", "0.125", "0.0005", "3.2279", "9401b7188ba790a5"],
+      "numbers_preregistered": ["0.25", "0.75", "0.0", "0.5", "0.125", "0.0005", "3.2279", "9401b7188ba790a5"],
       "bibkeys_required": [],
       "figures": ["fig_2"],
       "tables": ["tbl_2"]
@@ -171,7 +171,7 @@
         "15/18 evading disguises: both-independents confirmed as meaning-preserving threats; 3/18 split (GPT-4o benign / Gemini+Sonnet malign) — splits cluster at the meaning-dilution boundary of SYN-001",
         "Audit verdict ROBUST: the SUPPORTED_STRONG headline is not a lenient-judge artifact; GPT-4o is the stricter judge; total spend $0.0093"
       ],
-      "numbers_preregistered": ["15", "3", "18", "4", "ROBUST", "0.0093"],
+      "numbers_preregistered": ["15", "3", "4", "ROBUST", "0.0093"],
       "bibkeys_required": [],
       "figures": ["fig_4"],
       "tables": ["tbl_4"]
@@ -348,7 +348,11 @@
     {"value": 15, "source": "S090 oov_audit.json evading[classification=independent_confirmed] count", "lock_target": "oov_audit.json evading[*].classification == independent_confirmed count"},
     {"value": 3, "source": "S090 oov_audit.json evading[classification=independent_split] count", "lock_target": "oov_audit.json evading[*].classification == independent_split count"},
     {"value": 0.0093, "source": "S090 oov_audit.json total_cost_usd", "lock_target": "oov_audit.json total_cost_usd"},
-    {"value": 0.115, "source": "derived: S089 $0.106 + S090 $0.0093 total live spend on the OOV experiment + audit", "lock_target": "oov_summary.json total_cost_usd + oov_audit.json total_cost_usd"}
+    {"value": 0.115, "source": "derived: S089 $0.106 + S090 $0.0093 total live spend on the OOV experiment + audit", "lock_target": "oov_summary.json total_cost_usd + oov_audit.json total_cost_usd"},
+    {"value": 5, "source": "light_skeptic_v2_ladder.py LADDER_ORDER length (5 rungs: v1_field, v2_structured, v2_lexical, v2_canonical, llm_semantic)", "lock_target": "light_skeptic_v2_ladder.py len(LADDER_ORDER)"},
+    {"value": 0.10, "source": "docs/paper_4/PREREGISTRATION_read_depth_frontier_phase_c.md frozen band framing-robust threshold X_sem ≤ 0.10", "lock_target": "read_depth_verdict.py FRAMING_ROBUST_MAX_X"},
+    {"value": 0.50, "source": "docs/paper_4/PREREGISTRATION_read_depth_frontier_phase_c.md frozen band high-detection threshold cumulative J ≥ 0.50", "lock_target": "read_depth_verdict.py HIGH_DETECTION_MIN_J"},
+    {"value": 0.0, "source": "S088 frontier_coordinates.json coordinates[view=standalone, tier_id=v1_field].x_semantic (framing-robust by construction, also v2_canonical X_sem=0.0)", "lock_target": "frontier_coordinates.json coordinates[view=standalone, tier_id=v1_field].x_semantic"}
   ],
 
   "bibkeys_required_verified": [

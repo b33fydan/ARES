@@ -68,13 +68,34 @@ class TestFiguresTables:
         assert len(skeleton["tables"]) == 4
     def test_each_figure_has_required_fields(self, skeleton):
         for fig in skeleton["figures"]:
-            for f in ("id", "type", "purpose", "host_section"):
+            for f in ("id", "type", "purpose", "host_section", "source"):
                 assert f in fig, (fig.get("id"), f)
     def test_figure_host_sections_valid(self, skeleton):
         valid = {s["section_number"] for s in skeleton["sections"]
                  if s["section_number"] is not None}
         for fig in skeleton["figures"]:
             assert fig["host_section"] in valid
+    def test_each_table_has_required_fields(self, skeleton):
+        for tbl in skeleton["tables"]:
+            for f in ("id", "purpose", "host_section", "source"):
+                assert f in tbl, (tbl.get("id"), f)
+    def test_table_host_sections_valid(self, skeleton):
+        valid = {s["section_number"] for s in skeleton["sections"]
+                 if s["section_number"] is not None}
+        for tbl in skeleton["tables"]:
+            assert tbl["host_section"] in valid
+    def test_figures_listed_in_their_host_section(self, skeleton):
+        by_num = {s["section_number"]: s for s in skeleton["sections"]
+                  if s["section_number"] is not None}
+        for fig in skeleton["figures"]:
+            host = by_num[fig["host_section"]]
+            assert fig["id"] in host["figures"], (fig["id"], host["section_id"])
+    def test_tables_listed_in_their_host_section(self, skeleton):
+        by_num = {s["section_number"]: s for s in skeleton["sections"]
+                  if s["section_number"] is not None}
+        for tbl in skeleton["tables"]:
+            host = by_num[tbl["host_section"]]
+            assert tbl["id"] in host["tables"], (tbl["id"], host["section_id"])
 
 class TestNumbers:
     def test_each_number_has_required_fields(self, skeleton):
@@ -86,6 +107,14 @@ class TestNumbers:
         assert "SUPPORTED_STRONG" in vals
         assert "ROBUST" in vals
         assert "0.0005" in vals
+    def test_section_numbers_preregistered_are_subset_of_top_level(self, skeleton):
+        top_vals = {str(n["value"]) for n in skeleton["numbers_preregistered"]}
+        for s in skeleton["sections"]:
+            for v in s.get("numbers_preregistered", []):
+                assert str(v) in top_vals, (
+                    s["section_id"], v,
+                    f"'{v}' not in top-level numbers_preregistered"
+                )
 
 class TestBibkeys:
     def test_verified_keys_present(self, skeleton):
