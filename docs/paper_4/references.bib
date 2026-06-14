@@ -1,0 +1,166 @@
+% Paper 4 bibliography.
+%
+% Per Session 064 brief discipline: this file contains ONLY verified
+% entries. Unverified bibkeys are tracked in
+% docs/paper_4/skeleton_v1_0.json under "bibkeys_needed_unverified"
+% and are surfaced by tests/paper_4/test_citation_existence.py as a
+% TODO surface. No placeholder entries here — Paper 2's Sabet
+% hallucination (Session 054 audit, Session 055 remediation) showed
+% that placeholders-in-bib are how unverified entries silently grow
+% into hallucinated citations. Keep this file pristine.
+%
+% Bibkey-form convention: canonical Author-Year keys are required so
+% natural prose cites round-trip through extract_citations +
+% citation_to_bibkey (see Session 071 Path A reconcile). Cross-paper
+% key relationships are file-scoped:
+%   Paper 2 bib: `gmys-casiano-2026` -> Paper 1
+%   Paper 3 bib: `gmys-casiano-2026` -> Paper 2
+%   Paper 4 bib: `gmys-casiano-2026a/b/c` -> Papers 1/2/3 (this file)
+%
+% Session 072 note-field cleanup: per-entry provenance previously
+% lived in `note = {...}` fields, which the ACM-Reference-Format style
+% renders literally in the published bibliography. That leaked
+% Session-numbered workflow history (a deanonymization fingerprint
+% under double-blind review) and triggered a math-mode artifact on
+% the bibliography page. All provenance now lives in % comment lines
+% above each entry; rendered `note` fields are removed entirely.
+
+% Provenance: Verified Session 068 via web search. Foundational
+%   reference for indirect prompt injection in LLM-integrated
+%   applications. Bibkey renamed Session 071 from
+%   `greshake-abdelnabi-mishra-2023` to canonical `firstauthor-year`
+%   form so the narrative `Greshake et al. (2023)` cite form in §1 /
+%   §2 round-trips through citation_to_bibkey; matches Paper 2's
+%   `lee-2024` / `hossain-2025` convention. Author list preserved in
+%   the `author` field. Brief slug:
+%   prompt-injection-foundational-needed.
+@inproceedings{greshake-2023,
+  author    = {Greshake, Kai and Abdelnabi, Sahar and Mishra, Shailesh and Endres, Christoph and Holz, Thorsten and Fritz, Mario},
+  title     = {Not What You've Signed Up For: Compromising Real-World {LLM}-Integrated Applications with Indirect Prompt Injection},
+  booktitle = {Proceedings of the 16th ACM Workshop on Artificial Intelligence and Security (AISec '23)},
+  year      = {2023},
+  doi       = {10.1145/3605764.3623985},
+  publisher = {ACM}
+}
+
+% Provenance: Verified Session 068 via web search. Recent multi-agent
+%   LLM pipeline survey covering 2023-2024 work. Bibkey renamed
+%   Session 071 from `guo-chen-zhang-2024` to canonical
+%   `firstauthor-year` form so the narrative `Guo et al. (2024)` cite
+%   form in §1 / §2 round-trips through citation_to_bibkey (round-trip
+%   discipline as above). Author list preserved in the `author` field.
+%   Brief slug: multi-agent-llm-survey-needed.
+@inproceedings{guo-2024,
+  author        = {Guo, Taicheng and Chen, Xiuying and Wang, Yaqi and Chang, Ruidi and Pei, Shichao and Chawla, Nitesh V. and Wiest, Olaf and Zhang, Xiangliang},
+  title         = {Large Language Model based Multi-Agents: A Survey of Progress and Challenges},
+  booktitle     = {Proceedings of the 33rd International Joint Conference on Artificial Intelligence (IJCAI 2024)},
+  year          = {2024},
+  eprint        = {2402.01680},
+  archivePrefix = {arXiv}
+}
+
+% Provenance: Verified Session 068 via web search. Foundational
+%   closed-world assumption reference; classical citation for the
+%   closed-world reasoning paradigm. Pre-DOI / pre-arXiv era; stable
+%   identifier is ISBN. Bibkey renamed Session 071 from
+%   `reiter-1978-closed-world` to canonical `firstauthor-year` form
+%   (closed-world topic tag was redundant with the metadata).
+%   Brief slug: closed-world-deterministic-verification-needed.
+@incollection{reiter-1978,
+  author    = {Reiter, Raymond},
+  title     = {On Closed World Data Bases},
+  booktitle = {Logic and Data Bases},
+  editor    = {Gallaire, Herv{\'e} and Minker, Jack},
+  publisher = {Plenum Press},
+  address   = {New York},
+  pages     = {55--76},
+  year      = {1978},
+  isbn      = {9780306400605}
+}
+
+% Provenance: Verified Session 068 via web search. NLP explanation-
+%   faithfulness reference for the citation-surface decoupling
+%   principle. Brief slug: citation-surfaces-xai-needed.
+@inproceedings{jacovi-goldberg-2020,
+  author    = {Jacovi, Alon and Goldberg, Yoav},
+  title     = {Towards Faithfully Interpretable {NLP} Systems: How Should We Define and Evaluate Faithfulness?},
+  booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
+  pages     = {4198--4205},
+  year      = {2020},
+  doi       = {10.18653/v1/2020.acl-main.386},
+  publisher = {Association for Computational Linguistics}
+}
+
+% Provenance: ETH Zurich. Verified Session 053 against
+%   https://arxiv.org/abs/2603.01213. Entry reused from Paper 2's
+%   references.bib with identical bib key (cross-paper key reuse for
+%   the same paper). Middle author given name corrected from Marco to
+%   Leonardo per arXiv listing.
+@article{berdoz-rugli-wattenhofer-2026,
+  author        = {Berdoz, Fr{\'e}d{\'e}ric and Rugli, Leonardo and Wattenhofer, Roger},
+  title         = {Can AI Agents Agree?},
+  year          = {2026},
+  journal       = {arXiv preprint},
+  eprint        = {2603.01213},
+  archivePrefix = {arXiv},
+  doi           = {10.48550/arXiv.2603.01213}
+}
+
+% Provenance: ARES Paper 1 self-cite. Canonical PDF at
+%   docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf.
+@article{gmys-casiano-2026a,
+  author  = {Gmys-Casiano, Daniel},
+  title   = {The Problem Is Inside the Black Box: Asymmetric Calibration Failure in Multi-Agent {LLM} Debate},
+  year    = {2026},
+  journal = {Preprint}
+}
+% Provenance: ARES Paper 2 self-cite (deterministic Skeptic primitive).
+@article{gmys-casiano-2026b,
+  author  = {Gmys-Casiano, Daniel},
+  title   = {The Deterministic Skeptic: Four Rules Match an {LLM} Agent in Adversarial Cybersecurity Threat Analysis},
+  year    = {2026},
+  journal = {Preprint}
+}
+% Provenance: ARES Paper 3 self-cite (decision determinism, explanation drift).
+@article{gmys-casiano-2026c,
+  author  = {Gmys-Casiano, Daniel},
+  title   = {Decision Determinism, Explanation Drift: Decoupling Verdict Stability from Explanation Stability in Adversarial Multi-Agent {LLM} Pipelines},
+  year    = {2026},
+  journal = {Preprint}
+}
+
+% Provenance: Verified 2026-06-13 (S094) via web search (arXiv + AAAI
+%   proceedings ojs.aaai.org/index.php/AAAI/article/view/6311). TextFooler —
+%   synonym-substitution adversarial attack on text classifiers; grounds the
+%   OOV/evasion threat model in §2 / §6.
+@inproceedings{jin-2020,
+  author        = {Jin, Di and Jin, Zhijing and Zhou, Joey Tianyi and Szolovits, Peter},
+  title         = {Is {BERT} Really Robust? A Strong Baseline for Natural Language Attack on Text Classification and Entailment},
+  booktitle     = {Proceedings of the 34th {AAAI} Conference on Artificial Intelligence (AAAI 2020)},
+  year          = {2020},
+  eprint        = {1907.11932},
+  archivePrefix = {arXiv}
+}
+% Provenance: Verified 2026-06-13 (S094) via web search (arXiv 1805.12152 +
+%   MIT open access). Robustness-accuracy tradeoff; grounds the
+%   robustness-frontier / tradeoff-space framing in §2 / §4.
+@inproceedings{tsipras-2019,
+  author        = {Tsipras, Dimitris and Santurkar, Shibani and Engstrom, Logan and Turner, Alexander and Madry, Aleksander},
+  title         = {Robustness May Be at Odds with Accuracy},
+  booktitle     = {7th International Conference on Learning Representations (ICLR 2019)},
+  year          = {2019},
+  eprint        = {1805.12152},
+  archivePrefix = {arXiv}
+}
+% Provenance: Verified 2026-06-13 (S094) via proceedings.mlr.press/v181.
+%   The NeurIPS pre-registration-in-ML workshop; grounds the pre-registration
+%   commitment (decision rules frozen before the run) in §2 / §4. Editors
+%   credited as authors for the proceedings-volume citation.
+@inproceedings{albanie-2022,
+  author    = {Albanie, Samuel and Henriques, Jo{\~a}o F. and Bertinetto, Luca and Hern{\'a}ndez-Garc{\'i}a, Alex and Doughty, Hazel and Varol, G{\"u}l},
+  title     = {Proceedings of the NeurIPS 2021 Workshop on Pre-registration in Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {181},
+  year      = {2022},
+  publisher = {PMLR}
+}

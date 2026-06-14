@@ -1,0 +1,459 @@
+{
+  "kind": "paper_structure_skeleton",
+  "paper_id": "paper_4_v1_0",
+  "working_title": "Reading Deeper Re-Acquires the Attack: A Pre-Registered Read-Depth Robustness Trilemma for Deterministic Threat Verifiers",
+  "short_title": "The Read-Depth Robustness Trilemma",
+  "author": "Daniel Gmys-Casiano (Skyframe Innovations)",
+  "venue": "TBD peer venue; acmart-portable",
+  "target_words_core": 9400,
+  "section_count_numbered": 12,
+  "framing_choice": "trilemma-as-result; frontier-first + embedded refute",
+  "framing_rationale": "Conventional empirical shape — thesis, ladder, axes, pre-registered bands, measure all rungs (empty corner) — with the candidate-defense-then-refute device (v2_canonical → OOV → audit) living inside §§5–7 where it is most dramatic",
+  "build_session": 94,
+  "build_start_test_floor": 4188,
+  "skeleton_version": "v1.0",
+  "evidence_base": "Read-Depth Robustness Frontier, Phases A–E (Sessions S086–S090). No new measurement — written entirely from closed artifacts.",
+
+  "contribution_claims": [
+    "The frontier + trilemma result: a pre-registered 5-rung read-depth robustness frontier; the good corner is empty under frozen bands (S088, SUPPORTED)",
+    "Adversarial refutation of the lone escape: a blind OOV LLM adversary defeats deterministic canonicalization on 2/4 malign string scenarios; named-IOC matching resists, structural/synonym matching falls; white-box ≈ black-box (S089, SUPPORTED_STRONG)",
+    "Independent-judge audit + reusable method: GPT-4o + Gemini with calibration controls corroborate the evasions are meaning-preserving threats, not lenient-judge artifacts (S090, ROBUST); the pre-registered frontier + LLM-proposes/code-disposes + independent audit recipe as a transferable methodological contribution"
+  ],
+
+  "three_finding_story": {
+    "finding_1": {
+      "session": "S088",
+      "one_line_claim": "The good corner of the detection × framing-robustness frontier is empty: all rungs of the read-depth ladder cap at cumulative J=0.25 under pre-registered frozen bands",
+      "data_source_primary": "data/paper_4/read_depth_frontier/tier4_summary.json",
+      "data_source_coordinates": "data/paper_4/read_depth_frontier/frontier_coordinates.json"
+    },
+    "finding_2": {
+      "session": "S089 run-2",
+      "one_line_claim": "The lone apparent escape (v2_canonical) is defeated by a blind black-box OOV adversary on 2/4 malign scenarios; named-IOC scenarios resist in both arms",
+      "data_source": "data/paper_4/read_depth_oov/oov_summary.json"
+    },
+    "finding_3": {
+      "session": "S090",
+      "one_line_claim": "GPT-4o and Gemini independently corroborate 15/18 evading disguises are meaning-preserving threats; 4/4 calibration controls pass; audit verdict ROBUST",
+      "data_source": "data/paper_4/read_depth_oov/oov_audit.json"
+    }
+  },
+
+  "sections": [
+    {
+      "section_id": "abstract",
+      "section_number": null,
+      "title": "Abstract",
+      "target_words": 250,
+      "claims": [
+        "Deterministic threat verifiers escape framing vulnerability by removing AI from the reading seat, but this forces shallow reading",
+        "A pre-registered 5-rung read-depth ladder reveals no rung simultaneously achieves high detection, framing-robustness, and data-integrity-cleanliness",
+        "The lone apparent escape is adversarially defeated by a blind out-of-vocabulary LLM adversary on 2/4 malign scenarios",
+        "Two independent judge families (GPT-4o, Gemini) corroborate the evasions are meaning-preserving threats under calibration controls",
+        "The trilemma is empirical and pre-registered, not a theoretical impossibility — but the good corner is empty as measured"
+      ],
+      "numbers_preregistered": ["0.25", "SUPPORTED_STRONG", "ROBUST"],
+      "bibkeys_required": ["gmys-casiano-2026a", "gmys-casiano-2026b", "gmys-casiano-2026c"],
+      "figures": [],
+      "tables": []
+    },
+    {
+      "section_id": "introduction",
+      "section_number": 1,
+      "title": "Introduction",
+      "target_words": 600,
+      "claims": [
+        "Deterministic verifiers were introduced to eliminate framing vulnerability in multi-agent LLM threat analysis, but determinism forces shallow reading",
+        "Deeper reading re-acquires either framing susceptibility or dependence on attacker-controlled structure — the central trilemma",
+        "Three contributions: pre-registered frontier (SUPPORTED), adversarial OOV refutation (SUPPORTED_STRONG), independent-judge audit (ROBUST)",
+        "Roadmap: §§2–3 background and ladder, §4 methodology, §§5–7 findings, §8 method contribution, §§9–11 discussion and limitations"
+      ],
+      "numbers_preregistered": [],
+      "bibkeys_required": ["greshake-2023", "guo-2024", "gmys-casiano-2026a", "gmys-casiano-2026b", "gmys-casiano-2026c"],
+      "figures": [],
+      "tables": []
+    },
+    {
+      "section_id": "background",
+      "section_number": 2,
+      "title": "Background",
+      "target_words": 750,
+      "claims": [
+        "Adversarial framing injection in multi-agent LLM systems is documented: meaning-preserving rewording can flip agent verdicts without altering the underlying facts",
+        "Multi-agent LLM pipelines mix deterministic and LLM components; deterministic components buy stability at the cost of expressive reading depth",
+        "Robustness frontiers and pre-registration are underused in ML security evaluation; conflating framing-robustness with detection power obscures tradeoffs",
+        "OOV/evasion attacks on detectors show that pattern-matching rules with fixed vocabularies have a natural adversarial bypass via synonym substitution",
+        "Faithfulness of explanation surfaces in AI systems is distinct from decision stability — a recurring theme in XAI literature"
+      ],
+      "numbers_preregistered": [],
+      "bibkeys_required": ["greshake-2023", "guo-2024", "jacovi-goldberg-2020", "reiter-1978", "tsipras-2019", "albanie-2022", "jin-2020"],
+      "figures": [],
+      "tables": []
+    },
+    {
+      "section_id": "ares_verifier_ladder",
+      "section_number": 3,
+      "title": "The ARES Verifier and the Read-Depth Ladder",
+      "target_words": 700,
+      "claims": [
+        "ARES is a three-agent deterministic threat analysis pipeline: Architect (LLM), Light Skeptic (deterministic rule engine), OracleJudge (deterministic); cite Papers 1–3 for full derivation",
+        "The Light Skeptic v2 ladder defines 5 read-depth rungs: v1_field (field presence only), v2_structured (high-threat field + stage logic), v2_lexical (exe-in-user-path regex), v2_canonical (canonicalize-then-match), llm_semantic (full LLM reading)",
+        "Each rung reads more of the evidence packet value content than the rung below it; deeper reading increases detection potential but re-introduces attacker-controlled surface",
+        "The DETERMINISTIC_TIERS registry and LADDER_ORDER in light_skeptic_v2_ladder.py are the code-reality anchor for the ladder definition"
+      ],
+      "numbers_preregistered": ["5"],
+      "bibkeys_required": ["gmys-casiano-2026a", "gmys-casiano-2026b", "gmys-casiano-2026c"],
+      "figures": ["fig_1"],
+      "tables": []
+    },
+    {
+      "section_id": "methodology",
+      "section_number": 4,
+      "title": "Methodology: A Pre-Registered Frontier",
+      "target_words": 1200,
+      "claims": [
+        "Adaptive Corpus C comprises 8 stratified scenarios: 4 malign string scenarios (M-lex × 2, M-syn × 1, M-patch × 1), 2 benign structural twins, 1 .com/.js carry-forward FP probe, 1 inject_authorization positive control",
+        "Three properties operationalized: P1 (detection) = Youden's J on malign vs benign; P2 (framing-robustness) = noise-gated majority-flip-rate under semantic operators; P3 (data-integrity) = encoded in cumulative J via FPR-inheritance from the structural tier",
+        "Two frontier views: standalone (each rung measured independently) and cumulative (each rung stacked on all prior); standalone reveals per-rung strength, cumulative reveals deployment reality",
+        "Frozen pre-registered bands: framing-robust iff X_sem ≤ 0.10; high detection iff cumulative J ≥ 0.50; good corner = both simultaneously",
+        "Decision rule locked before tier-4 run: SUPPORTED if good corner empty, FALSIFIED if any rung occupies it"
+      ],
+      "numbers_preregistered": ["8", "0.1", "0.5"],
+      "bibkeys_required": [],
+      "figures": [],
+      "tables": ["tbl_1"]
+    },
+    {
+      "section_id": "finding_1_empty_corner",
+      "section_number": 5,
+      "title": "Finding 1: The Good Corner Is Empty",
+      "target_words": 1100,
+      "claims": [
+        "S088 tier-4 live run (Sonnet 4, K=20, Corpus C digest 9401b7188ba790a5, $3.23): all four deterministic rungs cap at cumulative J=0.25 — the structural tier's FPR=0.75 propagates through the entire stack",
+        "Standalone view shows the genuine detection ladder: v1_field J=0.0, v2_structured J=0.25, v2_lexical J=0.50, v2_canonical J=0.75; the standalone-to-cumulative gap is P3's empirical signature",
+        "LLM tier (llm_semantic) shows standalone J=0.75, X_sem=0.125 [0.00, 0.375] — it detects but is framing-susceptible (RDF-M-SYN-001 suffix flip p=0.0005)",
+        "v2_canonical appears to occupy the good corner in standalone: J=0.75, X_sem=0.0 (framing-robust by construction) — this is the lone escape that §6 adversarially probes",
+        "Finding 1 SUPPORTED under the pre-registered bands: the cumulative view confirms the good corner is empty for all rungs"
+      ],
+      "numbers_preregistered": ["0.25", "0.75", "0.0", "0.5", "0.125", "0.0005", "3.2279", "9401b7188ba790a5"],
+      "bibkeys_required": [],
+      "figures": ["fig_2"],
+      "tables": ["tbl_2"]
+    },
+    {
+      "section_id": "finding_2_oov_defeat",
+      "section_number": 6,
+      "title": "Finding 2: The Lone Escape Is Adversarially Defeated",
+      "target_words": 1400,
+      "load_bearing": true,
+      "claims": [
+        "OOV adversarial evasion protocol: 'LLM proposes, code disposes' — an LLM adversary generates disguises, a deterministic skeleton+novelty gate rejects invalid ones, an LLM judge confirms meaning-preservation",
+        "Black arm (blind, no source access) and white arm (with source access) run independently; K=8 candidates per scenario per arm; both arms ran on Sonnet, $0.106 total",
+        "v2_canonical evaded on RDF-M-LEX-002 (exe-in-temp) and RDF-M-SYN-001 (synonym-dropper) in both arms: adversarial X_scenario=0.50 in both arms",
+        "Named-IOC scenarios RDF-M-LEX-001 (lsass) and RDF-M-PATCH-001 (procdump) resist in both arms: zero flips; named-IOC matching cannot be disguised away while preserving threat meaning",
+        "White-box ≈ black-box: source access does not expand the evadable set; the evadable boundary tracks the attacker's ability to construct meaning-preserving synonyms, not knowledge of the vocabulary",
+        "OOV corpus digest a4ea1d0645152ffa; verdict SUPPORTED_STRONG — a blind adversary found holes in both evadable scenarios"
+      ],
+      "numbers_preregistered": ["0.5", "0.28125", "0.2903225806451613", "0.106", "a4ea1d0645152ffa", "SUPPORTED_STRONG"],
+      "bibkeys_required": [],
+      "figures": ["fig_3", "fig_6"],
+      "tables": ["tbl_3"]
+    },
+    {
+      "section_id": "finding_3_independent_audit",
+      "section_number": 7,
+      "title": "Finding 3: Independent-Judge Audit",
+      "target_words": 900,
+      "claims": [
+        "Leniency threat: Sonnet (the original judge) accepted all 64 disguise candidates with zero rejections — could the verdict SUPPORTED_STRONG be a judge-leniency artifact?",
+        "Independent audit panel: GPT-4o and Gemini re-judge all 18 evading disguises; 4 calibration controls (2 positive = evaded originals must read malign, 2 negative = benign twins must read benign) applied first",
+        "4/4 calibration controls pass: both independents correctly identify positive controls as malign and negative controls as benign — leniency hypothesis rejected at the calibration level",
+        "15/18 evading disguises: both-independents confirmed as meaning-preserving threats; 3/18 split (GPT-4o benign / Gemini+Sonnet malign) — splits cluster at the meaning-dilution boundary of SYN-001",
+        "Audit verdict ROBUST: the SUPPORTED_STRONG headline is not a lenient-judge artifact; GPT-4o is the stricter judge; total spend $0.0093"
+      ],
+      "numbers_preregistered": ["15", "3", "4", "ROBUST", "0.0093"],
+      "bibkeys_required": [],
+      "figures": ["fig_4"],
+      "tables": ["tbl_4"]
+    },
+    {
+      "section_id": "method_contribution",
+      "section_number": 8,
+      "title": "The Method as a Contribution",
+      "target_words": 550,
+      "claims": [
+        "The three-layer recipe — pre-registered bands, LLM-proposes/code-disposes adversarial generation, independent-judge audit with calibration controls — is a transferable evaluation methodology",
+        "Pre-registration is what converts an empty corner from a curve-fit to a credible empirical result; the bands must be frozen before measurement, not fit after",
+        "LLM-proposes/code-disposes separates adversarial creativity (LLM) from adversarial validity (deterministic skeleton+novelty gate), preventing the adversary from exploiting the judge",
+        "The independent-judge audit with calibration controls is a reusable leniency-falsification instrument applicable to any LLM-judge-reliant evaluation"
+      ],
+      "numbers_preregistered": [],
+      "bibkeys_required": [],
+      "figures": ["fig_5"],
+      "tables": []
+    },
+    {
+      "section_id": "discussion",
+      "section_number": 9,
+      "title": "Discussion",
+      "target_words": 1000,
+      "claims": [
+        "The relocation thesis (Papers 1–3 + this paper): removing the AI from the reading seat does not remove the attack — it relocates it from framing-susceptibility to attacker-controlled-structure and then to adversarial OOV evasion",
+        "Not all deterministic rules are equally fragile: named-IOC matching (specific tool names like lsass/procdump) resists OOV evasion because you cannot disguise a specific tool name and still mean it; structural/synonym matching does not share this property",
+        "Production verifier design implication: the named-IOC class of rules may occupy a defensible corner of the trilemma; building a ladder anchored on IOC specificity is a candidate future direction",
+        "The honesty dividend of pre-registration: presenting a result where the pre-registered bands could have been falsified strengthens the credibility of the empty-corner claim beyond what post-hoc analysis could achieve"
+      ],
+      "numbers_preregistered": [],
+      "bibkeys_required": ["berdoz-rugli-wattenhofer-2026", "gmys-casiano-2026a", "gmys-casiano-2026b", "gmys-casiano-2026c"],
+      "figures": [],
+      "tables": []
+    },
+    {
+      "section_id": "limitations",
+      "section_number": 10,
+      "title": "Limitations",
+      "target_words": 500,
+      "claims": [
+        "Single corpus (Adaptive Corpus C); N=4 malign string scenarios — small; generalization to broader scenario distributions is untested",
+        "Single base-model family for the pipeline (Sonnet 4); cross-model generalization of the frontier result is untested",
+        "Single OOV adversary model (Sonnet); a second adversary family would strengthen the adversarial evasion claim",
+        "RDF-M-SYN-001 has no same-skeleton benign twin in Corpus C; its leniency control leans on the generic clean baseline (slightly weaker for the synonym class)",
+        "The 3-property claim is operationalized on a 2-axis frontier (P3 enters via the cumulative FPR cap, not a third independent axis)",
+        "Trilemma is an empirical, pre-registered frontier result on this setup — not a proven impossibility; a different ladder, corpus, or adversary might find a corner occupant"
+      ],
+      "numbers_preregistered": ["4"],
+      "bibkeys_required": [],
+      "figures": [],
+      "tables": []
+    },
+    {
+      "section_id": "future_work",
+      "section_number": 11,
+      "title": "Future Work",
+      "target_words": 400,
+      "claims": [
+        "Benign synonym-class twin for RDF-M-SYN-001 to close the leniency-control gap",
+        "Second and third OOV adversary families to assess adversary-model dependence of the evasion boundary",
+        "Larger Corpus C with more malign/benign scenario pairs across broader threat categories",
+        "Named-IOC + semantic reading as a candidate corner-occupant: a hybrid tier that anchors on IOC specificity before invoking LLM reading may escape the trilemma"
+      ],
+      "numbers_preregistered": [],
+      "bibkeys_required": [],
+      "figures": [],
+      "tables": []
+    },
+    {
+      "section_id": "references",
+      "section_number": 12,
+      "title": "References",
+      "target_words": 0,
+      "claims": [],
+      "numbers_preregistered": [],
+      "bibkeys_required": [],
+      "figures": [],
+      "tables": []
+    }
+  ],
+
+  "figures": [
+    {
+      "id": "fig_1",
+      "type": "conceptual_diagram",
+      "purpose": "The read-depth ladder: 5 rungs (v1_field → v2_structured → v2_lexical → v2_canonical → llm_semantic) with annotations on what each rung reads and why depth increases attack surface",
+      "source": "new — derived from light_skeptic_v2_ladder.py DETERMINISTIC_TIERS / LADDER_ORDER",
+      "host_section": 3
+    },
+    {
+      "id": "fig_2",
+      "type": "scatter_plot",
+      "purpose": "THE money figure: the frontier in 2 axes (X_sem × Youden J), standalone vs cumulative panels side-by-side; good-corner box drawn empty; all 5 rungs plotted; cumulative cap at J=0.25 visible",
+      "source": "data/paper_4/read_depth_frontier/frontier_coordinates.json",
+      "host_section": 5
+    },
+    {
+      "id": "fig_3",
+      "type": "bar_chart",
+      "purpose": "OOV evasion per-scenario: canonical flip rates for LEX-002 (evaded) and SYN-001 (evaded) vs LEX-001 (resist) and PATCH-001 (resist), black arm vs white arm side-by-side",
+      "source": "data/paper_4/read_depth_oov/oov_summary.json",
+      "host_section": 6
+    },
+    {
+      "id": "fig_4",
+      "type": "bar_chart",
+      "purpose": "Audit result: 4 calibration controls (all pass) + 15/18 both-confirmed + 3 split, with per-judge breakdown (GPT-4o vs Gemini vs Sonnet) showing GPT-4o as the stricter judge",
+      "source": "data/paper_4/read_depth_oov/oov_audit.json",
+      "host_section": 7
+    },
+    {
+      "id": "fig_5",
+      "type": "pipeline_diagram",
+      "purpose": "Method recipe: LLM-proposes/code-disposes pipeline (generate → skeleton+novelty gate → judge → verdict) plus independent-audit panel; shows separation of adversarial creativity from validity gate",
+      "source": "new — derived from read_depth_oov_generator.py + read_depth_oov_validator.py + read_depth_oov_audit.py",
+      "host_section": 8
+    },
+    {
+      "id": "fig_6",
+      "type": "code_snippet",
+      "purpose": "Worked OOV disguise: RDF-M-SYN-001 original values vs evading disguise (e.g. 'binary dropped to C:\\Users\\Public\\' → 'payload written to C:\\Users\\Public\\'); shows what canonical matched vs what the OOV disguise substituted",
+      "source": "data/paper_4/read_depth_oov/oov_audit.json evading[scenario=RDF-M-SYN-001, arm=black, classification=independent_confirmed][0]",
+      "host_section": 6
+    }
+  ],
+
+  "tables": [
+    {
+      "id": "tbl_1",
+      "purpose": "Adaptive Corpus C composition: 8 scenarios with columns (scenario_id, stratum, is_malign, description, control_role)",
+      "source": "ares/dialectic/measurement/read_depth_corpus.py",
+      "host_section": 4
+    },
+    {
+      "id": "tbl_2",
+      "purpose": "Frontier coordinates per rung in both views: columns (tier_id, view, TPR, FPR, J, X_sem); standalone and cumulative rows for all 5 rungs; the S088 result table",
+      "source": "data/paper_4/read_depth_frontier/frontier_coordinates.json",
+      "host_section": 5
+    },
+    {
+      "id": "tbl_3",
+      "purpose": "OOV per-arm summary: columns (arm, n_candidates, n_accepted, scenarios_evaded, adversarial_X_scenario, per_candidate_flip_rate); S089 run-2 result",
+      "source": "data/paper_4/read_depth_oov/oov_summary.json arm_summaries",
+      "host_section": 6
+    },
+    {
+      "id": "tbl_4",
+      "purpose": "Evading disguises + per-judge verdicts: columns (scenario_id, arm, classification, openai_verdict, gemini_verdict, sonnet_verdict); all 18 evading disguises from S090 audit",
+      "source": "data/paper_4/read_depth_oov/oov_audit.json evading",
+      "host_section": 7
+    }
+  ],
+
+  "numbers_preregistered": [
+    {"value": 0.75, "source": "S088 tier4_summary.json coordinates[view=standalone, tier=llm_semantic].youden_j", "lock_target": "tier4_summary.json coordinates[view=standalone, tier_id=llm_semantic].youden_j"},
+    {"value": 0.125, "source": "S088 tier4_summary.json coordinates[view=standalone, tier=llm_semantic].x_semantic", "lock_target": "tier4_summary.json coordinates[view=standalone, tier_id=llm_semantic].x_semantic"},
+    {"value": 0.25, "source": "S088 tier4_summary.json coordinates[view=cumulative, tier=llm_semantic].youden_j (the trilemma cap)", "lock_target": "tier4_summary.json coordinates[view=cumulative, tier_id=llm_semantic].youden_j"},
+    {"value": 0.0005, "source": "S088 tier4_summary.json records[scenario=RDF-M-SYN-001].operator_records[name=framing_suffix_v1].p_value", "lock_target": "tier4_summary.json records[scenario_id=RDF-M-SYN-001].operator_records[operator_name=framing_suffix_v1].p_value"},
+    {"value": "0.0, 0.25, 0.50, 0.75", "source": "S088 frontier_coordinates.json deterministic standalone J ladder v1_field→v2_canonical", "lock_target": "frontier_coordinates.json coordinates[view=standalone, tier_id in (v1_field, v2_structured, v2_lexical, v2_canonical)].youden_j sequence"},
+    {"value": 3.2279, "source": "S088 tier4_summary.json total_cost_usd (prose $3.23)", "lock_target": "tier4_summary.json total_cost_usd"},
+    {"value": "9401b7188ba790a5", "source": "S088 tier4_summary.json corpus_digest", "lock_target": "tier4_summary.json corpus_digest"},
+    {"value": "SUPPORTED_STRONG", "source": "S089 run-2 oov_summary.json verdict", "lock_target": "oov_summary.json verdict"},
+    {"value": 8, "source": "S089 run-2 oov_summary.json k", "lock_target": "oov_summary.json k"},
+    {"value": ["RDF-M-LEX-002", "RDF-M-SYN-001"], "source": "S089 run-2 oov_summary.json arm_summaries[*].scenarios_evaded (both arms)", "lock_target": "oov_summary.json arm_summaries[arm=black].scenarios_evaded"},
+    {"value": 0.5, "source": "S089 run-2 oov_summary.json arm_summaries[*].adversarial_x_scenario (both arms)", "lock_target": "oov_summary.json arm_summaries[arm=black].adversarial_x_scenario"},
+    {"value": 0.28125, "source": "S089 run-2 oov_summary.json arm_summaries[arm=black].per_candidate_flip_rate", "lock_target": "oov_summary.json arm_summaries[arm=black].per_candidate_flip_rate"},
+    {"value": 0.2903225806451613, "source": "S089 run-2 oov_summary.json arm_summaries[arm=white].per_candidate_flip_rate", "lock_target": "oov_summary.json arm_summaries[arm=white].per_candidate_flip_rate"},
+    {"value": 0.106, "source": "S089 run-2 oov_summary.json total_cost_usd", "lock_target": "oov_summary.json total_cost_usd"},
+    {"value": "a4ea1d0645152ffa", "source": "S089 run-2 oov_summary.json oov_corpus_digest", "lock_target": "oov_summary.json oov_corpus_digest"},
+    {"value": "ROBUST", "source": "S090 oov_audit.json audit_verdict", "lock_target": "oov_audit.json audit_verdict"},
+    {"value": 4, "source": "S090 oov_audit.json controls (all 4 pass)", "lock_target": "oov_audit.json controls length + controls_passed"},
+    {"value": 15, "source": "S090 oov_audit.json evading[classification=independent_confirmed] count", "lock_target": "oov_audit.json evading[*].classification == independent_confirmed count"},
+    {"value": 3, "source": "S090 oov_audit.json evading[classification=independent_split] count", "lock_target": "oov_audit.json evading[*].classification == independent_split count"},
+    {"value": 0.0093, "source": "S090 oov_audit.json total_cost_usd", "lock_target": "oov_audit.json total_cost_usd"},
+    {"value": 0.115, "source": "derived: S089 $0.106 + S090 $0.0093 total live spend on the OOV experiment + audit", "lock_target": "oov_summary.json total_cost_usd + oov_audit.json total_cost_usd"},
+    {"value": 5, "source": "light_skeptic_v2_ladder.py LADDER_ORDER length (5 rungs: v1_field, v2_structured, v2_lexical, v2_canonical, llm_semantic)", "lock_target": "light_skeptic_v2_ladder.py len(LADDER_ORDER)"},
+    {"value": 0.10, "source": "docs/paper_4/PREREGISTRATION_read_depth_frontier_phase_c.md frozen band framing-robust threshold X_sem ≤ 0.10", "lock_target": "read_depth_verdict.py FRAMING_ROBUST_MAX_X"},
+    {"value": 0.50, "source": "docs/paper_4/PREREGISTRATION_read_depth_frontier_phase_c.md frozen band high-detection threshold cumulative J ≥ 0.50", "lock_target": "read_depth_verdict.py HIGH_DETECTION_MIN_J"},
+    {"value": 0.0, "source": "S088 frontier_coordinates.json coordinates[view=standalone, tier_id=v1_field].x_semantic (framing-robust by construction, also v2_canonical X_sem=0.0)", "lock_target": "frontier_coordinates.json coordinates[view=standalone, tier_id=v1_field].x_semantic"}
+  ],
+
+  "bibkeys_required_verified": [
+    {
+      "bibkey": "greshake-2023",
+      "role": "Foundational indirect prompt injection reference (§1 introduction, §2 background) — establishes that LLM-integrated applications can be compromised via adversarial input injection",
+      "status": "VERIFIED",
+      "source": "Greshake, Abdelnabi, Mishra, Endres, Holz, Fritz, 'Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection', AISec '23 (ACM Workshop on Artificial Intelligence and Security). DOI: 10.1145/3605764.3623985. Verified Session 068 via web search. Reused from Paper 3 references.bib."
+    },
+    {
+      "bibkey": "guo-2024",
+      "role": "Multi-agent LLM pipeline survey (§1 introduction, §2 background) — provides the survey context for multi-agent LLM systems as the deployment setting",
+      "status": "VERIFIED",
+      "source": "Guo, Chen, Wang, Chang, Pei, Chawla, Wiest, Zhang, 'Large Language Model based Multi-Agents: A Survey of Progress and Challenges', IJCAI 2024. arXiv: 2402.01680. Verified Session 068 via web search. Reused from Paper 3 references.bib."
+    },
+    {
+      "bibkey": "jacovi-goldberg-2020",
+      "role": "NLP explanation-faithfulness reference (§2 background) — grounds the distinction between decision stability and explanation faithfulness that motivates the data-integrity leg of the trilemma",
+      "status": "VERIFIED",
+      "source": "Jacovi and Goldberg, 'Towards Faithfully Interpretable NLP Systems: How Should We Define and Evaluate Faithfulness?', ACL 2020, pp. 4198-4205. DOI: 10.18653/v1/2020.acl-main.386. Verified Session 068 via web search. Reused from Paper 3 references.bib."
+    },
+    {
+      "bibkey": "reiter-1978",
+      "role": "Foundational closed-world assumption reference (§2 background) — anchors the closed-world evidence architecture that underlies the ARES verifier design",
+      "status": "VERIFIED",
+      "source": "Reiter, 'On Closed World Data Bases', in Logic and Data Bases (Gallaire and Minker, eds.), Plenum Press, 1978, pp. 55-76. ISBN 9780306400605. Verified Session 068 via web search. Reused from Paper 3 references.bib."
+    },
+    {
+      "bibkey": "berdoz-rugli-wattenhofer-2026",
+      "role": "ETH Zurich corroboration on multi-agent LLM drift (§9 discussion) — independent external evidence that LLM-path drift in multi-agent pipelines is a real phenomenon beyond ARES",
+      "status": "VERIFIED",
+      "source": "Berdoz, Rugli, Wattenhofer 2026, arXiv 2603.01213. Verified Session 064. Reused from Paper 3 references.bib."
+    },
+    {
+      "bibkey": "gmys-casiano-2026a",
+      "role": "Paper 1 self-cite — 'The Problem Is Inside the Black Box: Asymmetric Calibration Failure in Multi-Agent LLM Debate'; establishes the multi-turn debate degradation finding and the ARES research program",
+      "status": "VERIFIED",
+      "source": "docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf (canonical PDF); Session 052 canonical decision"
+    },
+    {
+      "bibkey": "gmys-casiano-2026b",
+      "role": "Paper 2 self-cite — establishes the deterministic Light Skeptic primitive and the framing-robustness baseline that Paper 4 extends with the read-depth ladder",
+      "status": "VERIFIED",
+      "source": "docs/paper_2/PAPER2_DRAFT_v1_2.docx (canonical v1.2); Session 069 canonical promotion"
+    },
+    {
+      "bibkey": "gmys-casiano-2026c",
+      "role": "Paper 3 self-cite — 'Decision Determinism, Explanation Drift'; establishes the Oracle passthrough finding and the architecture Paper 4 builds on",
+      "status": "VERIFIED",
+      "source": "docs/paper_3/acmart_spike/paper_3_acmart.pdf (canonical acmart sigconf PDF); Session 073 figure completion + Session 080 de-risk"
+    },
+    {
+      "bibkey": "jin-2020",
+      "role": "OOV/synonym evasion of text classifiers (§2 background, §6) — TextFooler establishes that synonym substitution defeats pattern-matching detectors while preserving meaning",
+      "status": "VERIFIED",
+      "source": "Jin, Jin, Zhou, Szolovits, 'Is BERT Really Robust? A Strong Baseline for Natural Language Attack on Text Classification and Entailment', AAAI 2020, arXiv 1907.11932. Verified 2026-06-13 (S094) via web search."
+    },
+    {
+      "bibkey": "tsipras-2019",
+      "role": "Robustness-frontier / robustness-accuracy tradeoff (§2 background, §4) — grounds the tradeoff-space framing of the read-depth frontier",
+      "status": "VERIFIED",
+      "source": "Tsipras, Santurkar, Engstrom, Turner, Madry, 'Robustness May Be at Odds with Accuracy', ICLR 2019, arXiv 1805.12152. Verified 2026-06-13 (S094) via web search."
+    },
+    {
+      "bibkey": "albanie-2022",
+      "role": "Pre-registration in ML evaluation (§2 background, §4) — the NeurIPS pre-registration-in-ML workshop grounds committing decision rules before the deciding run",
+      "status": "VERIFIED",
+      "source": "Albanie, Henriques, Bertinetto, Hernandez-Garcia, Doughty, Varol (eds.), 'NeurIPS 2021 Workshop on Pre-registration in Machine Learning', PMLR 181, 2022. Verified 2026-06-13 (S094) via proceedings.mlr.press/v181."
+    }
+  ],
+
+  "bibkeys_needed_unverified": [],
+
+  "anchor_tests_required": [
+    {
+      "path": "tests/paper_4/test_oov_prereg_bands_match_code.py",
+      "status": "EXISTS (Session 089)",
+      "locks": "SSOT guard: OOV pre-registration bands in docs/paper_4/PREREGISTRATION_oov_evasion_phase_d.md match the code constants in read_depth_oov_schema.py"
+    },
+    {
+      "path": "tests/paper_4/test_oov_audit_prereg_bands_match_code.py",
+      "status": "EXISTS (Session 090)",
+      "locks": "SSOT guard: OOV audit pre-registration in docs/paper_4/PREREGISTRATION_oov_audit_phase_e.md matches code constants in read_depth_oov_audit.py CONFIRM_REQUIRES_BOTH_INDEPENDENTS"
+    },
+    {
+      "path": "tests/dialectic/measurement/test_read_depth_oov_no_network_anchor.py",
+      "status": "EXISTS (Session 089 + extended Session 090)",
+      "locks": "Source-text purity anchor: OOV modules make no live network calls; validator.is_novel + skeleton invariants; suite-robust against accidental network import"
+    },
+    {
+      "path": "ares/dialectic/agents/light_skeptic_v2_ladder.py",
+      "status": "EXISTS (Session 086)",
+      "locks": "DETERMINISTIC_TIERS registry and LADDER_ORDER define the 5-rung read-depth ladder that is the object of study in §3 and the frontier in §§4–5"
+    }
+  ],
+
+  "out_of_scope_session_094": [
+    "Writing any prose for docs/paper_4/source/",
+    "Building docs/paper_4/references.bib (Task 2)",
+    "Authoring number_check.py resolvers (Task 3)",
+    "Building figures",
+    "Building acmart PDF"
+  ]
+}
