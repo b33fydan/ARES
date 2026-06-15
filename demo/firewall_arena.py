@@ -19,7 +19,9 @@ PRD: docs/superpowers/specs/2026-06-15-firewall-arena-mini-prd.md
 from __future__ import annotations
 
 import dataclasses as _dc
+import uuid as _uuid
 from dataclasses import dataclass
+from datetime import datetime as _dt
 from typing import Optional
 
 from ares.dialectic.agents.strategies.guarded_cycle import (
@@ -33,6 +35,8 @@ from ares.dialectic.agents.strategies.rule_based import (
 )
 from ares.dialectic.coordinator.firewall import FirewallVerdict, OracleFirewall
 from ares.dialectic.evidence.packet import EvidencePacket
+from ares.dialectic.messages.assertions import Assertion, AssertionType
+from ares.dialectic.messages.protocol import DialecticalMessage, MessageType, Phase
 from ares.dialectic.scripts.injection_corpus import get_injection_scenario_by_id
 from ares.dialectic.scripts.injection_corpus_b_framing import (
     get_framing_scenario_by_id,
@@ -227,3 +231,59 @@ def run_incident(packet: EvidencePacket) -> ArenaRun:
         agent_id_prefix="arena",
     )
     return _flatten(result)
+
+
+# ---------------------------------------------------------------------------
+# scan_raw_text — OracleFirewall on arbitrary typed text
+# ---------------------------------------------------------------------------
+
+def _raw_text_message(text: str, packet: EvidencePacket) -> DialecticalMessage:
+    """Build an Architect message whose interpretation IS the audience text.
+
+    Mirrors the firewall proving test's _make_arch_message. The real
+    OracleFirewall scans this interpretation for literal injections.
+    """
+    fact_ids = tuple(f.fact_id for f in packet.get_all_facts())
+    assertion = Assertion(
+        assertion_id=f"a-{_uuid.uuid4().hex[:8]}",
+        assertion_type=AssertionType.ASSERT,
+        fact_ids=fact_ids,
+        interpretation=text,
+        operator="detected",
+        threshold="arena",
+    )
+    return DialecticalMessage(
+        message_id=str(_uuid.uuid4()),
+        timestamp=_dt(2026, 6, 15, 12, 0, 0),
+        source_agent="arena-architect",
+        target_agent="arena-skeptic",
+        packet_id=packet.packet_id,
+        cycle_id="arena-raw-scan",
+        phase=Phase.THESIS,
+        turn_number=1,
+        message_type=MessageType.HYPOTHESIS,
+        assertions=[assertion],
+        confidence=0.8,
+    )
+
+
+def scan_raw_text(text: str, base_preset_id: str = "INJ-009") -> dict:
+    """Run the REAL OracleFirewall on arbitrary typed text. No LLM, no exec.
+
+    Returns a flat dict: raw_text, firewall_passed, taint_score, violations[],
+    sanitized_text (display-safe redaction, or None if clean).
+    """
+    packet = load_base_packet(base_preset_id)
+    msg = _raw_text_message(text, packet)
+    firewall = OracleFirewall()
+    verdict = firewall.validate(msg, packet)
+    sanitized_text = (
+        firewall.sanitize(text, verdict.violations) if verdict.violations else None
+    )
+    return {
+        "raw_text": text,
+        "firewall_passed": verdict.passed,
+        "taint_score": round(float(verdict.taint_score), 3),
+        "violations": _violations_to_dicts(verdict),
+        "sanitized_text": sanitized_text,
+    }
