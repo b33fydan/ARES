@@ -1,8 +1,10 @@
-"""Firewall Arena — live, deterministic exposure of the real ARES firewall.
+"""Firewall Arena core — deterministic, no-LLM exposure of the real ARES firewall.
 
-Pure-Python core. Wraps OracleFirewall + run_guarded_cycle with rule-based
-agents (NO LLM). Loads real injection-corpus incidents, runs the real
-guarded cycle, and serializes a provenanced "arena trace" for the renderer.
+Builds toward a thin local service that runs the real OracleFirewall +
+run_guarded_cycle (rule-based agents, no LLM) and serializes a provenanced
+"arena trace" for the renderer. This module currently provides the preset
+registry and the base-packet loader; later tasks add the guarded-cycle run,
+raw-text scan, and trace serializer.
 
 PRD: docs/superpowers/specs/2026-06-15-firewall-arena-mini-prd.md
 """
@@ -41,7 +43,6 @@ PRESETS = [
 # Maps each preset_id to the corpus fetch function and scenario ID.
 # INJ-001 / CLEAN-CTRL live in injection_corpus; INJ-020 lives in
 # injection_corpus_b_framing. CLEAN-CTRL derives from INJ-001 (see below).
-_INJECTION_CORPUS_IDS = {"INJ-001", "CLEAN-CTRL"}
 _FRAMING_CORPUS_IDS = {"INJ-020"}
 
 _PRESET_TO_SCENARIO = {

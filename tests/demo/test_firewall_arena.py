@@ -24,3 +24,13 @@ def test_load_base_packet_unknown_raises():
     import pytest
     with pytest.raises(KeyError):
         load_base_packet("NOPE")
+
+
+def test_load_base_packet_inj020_is_frozen_with_facts():
+    packet = load_base_packet("INJ-020")
+    assert packet.is_frozen
+    assert len(list(packet.get_all_facts())) > 0
+
+
+# NOTE: load_base_packet("CLEAN-CTRL") exercises apply_field_edit (Task 3).
+# Its packet-body behavior is covered by the CLEAN-CTRL test added in Task 3.
