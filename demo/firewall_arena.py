@@ -287,3 +287,156 @@ def scan_raw_text(text: str, base_preset_id: str = "INJ-009") -> dict:
         "violations": _violations_to_dicts(verdict),
         "sanitized_text": sanitized_text,
     }
+
+
+# ---------------------------------------------------------------------------
+# ArenaTrace serializer — build_incident_trace / build_raw_trace
+# ---------------------------------------------------------------------------
+
+import subprocess as _subprocess
+
+LABEL_MAX = 90
+TRACE_VERSION = "1.0"
+
+
+def _git_sha() -> str:
+    try:
+        out = _subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, check=True,
+        )
+        return out.stdout.strip()
+    except Exception:
+        return "unknown"
+
+
+GIT_SHA = _git_sha()
+
+
+def _source_str(source_type) -> str:
+    return str(getattr(source_type, "value", source_type))
+
+
+def _preset_kind(preset_id: str) -> Optional[str]:
+    for p in PRESETS:
+        if p["preset_id"] == preset_id:
+            return p["kind"]
+    return None
+
+
+def _facts_for_display(packet: EvidencePacket, injected_fact_id: Optional[str] = None) -> list:
+    out = []
+    for fact in packet.get_all_facts():
+        out.append({
+            "fact_id": fact.fact_id,
+            "field": fact.field,
+            "display_label": str(fact.value)[:LABEL_MAX],
+            "source_type": _source_str(fact.provenance.source_type),
+            "is_injected": fact.fact_id == injected_fact_id,
+        })
+    return out
+
+
+def _hold_caption(run: ArenaRun) -> str:
+    if run.verdict_outcome == "threat_confirmed":
+        return "The deterministic Oracle confirms the threat. The attack did not move the verdict."
+    if run.verdict_outcome == "threat_dismissed":
+        return ("The deterministic Oracle dismisses it — by fixed rules, not persuasion. "
+                "Framing did not move the verdict.")
+    return "The deterministic Oracle returns inconclusive — unchanged by the attack."
+
+
+def _beats(run: ArenaRun, *, scan_passed: bool, scan_violations: list,
+           scan_taint: float, scan_sanitized) -> list:
+    return [
+        {"phase": "incident",
+         "caption": "An incident arrives. The Architect will interpret it."},
+        {"phase": "scan",
+         "caption": "The Oracle Firewall scans, deterministically — regex + rules, no LLM.",
+         "firewall_passed": scan_passed, "taint_score": scan_taint},
+        {"phase": "catch",
+         "caption": ("Injection caught — the offending span is flagged."
+                     if not scan_passed else
+                     "No literal injection for the syntactic gate to flag."),
+         "violations": scan_violations, "sanitized_output": scan_sanitized},
+        {"phase": "respond",
+         "caption": ("Tainted text redacted; a fresh Architect is hot-swapped in."
+                     if run.hot_swap_triggered else
+                     "Nothing to quarantine — analysis proceeds on the raw evidence."),
+         "hot_swap_triggered": run.hot_swap_triggered,
+         "used_sanitized": run.used_sanitized,
+         "quarantined_output": run.quarantined_output},
+        {"phase": "hold",
+         "caption": _hold_caption(run),
+         "verdict_outcome": run.verdict_outcome,
+         "architect_confidence": run.architect_confidence,
+         "skeptic_confidence": run.skeptic_confidence,
+         "verdict_confidence": run.verdict_confidence,
+         "supporting_fact_ids": run.supporting_fact_ids,
+         "reasoning": run.reasoning},
+    ]
+
+
+def _provenance() -> dict:
+    return {"real_pipeline": True, "git_sha": GIT_SHA,
+            "trace_version": TRACE_VERSION, "no_llm": True}
+
+
+def _boundary_note(kind: Optional[str], firewall_passed: bool) -> str:
+    if kind == "semantic_framing":
+        return ("The firewall is syntactic — it cannot see semantic framing. "
+                "The deterministic Oracle's verdict does not move under it.")
+    if kind == "literal_injection":
+        return "A literal injection the syntactic firewall is built to catch."
+    return "Clean evidence — nothing for the syntactic gate to flag."
+
+
+def build_incident_trace(preset_id: str, field_id: Optional[str] = None,
+                         field_value: Optional[str] = None) -> dict:
+    packet = load_base_packet(preset_id)
+    injected_fact_id = _INJECT_TARGET if preset_id == "INJ-009-INJECTED" else None
+    if field_id is not None and field_value is not None:
+        packet = apply_field_edit(packet, field_id, field_value)
+        injected_fact_id = field_id
+    run = run_incident(packet)
+    kind = _preset_kind(preset_id)
+    semantic_blind_spot = (kind == "semantic_framing") and run.firewall_passed
+    return {
+        "mode": "incident",
+        "preset_id": preset_id,
+        "title_label": next((p["label"] for p in PRESETS if p["preset_id"] == preset_id), preset_id),
+        "injected_fact_id": injected_fact_id,
+        "facts": _facts_for_display(packet, injected_fact_id),
+        "beats": _beats(run, scan_passed=run.firewall_passed, scan_violations=run.violations,
+                        scan_taint=run.taint_score, scan_sanitized=run.sanitized_output),
+        "honesty": {"firewall_is_syntactic": True,
+                    "semantic_blind_spot": semantic_blind_spot,
+                    "boundary_note": _boundary_note(kind, run.firewall_passed)},
+        "provenance": _provenance(),
+    }
+
+
+def build_raw_trace(text: str, base_preset_id: str = "INJ-009") -> dict:
+    scan = scan_raw_text(text, base_preset_id)
+    run = run_incident(load_base_packet(base_preset_id))
+    packet = load_base_packet(base_preset_id)
+    semantic_blind_spot = scan["firewall_passed"]
+    note = ("Your wording carried no literal injection pattern — the syntactic gate passed it. "
+            "The deterministic Oracle still judges the incident on its evidence."
+            if scan["firewall_passed"] else
+            "The syntactic gate caught a literal injection in your text and redacted it.")
+    return {
+        "mode": "raw",
+        "preset_id": base_preset_id,
+        "raw_text": text,
+        "title_label": "Your text vs the real firewall",
+        "injected_fact_id": None,
+        "facts": _facts_for_display(packet),
+        "beats": _beats(run, scan_passed=scan["firewall_passed"], scan_violations=scan["violations"],
+                        scan_taint=scan["taint_score"],
+                        scan_sanitized=[scan["sanitized_text"]] if scan["sanitized_text"] else None),
+        "honesty": {"firewall_is_syntactic": True,
+                    "semantic_blind_spot": semantic_blind_spot,
+                    "boundary_note": note},
+        "provenance": _provenance(),
+    }
