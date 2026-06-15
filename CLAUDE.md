@@ -1,7 +1,7 @@
 # CLAUDE.md — ARES Phase 7 (post-Session 094)
 
-**Last updated:** 2026-06-13
-**Test count floor (passing):** 4,257
+**Last updated:** 2026-06-15
+**Test count floor (passing):** 4,288
 
 > Context-hygiene rule: this file holds current state + the last 3 sessions in full.
 > Older session prose rolls off to `docs/SESSION_LOG.md` at the top of each session.
@@ -118,6 +118,11 @@ Strategic docs: `docs/V4 Tribunal - *.md`, `docs/ARES_Tribunal_V3_Codex_Briefing
 - CLAUDE.md is self-validating ground truth: declared test floor and canonical paths are checked by `tests/test_claude_md_freshness.py`. Update floor and paths in this file rather than embedding them inline in session prompts.
 
 ## Key Code Locations
+
+### Firewall Arena live demo (ares-live-demo thread, not research)
+- Spec/PRD: `docs/superpowers/specs/2026-06-15-firewall-arena-mini-prd.md`; plan: `docs/superpowers/plans/2026-06-15-firewall-arena.md` (build on branch `firewall-arena-build`).
+- Deterministic, no-LLM service (ARES repo): `demo/firewall_arena.py` (presets INJ-009 / INJ-009-INJECTED / INJ-020, `load_base_packet`, `apply_field_edit`, `run_incident` wrapping the real `run_guarded_cycle`+`OracleFirewall`, `scan_raw_text`, `build_incident_trace`/`build_raw_trace` → ArenaTrace) + `demo/firewall_arena_service.py` (FastAPI `/presets`+`/run`, 127.0.0.1, CORS). Tests `tests/demo/test_firewall_arena{,_service}.py` (+31). README `demo/FIREWALL_ARENA_README.md`.
+- Renderer (separate repo, no remote): `C:\glassbox\arena` — Vite/React/TS/canvas sibling to `C:\glassbox\glassbox` (Glass Box untouched). 5-beat arc (incident→scan→catch→respond→hold), preset buttons + try-your-own (edit-a-field + raw box), honest semantic-miss banner. Empirical pivot: only INJ-009 is deterministically `threat_confirmed`, so INJ-009-INJECTED is the headline (caught in-cycle → hot-swap → verdict holds).
 
 ### Core pipeline
 - Injection highway: `ares/dialectic/agents/strategies/llm_strategy.py:411`
