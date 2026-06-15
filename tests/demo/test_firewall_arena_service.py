@@ -53,3 +53,8 @@ def test_run_rejects_unknown_preset():
 def test_run_raw_requires_text():
     r = client.post("/run", json={"mode": "raw"})
     assert r.status_code in (400, 422)
+
+
+def test_run_rejects_partial_field_edit():
+    r = client.post("/run", json={"mode": "incident", "preset_id": "INJ-009", "field_id": "inj009-fact-002"})
+    assert r.status_code in (400, 422)

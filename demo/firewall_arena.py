@@ -1,10 +1,10 @@
 """Firewall Arena core — deterministic, no-LLM exposure of the real ARES firewall.
 
-Builds toward a thin local service that runs the real OracleFirewall +
-run_guarded_cycle (rule-based agents, no LLM) and serializes a provenanced
-"arena trace" for the renderer. This module currently provides the preset
-registry, the base-packet loader, the full guarded-cycle runner, and the
-flat ArenaRun result. Later tasks add raw-text scan and trace serializer.
+Runs the real OracleFirewall + run_guarded_cycle (rule-based agents, no LLM)
+and serializes a provenanced "arena trace" for the renderer. Provides the
+preset registry, the base-packet loader, the edit-a-field helper, the
+guarded-cycle runner + ArenaRun flat result, the raw-text scan, and the
+ArenaTrace serializers (build_incident_trace / build_raw_trace).
 
 Presets (locked 2026-06-15 after empirical survey):
   INJ-009           — confirmed_threat   — clean credential-theft chain, no injection.
@@ -19,10 +19,10 @@ PRD: docs/superpowers/specs/2026-06-15-firewall-arena-mini-prd.md
 from __future__ import annotations
 
 import dataclasses as _dc
+import subprocess as _subprocess
 import uuid as _uuid
 from dataclasses import dataclass
 from datetime import datetime as _dt
-from typing import Optional
 
 from ares.dialectic.agents.strategies.guarded_cycle import (
     GuardedCycleResult,
@@ -171,20 +171,20 @@ class ArenaRun:
 
     firewall_passed: bool
     taint_score: float
-    violations: list
-    sanitized_output: Optional[list]
+    violations: list[dict]
+    sanitized_output: list[str] | None
     hot_swap_triggered: bool
     used_sanitized: bool
-    quarantined_output: Optional[list]
+    quarantined_output: list[str] | None
     verdict_outcome: str
     architect_confidence: float
     skeptic_confidence: float
     verdict_confidence: float
-    supporting_fact_ids: list
+    supporting_fact_ids: list[str]
     reasoning: str
 
 
-def _violations_to_dicts(verdict: FirewallVerdict) -> list:
+def _violations_to_dicts(verdict: FirewallVerdict) -> list[dict]:
     """Convert a FirewallVerdict's violations to plain dicts."""
     return [
         {
@@ -293,8 +293,6 @@ def scan_raw_text(text: str, base_preset_id: str = "INJ-009") -> dict:
 # ArenaTrace serializer — build_incident_trace / build_raw_trace
 # ---------------------------------------------------------------------------
 
-import subprocess as _subprocess
-
 LABEL_MAX = 90
 TRACE_VERSION = "1.0"
 
@@ -317,14 +315,14 @@ def _source_str(source_type) -> str:
     return str(getattr(source_type, "value", source_type))
 
 
-def _preset_kind(preset_id: str) -> Optional[str]:
+def _preset_kind(preset_id: str) -> str | None:
     for p in PRESETS:
         if p["preset_id"] == preset_id:
             return p["kind"]
     return None
 
 
-def _facts_for_display(packet: EvidencePacket, injected_fact_id: Optional[str] = None) -> list:
+def _facts_for_display(packet: EvidencePacket, injected_fact_id: str | None = None) -> list[dict]:
     out = []
     for fact in packet.get_all_facts():
         out.append({
@@ -347,7 +345,7 @@ def _hold_caption(run: ArenaRun) -> str:
 
 
 def _beats(run: ArenaRun, *, scan_passed: bool, scan_violations: list,
-           scan_taint: float, scan_sanitized) -> list:
+           scan_taint: float, scan_sanitized: list[str] | None) -> list[dict]:
     return [
         {"phase": "incident",
          "caption": "An incident arrives. The Architect will interpret it."},
@@ -382,7 +380,7 @@ def _provenance() -> dict:
             "trace_version": TRACE_VERSION, "no_llm": True}
 
 
-def _boundary_note(kind: Optional[str], firewall_passed: bool) -> str:
+def _boundary_note(kind: str | None, firewall_passed: bool) -> str:
     if kind == "semantic_framing":
         return ("The firewall is syntactic — it cannot see semantic framing. "
                 "The deterministic Oracle's verdict does not move under it.")
@@ -391,8 +389,8 @@ def _boundary_note(kind: Optional[str], firewall_passed: bool) -> str:
     return "Clean evidence — nothing for the syntactic gate to flag."
 
 
-def build_incident_trace(preset_id: str, field_id: Optional[str] = None,
-                         field_value: Optional[str] = None) -> dict:
+def build_incident_trace(preset_id: str, field_id: str | None = None,
+                         field_value: str | None = None) -> dict:
     packet = load_base_packet(preset_id)
     injected_fact_id = _INJECT_TARGET if preset_id == "INJ-009-INJECTED" else None
     if field_id is not None and field_value is not None:
@@ -417,9 +415,9 @@ def build_incident_trace(preset_id: str, field_id: Optional[str] = None,
 
 
 def build_raw_trace(text: str, base_preset_id: str = "INJ-009") -> dict:
-    scan = scan_raw_text(text, base_preset_id)
-    run = run_incident(load_base_packet(base_preset_id))
     packet = load_base_packet(base_preset_id)
+    scan = scan_raw_text(text, base_preset_id)
+    run = run_incident(packet)
     semantic_blind_spot = scan["firewall_passed"]
     note = ("Your wording carried no literal injection pattern — the syntactic gate passed it. "
             "The deterministic Oracle still judges the incident on its evidence."

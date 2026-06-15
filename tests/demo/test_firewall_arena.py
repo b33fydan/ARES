@@ -136,8 +136,10 @@ def test_scan_raw_text_semantic_text_passes_firewall():
 
 
 def test_scan_raw_text_never_executes_just_matches():
+    # Python-looking syntax with no injection keyword — firewall passes, no violations.
     scan = scan_raw_text("__import__('os').system('echo pwned')")
-    assert isinstance(scan["taint_score"], float)
+    assert scan["firewall_passed"] is True
+    assert scan["violations"] == []
 
 
 def test_scan_raw_text_echoes_input():

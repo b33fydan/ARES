@@ -48,6 +48,8 @@ class RunRequest(BaseModel):
             raise ValueError(f"unknown preset_id: {self.preset_id}")
         if self.mode == "raw" and not (self.raw_text and self.raw_text.strip()):
             raise ValueError("raw mode requires non-empty raw_text")
+        if bool(self.field_id) != bool(self.field_value):
+            raise ValueError("field_id and field_value must be provided together")
         return self
 
 
