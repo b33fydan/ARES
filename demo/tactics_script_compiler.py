@@ -74,3 +74,43 @@ def condition_summary(records: list[dict], condition: str) -> dict:
             "supporting_fact_ids": list(modal_fact_set(recs, "oracle_supporting_facts")),
         },
     }
+
+
+LABEL_MAX = 80
+
+
+def _load_scenario_packet(scenario_id: str):
+    from ares.dialectic.scripts.injection_registry_v3 import build_registry_v3
+    for sc in build_registry_v3().all_scenarios():
+        if sc.metadata.scenario_id == scenario_id:
+            return sc.packet
+    raise LookupError(f"{scenario_id} not in injection_registry_v3")
+
+
+def _source_str(source_type) -> str:
+    return str(getattr(source_type, "value", source_type))
+
+
+def _threat_dominant_ids(scenario_id: str,
+                         traces_path: str = DEFAULT_TRACES_PATH) -> set:
+    """Facts the Architect cites under the prefix-framing condition = threat-dominant."""
+    recs = load_scenario_traces(scenario_id, traces_path)
+    framed = [r for r in recs if r["condition"] == "framing:framing_prefix_v1"]
+    pool = framed or [r for r in recs if r["condition"] == "baseline"]
+    return set(modal_fact_set(pool, "architect_cited_facts"))
+
+
+def resolve_facts(scenario_id: str,
+                  traces_path: str = DEFAULT_TRACES_PATH) -> list[dict]:
+    packet = _load_scenario_packet(scenario_id)
+    threat = _threat_dominant_ids(scenario_id, traces_path)
+    out = []
+    for fact in packet.get_all_facts():
+        out.append({
+            "fact_id": fact.fact_id,
+            "field": fact.field,
+            "display_label": str(fact.value)[:LABEL_MAX],
+            "source_type": _source_str(fact.provenance.source_type),
+            "is_threat_dominant": fact.fact_id in threat,
+        })
+    return out

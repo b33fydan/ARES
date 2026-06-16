@@ -42,3 +42,14 @@ def test_condition_summary_shape_for_baseline():
     assert summ["oracle"]["verdict"] in {
         "threat_confirmed", "threat_dismissed", "inconclusive"}
     assert isinstance(summ["oracle"]["supporting_fact_ids"], list)
+
+
+from demo.tactics_script_compiler import resolve_facts
+
+
+def test_resolve_facts_returns_display_fields():
+    facts = resolve_facts("INJ-020")
+    assert facts, "no facts resolved"
+    f = facts[0]
+    assert set(f) >= {"fact_id", "field", "display_label", "source_type", "is_threat_dominant"}
+    assert any(x["is_threat_dominant"] for x in facts)  # at least one threat-dominant fact
