@@ -8,7 +8,9 @@ Spec: docs/superpowers/specs/2026-06-16-ares-tactics-behavior-viz-design.md
 """
 from __future__ import annotations
 
+import hashlib
 import json
+import subprocess
 from collections import Counter
 from pathlib import Path
 
@@ -114,3 +116,77 @@ def resolve_facts(scenario_id: str,
             "is_threat_dominant": fact.fact_id in threat,
         })
     return out
+
+
+_NAME = {"architect": "Architect", "skeptic": "Skeptic"}
+_STANCE = {"architect": "threat", "skeptic": "benign"}
+
+
+def synthesize_claim(actor: str, cited: list, total: int) -> str:
+    """Deterministic, provenanced claim string (NOT a model quote)."""
+    return f"{_NAME[actor]} cites {len(cited)} of {total} facts — {_STANCE[actor]}."
+
+
+def _git_sha() -> str:
+    try:
+        out = subprocess.run(["git", "rev-parse", "--short", "HEAD"],
+                             capture_output=True, text=True, check=True)
+        return out.stdout.strip()
+    except Exception:
+        return "unknown"
+
+
+def _trace_sha256(traces_path: str) -> str:
+    return hashlib.sha256(Path(traces_path).read_bytes()).hexdigest()
+
+
+def compile_tactics_script(scenario_id: str,
+                           traces_path: str = DEFAULT_TRACES_PATH,
+                           compiled_at: str | None = None) -> dict:
+    if compiled_at is None:
+        from datetime import datetime, timezone
+        compiled_at = datetime.now(timezone.utc).isoformat()
+    recs = load_scenario_traces(scenario_id, traces_path)
+    if not recs:
+        raise LookupError(f"no traces for {scenario_id}")
+    facts = resolve_facts(scenario_id, traces_path)
+    total = len(facts)
+    conditions = []
+    for cond in conditions_in(recs):
+        summ = condition_summary(recs, cond)
+        summ["name"] = cond
+        summ["architect"]["claim"] = synthesize_claim(
+            "architect", summ["architect"]["cited_fact_ids"], total)
+        summ["skeptic"]["claim"] = synthesize_claim(
+            "skeptic", summ["skeptic"]["cited_fact_ids"], total)
+        conditions.append(summ)
+    return {
+        "scenario_id": scenario_id,
+        "title_label": scenario_id,  # human title optional; scenario_id is the stable label
+        "facts": facts,
+        "conditions": conditions,
+        "provenance": {
+            "source_run": SOURCE_RUN,
+            "trace_sha256": _trace_sha256(traces_path),
+            "git_sha": _git_sha(),
+            "compiler_version": COMPILER_VERSION,
+            "compiled_at": compiled_at,
+        },
+    }
+
+
+def validate_provenance(script: dict) -> None:
+    prov = script.get("provenance") or {}
+    if not prov.get("source_run") or not prov.get("trace_sha256"):
+        raise ValueError("tactics-script missing provenance (source_run + trace_sha256)")
+
+
+def emit_tactics_script(scenario_id: str, out_dir: str = DEFAULT_OUT_DIR,
+                        traces_path: str = DEFAULT_TRACES_PATH,
+                        compiled_at: str | None = None) -> str:
+    script = compile_tactics_script(scenario_id, traces_path, compiled_at)
+    validate_provenance(script)
+    out = Path(out_dir) / f"{scenario_id.lower()}.tactics.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(script, indent=2) + "\n", encoding="utf-8")
+    return str(out)

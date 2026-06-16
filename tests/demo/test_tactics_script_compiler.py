@@ -53,3 +53,36 @@ def test_resolve_facts_returns_display_fields():
     f = facts[0]
     assert set(f) >= {"fact_id", "field", "display_label", "source_type", "is_threat_dominant"}
     assert any(x["is_threat_dominant"] for x in facts)  # at least one threat-dominant fact
+
+
+import json as _json
+from demo.tactics_script_compiler import (
+    SOURCE_RUN,
+    synthesize_claim, compile_tactics_script, validate_provenance, emit_tactics_script,
+)
+
+
+def test_synthesize_claim_states_counts_and_stance():
+    c = synthesize_claim("architect", ["a", "b"], total=5)
+    assert "2" in c and "5" in c and "threat" in c.lower()
+    c2 = synthesize_claim("skeptic", ["a"], total=5)
+    assert "benign" in c2.lower()
+
+
+def test_compile_tactics_script_full_shape():
+    s = compile_tactics_script("INJ-020")
+    assert s["scenario_id"] == "INJ-020"
+    assert s["facts"]
+    assert s["conditions"] and s["conditions"][0]["name"] == "baseline"
+    cond = s["conditions"][0]
+    assert "claim" in cond["architect"] and "claim" in cond["skeptic"]
+    assert cond["oracle"]["verdict"] in {"threat_confirmed", "threat_dismissed", "inconclusive"}
+    validate_provenance(s)  # must not raise
+    assert s["provenance"]["source_run"] == SOURCE_RUN
+    assert s["provenance"]["trace_sha256"]
+
+
+def test_emit_writes_valid_json(tmp_path):
+    out = emit_tactics_script("INJ-020", out_dir=str(tmp_path))
+    data = _json.loads(open(out, encoding="utf-8").read())
+    assert data["scenario_id"] == "INJ-020"
