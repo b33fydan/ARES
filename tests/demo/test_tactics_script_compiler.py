@@ -19,3 +19,26 @@ def test_load_scenario_traces_filters_by_id():
                 "architect_confidence", "skeptic_confidence",
                 "oracle_supporting_facts", "final_outcome"):
         assert key in r
+
+
+from demo.tactics_script_compiler import (
+    conditions_in, condition_summary,
+)
+
+
+def test_conditions_in_includes_baseline_and_framing():
+    recs = load_scenario_traces("INJ-020")
+    conds = conditions_in(recs)
+    assert "baseline" in conds
+    assert any(c.startswith("framing:") for c in conds)
+
+
+def test_condition_summary_shape_for_baseline():
+    recs = load_scenario_traces("INJ-020")
+    summ = condition_summary(recs, "baseline")
+    assert isinstance(summ["architect"]["cited_fact_ids"], list)
+    assert 0.0 <= summ["architect"]["confidence"] <= 1.0
+    assert isinstance(summ["skeptic"]["cited_fact_ids"], list)
+    assert summ["oracle"]["verdict"] in {
+        "threat_confirmed", "threat_dismissed", "inconclusive"}
+    assert isinstance(summ["oracle"]["supporting_fact_ids"], list)

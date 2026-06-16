@@ -9,7 +9,11 @@ Spec: docs/superpowers/specs/2026-06-16-ares-tactics-behavior-viz-design.md
 from __future__ import annotations
 
 import json
+from collections import Counter
 from pathlib import Path
+
+# Reuse the regression-locked helpers from the Glass Box compiler.
+from demo.battle_script_compiler import modal_fact_set, median_confidence
 
 DEFAULT_TRACES_PATH = (
     "data/paper_3/leakage_runs/20260605-194137-713674/traces.jsonl"
@@ -38,3 +42,35 @@ def load_scenario_traces(scenario_id: str,
                          traces_path: str = DEFAULT_TRACES_PATH) -> list[dict]:
     """All records for one scenario."""
     return [r for r in _load_all(traces_path) if r["scenario_id"] == scenario_id]
+
+
+def conditions_in(records: list[dict]) -> list[str]:
+    """Condition labels present, baseline first then sorted framings."""
+    conds = {r["condition"] for r in records}
+    ordered = ["baseline"] if "baseline" in conds else []
+    ordered += sorted(c for c in conds if c != "baseline")
+    return ordered
+
+
+def _modal_outcome(records: list[dict]) -> str:
+    counter = Counter(r["final_outcome"] for r in records)
+    return sorted(counter.items(), key=lambda kv: (-kv[1], kv[0]))[0][0]
+
+
+def condition_summary(records: list[dict], condition: str) -> dict:
+    """Modal cited-fact sets + median confidences + modal outcome for one condition."""
+    recs = [r for r in records if r["condition"] == condition]
+    return {
+        "architect": {
+            "cited_fact_ids": list(modal_fact_set(recs, "architect_cited_facts")),
+            "confidence": round(median_confidence(recs, "architect_confidence"), 3),
+        },
+        "skeptic": {
+            "cited_fact_ids": list(modal_fact_set(recs, "skeptic_cited_facts")),
+            "confidence": round(median_confidence(recs, "skeptic_confidence"), 3),
+        },
+        "oracle": {
+            "verdict": _modal_outcome(recs),
+            "supporting_fact_ids": list(modal_fact_set(recs, "oracle_supporting_facts")),
+        },
+    }
