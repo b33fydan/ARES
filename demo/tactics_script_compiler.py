@@ -13,6 +13,7 @@ import hashlib
 import json
 import subprocess
 from collections import Counter
+from functools import lru_cache
 from pathlib import Path
 
 # Reuse the regression-locked helpers from the Glass Box compiler.
@@ -26,6 +27,7 @@ COMPILER_VERSION = "1.0"
 DEFAULT_OUT_DIR = "demo/out"
 
 
+@lru_cache(maxsize=None)
 def _load_all(traces_path: str) -> list[dict]:
     out: list[dict] = []
     with Path(traces_path).open("r", encoding="utf-8") as fh:

@@ -1,3 +1,5 @@
+import pytest
+
 from demo.tactics_script_compiler import (
     DEFAULT_TRACES_PATH, load_scenario_traces, scenarios_in_run,
 )
@@ -101,3 +103,19 @@ def test_cli_emit_single(tmp_path):
     rc = main(["--scenario", "INJ-020", "--out-dir", str(tmp_path)])
     assert rc == 0
     assert (tmp_path / "inj-020.tactics.json").exists()
+
+
+def test_validate_provenance_raises_on_empty_provenance():
+    s = compile_tactics_script("INJ-020")
+    s["provenance"] = {}
+    with pytest.raises(ValueError, match="provenance"):
+        validate_provenance(s)
+
+
+def test_compile_tactics_script_raises_on_unknown_scenario():
+    with pytest.raises(LookupError):
+        compile_tactics_script("NOPE-999")
+
+
+def test_emit_all_writes_exactly_17_files(tmp_path):
+    assert len(emit_all(out_dir=str(tmp_path))) == 17
