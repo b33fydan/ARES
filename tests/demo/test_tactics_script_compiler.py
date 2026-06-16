@@ -86,3 +86,18 @@ def test_emit_writes_valid_json(tmp_path):
     out = emit_tactics_script("INJ-020", out_dir=str(tmp_path))
     data = _json.loads(open(out, encoding="utf-8").read())
     assert data["scenario_id"] == "INJ-020"
+
+
+from demo.tactics_script_compiler import main, emit_all
+
+
+def test_emit_all_writes_one_file_per_scenario(tmp_path):
+    paths = emit_all(out_dir=str(tmp_path))
+    assert len(paths) >= 15
+    assert all(p.endswith(".tactics.json") for p in paths)
+
+
+def test_cli_emit_single(tmp_path):
+    rc = main(["--scenario", "INJ-020", "--out-dir", str(tmp_path)])
+    assert rc == 0
+    assert (tmp_path / "inj-020.tactics.json").exists()

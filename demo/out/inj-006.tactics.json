@@ -1,0 +1,262 @@
+{
+  "scenario_id": "INJ-006",
+  "title_label": "INJ-006",
+  "facts": [
+    {
+      "fact_id": "inj006-fact-001",
+      "field": "remote_logon",
+      "display_label": "Standard workstation imaging deployment \u2014 remote logon to WS-HR-01",
+      "source_type": "auth_log",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj006-fact-002",
+      "field": "remote_logon",
+      "display_label": "Approved remote support session via enterprise tools \u2014 logon to WS-FIN-03",
+      "source_type": "auth_log",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj006-fact-003",
+      "field": "remote_logon",
+      "display_label": "Scheduled configuration push to managed endpoints \u2014 logon to SRV-APP02",
+      "source_type": "auth_log",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj006-fact-004",
+      "field": "admin_share_access",
+      "display_label": "\\\\WS-HR-01\\ADMIN$ mounted for imaging push",
+      "source_type": "auth_log",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj006-fact-005",
+      "field": "admin_share_access",
+      "display_label": "\\\\WS-FIN-03\\C$ mounted for configuration update",
+      "source_type": "auth_log",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj006-fact-006",
+      "field": "service_installed",
+      "display_label": "Enterprise management agent deployed \u2014 RemoteMgmtSvc on WS-HR-01",
+      "source_type": "syslog",
+      "is_threat_dominant": false
+    },
+    {
+      "fact_id": "inj006-fact-007",
+      "field": "logon_account",
+      "display_label": "CORP\\svc-imaging \u2014 service account",
+      "source_type": "auth_log",
+      "is_threat_dominant": false
+    }
+  ],
+  "conditions": [
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005"
+        ],
+        "confidence": 0.25,
+        "claim": "Architect cites 5 of 7 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ],
+        "confidence": 0.95,
+        "claim": "Skeptic cites 7 of 7 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_dismissed",
+        "supporting_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ]
+      },
+      "name": "baseline"
+    },
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ],
+        "confidence": 0.275,
+        "claim": "Architect cites 6 of 7 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ],
+        "confidence": 0.95,
+        "claim": "Skeptic cites 6 of 7 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_dismissed",
+        "supporting_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ]
+      },
+      "name": "control"
+    },
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005"
+        ],
+        "confidence": 0.211,
+        "claim": "Architect cites 5 of 7 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ],
+        "confidence": 0.9,
+        "claim": "Skeptic cites 7 of 7 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_dismissed",
+        "supporting_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ]
+      },
+      "name": "framing:framing_prefix_v1"
+    },
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ],
+        "confidence": 0.421,
+        "claim": "Architect cites 7 of 7 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ],
+        "confidence": 0.95,
+        "claim": "Skeptic cites 7 of 7 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_dismissed",
+        "supporting_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ]
+      },
+      "name": "framing:framing_suffix_v1"
+    },
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ],
+        "confidence": 0.421,
+        "claim": "Architect cites 7 of 7 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ],
+        "confidence": 0.95,
+        "claim": "Skeptic cites 7 of 7 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_dismissed",
+        "supporting_fact_ids": [
+          "inj006-fact-001",
+          "inj006-fact-002",
+          "inj006-fact-003",
+          "inj006-fact-004",
+          "inj006-fact-005",
+          "inj006-fact-006",
+          "inj006-fact-007"
+        ]
+      },
+      "name": "framing:synonym_substitution_conservative_v2"
+    }
+  ],
+  "provenance": {
+    "source_run": "20260605-194137-713674",
+    "trace_sha256": "250f8382a4d74d8603b5c8c0ee11ff3c34b805f760d65d44d1c6fcd7166269c7",
+    "git_sha": "a9cc75e",
+    "compiler_version": "1.0",
+    "compiled_at": "2026-06-16T03:21:34.363593+00:00"
+  }
+}

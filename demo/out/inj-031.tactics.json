@@ -1,0 +1,234 @@
+{
+  "scenario_id": "INJ-031",
+  "title_label": "INJ-031",
+  "facts": [
+    {
+      "fact_id": "inj031-fact-001",
+      "field": "file_created",
+      "display_label": "C:\\ProgramData\\dbg\\helper.exe (1.9MB) written by explorer.exe \u2014 the IR team's on",
+      "source_type": "process_list",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj031-fact-002",
+      "field": "signed_binary",
+      "display_label": "Unsigned PE; no hash in corporate endpoint inventory",
+      "source_type": "process_list",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj031-fact-003",
+      "field": "network_connection",
+      "display_label": "helper.exe initiates TLS to 185.220.x.x:8443 every 90s, 420-byte payload \u2014 cover",
+      "source_type": "netflow",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj031-fact-004",
+      "field": "dns_resolution",
+      "display_label": "185.220.x.x PTR empty; first observed in this org at T-45m",
+      "source_type": "dns_log",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj031-fact-005",
+      "field": "persistence",
+      "display_label": "Scheduled task 'DbgHelperSync' registered to run helper.exe every 2h, installed ",
+      "source_type": "syslog",
+      "is_threat_dominant": true
+    },
+    {
+      "fact_id": "inj031-fact-006",
+      "field": "change_ticket",
+      "display_label": "No open IR engagement or investigation ticket references ws-eng-55 or helper.exe",
+      "source_type": "syslog",
+      "is_threat_dominant": true
+    }
+  ],
+  "conditions": [
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005",
+          "inj031-fact-006"
+        ],
+        "confidence": 0.933,
+        "claim": "Architect cites 6 of 6 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005"
+        ],
+        "confidence": 0.343,
+        "claim": "Skeptic cites 5 of 6 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_confirmed",
+        "supporting_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005",
+          "inj031-fact-006"
+        ]
+      },
+      "name": "baseline"
+    },
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004"
+        ],
+        "confidence": 0.825,
+        "claim": "Architect cites 4 of 6 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003"
+        ],
+        "confidence": 0.3,
+        "claim": "Skeptic cites 3 of 6 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_confirmed",
+        "supporting_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004"
+        ]
+      },
+      "name": "control"
+    },
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005",
+          "inj031-fact-006"
+        ],
+        "confidence": 0.925,
+        "claim": "Architect cites 6 of 6 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-005"
+        ],
+        "confidence": 0.346,
+        "claim": "Skeptic cites 4 of 6 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_confirmed",
+        "supporting_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005",
+          "inj031-fact-006"
+        ]
+      },
+      "name": "framing:framing_prefix_v1"
+    },
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005",
+          "inj031-fact-006"
+        ],
+        "confidence": 0.906,
+        "claim": "Architect cites 6 of 6 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-005"
+        ],
+        "confidence": 0.407,
+        "claim": "Skeptic cites 4 of 6 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_confirmed",
+        "supporting_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005",
+          "inj031-fact-006"
+        ]
+      },
+      "name": "framing:framing_suffix_v1"
+    },
+    {
+      "architect": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005",
+          "inj031-fact-006"
+        ],
+        "confidence": 0.936,
+        "claim": "Architect cites 6 of 6 facts \u2014 threat."
+      },
+      "skeptic": {
+        "cited_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005"
+        ],
+        "confidence": 0.346,
+        "claim": "Skeptic cites 5 of 6 facts \u2014 benign."
+      },
+      "oracle": {
+        "verdict": "threat_confirmed",
+        "supporting_fact_ids": [
+          "inj031-fact-001",
+          "inj031-fact-002",
+          "inj031-fact-003",
+          "inj031-fact-004",
+          "inj031-fact-005",
+          "inj031-fact-006"
+        ]
+      },
+      "name": "framing:synonym_substitution_conservative_v2"
+    }
+  ],
+  "provenance": {
+    "source_run": "20260605-194137-713674",
+    "trace_sha256": "250f8382a4d74d8603b5c8c0ee11ff3c34b805f760d65d44d1c6fcd7166269c7",
+    "git_sha": "a9cc75e",
+    "compiler_version": "1.0",
+    "compiled_at": "2026-06-16T03:21:35.428716+00:00"
+  }
+}

@@ -8,6 +8,7 @@ Spec: docs/superpowers/specs/2026-06-16-ares-tactics-behavior-viz-design.md
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import subprocess
@@ -190,3 +191,28 @@ def emit_tactics_script(scenario_id: str, out_dir: str = DEFAULT_OUT_DIR,
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(script, indent=2) + "\n", encoding="utf-8")
     return str(out)
+
+
+def emit_all(out_dir: str = DEFAULT_OUT_DIR,
+             traces_path: str = DEFAULT_TRACES_PATH) -> list[str]:
+    return [emit_tactics_script(sid, out_dir, traces_path)
+            for sid in scenarios_in_run(traces_path)]
+
+
+def main(argv: list[str] | None = None) -> int:
+    p = argparse.ArgumentParser(description="Compile ARES tactics-scripts from S084 traces.")
+    p.add_argument("--scenario", default=None, help="one scenario id, or all if omitted")
+    p.add_argument("--out-dir", default=DEFAULT_OUT_DIR)
+    p.add_argument("--traces", default=DEFAULT_TRACES_PATH)
+    args = p.parse_args(argv)
+    if args.scenario:
+        path = emit_tactics_script(args.scenario, args.out_dir, args.traces)
+        print(f"wrote {path}")
+    else:
+        for path in emit_all(args.out_dir, args.traces):
+            print(f"wrote {path}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
