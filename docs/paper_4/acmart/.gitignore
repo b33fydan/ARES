@@ -1,0 +1,24 @@
+# LaTeX build intermediates
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.ppm
+texput.log
+
+# pdftotext dumps + diagnostic snapshots
+full.txt
+p*.txt
+page*.txt
+page*-*.png
+nonascii.txt
+
+# Copy of references.bib written by build_acmart.py at build time
+# (canonical lives at docs/paper_4/references.bib — committing the
+# copy here would cause drift)
+references.bib
