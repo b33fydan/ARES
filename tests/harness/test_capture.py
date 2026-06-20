@@ -38,3 +38,13 @@ def test_manual_is_trusted():
 def test_unknown_is_untrusted_failsafe():
     assert is_trusted(unknown_prov()) is False
     assert capture("r1", "x", unknown_prov()).trusted is False
+
+
+def test_hash_convention_matches_ares_fact():
+    import hashlib, json
+    from ares.harness.capture import _hash_content
+    content = "hello world"
+    expected = hashlib.sha256(
+        json.dumps(content, sort_keys=True, default=str).encode("utf-8")
+    ).hexdigest()[:16]
+    assert _hash_content(content) == expected
