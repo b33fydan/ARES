@@ -31,7 +31,7 @@ def scan(record: CapturedRecord) -> IngressScanResult:
     violations = tuple(
         v for v in found if v.violation_type in HIGH_PRECISION_TYPES
     )
-    taint = OracleFirewall._compute_taint_score(violations)
+    taint = _FIREWALL._compute_taint_score(violations)
     iocs = scan_iocs(normalized)
     passed = len(violations) == 0
     return IngressScanResult(

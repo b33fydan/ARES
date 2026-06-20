@@ -9,6 +9,7 @@ import re
 import unicodedata
 
 # Zero-width and joiner code points commonly used to split banned tokens.
+# U+200B ZWSP, U+200C ZWNJ, U+200D ZWJ, U+2060 WORD JOINER, U+FEFF BOM
 _ZERO_WIDTH = dict.fromkeys(
     map(ord, "​‌‍⁠﻿"), None
 )

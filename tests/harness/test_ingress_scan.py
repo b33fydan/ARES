@@ -35,3 +35,11 @@ def test_benign_ioc_content_passes_gate_but_flags_ioc():
     res = scan(capture("r1", "the host ran procdump -ma lsass.dmp", manual_prov()))
     assert res.passed is True
     assert any(m.ioc_name == "credential_access" for m in res.ioc_matches)
+
+
+def test_structural_break_payload_fails_gate():
+    # A typed code fence triggers STRUCTURAL_BREAK; the gate must reject it.
+    payload = "data follows:\n```python\nprint('exec me')\n```"
+    res = scan(capture("r1", payload, manual_prov()))
+    assert res.passed is False
+    assert any(v.violation_type == "STRUCTURAL_BREAK" for v in res.violations)
