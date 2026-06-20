@@ -27,7 +27,7 @@ class IOCMatch:
     matched_text: str
 
 
-def scan_iocs(text: str) -> tuple:
+def scan_iocs(text: str) -> tuple[IOCMatch, ...]:
     matches = []
     for name, pattern in IOC_PATTERNS:
         for m in pattern.finditer(text):
