@@ -74,3 +74,5 @@ docs/tribunal/
 
 # Brainstorming session artifacts (local-only)
 .superpowers/
+
+.scratch/
