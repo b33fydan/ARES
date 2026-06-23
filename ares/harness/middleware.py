@@ -5,9 +5,14 @@ and the deterministic action gate around a tool-using agent. The agent is the
 ONLY LLM in the trusted path and is injected as a callable (``agent_fn``) so the
 orchestration is deterministic and offline-testable; Phase 3's benchmark adapter
 injects the real Anthropic-backed agent and wires actual tool execution behind an
-ALLOW. Untrusted content reaches the agent only as redacted, inert,
-provenance-tagged data; the proposed tool call is authorized on code-checkable
-facts (capability class + argument taint), never on the model's free text.
+ALLOW. Untrusted content reaches the agent only as **trigger-redacted,
+inert-wrapped, provenance-tagged** data; redaction strips detected injection
+*triggers* (e.g. "ignore previous instructions"), while content safety rests on
+the inert envelope and the downstream action gate, not on redaction completeness.
+IOC-bearing content with no structural/instruction violation passes the scan and
+renders verbatim inside the inert envelope. The proposed tool call is authorized
+on code-checkable facts (capability class + argument taint), never on the model's
+free text.
 
 Fail-closed everywhere: a scan error withholds the record and marks it
 quarantined; a gate error denies the action.
@@ -15,7 +20,7 @@ quarantined; a gate error denies the action.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Callable, Optional
 
 from ares.harness.action_gate import (
     CapabilityClass,
@@ -87,6 +92,23 @@ def _ingest(records: tuple) -> tuple:
     for rec in records:
         try:
             result = scan(rec)
+            quarantined = not result.passed
+            if quarantined:
+                # redact strips detected injection triggers, not the full lure;
+                # the inert envelope + action gate are the content-safety guarantee.
+                safe_rec = redact(rec, result.violations)
+                any_quarantined = True
+            else:
+                safe_rec = rec
+            rendered = inert_render(safe_rec)
+            report = IngressRecordReport(
+                record_id=rec.record_id,
+                passed=result.passed,
+                quarantined=quarantined,
+                violation_types=tuple(v.violation_type for v in result.violations),
+                ioc_names=tuple(m.ioc_name for m in result.ioc_matches),
+                taint_score=result.taint_score,
+            )
         except Exception:
             any_quarantined = True
             reports.append(
@@ -101,21 +123,8 @@ def _ingest(records: tuple) -> tuple:
             )
             inert_parts.append(_QUARANTINED_NOTICE.format(record_id=rec.record_id))
             continue
-        quarantined = not result.passed
-        safe_rec = redact(rec, result.violations) if quarantined else rec
-        if quarantined:
-            any_quarantined = True
-        inert_parts.append(inert_render(safe_rec))
-        reports.append(
-            IngressRecordReport(
-                record_id=rec.record_id,
-                passed=result.passed,
-                quarantined=quarantined,
-                violation_types=tuple(v.violation_type for v in result.violations),
-                ioc_names=tuple(m.ioc_name for m in result.ioc_matches),
-                taint_score=result.taint_score,
-            )
-        )
+        inert_parts.append(rendered)
+        reports.append(report)
     return tuple(reports), inert_parts, any_quarantined
 
 
@@ -130,6 +139,7 @@ def run_hardened_turn(
     reports, inert_parts, any_quarantined = _ingest(records)
     inert_context = "\n\n".join(inert_parts)
 
+    # A raising agent is intentionally the integrator's concern — not wrapped here.
     action = agent_fn(inert_context)
     if action is None:
         return HarnessTrace(
