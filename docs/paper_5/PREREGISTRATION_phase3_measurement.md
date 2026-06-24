@@ -58,7 +58,8 @@ because they collapse into AgentDojo's own `security`).
   over the filtered (eligible) injection-task slice; deterministic tie-break (est_cost, model, attack, suite).
 - No-cell contingency: if no cell clears both bars, the ASR-delta degenerates and the result stands on
   the deterministic-guarantee spine (gate-on ASR = 0 by construction on the env-state task class across
-  the model row).
+  the model row). The Stage-1 arms still run on a FALLBACK cell — the sweep cell with the highest
+  undefended ASR (tie → cheapest) — so the guarantee panel + benign false-block rate are always measured.
 
 ## Stage-1 arms (with-injection, on the selected cell; code SSOT: _STAGE1_ARMS)
 - undefended (no ARES elements), full_defense (GatedToolsExecutor + AresIngressElement), gate_off

@@ -478,6 +478,7 @@ def _run_live(args) -> int:
     arms_report = {}
     benign_report = {}
     selected = None
+    run_cell = None
     aborted = None  # set to the cost-ceiling message if we stop early (partial result persists)
 
     try:
@@ -519,17 +520,27 @@ def _run_live(args) -> int:
         selected = _meas.select_cell(sweep_cells, tau_asr, tau_util)
         print(f"[live] selected cell: {selected}")
 
-        if selected is not None:
-            suite = suites[selected.suite]
-            elig = eligible[selected.suite]
-            llm = _make_llm(_SWEEP_MODELS[selected.model])
+        # Contingency (pre-registered): if no cell clears tau, still run the
+        # defense arms on a FALLBACK cell (the highest-undefended-ASR cell, tie ->
+        # cheapest) so the by-construction guarantee panel + benign false-block
+        # rate are always measured. The ASR-delta then degenerates to
+        # "undefended already ~0; the gate guarantees it across the model row".
+        run_cell = selected
+        if run_cell is None and sweep_cells:
+            run_cell = max(sweep_cells, key=lambda c: (c.undefended_asr, -c.est_cost_usd))
+            print(f"[live] no cell clears tau -> contingency fallback cell: {run_cell}")
+
+        if run_cell is not None:
+            suite = suites[run_cell.suite]
+            elig = eligible[run_cell.suite]
+            llm = _make_llm(_SWEEP_MODELS[run_cell.model])
             with OutputLogger(str(logdir)):
                 for arm in _STAGE1_ARMS:
-                    attack = load_attack(selected.attack, suite,
+                    attack = load_attack(run_cell.attack, suite,
                                          _build_pipeline(arm, llm, policy, _maybe_tracker(arm), sink))
                     arms_report[arm] = _run_arm(suite, arm, llm, policy, attack, elig, args.n_per_arm, sink, guard)
                 for arm in _BLOCKING_ARMS:
-                    attack = load_attack(selected.attack, suite,
+                    attack = load_attack(run_cell.attack, suite,
                                          _build_pipeline(arm, llm, policy, _maybe_tracker(arm), sink))
                     benign_report[arm] = _run_benign(suite, arm, llm, policy, attack, args.n_benign, sink, guard)
     except _CostCeilingExceeded as exc:
@@ -547,6 +558,7 @@ def _run_live(args) -> int:
         "eligible_injection_tasks": eligible,
         "sweep": sweep_records,
         "selected_cell": selected.__dict__ if selected else None,
+        "run_cell": run_cell.__dict__ if run_cell else None,
         "no_cell_contingency": contingency,
         "stage1_arms": arms_report,
         "benign_false_block": benign_report,
