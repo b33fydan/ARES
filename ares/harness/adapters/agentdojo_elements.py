@@ -33,7 +33,9 @@ from ares.harness.action_gate import (
     authorize,
 )
 from ares.harness.capture import CapturedRecord
+from ares.harness.ingress_scan import scan
 from ares.harness.provenance_tracker import derive_arg_sources
+from ares.harness.quarantine import inert_render, redact
 
 _DENIED_ERROR_FMT = "blocked by ARES-Harness action gate (policy: {reason})"
 
@@ -177,3 +179,41 @@ class _FailClosedDecision:
         self.tool_name = tool_name
         self.reason = "gate derivation error -> fail-closed deny"
         self.tainted_args = ()
+
+
+_WITHHELD_NOTICE = "[TOOL OUTPUT WITHHELD: ingress scan failed; content quarantined.]"
+
+
+class AresIngressElement:
+    """Sanitize the trailing block of newly-appended tool messages in place.
+
+    Backward-walk the trailing consecutive ``role=="tool"`` messages, flatten +
+    capture (UNKNOWN) + scan each; redact on a hit; inert-render; write back as a
+    one-element text block list. Mutates the message dicts in place and returns
+    the SAME messages list (the loop rebinds from the return). Idempotent across
+    loop iterations and fail-closed on scan error.
+    """
+
+    def query(self, query, runtime, env, messages, extra_args):
+        for i in range(len(messages) - 1, -1, -1):
+            if messages[i].get("role") != "tool":
+                break
+            self._sanitize_in_place(messages[i], i)
+        return query, runtime, env, messages, extra_args
+
+    @staticmethod
+    def _sanitize_in_place(message, index) -> None:
+        text = _text_of_content(message.get("content"))
+        record = CapturedRecord(
+            record_id=f"tool-ingress:{index}",
+            content=text,
+            provenance=Provenance(source_type=SourceType.UNKNOWN, source_id="tool"),
+        )
+        try:
+            result = scan(record)
+        except Exception:
+            message["content"] = [{"type": "text", "content": _WITHHELD_NOTICE}]
+            return
+        safe = redact(record, result.violations) if not result.passed else record
+        rendered = inert_render(safe)
+        message["content"] = [{"type": "text", "content": rendered}]
