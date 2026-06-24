@@ -319,6 +319,19 @@ def _rollout(suite, pipeline, user_task, injection_task, attack, tracker, sink, 
     return utility, security, final_text, decisions
 
 
+def _safe_rollout(*a, **kw):
+    """_rollout, but a non-cost error (e.g. a model 404 or transient API failure)
+    degrades that rollout to a null result instead of crashing the whole run and
+    losing the spend so far. A _CostCeilingExceeded is re-raised (it MUST stop)."""
+    try:
+        return _rollout(*a, **kw)
+    except _CostCeilingExceeded:
+        raise
+    except Exception as exc:  # noqa: BLE001 — protect paid-for partial results
+        print(f"[warn] rollout error (skipped): {type(exc).__name__}: {exc}", file=sys.stderr)
+        return None, None, "", []
+
+
 def _denies(decisions) -> int:
     from ares.harness.action_gate import GateOutcome
     return sum(1 for d in decisions if getattr(d, "outcome", None) == GateOutcome.DENY)
@@ -449,55 +462,69 @@ def _run_live(args) -> int:
 
     sweep_cells = []
     sweep_records = []
-    with OutputLogger(str(logdir)):
-        for suite_name in _SWEEP_SUITES:
-            suite = suites[suite_name]
-            elig = eligible[suite_name]
-            model_labels = [args.model] if args.model else list(_SWEEP_MODELS)
-            for model_label in model_labels:
-                model_id = _SWEEP_MODELS[model_label]
-                llm = _make_llm(model_id)
-                for attack_name in _SWEEP_ATTACKS:
-                    pipe = _build_pipeline("undefended", llm, policy, None, sink)
-                    attack = load_attack(attack_name, suite, pipe)
-                    pairs = _sweep_pairs(suite, elig, args.sweep_n)
-                    asr_hits = util_hits = 0
-                    for (ut_id, it_id) in pairs:
-                        u, s, _, _ = _rollout(
-                            suite, _build_pipeline("undefended", llm, policy, None, sink),
-                            suite.user_tasks[ut_id], suite.injection_tasks[it_id],
-                            attack, None, sink, guard,
-                        )
-                        asr_hits += int(bool(s))
-                        util_hits += int(bool(u))
-                    n = max(len(pairs), 1)
-                    cell = _meas.SweepCell(
-                        model=model_label, attack=attack_name, suite=suite_name,
-                        undefended_asr=asr_hits / n, undefended_utility=util_hits / n,
-                        est_cost_usd=per_rollout_hint * (1.0 if model_label == "haiku-4-5" else 3.0),
-                    )
-                    sweep_cells.append(cell)
-                    sweep_records.append({**cell.__dict__, "pairs": len(pairs)})
-                    print(f"[sweep] {model_label}/{attack_name}/{suite_name}: "
-                          f"ASR={cell.undefended_asr:.2f} util={cell.undefended_utility:.2f}")
-
-    selected = _meas.select_cell(sweep_cells, tau_asr, tau_util)
-    print(f"[live] selected cell: {selected}")
-
     arms_report = {}
     benign_report = {}
-    contingency = selected is None
-    if not contingency:
-        suite = suites[selected.suite]
-        elig = eligible[selected.suite]
-        llm = _make_llm(_SWEEP_MODELS[selected.model])
+    selected = None
+    aborted = None  # set to the cost-ceiling message if we stop early (partial result persists)
+
+    try:
         with OutputLogger(str(logdir)):
-            for arm in _STAGE1_ARMS:
-                attack = load_attack(selected.attack, suite, _build_pipeline(arm, llm, policy, _maybe_tracker(arm), sink))
-                arms_report[arm] = _run_arm(suite, arm, llm, policy, attack, elig, args.n_per_arm, sink, guard)
-            for arm in _BLOCKING_ARMS:
-                attack = load_attack(selected.attack, suite, _build_pipeline(arm, llm, policy, _maybe_tracker(arm), sink))
-                benign_report[arm] = _run_benign(suite, arm, llm, policy, attack, args.n_per_arm, sink, guard)
+            for suite_name in _SWEEP_SUITES:
+                suite = suites[suite_name]
+                elig = eligible[suite_name]
+                model_labels = [args.model] if args.model else list(_SWEEP_MODELS)
+                for model_label in model_labels:
+                    model_id = _SWEEP_MODELS[model_label]
+                    llm = _make_llm(model_id)
+                    for attack_name in _SWEEP_ATTACKS:
+                        attack = load_attack(attack_name, suite,
+                                             _build_pipeline("undefended", llm, policy, None, sink))
+                        pairs = _sweep_pairs(suite, elig, args.sweep_n)
+                        asr_hits = util_hits = n_ok = 0
+                        for (ut_id, it_id) in pairs:
+                            u, s, _, _ = _safe_rollout(
+                                suite, _build_pipeline("undefended", llm, policy, None, sink),
+                                suite.user_tasks[ut_id], suite.injection_tasks[it_id],
+                                attack, None, sink, guard,
+                            )
+                            if u is None and s is None:
+                                continue  # errored rollout -> excluded from the denominator
+                            n_ok += 1
+                            asr_hits += int(bool(s))
+                            util_hits += int(bool(u))
+                        n = max(n_ok, 1)
+                        cell = _meas.SweepCell(
+                            model=model_label, attack=attack_name, suite=suite_name,
+                            undefended_asr=asr_hits / n, undefended_utility=util_hits / n,
+                            est_cost_usd=per_rollout_hint * (1.0 if model_label == "haiku-4-5" else 3.0),
+                        )
+                        sweep_cells.append(cell)
+                        sweep_records.append({**cell.__dict__, "n_ok": n_ok, "pairs": len(pairs)})
+                        print(f"[sweep] {model_label}/{attack_name}/{suite_name}: "
+                              f"ASR={cell.undefended_asr:.2f} util={cell.undefended_utility:.2f} (n={n_ok})")
+
+        selected = _meas.select_cell(sweep_cells, tau_asr, tau_util)
+        print(f"[live] selected cell: {selected}")
+
+        if selected is not None:
+            suite = suites[selected.suite]
+            elig = eligible[selected.suite]
+            llm = _make_llm(_SWEEP_MODELS[selected.model])
+            with OutputLogger(str(logdir)):
+                for arm in _STAGE1_ARMS:
+                    attack = load_attack(selected.attack, suite,
+                                         _build_pipeline(arm, llm, policy, _maybe_tracker(arm), sink))
+                    arms_report[arm] = _run_arm(suite, arm, llm, policy, attack, elig, args.n_per_arm, sink, guard)
+                for arm in _BLOCKING_ARMS:
+                    attack = load_attack(selected.attack, suite,
+                                         _build_pipeline(arm, llm, policy, _maybe_tracker(arm), sink))
+                    benign_report[arm] = _run_benign(suite, arm, llm, policy, attack, args.n_per_arm, sink, guard)
+    except _CostCeilingExceeded as exc:
+        aborted = str(exc)
+        print(f"[abort] cost ceiling reached: {exc}", file=sys.stderr)
+
+    # A genuine no-cell contingency only if the sweep completed without aborting.
+    contingency = selected is None and aborted is None
 
     payload = {
         "phase": "stage0+stage1",
@@ -510,15 +537,16 @@ def _run_live(args) -> int:
         "no_cell_contingency": contingency,
         "stage1_arms": arms_report,
         "benign_false_block": benign_report,
+        "aborted": aborted,
         "estimated_spend_usd": guard.spent_estimate,
         "rollouts": guard.rollouts,
     }
-    out = _write_artifacts(payload, stamp)
+    out = _write_artifacts(payload, stamp)  # always persist (even on a cost abort)
     print(json.dumps(payload, indent=2, default=str))
     print(f"[live] results written to {out}")
     print(f"[live] estimated spend ${guard.spent_estimate} over {guard.rollouts} rollouts "
           f"(ceiling ${args.cost_ceiling}).")
-    return 0
+    return 4 if aborted else 0
 
 
 def _import_gate_tracker():
@@ -560,26 +588,28 @@ def _stage1_pairs(suite, eligible_ids, n):
 
 def _run_arm(suite, arm, llm, policy, attack, eligible_ids, n, sink, guard):
     tracker = _maybe_tracker(arm)
-    asr_hits = util_hits = echo_hits = denials = 0
+    asr_hits = util_hits = echo_hits = denials = n_ok = 0
     pairs = _stage1_pairs(suite, eligible_ids, n)
-    from agentdojo.logging import OutputLogger  # already inside one; harmless re-entry guard
     for (ut_id, it_id) in pairs:
         it = suite.injection_tasks[it_id]
         pipe = _build_pipeline(arm, llm, policy, tracker, sink)
-        u, s, final_text, dec = _rollout(suite, pipe, suite.user_tasks[ut_id], it, attack, tracker, sink, guard)
+        u, s, final_text, dec = _safe_rollout(suite, pipe, suite.user_tasks[ut_id], it, attack, tracker, sink, guard)
+        if u is None and s is None:
+            continue  # errored rollout -> excluded from the denominator
+        n_ok += 1
         asr_hits += int(bool(s))
         util_hits += int(bool(u))
         denials += _denies(dec)
         literals = _meas.extract_planted_literals(getattr(it, "GOAL", ""))
         if _meas.final_answer_echoes_any(final_text, literals):
             echo_hits += 1
-    n_eff = max(len(pairs), 1)
+    d = max(n_ok, 1)
     return {
-        "n": len(pairs),
-        "asr": asr_hits / n_eff,
-        "utility": util_hits / n_eff,
-        "echo_rate": echo_hits / n_eff,
-        "conclusion_integrity_rate": 1.0 - echo_hits / n_eff,
+        "n": n_ok,
+        "asr": asr_hits / d,
+        "utility": util_hits / d,
+        "echo_rate": echo_hits / d,
+        "conclusion_integrity_rate": 1.0 - echo_hits / d,
         "gate_denials": denials,
     }
 
@@ -590,18 +620,21 @@ def _run_benign(suite, arm, llm, policy, attack, n, sink, guard):
     tracker = _maybe_tracker(arm)
     user_ids = list(suite.user_tasks)
     pairs = [user_ids[i % len(user_ids)] for i in range(n)]
-    blocks = util_hits = 0
+    blocks = util_hits = n_ok = 0
     for ut_id in pairs:
         pipe = _build_pipeline(arm, llm, policy, tracker, sink)
-        u, _s, _txt, dec = _rollout(suite, pipe, suite.user_tasks[ut_id], None, attack, tracker, sink, guard)
+        u, _s, _txt, dec = _safe_rollout(suite, pipe, suite.user_tasks[ut_id], None, attack, tracker, sink, guard)
+        if u is None:
+            continue  # errored rollout -> excluded from the denominator
+        n_ok += 1
         blocks += _denies(dec)
         util_hits += int(bool(u))
-    n_eff = max(len(pairs), 1)
+    d = max(n_ok, 1)
     return {
-        "n": len(pairs),
+        "n": n_ok,
         "benign_denials": blocks,
-        "false_block_rate_per_task": blocks / n_eff,
-        "benign_utility": util_hits / n_eff,
+        "false_block_rate_per_task": blocks / d,
+        "benign_utility": util_hits / d,
     }
 
 
