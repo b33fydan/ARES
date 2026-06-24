@@ -29,11 +29,13 @@ import sys
 import time
 from pathlib import Path
 
-from ares.harness.adapters import agentdojo_measurement as _meas  # agentdojo-free
-
+# Bootstrap sys.path BEFORE importing ares (standalone `python scripts/...` puts
+# scripts/ on sys.path[0], not the repo root; pytest already has the root).
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
+
+from ares.harness.adapters import agentdojo_measurement as _meas  # noqa: E402  (agentdojo-free)
 
 HARD_CEILING_USD = 25.0
 _PREREG = _REPO_ROOT / "docs" / "paper_5" / "PREREGISTRATION_phase3_measurement.md"
@@ -73,6 +75,15 @@ _BANKING_ELIGIBLE_INJECTION_TASKS = tuple(f"injection_task_{i}" for i in range(9
 _TAU_ASR = 0.2
 _TAU_UTIL = 0.2
 
+# Stage-B run parameters, FROZEN at the S099 Phase-A calibration (haiku measured
+# ~$0.033/rollout @ 3 turns; sonnet assumed ~3x). N in the design's honest 15-25
+# band; the ASR-delta is a small-N illustration and the guarantee spine is
+# N-independent. _REFIT_ROLLOUT_USD (>= the sonnet worst case) feeds the cost
+# guard so the estimate is honest and tight ceilings don't false-abort.
+_FROZEN_N = 20            # with-injection rollouts per Stage-1 arm
+_FROZEN_N_BENIGN = 20     # benign rollouts per blocking arm (false-block pass)
+_REFIT_ROLLOUT_USD = 0.12
+
 # Anthropic prices (USD per 1M tokens) — refit/confirmed at the freeze step
 # (claude-api skill); the hard --cost-ceiling abort is the real safety net.
 _PRICE_USD_PER_MTOK = {
@@ -103,18 +114,18 @@ def _load_env() -> int:
     return loaded
 
 
-def estimate_cost_usd(n_per_arm: int = 20) -> float:
-    """Offline cost estimate (refit from the live calibration rollout at freeze).
+def estimate_cost_usd(n_per_arm: int = _FROZEN_N) -> float:
+    """Offline cost estimate (refit from the S099 Phase-A calibration).
 
-    Models the realistic uncached 15-turn rollout cost from design §8: a sweep
-    sub-budget + the Stage-1 with-injection arms (undefended/full_defense/gate_off)
-    + a benign false-block pass through the blocking arm(s). The hard
-    --cost-ceiling abort is the real safety net; this is a pre-run sanity figure.
+    Models the realistic uncached 15-turn rollout cost from design §8: the
+    fixed sweep + the Stage-1 with-injection arms (undefended/full_defense/gate_off)
+    + a benign false-block pass through the blocking arm(s), at the refit
+    per-rollout cost. The hard --cost-ceiling abort is the real safety net.
     """
-    approx_rollout_usd = _CONSERVATIVE_ROLLOUT_USD
+    approx_rollout_usd = _REFIT_ROLLOUT_USD
     sweep_rollouts = len(_SWEEP_MODELS) * len(_SWEEP_ATTACKS) * len(_SWEEP_SUITES) * 4
     with_injection = len(_STAGE1_ARMS) * n_per_arm
-    benign = len(_BLOCKING_ARMS) * n_per_arm
+    benign = len(_BLOCKING_ARMS) * _FROZEN_N_BENIGN
     return round((sweep_rollouts + with_injection + benign) * approx_rollout_usd, 2)
 
 
@@ -125,7 +136,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--confirm-live", action="store_true", help="actually run the gated live measurement")
     p.add_argument("--cost-ceiling", type=float, default=HARD_CEILING_USD,
                    help=f"hard USD cap (must be <= {HARD_CEILING_USD})")
-    p.add_argument("--n-per-arm", type=int, default=20)
+    p.add_argument("--n-per-arm", type=int, default=_FROZEN_N)
+    p.add_argument("--n-benign", type=int, default=_FROZEN_N_BENIGN)
     p.add_argument("--sweep-n", type=int, default=4,
                    help="(user_task x injection_task) pairs per sweep cell")
     p.add_argument("--model", default=None,
@@ -458,7 +470,8 @@ def _run_live(args) -> int:
     # ------------------------------------------------------------------ #
     print("[live] pre-registration frozen -> Stage-0 sweep + Stage-1 arms.")
     tau_asr, tau_util = _read_frozen_taus()
-    per_rollout_hint = _CONSERVATIVE_ROLLOUT_USD
+    guard.per_rollout = _REFIT_ROLLOUT_USD  # honest refit cost for the Stage-1 spend
+    per_rollout_hint = _REFIT_ROLLOUT_USD
 
     sweep_cells = []
     sweep_records = []
@@ -518,7 +531,7 @@ def _run_live(args) -> int:
                 for arm in _BLOCKING_ARMS:
                     attack = load_attack(selected.attack, suite,
                                          _build_pipeline(arm, llm, policy, _maybe_tracker(arm), sink))
-                    benign_report[arm] = _run_benign(suite, arm, llm, policy, attack, args.n_per_arm, sink, guard)
+                    benign_report[arm] = _run_benign(suite, arm, llm, policy, attack, args.n_benign, sink, guard)
     except _CostCeilingExceeded as exc:
         aborted = str(exc)
         print(f"[abort] cost ceiling reached: {exc}", file=sys.stderr)

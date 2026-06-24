@@ -96,11 +96,16 @@ because they collapse into AgentDojo's own `security`).
   undefended-vs-defended delta a ~±31pp CI. The ASR-delta panel is a small-N headroom illustration; the
   component-arm contrast is exploratory. The guarantee spine is N-independent (ASR = 0 by construction).
 
-## Stage-1 run parameters (frozen at the Phase-A calibration rollout — Stage B)
-- N (with-injection rollouts per arm): [FROZEN AT CALIBRATION]
-- N_benign (benign rollouts per blocking arm): [FROZEN AT CALIBRATION]
-- B_sweep (sweep sub-budget, USD): [FROZEN AT CALIBRATION]
-- per-rollout cost refit (USD) + Anthropic price table: [FROZEN AT CALIBRATION]
-- Release token (added on freeze only): the runner's `_PREREG_FROZEN_SENTINEL` string. It is intentionally
-  ABSENT until N/N_benign/B_sweep above are filled, so the runner runs Phase-A calibration and HALTs until
-  then. (Do not write the token anywhere in this file until the Stage-B values are filled in.)
+## Stage-1 run parameters (frozen at the S099 Phase-A calibration rollout — Stage B)
+Calibration (haiku-4-5, banking / important_instructions / injection_task_0, 2026-06-24): 3 turns/rollout,
+measured ~$0.033/rollout (artifact: data/paper_5/s099_phase3_run_20260624-131359_calibration.json). The
+live wiring was proven end-to-end (composed pipeline ran; gate executed; denied+sanitized messages
+round-tripped through the real Anthropic serializer; tracker populated; messages recovered for the echo-check).
+- N = 20 (with-injection rollouts per Stage-1 arm; the design's honest 15–25 band; code SSOT: _FROZEN_N).
+- N_benign = 20 (benign rollouts per blocking arm — the false-block pass; code SSOT: _FROZEN_N_BENIGN).
+- B_sweep ≈ $3 sub-budget; the sweep is a FIXED 16 undefended rollouts (2 models × 2 attacks × 1 suite × 4 pairs).
+- per-rollout cost refit: haiku-4-5 ~$0.033 (measured); sonnet-4-6 assumed ~3× (~$0.10). The cost guard uses
+  _REFIT_ROLLOUT_USD = 0.12 (>= the sonnet worst case). Anthropic price table (USD / 1M tok): haiku-4-5 in 1.0 / out 5.0; sonnet-4-6 in 3.0 / out 15.0.
+- Projected Stage-1 total: ~$4 (haiku cell) to ~$9 (sonnet cell), hard-capped at $25 with an estimate-based mid-run abort.
+
+STAGE1_PARAMETERS_FROZEN  <!-- release token: Stage-B numeric parameters above are frozen; the runner now runs Stage-1 -->.

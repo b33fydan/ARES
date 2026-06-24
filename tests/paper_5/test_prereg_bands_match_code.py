@@ -93,11 +93,11 @@ def test_eligible_banking_ids_match_runner():
         assert tid in text
 
 
-def test_sentinel_absent_until_stage_b_frozen():
-    # The release token must NOT appear until N/N_benign/B_sweep are filled
-    # (Stage B). Its presence is the runner's gate; a premature token would let
-    # Stage-1 run on unfrozen parameters.
+def test_stage_b_frozen_sentinel_and_n_match_runner():
+    # Stage B is frozen: the release token is present (the runner's Stage-1 gate)
+    # AND the numeric run parameters equal the runner constants.
     mod = _runner()
-    assert mod._PREREG_FROZEN_SENTINEL not in _prereg_text(), (
-        "release token present but Stage-B numeric params not yet frozen"
-    )
+    text = _prereg_text()
+    assert mod._PREREG_FROZEN_SENTINEL in text, "Stage-B release token missing"
+    assert f"N = {mod._FROZEN_N}" in text
+    assert f"N_benign = {mod._FROZEN_N_BENIGN}" in text
