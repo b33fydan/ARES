@@ -40,18 +40,23 @@ from ares.harness.quarantine import inert_render, redact
 _DENIED_ERROR_FMT = "blocked by ARES-Harness action gate (policy: {reason})"
 
 
-def build_denied_result(tool_call) -> dict:
+def build_denied_result(tool_call, reason=None) -> dict:
     """A schema-complete ChatToolResultMessage dict for a DENIED call.
 
     All five Required fields; ``content`` is a one-element block list (never a
     bare string) so AgentDojo's ``TaskResults(**res_dict)`` revalidation on
     reload does not raise (design §3b.3).
+
+    ``reason`` threads the real gate reason into the ``error`` field for audit
+    trail fidelity (e.g. the tainted arg name or the fail-closed message).
+    When omitted or None the generic fallback ``"capability gate denied"`` is
+    used so existing callers without a reason keep their current behaviour.
     """
     return {
         "role": "tool",
         "tool_call": tool_call,
         "tool_call_id": getattr(tool_call, "id", None),
-        "error": _DENIED_ERROR_FMT.format(reason="capability gate denied"),
+        "error": _DENIED_ERROR_FMT.format(reason=reason or "capability gate denied"),
         "content": [{"type": "text", "content": ""}],
     }
 
@@ -140,13 +145,15 @@ class GatedToolsExecutor:
                 action = ProposedAction(tc.function, dict(tc.args), arg_sources)
                 decision = authorize(action, self._policy)
             except Exception:
-                self._tracker.record_decision(
-                    _FailClosedDecision(tc.function)
-                )
-                denied.append(tc)
+                fc_decision = _FailClosedDecision(tc.function)
+                self._tracker.record_decision(fc_decision)
+                denied.append((tc, fc_decision.reason))
                 continue
             self._tracker.record_decision(decision)
-            (allowed if decision.outcome == GateOutcome.ALLOW else denied).append(tc)
+            if decision.outcome == GateOutcome.ALLOW:
+                allowed.append(tc)
+            else:
+                denied.append((tc, decision.reason))
 
         out = list(messages)
         # Execute ALLOWED calls via the real executor on a patched last message.
@@ -163,9 +170,9 @@ class GatedToolsExecutor:
                     tm.get("tool_call_id"), _text_of_content(tm.get("content"))
                 )
             out.extend(new_tool_msgs)
-        # Append schema-complete denied results.
-        for tc in denied:
-            out.append(build_denied_result(tc))
+        # Append schema-complete denied results (with real gate reason).
+        for tc, reason in denied:
+            out.append(build_denied_result(tc, reason))
 
         return query, runtime, env, out, extra_args
 

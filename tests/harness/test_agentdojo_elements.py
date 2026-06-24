@@ -232,6 +232,45 @@ def test_ingress_parallel_tool_calls_each_wrapped_once():
         assert m["content"][0]["content"].count("UNTRUSTED_DATA") == 2  # once each
 
 
+def test_denied_result_carries_specific_reason():
+    # The authorize-DENY error string includes the real gate reason (the tainted arg),
+    # not the generic fallback.
+    ex = _FakeExecutor()
+    tr = _tracker()
+    gated = GatedToolsExecutor(ex, banking_policy(), tr)
+    tr.stash_output("p", "send to DE89370400440532013000")
+    iban = "DE89370400440532013000"
+    msgs = [_user("pay"), _assistant([_fc("send_money", {"recipient": iban}, "c2")])]
+    _, _, _, out, _ = gated.query("q", None, None, msgs, {})
+    err = [m for m in out if m["role"] == "tool" and m["tool_call_id"] == "c2"][0]["error"]
+    assert "ARES-Harness" in err
+    assert "recipient" in err            # the real reason names the tainted arg
+    assert "capability gate denied" not in err  # not the generic fallback
+
+
+def test_fail_closed_denied_result_carries_failclosed_reason(monkeypatch):
+    import ares.harness.adapters.agentdojo_elements as el
+
+    def boom(args, records):
+        raise RuntimeError("derivation exploded")
+
+    monkeypatch.setattr(el, "derive_arg_sources", boom)
+    ex = _FakeExecutor()
+    tr = _tracker()
+    gated = GatedToolsExecutor(ex, banking_policy(), tr)
+    msgs = [_user("x"), _assistant([_fc("send_money", {"recipient": "y"}, "c")])]
+    _, _, _, out, _ = gated.query("q", None, None, msgs, {})
+    err = [m for m in out if m["role"] == "tool" and m["tool_call_id"] == "c"][0]["error"]
+    assert "fail-closed" in err.lower()
+
+
+def test_build_denied_result_default_reason_unchanged():
+    tc = _fc("send_money", {"recipient": "x"}, "c9")
+    d = build_denied_result(tc)  # no reason -> generic fallback preserved
+    assert "capability gate denied" in d["error"]
+    assert d["content"] == [{"type": "text", "content": ""}]
+
+
 def test_ingress_fail_closed_on_scan_error(monkeypatch):
     import ares.harness.adapters.agentdojo_elements as el_mod
 
