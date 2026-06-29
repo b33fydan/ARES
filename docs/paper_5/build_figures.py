@@ -218,14 +218,21 @@ def render_fig_2() -> None:
                 fontsize=6.5, color="#333333")
 
     # Row labels + cells
+    # PRIVILEGED_CLASSES = {WRITE_LOCAL, IRREVERSIBLE, EXFIL_SHAPED}
+    # (per action_gate.py) — READ_ONLY always ALLOW; privileged ∩ tainted → DENY
+    _PRIVILEGED = {"WRITE_LOCAL", "IRREVERSIBLE", "EXFIL_SHAPED"}
+    deny_cells_drawn = 0
+    deny_tainted_cx = None  # track x of the tainted column for annotation
+    deny_row_y_top = None   # topmost DENY cell y
+    deny_row_y_bot = None   # bottommost DENY cell y
+
     for i, cap in enumerate(cap_classes):
         row_y = 3.5 - i * 0.85
         ax.text(0.0, row_y + 0.30, cap, ha="left", va="center",
                 fontsize=6.0, family="monospace", color="#333333")
         for j in range(2):
-            # READ_ONLY always ALLOW; privileged ∩ tainted → DENY
             tainted = (j == 1)
-            privileged = (cap in ("IRREVERSIBLE", "EXFIL_SHAPED"))
+            privileged = cap in _PRIVILEGED
             allow = not (tainted and privileged)
             cell_color = C_STABLE if allow else C_DIVERGE
             cell_text = "ALLOW" if allow else "DENY"
@@ -238,12 +245,26 @@ def render_fig_2() -> None:
             ax.text(cx + 0.55, cy + 0.30, cell_text,
                     ha="center", va="center", fontsize=6.5,
                     fontweight="bold", color="white")
-            # Annotate the live denials on the tainted-privileged cells
             if not allow:
-                ax.text(cx + 0.55, cy + 0.10,
-                        f"({gate_denials_live} injected calls denied live)",
-                        ha="center", va="bottom", fontsize=5.2,
-                        color="white", style="italic")
+                deny_cells_drawn += 1
+                deny_tainted_cx = cx
+                if deny_row_y_top is None:
+                    deny_row_y_top = cy + 0.60  # top edge of first deny cell
+                deny_row_y_bot = cy             # bottom edge of last deny cell
+
+    # Single annotation OUTSIDE the matrix, pointing at the tainted-arg DENY region
+    if deny_cells_drawn > 0 and deny_tainted_cx is not None:
+        annot_x = deny_tainted_cx + 1.10 + 0.08  # just to the right of tainted column
+        annot_y = (deny_row_y_top + deny_row_y_bot) / 2  # vertically centered on deny region
+        ax.annotate(
+            f"← {gate_denials_live} live gate denials\n"
+            "  (injected privileged\n   tainted calls)",
+            xy=(deny_tainted_cx + 1.10, annot_y),
+            xytext=(annot_x + 0.05, annot_y),
+            fontsize=5.5, color=C_DIVERGE, style="italic",
+            va="center", ha="left",
+            arrowprops=dict(arrowstyle="-|>", color=C_DIVERGE, lw=0.9),
+        )
 
     ax.text(2.0, 0.15,
             "value-blind, no LLM — holds env-state ASR = 0 by construction",
@@ -431,84 +452,123 @@ _SOTA_COLS = ["Surface\nguarded", "Mechanism", "Conclusion-\nintegrity?"]
 
 
 def render_fig_5() -> None:
-    n_rows = len(_SOTA_ROWS)
-    n_cols = len(_SOTA_COLS)
-    fig_h = 0.55 * n_rows + 1.2
-    fig, ax = plt.subplots(figsize=(DOUBLE_COL, fig_h))
-    ax.set_xlim(0, n_cols + 0.2); ax.set_ylim(0, n_rows + 1.5); ax.axis("off")
+    """SOTA positioning matrix rebuilt with explicit fixed y-positions.
 
-    col_widths = [1.4, 2.0, 1.3]
-    col_x_start = [0.1, 1.60, 3.70]  # x start of each cell block
+    Design:
+    - Figure uses data coordinates (0..1) via ax.transData for precise placement.
+    - 4 columns at fixed x: System | Surface guarded | Mechanism | Conclusion-integrity
+    - 1 header row + 7 data rows evenly spaced.
+    - Column-4 vertical band + callout placed ABOVE the header row (no overlap).
+    - ARES row highlighted with a green band.
+    """
+    fig, ax = plt.subplots(figsize=(DOUBLE_COL, 4.2))
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
 
-    # Highlight band for conclusion-integrity column
-    ci_col = 2
+    # ── Layout constants (all in axes-fraction coords 0..1) ─────────────────
+    # Column x-centres for text; col_x_left for the CI band/cells
+    # System | Surface | Mechanism | CI
+    sys_x_left   = 0.00   # system name left-align start
+    surf_x_ctr   = 0.22   # Surface guarded centre
+    mech_x_ctr   = 0.50   # Mechanism centre
+    ci_x_left    = 0.70   # CI column left edge
+    ci_x_right   = 0.84   # CI column right edge
+    ci_x_ctr     = (ci_x_left + ci_x_right) / 2
+
+    n_rows = len(_SOTA_ROWS)          # 7
+    header_y  = 0.935                 # y for header text (va=bottom)
+    rule_y    = 0.900                 # horizontal rule under header
+    rows_top  = 0.880                 # top of first data row band
+    rows_bot  = 0.050                 # bottom of last data row band
+    row_h     = (rows_top - rows_bot) / n_rows  # even spacing
+
+    # ── CI column highlight band (spans all rows + header area) ─────────────
+    band_bottom = rows_bot
+    band_top    = rule_y + 0.005
     ax.add_patch(mpatches.Rectangle(
-        (col_x_start[ci_col] - 0.05, 0), col_widths[ci_col] + 0.15, n_rows + 1.4,
-        facecolor=C_AUDIT, alpha=0.06, edgecolor=C_AUDIT, linewidth=0.8,
-        zorder=0))
-    ax.text(col_x_start[ci_col] + col_widths[ci_col] / 2, n_rows + 1.35,
-            "← the decision-integrity axis\northogonal to surface defenses;\nonly ARES scores it",
-            ha="center", va="top", fontsize=5.8, color=C_AUDIT,
-            fontweight="bold", style="italic")
+        (ci_x_left - 0.01, band_bottom),
+        (ci_x_right - ci_x_left) + 0.02,
+        band_top - band_bottom,
+        facecolor=C_AUDIT, alpha=0.07, edgecolor=C_AUDIT, linewidth=0.8,
+        transform=ax.transAxes, zorder=0))
 
-    # Column headers
-    for j, (lbl, cx, cw) in enumerate(zip(_SOTA_COLS, col_x_start, col_widths)):
-        ax.text(cx + cw / 2, n_rows + 0.85, lbl, ha="center", va="bottom",
-                fontsize=7, fontweight="bold", color="#222222")
+    # CI callout ABOVE the header row — well clear of any cell text
+    callout_y = 0.990
+    ax.text(ci_x_ctr, callout_y,
+            "the decision-integrity axis —\northogonal to surface defenses;\nonly ARES scores it",
+            ha="center", va="top", fontsize=5.5, color=C_AUDIT,
+            fontweight="bold", style="italic",
+            transform=ax.transAxes)
 
-    # System label header
-    ax.text(col_x_start[0] - 0.05, n_rows + 0.85, "System",
-            ha="left", va="bottom", fontsize=7, fontweight="bold", color="#222222")
+    # ── Column headers ───────────────────────────────────────────────────────
+    col_headers = [
+        (sys_x_left, "left",   "System"),
+        (surf_x_ctr, "center", "Surface\nguarded"),
+        (mech_x_ctr, "center", "Mechanism"),
+        (ci_x_ctr,   "center", "Conclusion-\nintegrity?"),
+    ]
+    for (cx, ha_val, lbl) in col_headers:
+        ax.text(cx, header_y, lbl,
+                ha=ha_val, va="bottom", fontsize=7,
+                fontweight="bold", color="#222222",
+                transform=ax.transAxes)
 
-    # Horizontal separator
-    ax.axhline(n_rows + 0.65, xmin=0, xmax=1, color=C_BORDER, lw=0.8)
+    # Header rule (axhline uses data coords since xlim=0..1, ylim=0..1)
+    ax.axhline(rule_y, xmin=0.0, xmax=1.0, color=C_BORDER, lw=0.8)
 
-    row_h = 0.78
+    # ── Data rows ────────────────────────────────────────────────────────────
     for i, (system, surface, mechanism, ci) in enumerate(_SOTA_ROWS):
-        row_y = n_rows - 1 - i  # top row = first entry
-        y_center = row_y * row_h + row_h / 2 - 0.05
-        is_ares = ci  # last row
+        # row_y_top = top of this row band; row_y_ctr = text centre
+        row_y_top = rows_top - i * row_h
+        row_y_bot = row_y_top - row_h
+        row_y_ctr = (row_y_top + row_y_bot) / 2
+        is_ares = ci
 
-        # Row background for ARES
+        # Row highlight for ARES
         if is_ares:
             ax.add_patch(mpatches.Rectangle(
-                (-0.05, row_y * row_h - 0.06),
-                col_x_start[-1] + col_widths[-1] + 0.15, row_h + 0.04,
-                facecolor=C_STABLE, alpha=0.08,
-                edgecolor=C_STABLE, linewidth=1.2, zorder=1))
+                (0.0, row_y_bot + 0.005),
+                1.0, row_h - 0.010,
+                facecolor=C_STABLE, alpha=0.09,
+                edgecolor=C_STABLE, linewidth=1.0,
+                transform=ax.transAxes, zorder=1))
+
+        fw = "bold" if is_ares else "normal"
 
         # System name
-        fw = "bold" if is_ares else "normal"
-        ax.text(col_x_start[0] - 0.05, y_center, system,
-                ha="left", va="center", fontsize=6.2, fontweight=fw,
-                color="#111111")
+        ax.text(sys_x_left, row_y_ctr, system,
+                ha="left", va="center", fontsize=5.8, fontweight=fw,
+                color="#111111", transform=ax.transAxes)
 
         # Surface column
-        ax.text(col_x_start[0] + col_widths[0] / 2, y_center, surface,
-                ha="center", va="center", fontsize=6.0,
-                fontweight=fw, color="#333333")
+        ax.text(surf_x_ctr, row_y_ctr, surface,
+                ha="center", va="center", fontsize=5.6, fontweight=fw,
+                color="#333333", transform=ax.transAxes)
 
         # Mechanism column
-        ax.text(col_x_start[1] + col_widths[1] / 2, y_center, mechanism,
-                ha="center", va="center", fontsize=5.8,
-                fontweight=fw, color="#333333")
+        ax.text(mech_x_ctr, row_y_ctr, mechanism,
+                ha="center", va="center", fontsize=5.4, fontweight=fw,
+                color="#333333", transform=ax.transAxes)
 
-        # Conclusion-integrity cell
+        # CI cell — FancyBboxPatch using axes fraction coords via transform
         cell_color = C_STABLE if ci else C_BORDER
         check = "✓" if ci else "✗"
-        cx = col_x_start[2]
-        cw = col_widths[2]
+        cell_pad_h = 0.008
+        cell_pad_v = 0.012
         ax.add_patch(FancyBboxPatch(
-            (cx + 0.10, row_y * row_h + 0.05), cw - 0.20, row_h - 0.12,
-            boxstyle="round,pad=0.04",
-            facecolor=cell_color, alpha=0.75,
-            edgecolor=cell_color, linewidth=0.8, zorder=2))
-        ax.text(cx + cw / 2, y_center, check,
+            (ci_x_left, row_y_bot + cell_pad_v),
+            ci_x_right - ci_x_left,
+            row_h - 2 * cell_pad_v,
+            boxstyle="round,pad=0.01",
+            facecolor=cell_color, alpha=0.80,
+            edgecolor=cell_color, linewidth=0.8,
+            transform=ax.transAxes, zorder=2))
+        ax.text(ci_x_ctr, row_y_ctr, check,
                 ha="center", va="center", fontsize=9,
-                fontweight="bold", color="white", zorder=3)
+                fontweight="bold", color="white",
+                transform=ax.transAxes, zorder=3)
 
     ax.set_title("Positioning: ARES-Harness vs. SOTA injection defenses",
-                 fontsize=8, fontweight="bold", pad=8)
+                 fontsize=8, fontweight="bold", pad=4)
     fig.tight_layout()
     _save(fig, "fig_5")
 
