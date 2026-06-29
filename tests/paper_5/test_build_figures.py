@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import matplotlib
+import pytest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -40,3 +41,18 @@ def test_data_figures_trace_to_s099_artifact():
     assert arms["full_defense"]["utility"] == 0.3 and arms["undefended"]["utility"] == 0.5
     assert run["benign_false_block"]["full_defense"]["false_block_rate_per_task"] == 0.2
     assert run["tau_asr"] == 0.2
+
+
+def test_data_renders_read_the_loader_not_hardcoded(tmp_path, monkeypatch):
+    """Non-tautological guard: the real loader reads the artifact, AND the data
+    figures fail closed when the loader is emptied — so they cannot be silently
+    hardcoding the S099 values."""
+    import docs.paper_5.build_figures as bf
+    monkeypatch.setattr(bf, "OUT", tmp_path)
+    # 1) the real loader actually reads the S099 artifact
+    assert bf._run()["rollouts"] == 96
+    # 2) emptying the loader breaks the data figures -> they read _run(), not constants
+    monkeypatch.setattr(bf, "_run", dict)  # bf._run() now returns {}
+    for fn in (bf.render_fig_2, bf.render_fig_3, bf.render_fig_4):
+        with pytest.raises(KeyError):
+            fn()
