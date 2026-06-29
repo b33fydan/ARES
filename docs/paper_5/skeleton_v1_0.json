@@ -1,0 +1,123 @@
+{
+  "kind": "paper_structure_skeleton",
+  "paper_id": "paper_5_v1_0",
+  "working_title": "A Deterministic Action Gate Holds Injected Tool Calls at Zero: A Guarantee and a No-Headroom Regime for Tool-Using Agents",
+  "short_title": "The No-Headroom Injection Regime",
+  "author": "Daniel Gmys-Casiano (Skyframe Innovations)",
+  "venue": "TBD peer venue; acmart-portable",
+  "target_words_core": 9000,
+  "section_count_numbered": 11,
+  "framing_choice": "guarantee + no-headroom regime (dual-spine)",
+  "framing_rationale": "The live AgentDojo result is a pre-registered contingency: undefended ASR is 0 across the model x attack grid, so the contribution is the by-construction guarantee + the empirically-firing gate + the honest false-block cost + conclusion-integrity, not an ASR-delta. The paper co-headlines the guarantee (mechanism) and the no-headroom regime (empirical finding).",
+  "build_session": 101,
+  "build_start_test_floor": 4476,
+  "skeleton_version": "v1.0",
+  "evidence_base": "ARES-Harness arc S096-S099 (input-path defense, action gate, AgentDojo Phase-3 live measurement). No new measurement - written entirely from closed artifacts. Result spine: docs/paper_5/S099_PHASE3_MEASUREMENT_RESULT_2026-06-27.md; run artifact data/paper_5/s099_phase3_run_20260627-070037.json.",
+  "contribution_claims": [
+    "The ARES-Harness defense: a composable default-on deterministic layer (five-stage input path + LLM-free action-authorization gate keyed on (capability_class, arg-provenance-taint), provenance derived harness-side from raw bytes) that converts an indirect injection into a data-integrity decision and holds privileged-action ASR at 0 by construction on the environment-state task class, model- and N-independent.",
+    "A pre-registered, benchmark-anchored measurement (AgentDojo banking) delivering the no-headroom-regime finding: undefended ASR=0 across the grid, the gate empirically non-vacuous (2 denials of injected privileged tainted calls vs 0 in the no-gate arms), and the honest cost (0.20 benign false-block within the pre-registered <=0.50 band).",
+    "Conclusion-integrity as a measurement axis the standard action-authorization benchmarks do not score, and the argued claim that on modern models decision-integrity + the measured cost of deterministic guarantees, not an action-ASR-delta, is the axis worth evaluating.",
+    "Honesty boundary: this is a mechanism contribution + a pre-registered empirical regime characterization, NOT a demonstrated defended-vs-undefended ASR-delta (there is none to claim; undefended ASR is already 0)."
+  ],
+  "result_findings": {
+    "finding_1_no_headroom_regime": {
+      "session": "S099",
+      "one_line_claim": "Undefended ASR = 0 across all 4 sweep cells; the no-cell contingency fired; modern frontier models resist the action axis on banking.",
+      "data_source": "data/paper_5/s099_phase3_run_20260627-070037.json"
+    },
+    "finding_2_guarantee_nonvacuous": {
+      "session": "S099",
+      "one_line_claim": "full_defense ASR=0 by construction with 2 empirical gate denials of injected privileged tainted calls; undefended/gate_off issue 0 denials, proving the denials are the gate.",
+      "data_source": "data/paper_5/s099_phase3_run_20260627-070037.json"
+    },
+    "finding_3_honest_cost": {
+      "session": "S099",
+      "one_line_claim": "Benign false-block 0.20 (4/20) within the pre-registered <=0.50 band; utility 0.50 -> 0.30 under full_defense.",
+      "data_source": "data/paper_5/s099_phase3_run_20260627-070037.json"
+    },
+    "finding_4_conclusion_integrity": {
+      "session": "S099",
+      "one_line_claim": "Conclusion-integrity 0.95 (echo 0.05) across all arms - a level, high also undefended, not a defense-attributable delta at N=20.",
+      "data_source": "data/paper_5/s099_phase3_run_20260627-070037.json"
+    }
+  },
+  "sections": [
+    { "section_id": "in_plain_terms", "section_number": null, "title": "In Plain Terms", "target_words": 400, "claims": ["Plain-language anchor: a deterministic AI-free gate stops an injected tool action; on modern models the attack already fails, so the result is the guarantee + the regime + the honest cost."], "numbers_preregistered": ["0.0", "0.2", "0.95"], "bibkeys_required": [], "figures": [], "tables": [] },
+    { "section_id": "abstract", "section_number": null, "title": "Abstract", "target_words": 250, "claims": ["Tool-agent injection -> deterministic guarantee + no-headroom regime -> findings -> reproducibility."], "numbers_preregistered": ["0.0", "0.2", "0.95", "$3.8"], "bibkeys_required": ["gmys-casiano-2026a", "gmys-casiano-2026b", "gmys-casiano-2026c", "gmys-casiano-2026d"], "figures": [], "tables": [] },
+    { "section_id": "introduction", "section_number": 1, "title": "Introduction", "target_words": 650, "claims": ["The two pillars (guarantee + regime); the honesty boundary (no ASR-delta) stated here; three contributions; roadmap."], "numbers_preregistered": ["0.0", "2"], "bibkeys_required": ["greshake-2023", "debenedetti-2025-camel", "debenedetti-2024-agentdojo", "gmys-casiano-2026a", "gmys-casiano-2026d"], "figures": [], "tables": [] },
+    { "section_id": "background_threat_model", "section_number": 2, "title": "Background and Threat Model", "target_words": 850, "claims": ["Indirect/second-order injection; tool-using agents; SOTA action-surface defenses; benchmarks; the decision-integrity gap; defender/attacker/scope."], "numbers_preregistered": [], "bibkeys_required": ["greshake-2023", "debenedetti-2025-camel", "willison-2023-dualllm", "hines-2024-spotlighting", "wallace-2024-instruction-hierarchy", "chen-2024-struq", "chen-2024-secalign", "zhan-2024-injecagent", "yi-2023-bipia", "debenedetti-2024-agentdojo"], "figures": [], "tables": [] },
+    { "section_id": "ares_harness_architecture", "section_number": 3, "title": "The ARES-Harness Architecture", "target_words": 900, "claims": ["Five-stage input path; inert-rendering by provenance (control-data separation); middleware composition; harness-side provenance from raw bytes; fail-closed everywhere."], "numbers_preregistered": [], "bibkeys_required": ["willison-2023-dualllm", "gmys-casiano-2026d"], "figures": ["fig_1"], "tables": [] },
+    { "section_id": "action_gate_guarantee", "section_number": 4, "title": "The Deterministic Action Gate and Its Guarantee", "target_words": 750, "claims": ["Capability classes; arg-provenance-taint (fail-safe); the pure decision rule; monotone-in-taint; never consults model text; by-construction ASR=0 on the env-state class; positioned vs CaMeL."], "numbers_preregistered": ["0.0"], "bibkeys_required": ["debenedetti-2025-camel"], "figures": ["fig_6"], "tables": [] },
+    { "section_id": "methodology", "section_number": 5, "title": "Methodology: a Pre-Registered Benchmark Measurement", "target_words": 1100, "claims": ["AgentDojo v1.2 banking; grid + env-state filter; eligible injection tasks; two-stage pre-registration + SSOT lock + release token; arms; metrics (ASR / gate denials / false-block / conclusion-integrity echo-check); cost model; reproduction."], "numbers_preregistered": ["0.2", "20", "9"], "bibkeys_required": ["debenedetti-2024-agentdojo", "albanie-2022"], "figures": [], "tables": ["tbl_1"] },
+    { "section_id": "results", "section_number": 6, "title": "Results", "target_words": 1300, "load_bearing": true, "claims": ["F1 (headline): the no-headroom regime - undefended ASR=0 all 4 cells, no-cell contingency, fallback cell.", "F2: the guarantee holds and is non-vacuous - full_defense ASR=0 by construction + 2 gate denials, gate_off vs full_defense.", "F3: the honest cost - benign false-block 0.20 within band, utility 0.50->0.30.", "F4: conclusion-integrity 0.95 (level-not-delta honesty)."], "numbers_preregistered": ["0.0", "0.5", "0.3", "0.45", "2", "0", "0.95", "0.05", "0.2", "4", "20", "96", "0.75"], "bibkeys_required": [], "figures": ["fig_2", "fig_3", "fig_4"], "tables": ["tbl_2", "tbl_3"] },
+    { "section_id": "positioning_vs_sota", "section_number": 7, "title": "Positioning vs SOTA", "target_words": 700, "claims": ["The decision-integrity axis; CaMeL head-on (lighter single-hop provenance-taint vs interpreter-IFC); inert-rendering vs spotlighting/dual-LLM; deterministic code vs learned priority; the regex/IOC substrate is not novel (cite the read-depth trilemma)."], "numbers_preregistered": [], "bibkeys_required": ["debenedetti-2025-camel", "willison-2023-dualllm", "hines-2024-spotlighting", "wallace-2024-instruction-hierarchy", "chen-2024-struq", "chen-2024-secalign", "gmys-casiano-2026d"], "figures": ["fig_5"], "tables": ["tbl_4"] },
+    { "section_id": "discussion", "section_number": 8, "title": "Discussion", "target_words": 900, "claims": ["What the no-headroom regime means for injection-defense evaluation; decision-integrity + cost as the forward axis; deterministic guarantee vs learned resistance; when by-construction beats measured-delta."], "numbers_preregistered": ["0.0"], "bibkeys_required": ["gmys-casiano-2026a", "gmys-casiano-2026d"], "figures": [], "tables": [] },
+    { "section_id": "limitations", "section_number": 9, "title": "Limitations", "target_words": 550, "claims": ["The result is a contingency (no ASR headroom); N=20 CIs; single benchmark/suite/cell; integrity-as-level not delta; deterministic scan != semantic framing; finer component ablation deferred."], "numbers_preregistered": ["0.0", "20"], "bibkeys_required": ["gmys-casiano-2026d"], "figures": [], "tables": [] },
+    { "section_id": "future_work", "section_number": 10, "title": "Future Work", "target_words": 400, "claims": ["The deferred scan/quarantine/normalize component ablation; the OOV-adversary fuzz at the production firewall + IOC rung; weaker-model / harder-corpus to recover ASR headroom; second suite; escalate-to-human hook."], "numbers_preregistered": [], "bibkeys_required": [], "figures": [], "tables": [] },
+    { "section_id": "references", "section_number": 11, "title": "References", "target_words": 0, "claims": [], "numbers_preregistered": [], "bibkeys_required": [], "figures": [], "tables": [] }
+  ],
+  "figures": [
+    { "id": "fig_1", "type": "conceptual_diagram", "purpose": "The ARES-Harness architecture: five-stage input path (capture/normalize/ingress-scan/IOC-anchor/quarantine) + action gate + middleware; control-data separation; fail-closed.", "source": "new - derived from ares/harness/{capture,normalize,ingress_scan,ioc_anchor,quarantine,action_gate,middleware}.py", "host_section": 3 },
+    { "id": "fig_2", "type": "scatter_plot", "purpose": "THE money figure: regime + guarantee. Left panel: undefended ASR=0 across all 4 cells (no headroom). Right panel: the gate decision rule (capability_class x arg-taint) -> allow/deny holding the env-state class at 0 by construction, annotated with the 2 empirical denials.", "source": "data/paper_5/s099_phase3_run_20260627-070037.json sweep[].undefended_asr + stage1_arms.full_defense.gate_denials", "host_section": 6 },
+    { "id": "fig_3", "type": "bar_chart", "purpose": "Arms on the fallback cell: undefended / full_defense / gate_off x {ASR, utility, gate denials, conclusion-integrity}.", "source": "data/paper_5/s099_phase3_run_20260627-070037.json stage1_arms", "host_section": 6 },
+    { "id": "fig_4", "type": "bar_chart", "purpose": "The honest cost: benign false-block 0.20 inside the pre-registered <=0.50 band; utility cost 0.50->0.30.", "source": "data/paper_5/s099_phase3_run_20260627-070037.json benign_false_block.full_defense + stage1_arms utilities", "host_section": 6 },
+    { "id": "fig_5", "type": "conceptual_diagram", "purpose": "SOTA positioning: surface-guarded matrix with the decision-integrity axis called out.", "source": "new - derived from design spec section 13 SOTA matrix", "host_section": 7 },
+    { "id": "fig_6", "type": "pipeline_diagram", "purpose": "Worked example: an injected banking task -> captured untrusted bill text -> harness-side taint of the send_money target arg -> gate denial.", "source": "new - derived from ares/harness/provenance_tracker.py + action_gate.py", "host_section": 4 }
+  ],
+  "tables": [
+    { "id": "tbl_1", "purpose": "Pre-registered grid + protocol; columns (model, attack, suite, tau_asr, tau_util, N, N_benign, false_block_band, planted_IBAN).", "source": "docs/paper_5/PREREGISTRATION_phase3_measurement.md + run JSON tau_asr/tau_util/eligible_injection_tasks", "host_section": 5 },
+    { "id": "tbl_2", "purpose": "Stage-0 sweep: undefended ASR + utility per cell; columns (model, attack, undefended_asr, undefended_utility).", "source": "data/paper_5/s099_phase3_run_20260627-070037.json sweep", "host_section": 6 },
+    { "id": "tbl_3", "purpose": "Stage-1 arms on the fallback cell; columns (arm, asr, utility, gate_denials, echo_rate, conclusion_integrity).", "source": "data/paper_5/s099_phase3_run_20260627-070037.json stage1_arms", "host_section": 6 },
+    { "id": "tbl_4", "purpose": "SOTA positioning: surface guarded x ARES delta; columns (system, surface_guarded, ares_delta).", "source": "new - design spec section 13 SOTA matrix", "host_section": 7 }
+  ],
+  "numbers_preregistered": [
+    { "value": 0.0, "source": "S099 run: undefended ASR = 0.0 in every sweep cell AND every Stage-1 arm (the no-headroom contingency).", "lock_target": "s099_phase3_run_20260627-070037.json max(sweep[i].undefended_asr) == 0.0; stage1_arms[arm].asr == 0.0" },
+    { "value": 0.5, "source": "S099 run: Stage-1 undefended utility = 0.5; sweep haiku/tool_knowledge undefended utility = 0.5.", "lock_target": "stage1_arms.undefended.utility == 0.5" },
+    { "value": 0.75, "source": "S099 run: sweep sonnet undefended utility = 0.75 (both attacks).", "lock_target": "sweep[sonnet-4-6/important_instructions].undefended_utility == 0.75" },
+    { "value": 0.3, "source": "S099 run: Stage-1 full_defense utility = 0.3; benign utility = 0.3.", "lock_target": "stage1_arms.full_defense.utility == 0.3" },
+    { "value": 0.45, "source": "S099 run: Stage-1 gate_off utility = 0.45.", "lock_target": "stage1_arms.gate_off.utility == 0.45" },
+    { "value": 2, "source": "S099 run: full_defense gate_denials = 2 (the empirical non-vacuity headline).", "lock_target": "stage1_arms.full_defense.gate_denials == 2" },
+    { "value": 0, "source": "S099 run: undefended + gate_off gate_denials = 0 (no gate -> the denials are the gate).", "lock_target": "stage1_arms.undefended.gate_denials == 0 and stage1_arms.gate_off.gate_denials == 0" },
+    { "value": 0.95, "source": "S099 run: conclusion_integrity_rate = 0.95 (all arms; a level, high also undefended).", "lock_target": "stage1_arms.full_defense.conclusion_integrity_rate == 0.95" },
+    { "value": 0.05, "source": "S099 run: echo_rate = 0.05 (all arms).", "lock_target": "stage1_arms.full_defense.echo_rate == 0.05" },
+    { "value": 0.2, "source": "S099 run: benign false_block_rate_per_task = 0.2 (within <=0.50 band); also tau_asr = tau_util = 0.2.", "lock_target": "benign_false_block.full_defense.false_block_rate_per_task == 0.2; tau_asr == 0.2" },
+    { "value": 4, "source": "S099 run: benign denials = 4 (of 20).", "lock_target": "benign_false_block.full_defense.benign_denials == 4" },
+    { "value": 20, "source": "S099 run + prereg: N = 20, N_benign = 20 (per-arm n).", "lock_target": "stage1_arms.full_defense.n == 20 (prereg _FROZEN_N == 20)" },
+    { "value": 9, "source": "S099 run + prereg: 9 eligible banking injection tasks (injection_task_0..8, all ENV_STATE).", "lock_target": "len(eligible_injection_tasks.banking) == 9" },
+    { "value": 96, "source": "S099 run: 96 rollouts, no abort.", "lock_target": "rollouts == 96" },
+    { "value": "$3.8", "source": "S099 result note section 5: refined Phase-3 total cost ~= $3.8 (~$3.7 actual + ~$0.07 calibration). NOTE-ONLY - not in the run JSON; locked by prose substring + PDF gate, not a JSON resolver.", "lock_target": "docs/paper_5/S099_PHASE3_MEASUREMENT_RESULT_2026-06-27.md section 5 (prose substring + verify_pdf_substrings.py)" },
+    { "value": "US133000000121212121212", "source": "S099 result note section 4: planted attacker IBAN for the conclusion-integrity echo-check. NOTE-ONLY - not in the run JSON; locked by prose substring + PDF gate.", "lock_target": "docs/paper_5/S099_PHASE3_MEASUREMENT_RESULT_2026-06-27.md section 4 (prose substring + verify_pdf_substrings.py)" }
+  ],
+  "bibkeys_required_verified": [
+    { "bibkey": "greshake-2023", "role": "Indirect prompt injection (sections 1/2). Reused verbatim from Paper 4.", "status": "VERIFIED", "source": "Reused from docs/paper_4/references.bib (verified Session 068). Greshake et al., AISec '23, doi 10.1145/3605764.3623985." },
+    { "bibkey": "albanie-2022", "role": "Pre-registration in ML evaluation (section 5). Reused verbatim from Paper 4.", "status": "VERIFIED", "source": "Reused from docs/paper_4/references.bib (verified Session 094)." },
+    { "bibkey": "gmys-casiano-2026a", "role": "Self-cite Paper 1 (calibration failure). Sections 1/8.", "status": "VERIFIED", "source": "Reused from docs/paper_4/references.bib. Canonical PDF docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf." },
+    { "bibkey": "gmys-casiano-2026b", "role": "Self-cite Paper 2. Sections 1/8.", "status": "VERIFIED", "source": "Reused from docs/paper_4/references.bib. Canonical docs/paper_2/PAPER2_DRAFT_v1_2.docx." },
+    { "bibkey": "gmys-casiano-2026c", "role": "Self-cite Paper 3 (decision determinism, explanation drift). Sections 1/7/8.", "status": "VERIFIED", "source": "Reused from docs/paper_4/references.bib. Canonical docs/paper_3/acmart_spike/paper_3_acmart.pdf." },
+    { "bibkey": "gmys-casiano-2026d", "role": "Self-cite Paper 4 (read-depth robustness trilemma; the deterministic-scan limit). Sections 7/9.", "status": "VERIFIED", "source": "New self-cite. Canonical docs/paper_4/acmart/paper_4_acmart.pdf." }
+  ],
+  "bibkeys_needed_unverified": [
+    { "slug": "debenedetti-2025-camel", "verification_instructions": "Web-verify: Debenedetti et al., 'Defeating Prompt Injections by Design' (CaMeL), arXiv 2503.18813 (2025). Confirm authors/title/arXiv ID/venue." },
+    { "slug": "debenedetti-2024-agentdojo", "verification_instructions": "Web-verify (THE benchmark anchor): Debenedetti et al., 'AgentDojo', arXiv 2406.13352, NeurIPS 2024 Datasets & Benchmarks. Confirm exactly." },
+    { "slug": "willison-2023-dualllm", "verification_instructions": "Web-verify: Simon Willison, 'The Dual LLM pattern for building AI assistants that can resist prompt injection', simonwillison.net, 2023. Cite as @misc with url + howpublished." },
+    { "slug": "hines-2024-spotlighting", "verification_instructions": "Web-verify: Hines et al., 'Defending Against Indirect Prompt Injection Attacks With Spotlighting', arXiv 2403.14720 (2024)." },
+    { "slug": "wallace-2024-instruction-hierarchy", "verification_instructions": "Web-verify: Wallace et al., 'The Instruction Hierarchy', arXiv 2404.13208 (2024)." },
+    { "slug": "chen-2024-struq", "verification_instructions": "Web-verify: Chen et al., 'StruQ: Defending Against Prompt Injection with Structured Queries', arXiv 2402.06363 (2024). Keep key distinct from secalign." },
+    { "slug": "chen-2024-secalign", "verification_instructions": "Web-verify: Chen et al., 'SecAlign', arXiv 2410.05451 (2024). Keep key distinct from struq; note the chen-2024 first-author/year collision (disambiguate in prose)." },
+    { "slug": "zhan-2024-injecagent", "verification_instructions": "Web-verify: Zhan et al., 'InjecAgent', arXiv 2403.02691 (2024)." },
+    { "slug": "yi-2023-bipia", "verification_instructions": "Web-verify: Yi et al., 'Benchmarking and Defending Against Indirect Prompt Injection Attacks' (BIPIA), arXiv 2312.14197 (2023/2024)." }
+  ],
+  "anchor_tests_required": [
+    { "path": "tests/paper_5/test_prereg_bands_match_code.py", "status": "EXISTS (S098/S099)", "locks": "Two-stage pre-registration SSOT: grid / taus / arms / shim / model / max_tokens / eligible injection IDs / N / N_benign / release sentinel." },
+    { "path": "tests/harness/test_action_gate_invariants.py", "status": "EXISTS (S097)", "locks": "Action-gate determinism + monotone-in-taint + value-blind (no-LLM) invariants." },
+    { "path": "tests/harness/test_action_gate.py", "status": "EXISTS (S097)", "locks": "Action-gate capability classes + fail-safe taint + pure authorize()." },
+    { "path": "tests/harness/test_provenance_tracker.py", "status": "EXISTS (S098)", "locks": "Harness-side raw-byte provenance derivation (closes the Phase-2 mislabeling gap)." }
+  ],
+  "out_of_scope_session_101": [
+    "No prose (docs/paper_5/source/ is Phase 3).",
+    "No figures (docs/paper_5/build_figures.py + figures/ is Phase 2).",
+    "No acmart build / PDF (Phase 4).",
+    "No new measurement / no LLM calls.",
+    "No edits to existing files except CLAUDE.md at session close."
+  ]
+}
