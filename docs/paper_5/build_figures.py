@@ -491,13 +491,15 @@ def render_fig_5() -> None:
         facecolor=C_AUDIT, alpha=0.07, edgecolor=C_AUDIT, linewidth=0.8,
         transform=ax.transAxes, zorder=0))
 
-    # CI callout ABOVE the header row — well clear of any cell text
-    callout_y = 0.990
-    ax.text(ci_x_ctr, callout_y,
-            "the decision-integrity axis —\northogonal to surface defenses;\nonly ARES scores it",
-            ha="center", va="top", fontsize=5.5, color=C_AUDIT,
-            fontweight="bold", style="italic",
-            transform=ax.transAxes)
+    # CI callout in the RIGHT MARGIN (clear of the header + every cell), with
+    # an arrow pointing left at the CI column. xlim/ylim are 0..1 so plain
+    # data coords equal axes fractions.
+    ax.annotate(
+        "the decision-\nintegrity axis —\northogonal to all\nsurface defenses;\nonly ARES scores it",
+        xy=(ci_x_right + 0.01, 0.52), xytext=(0.995, 0.55),
+        ha="right", va="center", fontsize=5.5, color=C_AUDIT,
+        fontweight="bold", style="italic",
+        arrowprops=dict(arrowstyle="->", color=C_AUDIT, lw=0.9))
 
     # ── Column headers ───────────────────────────────────────────────────────
     col_headers = [
