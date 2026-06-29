@@ -94,19 +94,18 @@
     { "bibkey": "gmys-casiano-2026a", "role": "Self-cite Paper 1 (calibration failure). Sections 1/8.", "status": "VERIFIED", "source": "Reused from docs/paper_4/references.bib. Canonical PDF docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf." },
     { "bibkey": "gmys-casiano-2026b", "role": "Self-cite Paper 2. Sections 1/8.", "status": "VERIFIED", "source": "Reused from docs/paper_4/references.bib. Canonical docs/paper_2/PAPER2_DRAFT_v1_2.docx." },
     { "bibkey": "gmys-casiano-2026c", "role": "Self-cite Paper 3 (decision determinism, explanation drift). Sections 1/7/8.", "status": "VERIFIED", "source": "Reused from docs/paper_4/references.bib. Canonical docs/paper_3/acmart_spike/paper_3_acmart.pdf." },
-    { "bibkey": "gmys-casiano-2026d", "role": "Self-cite Paper 4 (read-depth robustness trilemma; the deterministic-scan limit). Sections 7/9.", "status": "VERIFIED", "source": "New self-cite. Canonical docs/paper_4/acmart/paper_4_acmart.pdf." }
+    { "bibkey": "gmys-casiano-2026d", "role": "Self-cite Paper 4 (read-depth robustness trilemma; the deterministic-scan limit). Sections 7/9.", "status": "VERIFIED", "source": "New self-cite. Canonical docs/paper_4/acmart/paper_4_acmart.pdf." },
+    { "bibkey": "debenedetti-2025-camel", "role": "CaMeL defense (sections 1/2/4/7). Adversarially web-verified 2026-06-29 S101.", "status": "VERIFIED", "source": "Verified 2026-06-29 S101, arXiv 2503.18813, Debenedetti et al. 2025, Google DeepMind/ETH Zurich." },
+    { "bibkey": "debenedetti-2024-agentdojo", "role": "AgentDojo benchmark anchor (sections 1/2/5/6). Adversarially web-verified 2026-06-29 S101.", "status": "VERIFIED", "source": "Verified 2026-06-29 S101, NeurIPS 2024 D&B Track, arXiv 2406.13352, doi 10.52202/079017-2636." },
+    { "bibkey": "willison-2023-dualllm", "role": "Dual-LLM pattern / inert rendering (sections 2/3/7). Adversarially web-verified 2026-06-29 S101.", "status": "VERIFIED", "source": "Verified 2026-06-29 S101, simonwillison.net 2023-04-25, blog post." },
+    { "bibkey": "hines-2024-spotlighting", "role": "Spotlighting defense (sections 2/7). Adversarially web-verified 2026-06-29 S101.", "status": "VERIFIED", "source": "Verified 2026-06-29 S101, arXiv 2403.14720, Hines et al. 2024, Microsoft." },
+    { "bibkey": "wallace-2024-instruction-hierarchy", "role": "Instruction hierarchy (sections 2/7). Adversarially web-verified 2026-06-29 S101.", "status": "VERIFIED", "source": "Verified 2026-06-29 S101, arXiv 2404.13208, Wallace et al. 2024, OpenAI." },
+    { "bibkey": "chen-2024-struq", "role": "StruQ defense (sections 2/7). Adversarially web-verified 2026-06-29 S101.", "status": "VERIFIED", "source": "Verified 2026-06-29 S101, arXiv 2402.06363 (2024), to appear USENIX Security 2025." },
+    { "bibkey": "chen-2024-secalign", "role": "SecAlign defense (sections 2/7). Adversarially web-verified 2026-06-29 S101.", "status": "VERIFIED", "source": "Verified 2026-06-29 S101, ACM CCS 2025, arXiv 2410.05451, doi 10.1145/3719027.3744836." },
+    { "bibkey": "zhan-2024-injecagent", "role": "InjecAgent benchmark (sections 2/7). Adversarially web-verified 2026-06-29 S101.", "status": "VERIFIED", "source": "Verified 2026-06-29 S101, Findings of ACL 2024, arXiv 2403.02691." },
+    { "bibkey": "yi-2023-bipia", "role": "BIPIA benchmark (sections 2/7). Adversarially web-verified 2026-06-29 S101.", "status": "VERIFIED", "source": "Verified 2026-06-29 S101, KDD 2025, arXiv 2312.14197, doi 10.1145/3690624.3709179." }
   ],
-  "bibkeys_needed_unverified": [
-    { "slug": "debenedetti-2025-camel", "verification_instructions": "Web-verify: Debenedetti et al., 'Defeating Prompt Injections by Design' (CaMeL), arXiv 2503.18813 (2025). Confirm authors/title/arXiv ID/venue." },
-    { "slug": "debenedetti-2024-agentdojo", "verification_instructions": "Web-verify (THE benchmark anchor): Debenedetti et al., 'AgentDojo', arXiv 2406.13352, NeurIPS 2024 Datasets & Benchmarks. Confirm exactly." },
-    { "slug": "willison-2023-dualllm", "verification_instructions": "Web-verify: Simon Willison, 'The Dual LLM pattern for building AI assistants that can resist prompt injection', simonwillison.net, 2023. Cite as @misc with url + howpublished." },
-    { "slug": "hines-2024-spotlighting", "verification_instructions": "Web-verify: Hines et al., 'Defending Against Indirect Prompt Injection Attacks With Spotlighting', arXiv 2403.14720 (2024)." },
-    { "slug": "wallace-2024-instruction-hierarchy", "verification_instructions": "Web-verify: Wallace et al., 'The Instruction Hierarchy', arXiv 2404.13208 (2024)." },
-    { "slug": "chen-2024-struq", "verification_instructions": "Web-verify: Chen et al., 'StruQ: Defending Against Prompt Injection with Structured Queries', arXiv 2402.06363 (2024). Keep key distinct from secalign." },
-    { "slug": "chen-2024-secalign", "verification_instructions": "Web-verify: Chen et al., 'SecAlign', arXiv 2410.05451 (2024). Keep key distinct from struq; note the chen-2024 first-author/year collision (disambiguate in prose)." },
-    { "slug": "zhan-2024-injecagent", "verification_instructions": "Web-verify: Zhan et al., 'InjecAgent', arXiv 2403.02691 (2024)." },
-    { "slug": "yi-2023-bipia", "verification_instructions": "Web-verify: Yi et al., 'Benchmarking and Defending Against Indirect Prompt Injection Attacks' (BIPIA), arXiv 2312.14197 (2023/2024)." }
-  ],
+  "bibkeys_needed_unverified": [],
   "anchor_tests_required": [
     { "path": "tests/paper_5/test_prereg_bands_match_code.py", "status": "EXISTS (S098/S099)", "locks": "Two-stage pre-registration SSOT: grid / taus / arms / shim / model / max_tokens / eligible injection IDs / N / N_benign / release sentinel." },
     { "path": "tests/harness/test_action_gate_invariants.py", "status": "EXISTS (S097)", "locks": "Action-gate determinism + monotone-in-taint + value-blind (no-LLM) invariants." },
