@@ -1,0 +1,238 @@
+% Paper 5 bibliography.
+%
+% Per session discipline (Session 064 origin): this file contains ONLY verified
+% entries. Unverified bibkeys are tracked in
+% docs/paper_5/skeleton_v1_0.json under "bibkeys_needed_unverified"
+% and are surfaced by tests/paper_5/test_citation_existence.py as a
+% TODO surface. No placeholder entries here — Paper 2's Sabet
+% hallucination (Session 054 audit, Session 055 remediation) showed
+% that placeholders-in-bib are how unverified entries silently grow
+% into hallucinated citations. Keep this file pristine.
+%
+% Bibkey-form convention: canonical Author-Year keys are required so
+% natural prose cites round-trip through extract_citations +
+% citation_to_bibkey (see Session 071 Path A reconcile). Cross-paper
+% key relationships are file-scoped:
+%   Paper 2 bib: `gmys-casiano-2026` -> Paper 1
+%   Paper 3 bib: `gmys-casiano-2026` -> Paper 2
+%   Paper 4 bib: `gmys-casiano-2026a/b/c` -> Papers 1/2/3
+%   Paper 5 bib: `gmys-casiano-2026a/b/c/d` -> Papers 1/2/3/4 (this file)
+%
+% Session 072 note-field cleanup: per-entry provenance previously
+% lived in `note = {...}` fields, which the ACM-Reference-Format style
+% renders literally in the published bibliography. That leaked
+% Session-numbered workflow history (a deanonymization fingerprint
+% under double-blind review) and triggered a math-mode artifact on
+% the bibliography page. All provenance now lives in % comment lines
+% above each entry; rendered `note` fields are removed entirely.
+
+% ---------------------------------------------------------------------------
+% Reused verbatim from docs/paper_4/references.bib
+% ---------------------------------------------------------------------------
+
+% Provenance: Verified Session 068 via web search. Foundational
+%   reference for indirect prompt injection in LLM-integrated
+%   applications. Bibkey renamed Session 071 from
+%   `greshake-abdelnabi-mishra-2023` to canonical `firstauthor-year`
+%   form so the narrative `Greshake et al. (2023)` cite form in §1 /
+%   §2 round-trips through citation_to_bibkey; matches Paper 2's
+%   `lee-2024` / `hossain-2025` convention. Author list preserved in
+%   the `author` field. Brief slug:
+%   prompt-injection-foundational-needed.
+@inproceedings{greshake-2023,
+  author    = {Greshake, Kai and Abdelnabi, Sahar and Mishra, Shailesh and Endres, Christoph and Holz, Thorsten and Fritz, Mario},
+  title     = {Not What You've Signed Up For: Compromising Real-World {LLM}-Integrated Applications with Indirect Prompt Injection},
+  booktitle = {Proceedings of the 16th ACM Workshop on Artificial Intelligence and Security (AISec '23)},
+  year      = {2023},
+  doi       = {10.1145/3605764.3623985},
+  publisher = {ACM}
+}
+
+% Provenance: Verified 2026-06-13 (S094) via proceedings.mlr.press/v181.
+%   The NeurIPS pre-registration-in-ML workshop; grounds the pre-registration
+%   commitment (decision rules frozen before the run) in §2 / §4. Editors
+%   credited as authors for the proceedings-volume citation.
+@inproceedings{albanie-2022,
+  author    = {Albanie, Samuel and Henriques, Jo{\~a}o F. and Bertinetto, Luca and Hern{\'a}ndez-Garc{\'i}a, Alex and Doughty, Hazel and Varol, G{\"u}l},
+  title     = {Proceedings of the NeurIPS 2021 Workshop on Pre-registration in Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {181},
+  year      = {2022},
+  publisher = {PMLR}
+}
+
+% Provenance: ARES Paper 1 self-cite. Canonical PDF at
+%   docs/paper_1/ARES_Preprint_Asymmetric_Calibration_Failure.pdf.
+@article{gmys-casiano-2026a,
+  author  = {Gmys-Casiano, Daniel},
+  title   = {The Problem Is Inside the Black Box: Asymmetric Calibration Failure in Multi-Agent {LLM} Debate},
+  year    = {2026},
+  journal = {Preprint}
+}
+
+% Provenance: ARES Paper 2 self-cite (deterministic Skeptic primitive).
+@article{gmys-casiano-2026b,
+  author  = {Gmys-Casiano, Daniel},
+  title   = {The Deterministic Skeptic: Four Rules Match an {LLM} Agent in Adversarial Cybersecurity Threat Analysis},
+  year    = {2026},
+  journal = {Preprint}
+}
+
+% Provenance: ARES Paper 3 self-cite (decision determinism, explanation drift).
+@article{gmys-casiano-2026c,
+  author  = {Gmys-Casiano, Daniel},
+  title   = {Decision Determinism, Explanation Drift: Decoupling Verdict Stability from Explanation Stability in Adversarial Multi-Agent {LLM} Pipelines},
+  year    = {2026},
+  journal = {Preprint}
+}
+
+% ---------------------------------------------------------------------------
+% New self-cite: Paper 4 (read-depth robustness trilemma)
+% ---------------------------------------------------------------------------
+
+% Provenance: ARES Paper 4 self-cite (read-depth robustness trilemma;
+%   deterministic-scan limit). Canonical PDF at
+%   docs/paper_4/acmart/paper_4_acmart.pdf. Title from
+%   docs/paper_4/skeleton_v1_0.json working_title.
+@article{gmys-casiano-2026d,
+  author  = {Gmys-Casiano, Daniel},
+  title   = {Reading Deeper Re-Acquires the Attack: A Pre-Registered Read-Depth Robustness Trilemma for Deterministic Threat Verifiers},
+  year    = {2026},
+  journal = {Preprint}
+}
+
+% ---------------------------------------------------------------------------
+% SOTA entries — adversarially web-verified 2026-06-29 (S101)
+% ---------------------------------------------------------------------------
+
+% Provenance: Verified 2026-06-29 (S101) via adversarial web search
+%   (confirm+refute, both agreed): Debenedetti et al., "Defeating Prompt
+%   Injections by Design" (CaMeL system), arXiv 2503.18813 (2025),
+%   Google DeepMind / ETH Zurich. arXiv preprint. DOI
+%   10.48550/arXiv.2503.18813.
+@misc{debenedetti-2025-camel,
+  author        = {Debenedetti, Edoardo and Shumailov, Ilia and Fan, Tianqi and Hayes, Jamie and Carlini, Nicholas and Fabian, Daniel and Kern, Christoph and Shi, Chongyang and Terzis, Andreas and Tram{\`e}r, Florian},
+  title         = {Defeating Prompt Injections by Design},
+  year          = {2025},
+  eprint        = {2503.18813},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CR},
+  doi           = {10.48550/arXiv.2503.18813}
+}
+
+% Provenance: Verified 2026-06-29 (S101) via adversarial web search
+%   (confirm+refute, both agreed): Debenedetti et al., "AgentDojo: A
+%   Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses
+%   for LLM Agents", NeurIPS 2024 Datasets and Benchmarks Track, arXiv
+%   2406.13352, DOI 10.52202/079017-2636. Note: the verified title
+%   includes "Prompt Injection" (not just "AgentDojo").
+@inproceedings{debenedetti-2024-agentdojo,
+  author        = {Debenedetti, Edoardo and Zhang, Jie and Balunovi{\'c}, Mislav and Beurer-Kellner, Luca and Fischer, Marc and Tram{\`e}r, Florian},
+  title         = {{AgentDojo}: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for {LLM} Agents},
+  booktitle     = {Advances in Neural Information Processing Systems 37 (NeurIPS 2024) Datasets and Benchmarks Track},
+  year          = {2024},
+  eprint        = {2406.13352},
+  archivePrefix = {arXiv},
+  doi           = {10.52202/079017-2636}
+}
+
+% Provenance: Verified 2026-06-29 (S101) via adversarial web search
+%   (confirm+refute, both agreed): Simon Willison, "The Dual LLM pattern
+%   for building AI assistants that can resist prompt injection",
+%   simonwillison.net, published 25 April 2023. Blog post; no arXiv, no DOI.
+@misc{willison-2023-dualllm,
+  author       = {Willison, Simon},
+  title        = {The Dual {LLM} Pattern for Building {AI} Assistants That Can Resist Prompt Injection},
+  year         = {2023},
+  howpublished = {\url{https://simonwillison.net/2023/Apr/25/dual-llm-pattern/}}
+}
+
+% Provenance: Verified 2026-06-29 (S101) via adversarial web search
+%   (confirm+refute, both agreed): Hines et al., "Defending Against
+%   Indirect Prompt Injection Attacks With Spotlighting", arXiv 2403.14720
+%   (2024), Microsoft. DOI 10.48550/arXiv.2403.14720.
+@misc{hines-2024-spotlighting,
+  author        = {Hines, Keegan and Lopez, Gary and Hall, Matthew and Zarfati, Federico and Zunger, Yonatan and Kiciman, Emre},
+  title         = {Defending Against Indirect Prompt Injection Attacks With Spotlighting},
+  year          = {2024},
+  eprint        = {2403.14720},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CR},
+  doi           = {10.48550/arXiv.2403.14720}
+}
+
+% Provenance: Verified 2026-06-29 (S101) via adversarial web search
+%   (confirm+refute, both agreed): Wallace et al., "The Instruction
+%   Hierarchy: Training LLMs to Prioritize Privileged Instructions",
+%   arXiv 2404.13208 (2024), OpenAI. No DOI on arXiv.
+@misc{wallace-2024-instruction-hierarchy,
+  author        = {Wallace, Eric and Xiao, Kai and Leike, Reimar and Weng, Lilian and Heidecke, Johannes and Beutel, Alex},
+  title         = {The Instruction Hierarchy: Training {LLMs} to Prioritize Privileged Instructions},
+  year          = {2024},
+  eprint        = {2404.13208},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CR}
+}
+
+% Provenance: Verified 2026-06-29 (S101) via adversarial web search
+%   (confirm+refute, both agreed): Chen et al., "StruQ: Defending Against
+%   Prompt Injection with Structured Queries", arXiv 2402.06363 (2024),
+%   UC Berkeley. DOI 10.48550/arXiv.2402.06363. Bibkey slug tracks arXiv
+%   2024 appearance; to appear at USENIX Security Symposium 2025.
+@misc{chen-2024-struq,
+  author        = {Chen, Sizhe and Piet, Julien and Sitawarin, Chawin and Wagner, David},
+  title         = {{StruQ}: Defending Against Prompt Injection with Structured Queries},
+  year          = {2024},
+  eprint        = {2402.06363},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CR},
+  doi           = {10.48550/arXiv.2402.06363}
+}
+
+% Provenance: Verified 2026-06-29 (S101) via adversarial web search
+%   (confirm+refute, both agreed): Chen et al., "SecAlign: Defending
+%   Against Prompt Injection with Preference Optimization", ACM CCS 2025,
+%   arXiv 2410.05451 (Oct 2024), DOI 10.1145/3719027.3744836. Bibkey slug
+%   tracks arXiv 2024 first appearance; venue year 2025 (ACM CCS '25).
+%   Distinct from chen-2024-struq (different paper, different Chen
+%   et al. author list).
+@inproceedings{chen-2024-secalign,
+  author        = {Chen, Sizhe and Zharmagambetov, Arman and Mahloujifar, Saeed and Chaudhuri, Kamalika and Wagner, David and Guo, Chuan},
+  title         = {{SecAlign}: Defending Against Prompt Injection with Preference Optimization},
+  booktitle     = {Proceedings of the 2025 ACM SIGSAC Conference on Computer and Communications Security (CCS '25)},
+  year          = {2025},
+  eprint        = {2410.05451},
+  archivePrefix = {arXiv},
+  doi           = {10.1145/3719027.3744836}
+}
+
+% Provenance: Verified 2026-06-29 (S101) via adversarial web search
+%   (confirm+refute, both agreed): Zhan et al., "InjecAgent: Benchmarking
+%   Indirect Prompt Injections in Tool-Integrated Large Language Model
+%   Agents", Findings of ACL 2024, arXiv 2403.02691. No DOI found on
+%   arXiv (ACL Anthology may carry one; not invented).
+@inproceedings{zhan-2024-injecagent,
+  author        = {Zhan, Qiusi and Liang, Zhixiang and Ying, Zifan and Kang, Daniel},
+  title         = {{InjecAgent}: Benchmarking Indirect Prompt Injections in Tool-Integrated Large Language Model Agents},
+  booktitle     = {Findings of the Association for Computational Linguistics: {ACL} 2024},
+  year          = {2024},
+  eprint        = {2403.02691},
+  archivePrefix = {arXiv}
+}
+
+% Provenance: Verified 2026-06-29 (S101) via adversarial web search
+%   (confirm+refute, both agreed): Yi et al., "Benchmarking and Defending
+%   Against Indirect Prompt Injection Attacks on Large Language Models"
+%   (BIPIA benchmark), KDD 2025, arXiv 2312.14197 (Dec 2023), DOI
+%   10.1145/3690624.3709179. Bibkey slug tracks arXiv 2023 first
+%   appearance; venue year 2025 (KDD '25). "BIPIA" is the benchmark name,
+%   not in the title.
+@inproceedings{yi-2023-bipia,
+  author        = {Yi, Jingwei and Xie, Yueqi and Zhu, Bin and Kiciman, Emre and Sun, Guangzhong and Xie, Xing and Wu, Fangzhao},
+  title         = {Benchmarking and Defending Against Indirect Prompt Injection Attacks on Large Language Models},
+  booktitle     = {Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD '25)},
+  year          = {2025},
+  eprint        = {2312.14197},
+  archivePrefix = {arXiv},
+  doi           = {10.1145/3690624.3709179}
+}
